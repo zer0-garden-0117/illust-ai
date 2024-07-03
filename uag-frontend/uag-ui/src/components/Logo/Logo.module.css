@@ -1,0 +1,15 @@
+.heading {
+  color: var(--mantine-color-yellow-4);
+  text-decoration: none;
+}
+
+.subtitle {
+  font-size: 0.9em;
+  margin-left: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .heading {
+    color: var(--mantine-color-yellow-3);
+  }
+}

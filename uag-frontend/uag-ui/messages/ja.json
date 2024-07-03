@@ -1,0 +1,22 @@
+{
+  "header": {
+    "title": "無限天使生成",
+    "subtitle": "- Copyright-Free Angel's AIArts -"
+  },
+  "navbar": {
+    "menu": {
+      "top": "トップページ",
+      "about": "はじめに",
+      "freeicon": "フリーアイコン",
+      "freeillust": "フリーイラスト",
+      "oc": "オリジナルキャラ",
+      "tag": "タグで検索"
+    }
+  },
+  "toppage": {
+    "legend": "トップページ"
+  },
+  "appshell": {
+    "copyright": "© 2024 無限天使生成"
+  }
+}

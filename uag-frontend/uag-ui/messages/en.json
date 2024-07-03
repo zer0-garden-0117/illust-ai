@@ -1,0 +1,22 @@
+{
+  "header": {
+    "title": "Unlimited Angel Generation",
+    "subtitle": "- Copyright-Free Angel's AIArts -"
+  },
+  "navbar": {
+    "menu": {
+      "top": "Top Page",
+      "about": "About",
+      "freeicon": "Free Icon",
+      "freeillust": "Free Illustration",
+      "oc": "Original Character",
+      "tag": "Search By Tag"
+    }
+  },
+  "toppage": {
+    "legend": "Top Page"
+  },
+  "appshell": {
+    "copyright": "© 2024 Unlimited Angel Generation"
+  }
+}

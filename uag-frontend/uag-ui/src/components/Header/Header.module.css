@@ -1,0 +1,66 @@
+.header {
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+  color: lightdark(var(--mantine-color-white), var(--mantine-color-dark));
+  gap: var(--mantine-spacing-md);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menuDropdown {
+  transform: translateX(-15px);
+}
+
+.clickableAvatar {
+  cursor: pointer;
+}
+
+.avatar {
+  radius: xl;
+  variant: light;
+  color: blue;
+  size: 1.9rem;
+}
+
+.accountlabel {
+  padding: 3px 0;
+  font-size: 0.875rem;
+  padding-left: 10px;
+}
+
+.email {
+  padding: 10px 0;
+  font-size: 0.875rem;
+  padding-left: 15px;
+}
+
+.languagepicker {
+  padding: 10px 0;
+  font-size: 0.875rem;
+  color: #555;
+  padding-left: 15px;
+}
+
+.themeswitcher {
+  padding: 10px 0;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.nonClickableItem {
+  cursor: default;
+}
+
+.nonClickableItem>div {
+  pointer-events: auto;
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+}
+
+.flexGrow {
+  flex: 1;
+}

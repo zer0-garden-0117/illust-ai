@@ -1,0 +1,13 @@
+{
+    "cssVariables.lookupFiles": [
+      "**/*.css",
+      "**/*.scss",
+      "**/*.sass",
+      "**/*.less",
+      "node_modules/@mantine/core/styles.css"
+    ],
+    "editor.rulers": [80, 100],
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true
+  }
