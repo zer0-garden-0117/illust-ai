@@ -1,12 +1,11 @@
 package com.uag.zer0.controller
 
-import com.uag.zer0.entity.Image
-import com.uag.zer0.entity.Tag
-import com.uag.zer0.entity.Work
+import com.uag.zer0.entity.*
 import com.uag.zer0.repository.ImageRepository
 import com.uag.zer0.repository.TagRepository
 import com.uag.zer0.repository.WorkRepository
 import com.uag.zer0.repository.WorkTagRepository
+import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -17,6 +16,8 @@ class WorkController(
     private val workTagRepository: WorkTagRepository,
     private val tagRepository: TagRepository
 ) {
+
+    private val logger = LoggerFactory.getLogger(WorkController::class.java)
 
     @GetMapping("/{id}")
     fun getWork(@PathVariable id: String): Work? {
@@ -41,5 +42,26 @@ class WorkController(
                 tagRepository.findById(it1.tagId).orElse(null)
             }
         }
+    }
+
+    @PostMapping("/{workId}/tags")
+    fun addTagToWork(
+        @PathVariable workId: String,
+        @RequestBody tag: Tag
+    ): WorkTag {
+        logger.info("Start addTagToWork: workId={}, tag={}", workId, tag)
+
+        val savedTag = tagRepository.save(tag)
+        logger.info("Tag saved: {}", savedTag)
+
+        val workTag = WorkTag(
+            workTagId = WorkTagId(workId = workId, tagId = savedTag.id)
+        )
+        logger.info("WorkTag created: {}", workTag)
+
+        val savedWorkTag = workTagRepository.save(workTag)
+        logger.info("WorkTag saved: {}", savedWorkTag)
+
+        return savedWorkTag
     }
 }
