@@ -15,14 +15,42 @@ class WorkController(
     private val workService: WorkService
 ) {
 
-    @GetMapping("/{id}")
-    fun getWork(@PathVariable id: String): Work? {
-        return workService.getWork(id)
-    }
-
     @PostMapping
     fun createWork(@RequestBody work: Work): Work {
         return workService.createWork(work)
+    }
+
+    @GetMapping("/{workId}")
+    fun getWork(@PathVariable workId: String): Work? {
+        return workService.getWork(workId)
+    }
+
+    @PutMapping("/{workId}")
+    fun updateWork(
+        @PathVariable workId: String,
+        @RequestBody work: Work
+    ): Work? {
+        return workService.updateWork(workId, work)
+    }
+
+    @DeleteMapping("/{workId}")
+    fun deleteWork(@PathVariable workId: String): ResponseEntity<String> {
+        return try {
+            workService.deleteWork(workId)
+            ResponseEntity.ok("Work with ID $workId deleted successfully")
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+        }
+    }
+
+    @GetMapping("/{workId}/images")
+    fun getImagesByWorkId(@PathVariable workId: String): List<Image> {
+        return workService.getImagesByWorkId(workId)
+    }
+
+    @GetMapping("/{workId}/tags")
+    fun getTagsByWorkId(@PathVariable workId: String): List<Tag> {
+        return workService.getTagsByWorkId(workId)
     }
 
     @PostMapping("/{workId}/tags")
@@ -38,34 +66,9 @@ class WorkController(
         return workService.createImage(image)
     }
 
-    @GetMapping("/{id}/images")
-    fun getImagesByWorkId(@PathVariable id: String): List<Image> {
-        return workService.getImagesByWorkId(id)
-    }
-
-    @GetMapping("/{id}/tags")
-    fun getTagsByWorkId(@PathVariable id: String): List<Tag> {
-        return workService.getTagsByWorkId(id)
-    }
-
-    @PutMapping("/{id}")
-    fun updateWork(@PathVariable id: String, @RequestBody work: Work): Work? {
-        return workService.updateWork(id, work)
-    }
-
-    @DeleteMapping("/{id}")
-    fun deleteWork(@PathVariable id: String): ResponseEntity<String> {
-        return try {
-            workService.deleteWork(id)
-            ResponseEntity.ok("Work with ID $id deleted successfully")
-        } catch (e: IllegalArgumentException) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
-        }
-    }
-
-    @DeleteMapping("/images/{id}")
-    fun deleteImage(@PathVariable id: String) {
-        workService.deleteImage(id)
+    @DeleteMapping("/images/{imgId}")
+    fun deleteImage(@PathVariable imgId: String) {
+        workService.deleteImage(imgId)
     }
 
     @PostMapping("/category")

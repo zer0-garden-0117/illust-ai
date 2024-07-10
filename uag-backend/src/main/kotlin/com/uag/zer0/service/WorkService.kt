@@ -38,16 +38,16 @@ class WorkService(
         return imageRepository.save(image)
     }
 
-    fun getWork(id: String): Work? {
-        return workRepository.findById(id).orElse(null)
+    fun getWork(workId: String): Work? {
+        return workRepository.findById(workId).orElse(null)
     }
 
-    fun getImagesByWorkId(id: String): List<Image> {
-        return imageRepository.findByWorkId(id)
+    fun getImagesByWorkId(workId: String): List<Image> {
+        return imageRepository.findByWorkId(workId)
     }
 
-    fun getTagsByWorkId(id: String): List<Tag> {
-        val workTags = workTagRepository.findByWorkTagId_WorkId(id)
+    fun getTagsByWorkId(workId: String): List<Tag> {
+        val workTags = workTagRepository.findByWorkTagId_WorkId(workId)
         return workTags.mapNotNull {
             it.workTagId?.let { workTagId ->
                 tagRepository.findById(workTagId.tagId).orElse(null)
@@ -55,23 +55,23 @@ class WorkService(
         }
     }
 
-    fun updateWork(id: String, work: Work): Work? {
-        if (workRepository.existsById(id)) {
-            work.id = id
+    fun updateWork(workId: String, work: Work): Work? {
+        if (workRepository.existsById(workId)) {
+            work.id = workId
             return workRepository.save(work)
         }
         return null
     }
 
-    fun deleteWork(id: String) {
-        if (!workRepository.existsById(id)) {
-            throw IllegalArgumentException("No work with id $id exists!")
+    fun deleteWork(workId: String) {
+        if (!workRepository.existsById(workId)) {
+            throw IllegalArgumentException("No work with id $workId exists!")
         }
-        workRepository.deleteById(id)
+        workRepository.deleteById(workId)
     }
 
-    fun deleteImage(id: String) {
-        imageRepository.deleteById(id)
+    fun deleteImage(imgId: String) {
+        imageRepository.deleteById(imgId)
     }
 
     fun getWorksByCategory(category: String): List<Work> {

@@ -22,15 +22,15 @@ class TagService(
         return tagRepository.findAll().toList()
     }
 
-    fun getTag(id: String): Tag? {
-        return tagRepository.findById(id).orElse(null)
+    fun getTag(tagId: String): Tag? {
+        return tagRepository.findById(tagId).orElse(null)
     }
 
-    fun deleteTag(id: String) {
+    fun deleteTag(tagId: String) {
         // タグに紐づけられているwork_tagsを削除
-        val workTags = workTagRepository.findByWorkTagId_TagId(id)
+        val workTags = workTagRepository.findByWorkTagId_TagId(tagId)
         workTags.forEach { workTagRepository.delete(it) }
 
-        tagRepository.deleteById(id)
+        tagRepository.deleteById(tagId)
     }
 }
