@@ -20,12 +20,12 @@ class TagController(
         return tagService.getAllTags()
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{tagId}")
     fun getTag(@PathVariable tagId: String): Tag? {
         return tagService.getTag(tagId)
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{tagId}")
     fun deleteTag(@PathVariable tagId: String): String {
         tagService.deleteTag(tagId)
         return "Tag with ID $tagId deleted successfully"
