@@ -1,0 +1,33 @@
+ApiErrorStatus:
+  type: object
+  properties:
+    source:
+      type: string
+      description: |-
+        ### 名前空間
+        プロバイダの種類を設定します。
+      example: CDO
+    code:
+      type: integer
+      description: |-
+        ### コード
+        プロバイダ毎に1からの連番を設定します。
+      format: int32
+      example: 1
+    title:
+      type: string
+      description: |-
+        ### タイトル
+        エラーダイアログのタイトルを設定します。
+      example: Unauthorized
+    message:
+      type: string
+      description: |-
+        ### メッセージ
+        エラーメッセージを設定します。
+      example: Unauthorized
+  required:
+    - source
+    - code
+    - title
+    - message

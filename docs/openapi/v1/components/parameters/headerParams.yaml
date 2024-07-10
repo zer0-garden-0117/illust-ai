@@ -1,0 +1,15 @@
+AccessTokenHeaderParam:
+  name: authorization
+  in: header
+  description: アクセストークンをBearerトークンとして含める
+  required: true
+  schema:
+    type: string
+
+CsrfTokenHeaderParam:
+  name: x-csrf-token
+  in: header
+  description: CSRF保護のためのトークン
+  required: false
+  schema:
+    type: string

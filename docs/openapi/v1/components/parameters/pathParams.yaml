@@ -1,0 +1,10 @@
+WorksIdPathParam:
+  name: worksId
+  in: path
+  description: |-
+    ### Works Id
+    作品のId worksId
+  required: true
+  schema:
+    type: integer
+    format: int32
