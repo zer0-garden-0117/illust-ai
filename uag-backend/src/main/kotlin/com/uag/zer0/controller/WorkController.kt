@@ -1,47 +1,28 @@
 package com.uag.zer0.controller
 
-import com.uag.zer0.entity.*
-import com.uag.zer0.repository.ImageRepository
-import com.uag.zer0.repository.TagRepository
-import com.uag.zer0.repository.WorkRepository
-import com.uag.zer0.repository.WorkTagRepository
-import org.slf4j.LoggerFactory
+import com.uag.zer0.entity.Image
+import com.uag.zer0.entity.Tag
+import com.uag.zer0.entity.Work
+import com.uag.zer0.entity.WorkTag
+import com.uag.zer0.service.WorkService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/works")
 class WorkController(
-    private val workRepository: WorkRepository,
-    private val imageRepository: ImageRepository,
-    private val workTagRepository: WorkTagRepository,
-    private val tagRepository: TagRepository
+    private val workService: WorkService
 ) {
-
-    private val logger = LoggerFactory.getLogger(WorkController::class.java)
 
     @GetMapping("/{id}")
     fun getWork(@PathVariable id: String): Work? {
-        return workRepository.findById(id).orElse(null)
+        return workService.getWork(id)
     }
 
     @PostMapping
     fun createWork(@RequestBody work: Work): Work {
-        return workRepository.save(work)
-    }
-
-    @GetMapping("/{id}/images")
-    fun getImagesByWorkId(@PathVariable id: String): List<Image> {
-        return imageRepository.findByWorkId(id)
-    }
-
-    @GetMapping("/{id}/tags")
-    fun getTagsByWorkId(@PathVariable id: String): List<Tag> {
-        val workTags = workTagRepository.findByWorkTagId_WorkId(id)
-        return workTags.mapNotNull {
-            it.workTagId?.let { it1 ->
-                tagRepository.findById(it1.tagId).orElse(null)
-            }
-        }
+        return workService.createWork(work)
     }
 
     @PostMapping("/{workId}/tags")
@@ -49,19 +30,50 @@ class WorkController(
         @PathVariable workId: String,
         @RequestBody tag: Tag
     ): WorkTag {
-        logger.info("Start addTagToWork: workId={}, tag={}", workId, tag)
+        return workService.addTagToWork(workId, tag)
+    }
 
-        val savedTag = tagRepository.save(tag)
-        logger.info("Tag saved: {}", savedTag)
+    @PostMapping("/images")
+    fun createImage(@RequestBody image: Image): Image {
+        return workService.createImage(image)
+    }
 
-        val workTag = WorkTag(
-            workTagId = WorkTagId(workId = workId, tagId = savedTag.id)
-        )
-        logger.info("WorkTag created: {}", workTag)
+    @GetMapping("/{id}/images")
+    fun getImagesByWorkId(@PathVariable id: String): List<Image> {
+        return workService.getImagesByWorkId(id)
+    }
 
-        val savedWorkTag = workTagRepository.save(workTag)
-        logger.info("WorkTag saved: {}", savedWorkTag)
+    @GetMapping("/{id}/tags")
+    fun getTagsByWorkId(@PathVariable id: String): List<Tag> {
+        return workService.getTagsByWorkId(id)
+    }
 
-        return savedWorkTag
+    @PutMapping("/{id}")
+    fun updateWork(@PathVariable id: String, @RequestBody work: Work): Work? {
+        return workService.updateWork(id, work)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteWork(@PathVariable id: String): ResponseEntity<String> {
+        return try {
+            workService.deleteWork(id)
+            ResponseEntity.ok("Work with ID $id deleted successfully")
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+        }
+    }
+
+    @DeleteMapping("/images/{id}")
+    fun deleteImage(@PathVariable id: String) {
+        workService.deleteImage(id)
+    }
+
+    @PostMapping("/category")
+    fun getWorksByCategory(@RequestBody request: CategoryRequest): List<Work> {
+        return workService.getWorksByCategory(request.category)
     }
 }
+
+data class CategoryRequest(
+    var category: String = ""
+)

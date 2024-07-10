@@ -30,6 +30,8 @@ dependencies {
     // AWS
     implementation("com.amazonaws:aws-java-sdk-dynamodb:1.12.757")
     implementation("io.github.boostchicken:spring-data-dynamodb:5.2.5")
+    implementation(platform("software.amazon.awssdk:bom:2.26.18"))
+    implementation("software.amazon.awssdk:dynamodb-enhanced")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

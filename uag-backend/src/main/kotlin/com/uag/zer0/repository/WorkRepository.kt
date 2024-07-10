@@ -5,4 +5,6 @@ import org.socialsignin.spring.data.dynamodb.repository.EnableScan
 import org.springframework.data.repository.CrudRepository
 
 @EnableScan
-interface WorkRepository : CrudRepository<Work, String>
+interface WorkRepository : CrudRepository<Work, String> {
+    fun findByCategory(category: String): List<Work>
+}

@@ -1,27 +1,33 @@
 package com.uag.zer0.controller
 
 import com.uag.zer0.entity.Tag
-import com.uag.zer0.repository.TagRepository
+import com.uag.zer0.service.TagService
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/tags")
 class TagController(
-    private val tagRepository: TagRepository
+    private val tagService: TagService
 ) {
 
     @PostMapping
     fun createTag(@RequestBody tag: Tag): Tag {
-        return tagRepository.save(tag)
+        return tagService.createTag(tag)
     }
 
     @GetMapping
     fun getAllTags(): List<Tag> {
-        return tagRepository.findAll().toList()
+        return tagService.getAllTags()
     }
 
     @GetMapping("/{id}")
     fun getTag(@PathVariable id: String): Tag? {
-        return tagRepository.findById(id).orElse(null)
+        return tagService.getTag(id)
+    }
+    
+    @DeleteMapping("/{id}")
+    fun deleteTag(@PathVariable id: String): String {
+        tagService.deleteTag(id)
+        return "Tag with ID $id deleted successfully"
     }
 }
