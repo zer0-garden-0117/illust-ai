@@ -43,11 +43,6 @@ class WorkController(
         }
     }
 
-    @GetMapping("/{workId}/images")
-    fun getImagesByWorkId(@PathVariable workId: String): List<Image> {
-        return workService.getImagesByWorkId(workId)
-    }
-
     @GetMapping("/{workId}/tags")
     fun getTagsByWorkId(@PathVariable workId: String): List<Tag> {
         return workService.getTagsByWorkId(workId)
@@ -61,14 +56,19 @@ class WorkController(
         return workService.addTagToWork(workId, tag)
     }
 
-    @PostMapping("/images")
-    fun createImage(@RequestBody image: Image): Image {
-        return workService.createImage(image)
+    @GetMapping("/{workId}/images")
+    fun getImagesByWorkId(@PathVariable workId: String): List<Image> {
+        return workService.getImagesByWorkId(workId)
     }
 
     @DeleteMapping("/images/{imgId}")
     fun deleteImage(@PathVariable imgId: String) {
         workService.deleteImage(imgId)
+    }
+
+    @PostMapping("/images")
+    fun createImage(@RequestBody image: Image): Image {
+        return workService.createImage(image)
     }
 
     @PostMapping("/category")
