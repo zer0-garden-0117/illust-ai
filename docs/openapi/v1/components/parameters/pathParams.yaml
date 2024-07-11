@@ -8,3 +8,14 @@ WorksIdPathParam:
   schema:
     type: integer
     format: int32
+
+TagsIdPathParam:
+  name: tagsId
+  in: path
+  description: |-
+    ### Tags Id
+    タグのId tagsId
+  required: true
+  schema:
+    type: integer
+    format: int32

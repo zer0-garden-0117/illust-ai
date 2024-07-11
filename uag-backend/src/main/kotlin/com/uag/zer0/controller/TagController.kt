@@ -10,14 +10,14 @@ class TagController(
     private val tagService: TagService
 ) {
 
-    @PostMapping
-    fun createTag(@RequestBody tag: Tag): Tag {
-        return tagService.createTag(tag)
-    }
-
     @GetMapping
     fun getAllTags(): List<Tag> {
         return tagService.getAllTags()
+    }
+
+    @PostMapping
+    fun createTag(@RequestBody tag: Tag): Tag {
+        return tagService.createTag(tag)
     }
 
     @GetMapping("/{tagId}")
