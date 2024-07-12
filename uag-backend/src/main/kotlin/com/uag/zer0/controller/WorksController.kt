@@ -35,7 +35,8 @@ class WorksController(
         apiWorksWithTags: ApiWorksWithTags?
     ): ResponseEntity<List<ApiWorks>> {
         logger.info("searchWorks called with: authorization=$authorization, xCsrfToken=$xCsrfToken, apiWorksWithTags=$apiWorksWithTags")
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val response = workService.searchWorks(apiWorksWithTags)
+        return ResponseEntity.ok(response)
     }
 
     override fun getWorksById(

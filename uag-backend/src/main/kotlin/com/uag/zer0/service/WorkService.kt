@@ -1,12 +1,14 @@
 package com.uag.zer0.service
 
 import com.uag.zer0.entity.*
+import com.uag.zer0.generated.model.ApiWorks
 import com.uag.zer0.generated.model.ApiWorksWithTags
 import com.uag.zer0.mapper.WorkMapper
 import com.uag.zer0.repository.ImageRepository
 import com.uag.zer0.repository.TagRepository
 import com.uag.zer0.repository.WorkRepository
 import com.uag.zer0.repository.WorkTagRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,6 +20,8 @@ class WorkService(
     private val counterService: CounterService,
     private val workMapper: WorkMapper
 ) {
+
+    private val logger = LoggerFactory.getLogger(WorkService::class.java)
 
     fun createWork(apiWorksWithTags: ApiWorksWithTags) {
         val work = workMapper.toWork(apiWorksWithTags)
@@ -31,6 +35,105 @@ class WorkService(
         val workTags = workTagRepository.findByWorkTagId_WorkId(workId)
         val response = workMapper.toApiWorkWithTags(work, workTags)
         return response
+    }
+
+    fun searchWorks(apiWorksWithTags: ApiWorksWithTags?): List<ApiWorks> {
+        val works = apiWorksWithTags?.apiWorks ?: return emptyList()
+
+        logger.info("Starting searchWorks with apiWorksWithTags: $apiWorksWithTags")
+
+        var result: List<Work> = emptyList()
+
+        works.workTitle.takeIf { it.isNotBlank() }?.let { title ->
+            logger.info("Searching by title: $title")
+            result = workRepository.findByTitle(title)
+            logger.info("Found ${result.size} works by title")
+        }
+
+        works.creator.takeIf { it.isNotBlank() }?.let { creator ->
+            logger.info("Filtering by creator: $creator")
+            result = if (result.isEmpty()) {
+                workRepository.findByCreator(creator)
+            } else {
+                result.filter { it.creator == creator }
+            }
+            logger.info("Found ${result.size} works by creator")
+        }
+
+        works.category.takeIf { it.isNotBlank() }?.let { category ->
+            logger.info("Filtering by category: $category")
+            result = if (result.isEmpty()) {
+                workRepository.findByCategory(category)
+            } else {
+                result.filter { it.category == category }
+            }
+            logger.info("Found ${result.size} works by category")
+        }
+
+        works.subject.takeIf { it.isNotBlank() }?.let { subject ->
+            logger.info("Filtering by subject: $subject")
+            result = if (result.isEmpty()) {
+                workRepository.findBySubject(subject)
+            } else {
+                result.filter { it.subject == subject }
+            }
+            logger.info("Found ${result.size} works by subject")
+        }
+
+        works.language.takeIf { it.isNotBlank() }?.let { language ->
+            logger.info("Filtering by language: $language")
+            result = if (result.isEmpty()) {
+                workRepository.findByLanguage(language)
+            } else {
+                result.filter { it.language == language }
+            }
+            logger.info("Found ${result.size} works by language")
+        }
+
+//        works.createdAt?.let { createdAt ->
+//            logger.info("Filtering by createdAt: $createdAt")
+//            result = if (result.isEmpty()) {
+//                workRepository.findByCreatedAt(createdAt)
+//            } else {
+//                result.filter { it.createdAt == createdAt }
+//            }
+//            logger.info("Found ${result.size} works by createdAt")
+//        }
+//
+//        works.updatedAt?.let { updatedAt ->
+//            logger.info("Filtering by updatedAt: $updatedAt")
+//            result = if (result.isEmpty()) {
+//                workRepository.findByUpdatedAt(updatedAt)
+//            } else {
+//                result.filter { it.updatedAt == updatedAt }
+//            }
+//            logger.info("Found ${result.size} works by updatedAt")
+//        }
+
+        works.likes.let { likes ->
+            logger.info("Filtering by likes: $likes")
+            result = if (result.isEmpty()) {
+                workRepository.findByLikes(likes)
+            } else {
+                result.filter { it.likes == likes }
+            }
+            logger.info("Found ${result.size} works by likes")
+        }
+
+        works.downloads.let { downloads ->
+            logger.info("Filtering by downloads: $downloads")
+            result = if (result.isEmpty()) {
+                workRepository.findByDownloads(downloads)
+            } else {
+                result.filter { it.downloads == downloads }
+            }
+            logger.info("Found ${result.size} works by downloads")
+        }
+
+        val apiWorks = result.map { workMapper.toApiWork(it) }
+        logger.info("Final search result: $apiWorks")
+
+        return apiWorks
     }
 
     fun updateWork(workId: String, apiWorksWithTags: ApiWorksWithTags): Work? {
