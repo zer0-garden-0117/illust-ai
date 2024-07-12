@@ -4,6 +4,7 @@ import com.uag.zer0.generated.endpoint.WorksApi
 import com.uag.zer0.generated.model.ApiWorks
 import com.uag.zer0.generated.model.ApiWorksWithTags
 import com.uag.zer0.service.WorkService
+import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,6 +15,8 @@ class WorksController(
     private val workService: WorkService
 ) : WorksApi {
 
+    private val logger = LoggerFactory.getLogger(WorksController::class.java)
+
     override fun registerWorks(
         authorization: String,
         titleImage: Resource,
@@ -21,6 +24,7 @@ class WorksController(
         apiWorksWithTags: ApiWorksWithTags,
         xCsrfToken: String?
     ): ResponseEntity<Unit> {
+        logger.info("registerWorks called with: authorization=$authorization, titleImage=$titleImage, images=$images, apiWorksWithTags=$apiWorksWithTags, xCsrfToken=$xCsrfToken")
         workService.createWork(apiWorksWithTags)
         return ResponseEntity(HttpStatus.OK)
     }
@@ -30,34 +34,39 @@ class WorksController(
         xCsrfToken: String?,
         apiWorksWithTags: ApiWorksWithTags?
     ): ResponseEntity<List<ApiWorks>> {
+        logger.info("searchWorks called with: authorization=$authorization, xCsrfToken=$xCsrfToken, apiWorksWithTags=$apiWorksWithTags")
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     override fun getWorksById(
-        pathParamWorksId: Int,
+        worksId: Int,
         authorization: String,
         xCsrfToken: String?
     ): ResponseEntity<ApiWorksWithTags> {
-        workService.getWork(pathParamWorksId.toString())
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        logger.info("getWorksById called with: pathParamWorksId=$worksId, authorization=$authorization, xCsrfToken=$xCsrfToken")
+        val response = workService.getWorkWithTags(worksId.toString())
+        logger.info("getWorksById found work: $response")
+        return ResponseEntity.ok(response)
     }
 
     override fun updateWorksById(
-        pathParamWorksId: Int,
+        worksId: Int,
         authorization: String,
         apiWorksWithTags: ApiWorksWithTags,
         xCsrfToken: String?
     ): ResponseEntity<Unit> {
-        workService.updateWork(pathParamWorksId.toString(), apiWorksWithTags)
+        logger.info("updateWorksById called with: pathParamWorksId=$worksId, authorization=$authorization, apiWorksWithTags=$apiWorksWithTags, xCsrfToken=$xCsrfToken")
+        workService.updateWork(worksId.toString(), apiWorksWithTags)
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     override fun deleteWorksById(
-        pathParamTagsId: Int,
+        tagsId: Int,
         authorization: String,
         xCsrfToken: String?
     ): ResponseEntity<Unit> {
-        workService.deleteWork(pathParamTagsId.toString())
+        logger.info("deleteWorksById called with: pathParamTagsId=$tagsId, authorization=$authorization, xCsrfToken=$xCsrfToken")
+        workService.deleteWork(tagsId.toString())
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 }

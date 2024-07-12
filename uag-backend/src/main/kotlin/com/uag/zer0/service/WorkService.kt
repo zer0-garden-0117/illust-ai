@@ -26,8 +26,11 @@ class WorkService(
         workRepository.save(work)
     }
 
-    fun getWork(workId: String): Work? {
-        return workRepository.findById(workId).orElse(null)
+    fun getWorkWithTags(workId: String): ApiWorksWithTags {
+        val work = workRepository.findById(workId).orElse(null)
+        val workTags = workTagRepository.findByWorkTagId_WorkId(workId)
+        val response = workMapper.toApiWorkWithTags(work, workTags)
+        return response
     }
 
     fun updateWork(workId: String, apiWorksWithTags: ApiWorksWithTags): Work? {

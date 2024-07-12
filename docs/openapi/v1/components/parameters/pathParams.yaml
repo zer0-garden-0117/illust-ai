@@ -1,5 +1,5 @@
 WorksIdPathParam:
-  name: pathParamWorksId
+  name: worksId
   in: path
   description: |-
     ### Works Id
@@ -10,7 +10,7 @@ WorksIdPathParam:
     format: int32
 
 TagsIdPathParam:
-  name: pathParamTagsId
+  name: tagsId
   in: path
   description: |-
     ### Tags Id
