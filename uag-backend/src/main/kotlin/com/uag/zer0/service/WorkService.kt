@@ -1,6 +1,8 @@
 package com.uag.zer0.service
 
 import com.uag.zer0.entity.*
+import com.uag.zer0.generated.model.ApiWorksWithTags
+import com.uag.zer0.mapper.WorkMapper
 import com.uag.zer0.repository.ImageRepository
 import com.uag.zer0.repository.TagRepository
 import com.uag.zer0.repository.WorkRepository
@@ -13,13 +15,35 @@ class WorkService(
     private val tagRepository: TagRepository,
     private val workTagRepository: WorkTagRepository,
     private val imageRepository: ImageRepository,
-    private val counterService: CounterService
+    private val counterService: CounterService,
+    private val workMapper: WorkMapper
 ) {
 
-    fun createWork(work: Work): Work {
+    fun createWork(apiWorksWithTags: ApiWorksWithTags) {
+        val work = workMapper.toWork(apiWorksWithTags)
         val nextId = counterService.getNextWorkId()
         work.id = nextId.toString()
-        return workRepository.save(work)
+        workRepository.save(work)
+    }
+
+    fun getWork(workId: String): Work? {
+        return workRepository.findById(workId).orElse(null)
+    }
+
+    fun updateWork(workId: String, apiWorksWithTags: ApiWorksWithTags): Work? {
+        if (workRepository.existsById(workId)) {
+            val work = workMapper.toWork(apiWorksWithTags)
+            work.id = workId
+            return workRepository.save(work)
+        }
+        return null
+    }
+
+    fun deleteWork(workId: String) {
+        if (!workRepository.existsById(workId)) {
+            throw IllegalArgumentException("No work with id $workId exists!")
+        }
+        workRepository.deleteById(workId)
     }
 
     fun addTagToWork(workId: String, tag: Tag): WorkTag {
@@ -38,8 +62,12 @@ class WorkService(
         return imageRepository.save(image)
     }
 
-    fun getWork(workId: String): Work? {
-        return workRepository.findById(workId).orElse(null)
+    fun deleteImage(imgId: String) {
+        imageRepository.deleteById(imgId)
+    }
+
+    fun getWorksByCategory(category: String): List<Work> {
+        return workRepository.findByCategory(category)
     }
 
     fun getImagesByWorkId(workId: String): List<Image> {
@@ -53,28 +81,5 @@ class WorkService(
                 tagRepository.findById(workTagId.tagId).orElse(null)
             }
         }
-    }
-
-    fun updateWork(workId: String, work: Work): Work? {
-        if (workRepository.existsById(workId)) {
-            work.id = workId
-            return workRepository.save(work)
-        }
-        return null
-    }
-
-    fun deleteWork(workId: String) {
-        if (!workRepository.existsById(workId)) {
-            throw IllegalArgumentException("No work with id $workId exists!")
-        }
-        workRepository.deleteById(workId)
-    }
-
-    fun deleteImage(imgId: String) {
-        imageRepository.deleteById(imgId)
-    }
-
-    fun getWorksByCategory(category: String): List<Work> {
-        return workRepository.findByCategory(category)
     }
 }
