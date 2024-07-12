@@ -108,7 +108,8 @@ class ProdAuthConfig : WebMvcConfigurer {
     companion object {
         // CORSのORIGINSの設定
         private val PROD_FRONT_ORIGINS: Array<String> = arrayOf(
-            "http://localhost:3001",  // フロントエンド開発用
+            "http://localhost:3001", // フロントエンド開発用
+            "http://localhost:8000", // SwaggerUI用
         )
 
         // CSRFトークンを生成するエンドポイントを指定

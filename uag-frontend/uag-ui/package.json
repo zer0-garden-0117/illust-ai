@@ -7,7 +7,11 @@
     "clean": "rm -rf build dist node_modules/.cache",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean:bundleDoc": "node -e 'require(\"fs\").rmSync(\"src/generated/services/uag-v1-full.yaml\", { force: true })'",
+    "bundleDoc": "npm run clean:bundleDoc && redocly bundle ../../docs/openapi/v1/uag-v1.yaml --output src/generated/services/uag-v1-full.yaml",
+    "openapi-docker": "docker run --rm -p 8000:8080 -e SWAGGER_JSON=/openapi/uag-v1-full.yaml -v $(pwd)/src/generated/services/uag-v1-full.yaml:/openapi/uag-v1-full.yaml swaggerapi/swagger-ui",
+    "openapi-ui": "npm run bundleDoc && npm run openapi-docker"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.1.12",
@@ -27,6 +31,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@redocly/cli": "^1.11.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8.4.38",
