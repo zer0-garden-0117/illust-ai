@@ -1,10 +1,11 @@
 package com.uag.zer0.mapper
 
-import com.uag.zer0.entity.Tag
 import com.uag.zer0.entity.Work
 import com.uag.zer0.generated.model.ApiWorksWithTags
+import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
+@Component
 class WorkMapper {
 
     fun toWork(apiWorksWithTags: ApiWorksWithTags?): Work {
@@ -13,12 +14,12 @@ class WorkMapper {
         }
 
         val works = apiWorksWithTags.apiWorks
-        val tags = apiWorksWithTags.apiTagsList.map {
-            Tag(
-                id = it.tagId,
-                name = it.tagName
-            )
-        }
+//        val tags = apiWorksWithTags.apiTagsList.map {
+//            Tag(
+//                id = it.tagId,
+//                name = it.tagName
+//            )
+//        }
 
         return Work(
             id = works.workId,
@@ -41,12 +42,12 @@ class WorkMapper {
         }
 
         val works = apiWorksWithTags.apiWorks
-        val tags = apiWorksWithTags.apiTagsList.map {
-            Tag(
-                id = it.tagId,
-                name = it.tagName
-            )
-        }
+//        val tags = apiWorksWithTags.apiTagsList.map {
+//            Tag(
+//                id = it.tagId,
+//                name = it.tagName
+//            )
+//        }
 
         return Work(
             id = works.workId,

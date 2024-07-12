@@ -24,6 +24,8 @@ dependencies {
     // SpringFramework
     implementation("org.springframework.boot:spring-boot-starter-web")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -107,4 +109,16 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 tasks.named("processResources") {
     dependsOn(":openApiGenerate")
+}
+
+// プロファイルの設定
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    systemProperty("spring.profiles.active", "prod")
+}
+tasks.register<org.springframework.boot.gradle.tasks.run.BootRun>("bootRunDev") {
+    doFirst {
+        systemProperty("spring.profiles.active", "dev")
+    }
+    mainClass.set("com.uag.zer0.Application")
+    classpath = sourceSets["main"].runtimeClasspath
 }

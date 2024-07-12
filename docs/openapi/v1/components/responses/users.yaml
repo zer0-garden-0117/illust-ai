@@ -1,0 +1,13 @@
+UsersMeGetResponse:
+  description: |-
+    200 OK
+    - 正常終了
+    - CSRFトークンがクッキーに設定される。
+  content: {}
+  headers:
+    Set-Cookie:
+      description: |-
+        CSRFトークンが含まれるクッキー。
+      schema:
+        type: string
+        example: "CSRF-Token=abcdef12345; Path=/; Secure; HttpOnly=false"
