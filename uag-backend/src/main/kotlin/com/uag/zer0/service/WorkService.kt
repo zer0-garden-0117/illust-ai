@@ -2,7 +2,7 @@ package com.uag.zer0.service
 
 import com.uag.zer0.entity.*
 import com.uag.zer0.generated.model.ApiWorks
-import com.uag.zer0.generated.model.ApiWorksWithTags
+import com.uag.zer0.generated.model.ApiWorksWithDetails
 import com.uag.zer0.mapper.WorkMapper
 import com.uag.zer0.repository.ImageRepository
 import com.uag.zer0.repository.TagRepository
@@ -23,34 +23,35 @@ class WorkService(
 
     private val logger = LoggerFactory.getLogger(WorkService::class.java)
 
-    fun createWork(apiWorksWithTags: ApiWorksWithTags) {
+    fun createWork(apiWorksWithTags: ApiWorksWithDetails) {
         val work = workMapper.toWork(apiWorksWithTags)
         val nextId = counterService.getNextWorkId()
-        work.id = nextId.toString()
+        work.workId = nextId.toString()
         workRepository.save(work)
     }
 
-    fun getWorkWithTags(workId: String): ApiWorksWithTags {
+    fun getWorkWithTags(workId: String): ApiWorksWithDetails {
         val work = workRepository.findById(workId).orElse(null)
-        val workTags = workTagRepository.findByWorkTagId_WorkId(workId)
-        val response = workMapper.toApiWorkWithTags(work, workTags)
+        val workTags = workTagRepository.findByWorkTagIdWorkId(workId)
+        val imgList = imageRepository.findByWorkId(workId)
+        val response = workMapper.toApiWorkWithDetails(work, workTags, imgList)
         return response
     }
 
-    fun searchWorks(apiWorksWithTags: ApiWorksWithTags?): List<ApiWorks> {
+    fun searchWorks(apiWorksWithTags: ApiWorksWithDetails?): List<ApiWorks> {
         val works = apiWorksWithTags?.apiWorks ?: return emptyList()
 
         logger.info("Starting searchWorks with apiWorksWithTags: $apiWorksWithTags")
 
         var result: List<Work> = emptyList()
 
-        works.workTitle.takeIf { it.isNotBlank() }?.let { title ->
+        works.mainTitle.takeIf { it!!.isNotBlank() }?.let { title ->
             logger.info("Searching by title: $title")
-            result = workRepository.findByTitle(title)
+            result = workRepository.findByMainTitle(title)
             logger.info("Found ${result.size} works by title")
         }
 
-        works.creator.takeIf { it.isNotBlank() }?.let { creator ->
+        works.creator.takeIf { it!!.isNotBlank() }?.let { creator ->
             logger.info("Filtering by creator: $creator")
             result = if (result.isEmpty()) {
                 workRepository.findByCreator(creator)
@@ -60,35 +61,35 @@ class WorkService(
             logger.info("Found ${result.size} works by creator")
         }
 
-        works.category.takeIf { it.isNotBlank() }?.let { category ->
-            logger.info("Filtering by category: $category")
-            result = if (result.isEmpty()) {
-                workRepository.findByCategory(category)
-            } else {
-                result.filter { it.category == category }
-            }
-            logger.info("Found ${result.size} works by category")
-        }
+//        works.category.takeIf { it.isNotBlank() }?.let { category ->
+//            logger.info("Filtering by category: $category")
+//            result = if (result.isEmpty()) {
+//                workRepository.findByCategory(category)
+//            } else {
+//                result.filter { it.category == category }
+//            }
+//            logger.info("Found ${result.size} works by category")
+//        }
+//
+//        works.subject.takeIf { it.isNotBlank() }?.let { subject ->
+//            logger.info("Filtering by subject: $subject")
+//            result = if (result.isEmpty()) {
+//                workRepository.findBySubject(subject)
+//            } else {
+//                result.filter { it.subject == subject }
+//            }
+//            logger.info("Found ${result.size} works by subject")
+//        }
 
-        works.subject.takeIf { it.isNotBlank() }?.let { subject ->
-            logger.info("Filtering by subject: $subject")
-            result = if (result.isEmpty()) {
-                workRepository.findBySubject(subject)
-            } else {
-                result.filter { it.subject == subject }
-            }
-            logger.info("Found ${result.size} works by subject")
-        }
-
-        works.language.takeIf { it.isNotBlank() }?.let { language ->
-            logger.info("Filtering by language: $language")
-            result = if (result.isEmpty()) {
-                workRepository.findByLanguage(language)
-            } else {
-                result.filter { it.language == language }
-            }
-            logger.info("Found ${result.size} works by language")
-        }
+//        works.language.takeIf { it.isNotBlank() }?.let { language ->
+//            logger.info("Filtering by language: $language")
+//            result = if (result.isEmpty()) {
+//                workRepository.findByLanguage(language)
+//            } else {
+//                result.filter { it.language == language }
+//            }
+//            logger.info("Found ${result.size} works by language")
+//        }
 
 //        works.createdAt?.let { createdAt ->
 //            logger.info("Filtering by createdAt: $createdAt")
@@ -110,25 +111,25 @@ class WorkService(
 //            logger.info("Found ${result.size} works by updatedAt")
 //        }
 
-        works.likes.let { likes ->
-            logger.info("Filtering by likes: $likes")
-            result = if (result.isEmpty()) {
-                workRepository.findByLikes(likes)
-            } else {
-                result.filter { it.likes == likes }
-            }
-            logger.info("Found ${result.size} works by likes")
-        }
-
-        works.downloads.let { downloads ->
-            logger.info("Filtering by downloads: $downloads")
-            result = if (result.isEmpty()) {
-                workRepository.findByDownloads(downloads)
-            } else {
-                result.filter { it.downloads == downloads }
-            }
-            logger.info("Found ${result.size} works by downloads")
-        }
+//        works.likes.let { likes ->
+//            logger.info("Filtering by likes: $likes")
+//            result = if (result.isEmpty()) {
+//                workRepository.findByLikes(likes)
+//            } else {
+//                result.filter { it.likes == likes }
+//            }
+//            logger.info("Found ${result.size} works by likes")
+//        }
+//
+//        works.downloads.let { downloads ->
+//            logger.info("Filtering by downloads: $downloads")
+//            result = if (result.isEmpty()) {
+//                workRepository.findByDownloads(downloads)
+//            } else {
+//                result.filter { it.downloads == downloads }
+//            }
+//            logger.info("Found ${result.size} works by downloads")
+//        }
 
         val apiWorks = result.map { workMapper.toApiWork(it) }
         logger.info("Final search result: $apiWorks")
@@ -136,10 +137,13 @@ class WorkService(
         return apiWorks
     }
 
-    fun updateWork(workId: String, apiWorksWithTags: ApiWorksWithTags): Work? {
+    fun updateWork(
+        workId: String,
+        apiWorksWithTags: ApiWorksWithDetails
+    ): Work? {
         if (workRepository.existsById(workId)) {
             val work = workMapper.toWork(apiWorksWithTags)
-            work.id = workId
+            work.workId = workId
             return workRepository.save(work)
         }
         return null
@@ -154,17 +158,17 @@ class WorkService(
 
     fun addTagToWork(workId: String, tag: Tag): WorkTag {
         val nextTagId = counterService.getNextTagId()
-        tag.id = nextTagId.toString()
+        tag.tagId = nextTagId.toString()
         val savedTag = tagRepository.save(tag)
         val workTag = WorkTag(
-            workTagId = WorkTagId(workId = workId, tagId = savedTag.id)
+            workTagId = WorkTagId(workId = workId, tagId = savedTag.tagId)
         )
         return workTagRepository.save(workTag)
     }
 
     fun createImage(image: Image): Image {
         val nextId = counterService.getNextImageId()
-        image.id = nextId.toString()
+        image.imgId = nextId.toString()
         return imageRepository.save(image)
     }
 
@@ -173,7 +177,7 @@ class WorkService(
     }
 
     fun getWorksByCategory(category: String): List<Work> {
-        return workRepository.findByCategory(category)
+        return workRepository.findByMainTitle(category)
     }
 
     fun getImagesByWorkId(workId: String): List<Image> {
@@ -181,7 +185,7 @@ class WorkService(
     }
 
     fun getTagsByWorkId(workId: String): List<Tag> {
-        val workTags = workTagRepository.findByWorkTagId_WorkId(workId)
+        val workTags = workTagRepository.findByWorkTagIdWorkId(workId)
         return workTags.mapNotNull {
             it.workTagId?.let { workTagId ->
                 tagRepository.findById(workTagId.tagId).orElse(null)

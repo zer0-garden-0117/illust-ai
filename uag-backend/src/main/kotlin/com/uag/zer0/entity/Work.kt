@@ -11,41 +11,50 @@ import java.time.LocalDateTime
 @DynamoDBTable(tableName = "works")
 data class Work(
     @Id
-    @DynamoDBHashKey(attributeName = "id")
-    var id: String = "",
+    @DynamoDBHashKey(attributeName = "workId")
+    var workId: String = "",
 
-    @DynamoDBAttribute(attributeName = "title")
-    var title: String = "",
+    @DynamoDBAttribute(attributeName = "mainTitle")
+    var mainTitle: String = "",
 
-    @DynamoDBAttribute(attributeName = "title_image_url")
-    var titleImageUrl: String = "",
+    @DynamoDBAttribute(attributeName = "subTitle")
+    var subTitle: String = "",
+
+    @DynamoDBAttribute(attributeName = "description")
+    var description: String = "",
+
+    @DynamoDBAttribute(attributeName = "workFormat")
+    var workFormat: String = "",
+
+    @DynamoDBAttribute(attributeName = "topicGenre")
+    var topicGenre: String = "",
 
     @DynamoDBAttribute(attributeName = "creator")
     var creator: String = "",
 
-    @DynamoDBAttribute(attributeName = "category")
-    var category: String = "",
+    @DynamoDBAttribute(attributeName = "pages")
+    var pages: String = "",
 
-    @DynamoDBAttribute(attributeName = "subject")
-    var subject: String = "",
+    @DynamoDBAttribute(attributeName = "workSize")
+    var workSize: String = "",
 
     @DynamoDBAttribute(attributeName = "language")
     var language: String = "",
-
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter::class)
-    @DynamoDBAttribute(attributeName = "created_at")
-    var createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter::class)
-    @DynamoDBAttribute(attributeName = "updated_at")
-    var updatedAt: LocalDateTime = LocalDateTime.now(),
-
-    @DynamoDBAttribute(attributeName = "page_count")
-    var pageCount: Int = 0,
 
     @DynamoDBAttribute(attributeName = "likes")
     var likes: Int = 0,
 
     @DynamoDBAttribute(attributeName = "downloads")
-    var downloads: Int = 0
+    var downloads: Int = 0,
+
+    @DynamoDBAttribute(attributeName = "titleImageUrl")
+    var titleImageUrl: String = "",
+
+    @DynamoDBTypeConverted(converter = LocalDateTimeConverter::class)
+    @DynamoDBAttribute(attributeName = "createdAt")
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @DynamoDBTypeConverted(converter = LocalDateTimeConverter::class)
+    @DynamoDBAttribute(attributeName = "updatedAt")
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 )

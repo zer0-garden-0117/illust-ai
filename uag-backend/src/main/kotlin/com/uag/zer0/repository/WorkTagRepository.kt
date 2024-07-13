@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository
 
 @EnableScan
 interface WorkTagRepository : CrudRepository<WorkTag, WorkTagId> {
-    fun findByWorkTagId_WorkId(workId: String): List<WorkTag>
-    fun findByWorkTagId_TagId(tagId: String): List<WorkTag>
+    fun findByWorkTagIdWorkId(workId: String): List<WorkTag>
+    fun findByWorkTagIdTagId(tagId: String): List<WorkTag>
 }

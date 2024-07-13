@@ -14,7 +14,7 @@ class TagService(
 
     fun createTag(tag: Tag): Tag {
         val newId = counterService.getNextTagId().toString()
-        val newTag = tag.copy(id = newId)
+        val newTag = tag.copy(tagId = newId)
         return tagRepository.save(newTag)
     }
 
@@ -28,7 +28,7 @@ class TagService(
 
     fun deleteTag(tagId: String) {
         // タグに紐づけられているwork_tagsを削除
-        val workTags = workTagRepository.findByWorkTagId_TagId(tagId)
+        val workTags = workTagRepository.findByWorkTagIdTagId(tagId)
         workTags.forEach { workTagRepository.delete(it) }
 
         tagRepository.deleteById(tagId)

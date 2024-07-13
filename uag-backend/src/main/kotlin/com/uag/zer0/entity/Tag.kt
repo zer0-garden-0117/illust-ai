@@ -6,14 +6,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable
 
 @DynamoDBTable(tableName = "tags")
 data class Tag(
-    @DynamoDBHashKey(attributeName = "id")
-    var id: String = "",
+    @DynamoDBHashKey(attributeName = "tagId")
+    var tagId: String = "",
 
-    @DynamoDBIndexHashKey(
-        globalSecondaryIndexName = "name-index",
-        attributeName = "name"
-    )
-    var name: String = ""
+    @DynamoDBIndexHashKey(attributeName = "tagName")
+    var tagName: String = ""
 ) {
     constructor() : this("", "")
 }

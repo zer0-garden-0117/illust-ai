@@ -9,28 +9,28 @@ AWS_PROFILE=default
 # counters テーブルの作成
 aws dynamodb create-table \
     --table-name counters \
-    --attribute-definitions AttributeName=counter_name,AttributeType=S \
-    --key-schema AttributeName=counter_name,KeyType=HASH \
+    --attribute-definitions AttributeName=counterName,AttributeType=S \
+    --key-schema AttributeName=counterName,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
     --endpoint-url $ENDPOINT_URL
 
 # works テーブルの作成
 aws dynamodb create-table \
     --table-name works \
-    --attribute-definitions AttributeName=id,AttributeType=S \
-    --key-schema AttributeName=id,KeyType=HASH \
+    --attribute-definitions AttributeName=workId,AttributeType=S \
+    --key-schema AttributeName=workId,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
     --endpoint-url $ENDPOINT_URL
 
 # images テーブルの作成
 aws dynamodb create-table \
     --table-name images \
-    --attribute-definitions AttributeName=id,AttributeType=S AttributeName=work_id,AttributeType=S \
-    --key-schema AttributeName=id,KeyType=HASH \
+    --attribute-definitions AttributeName=imgId,AttributeType=S AttributeName=workId,AttributeType=S \
+    --key-schema AttributeName=imgId,KeyType=HASH \
     --global-secondary-indexes "[
         {
-            \"IndexName\": \"work_id-index\",
-            \"KeySchema\": [{\"AttributeName\":\"work_id\",\"KeyType\":\"HASH\"}],
+            \"IndexName\": \"workId-index\",
+            \"KeySchema\": [{\"AttributeName\":\"workId\",\"KeyType\":\"HASH\"}],
             \"Projection\": {\"ProjectionType\":\"ALL\"},
             \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
         }
@@ -42,21 +42,21 @@ aws dynamodb create-table \
 aws dynamodb create-table \
     --table-name tags \
     --attribute-definitions \
-        AttributeName=id,AttributeType=S \
+        AttributeName=tagId,AttributeType=S \
     --key-schema \
-        AttributeName=id,KeyType=HASH \
+        AttributeName=tagId,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
     --endpoint-url $ENDPOINT_URL
 
 # work_tags テーブルの作成
 aws dynamodb create-table \
     --table-name work_tags \
-    --attribute-definitions AttributeName=work_id,AttributeType=S AttributeName=tag_id,AttributeType=S \
-    --key-schema AttributeName=work_id,KeyType=HASH AttributeName=tag_id,KeyType=RANGE \
+    --attribute-definitions AttributeName=workId,AttributeType=S AttributeName=tagId,AttributeType=S \
+    --key-schema AttributeName=workId,KeyType=HASH AttributeName=tagId,KeyType=RANGE \
     --global-secondary-indexes "[
         {
-            \"IndexName\": \"tag_id-index\",
-            \"KeySchema\": [{\"AttributeName\":\"tag_id\",\"KeyType\":\"HASH\"}],
+            \"IndexName\": \"tagIdindex\",
+            \"KeySchema\": [{\"AttributeName\":\"tagId\",\"KeyType\":\"HASH\"}],
             \"Projection\": {\"ProjectionType\":\"ALL\"},
             \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
         }
@@ -101,12 +101,12 @@ generate_id() {
     local counter_name=$1
     local current_value=$(aws dynamodb update-item \
         --table-name counters \
-        --key "{\"counter_name\": {\"S\": \"$counter_name\"}}" \
-        --update-expression "SET counter_value = if_not_exists(counter_value, :start) + :inc" \
+        --key "{\"counterName\": {\"S\": \"$counter_name\"}}" \
+        --update-expression "SET counterValue = if_not_exists(counterValue, :start) + :inc" \
         --expression-attribute-values '{":inc": {"N": "1"}, ":start": {"N": "0"}}' \
         --return-values "UPDATED_NEW" \
         --endpoint-url $ENDPOINT_URL \
-        --query "Attributes.counter_value.N" \
+        --query "Attributes.counterValue.N" \
         --output text)
     echo $current_value
 }
@@ -119,7 +119,7 @@ do
     work_ids+=($work_id)
     aws dynamodb put-item \
         --table-name works \
-        --item "{\"id\": {\"S\": \"$work_id\"}, \"mainTitle\": {\"S\": \"Sample Work $i\"}, \"subTitle\": {\"S\": \"Sample Subtitle $i\"}, \"description\": {\"S\": \"Sample Description $i\"}, \"workFormat\": {\"S\": \"CG/コミック/ゲーム\"}, \"topicGenre\": {\"S\": \"オリジナル/二次創作/パロディ\"}, \"creator\": {\"S\": \"Sample Creator $i\"}, \"pages\": {\"S\": \"30\"}, \"size\": {\"S\": \"30MB\"}, \"language\": {\"S\": \"English\"}, \"likes\": {\"N\": \"0\"}, \"downloads\": {\"N\": \"0\"}, \"titleImageUrl\": {\"S\": \"http://example.com/title_image_$i.jpg\"}, \"createdAt\": {\"S\": \"2024-07-08T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-07-08T00:00:00Z\"}}" \
+        --item "{\"workId\": {\"S\": \"$work_id\"}, \"mainTitle\": {\"S\": \"Sample Work $i\"}, \"subTitle\": {\"S\": \"Sample Subtitle $i\"}, \"description\": {\"S\": \"Sample Description $i\"}, \"workFormat\": {\"S\": \"CG/コミック/ゲーム\"}, \"topicGenre\": {\"S\": \"オリジナル/二次創作/パロディ\"}, \"creator\": {\"S\": \"Sample Creator $i\"}, \"pages\": {\"S\": \"30\"}, \"workSize\": {\"S\": \"30MB\"}, \"language\": {\"S\": \"English\"}, \"likes\": {\"N\": \"0\"}, \"downloads\": {\"N\": \"0\"}, \"titleImageUrl\": {\"S\": \"http://example.com/title_image_$i.jpg\"}, \"createdAt\": {\"S\": \"2024-07-08T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-07-08T00:00:00Z\"}}" \
         --endpoint-url $ENDPOINT_URL
 
     # images テーブルにテストデータを追加
@@ -128,7 +128,7 @@ do
         img_id=$(generate_id "img_id")
         aws dynamodb put-item \
             --table-name images \
-            --item "{\"id\": {\"S\": \"$img_id\"}, \"work_id\": {\"S\": \"$work_id\"}, \"s3_url\": {\"S\": \"http://example.com/image${i}_${j}.jpg\"}, \"pageNumber\": {\"N\": \"$j\"}}" \
+            --item "{\"imgId\": {\"S\": \"$img_id\"}, \"workId\": {\"S\": \"$work_id\"}, \"s3Url\": {\"S\": \"http://example.com/image${i}_${j}.jpg\"}, \"pageNumber\": {\"N\": \"$j\"}}" \
             --endpoint-url $ENDPOINT_URL
     done
 done
@@ -141,7 +141,7 @@ do
     tag_ids+=($tag_id)
     aws dynamodb put-item \
         --table-name tags \
-        --item "{\"id\": {\"S\": \"$tag_id\"}, \"name\": {\"S\": \"Sample Tag $i\"}}" \
+        --item "{\"tagId\": {\"S\": \"$tag_id\"}, \"tagName\": {\"S\": \"Sample Tag $i\"}}" \
         --endpoint-url $ENDPOINT_URL
 done
 
@@ -152,7 +152,7 @@ do
     do
         aws dynamodb put-item \
             --table-name work_tags \
-            --item "{\"work_id\": {\"S\": \"$work_id\"}, \"tag_id\": {\"S\": \"$tag_id\"}}" \
+            --item "{\"workId\": {\"S\": \"$work_id\"}, \"tagId\": {\"S\": \"$tag_id\"}}" \
             --endpoint-url $ENDPOINT_URL
     done
 done

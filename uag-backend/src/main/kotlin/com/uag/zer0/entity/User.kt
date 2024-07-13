@@ -5,12 +5,12 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable
 import org.springframework.data.annotation.Id
 
-@DynamoDBTable(tableName = "counters")
-data class Counter(
+@DynamoDBTable(tableName = "users")
+data class User(
     @Id
-    @DynamoDBHashKey(attributeName = "counterName")
-    var counterName: String = "",
+    @DynamoDBHashKey(attributeName = "userId")
+    var userId: String = "",
 
-    @DynamoDBAttribute(attributeName = "counterValue")
-    var counterValue: Long = 0
+    @DynamoDBAttribute(attributeName = "userRole")
+    var userRole: String = ""
 )
