@@ -119,7 +119,7 @@ do
     work_ids+=($work_id)
     aws dynamodb put-item \
         --table-name works \
-        --item "{\"workId\": {\"S\": \"$work_id\"}, \"mainTitle\": {\"S\": \"Sample Work $i\"}, \"subTitle\": {\"S\": \"Sample Subtitle $i\"}, \"description\": {\"S\": \"Sample Description $i\"}, \"workFormat\": {\"S\": \"CG/コミック/ゲーム\"}, \"topicGenre\": {\"S\": \"オリジナル/二次創作/パロディ\"}, \"creator\": {\"S\": \"Sample Creator $i\"}, \"pages\": {\"S\": \"30\"}, \"workSize\": {\"S\": \"30MB\"}, \"language\": {\"S\": \"English\"}, \"likes\": {\"N\": \"0\"}, \"downloads\": {\"N\": \"0\"}, \"titleImageUrl\": {\"S\": \"http://example.com/title_image_$i.jpg\"}, \"createdAt\": {\"S\": \"2024-07-08T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-07-08T00:00:00Z\"}}" \
+        --item "{\"workId\": {\"S\": \"$work_id\"}, \"mainTitle\": {\"S\": \"Sample Work $i\"}, \"subTitle\": {\"S\": \"Sample Subtitle $i\"}, \"description\": {\"S\": \"Sample Description $i\"}, \"workFormat\": {\"S\": \"CG/コミック/ゲーム\"}, \"topicGenre\": {\"S\": \"オリジナル/二次創作/パロディ\"}, \"characterName\": {\"S\": \"真白\"}, \"creator\": {\"S\": \"Sample Creator $i\"}, \"pages\": {\"S\": \"30\"}, \"workSize\": {\"S\": \"30MB\"}, \"language\": {\"S\": \"English\"}, \"likes\": {\"N\": \"0\"}, \"downloads\": {\"N\": \"0\"}, \"titleImageUrl\": {\"S\": \"http://example.com/title_image_$i.jpg\"}, \"createdAt\": {\"S\": \"2024-07-08T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-07-08T00:00:00Z\"}}" \
         --endpoint-url $ENDPOINT_URL
 
     # images テーブルにテストデータを追加

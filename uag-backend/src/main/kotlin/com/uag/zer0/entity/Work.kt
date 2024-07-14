@@ -29,6 +29,9 @@ data class Work(
     @DynamoDBAttribute(attributeName = "topicGenre")
     var topicGenre: String = "",
 
+    @DynamoDBAttribute(attributeName = "characterName")
+    var characterName: String = "",
+
     @DynamoDBAttribute(attributeName = "creator")
     var creator: String = "",
 
