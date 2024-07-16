@@ -1,13 +1,14 @@
 #!/bin/bash
 
-# テーブル名のリスト
-tables=("works" "images" "tags" "work_tags" "counters" "users" "user_likes" "user_downloads" "user_views")
+# DynamoDB Localのエンドポイント
+ENDPOINT_URL=http://localhost:10000
+
+# テーブル名の一覧を取得
+tables=$(aws dynamodb list-tables --endpoint-url $ENDPOINT_URL --query "TableNames" --output text)
 
 # 各テーブルを削除
-for table in "${tables[@]}"
+for table in $tables
 do
     echo "Deleting table: $table"
-    command="aws dynamodb delete-table --table-name $table --endpoint-url http://localhost:10000 --no-cli-pager"
-    echo "Running command: $command"
-    $command
+    aws dynamodb delete-table --table-name $table --endpoint-url $ENDPOINT_URL --no-cli-pager
 done
