@@ -2,7 +2,7 @@ package com.uag.zer0.mapper.work
 
 import com.uag.zer0.entity.work.Work
 import com.uag.zer0.generated.model.ApiImgsInner
-import com.uag.zer0.generated.model.ApiTagsListInner
+import com.uag.zer0.generated.model.ApiTagsMap
 import com.uag.zer0.generated.model.ApiWorks
 import com.uag.zer0.generated.model.ApiWorksWithDetails
 import org.springframework.stereotype.Component
@@ -12,8 +12,8 @@ class WorkMapper {
 
     fun toApiWorksWithDetails(
         work: Work?,
-        tagNameList: List<String?>,
-        imageList: List<String?>
+        imageList: List<String?>,
+        categoryNameToTagNameMap: Map<String?, List<String?>>
     ): ApiWorksWithDetails {
         // workオブジェクトがnullの場合は空のApiWorksを返す
         val apiWorks = work?.let {
@@ -30,14 +30,6 @@ class WorkMapper {
             )
         } ?: ApiWorks()
 
-        // タグのリストをApiTagsListInnerのリストに変換
-        val apiTagsList = tagNameList.filterNotNull().map { tagName ->
-            ApiTagsListInner(
-                tagId = tagName.hashCode(),  // タグ名のハッシュコードをタグIDとして使用
-                tagName = tagName
-            )
-        }
-
         // 画像のリストをApiImgsInnerのリストに変換
         val apiImgsList =
             imageList.filterNotNull().mapIndexed { index, imgUrl ->
@@ -48,11 +40,21 @@ class WorkMapper {
                 )
             }
 
+        // カテゴリ名をキー、タグ名を値とするマップをApiTagsMapオブジェクトに変換
+        val apiTagsMap = ApiTagsMap(
+            workFormat = categoryNameToTagNameMap["workFormat"]?.filterNotNull(),
+            topicGenre = categoryNameToTagNameMap["topicGenre"]?.filterNotNull(),
+            characterName = categoryNameToTagNameMap["characterName"]?.filterNotNull(),
+            creator = categoryNameToTagNameMap["creator"]?.filterNotNull(),
+            language = categoryNameToTagNameMap["language"]?.filterNotNull(),
+            other = categoryNameToTagNameMap["other"]?.filterNotNull()
+        )
+
         // ApiWorksWithDetailsオブジェクトを返す
         return ApiWorksWithDetails(
             apiWorks = apiWorks,
             apiImgsList = apiImgsList,
-            apiTagsList = apiTagsList
+            apiTagsMap = apiTagsMap
         )
     }
 }

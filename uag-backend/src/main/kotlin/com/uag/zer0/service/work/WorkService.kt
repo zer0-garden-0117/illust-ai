@@ -25,12 +25,19 @@ class WorkService(
             .map { it.s3Url }
         val tagNameList = workByTagRepository.findByWorkByTagIdWorkId(workId)
             .map { it.workByTagId?.tagName }
+        // タグ名に対応するカテゴリ情報のリストを取得
         val tagByCategoryList =
             tagByCategoryRepository.findByTagByCategoryIdTagNameIn(tagNameList as List<String>)
-        val tagNameToCategoryMap =
-            tagByCategoryList.associate { it.tagByCategoryId?.tagName to it.tagByCategoryId?.categoryName }
+        // カテゴリ名をキー、タグ名のリストを値とするマップを生成
+        val categoryNameToTagNameMap =
+            tagByCategoryList.groupBy { it.tagByCategoryId?.categoryName }
+                .mapValues { entry -> entry.value.map { it.tagByCategoryId?.tagName } }
         val response =
-            workMapper.toApiWorksWithDetails(work, tagNameList, imageList)
+            workMapper.toApiWorksWithDetails(
+                work,
+                imageList,
+                categoryNameToTagNameMap
+            )
         return response
     }
 }
