@@ -32,7 +32,17 @@ class WorksController(
     override fun searchWorks(
         authorization: String,
         xCsrfToken: String?,
-        apiWorksWithDetails: ApiWorksWithDetails?
+        requestBody: List<String>?
+    ): ResponseEntity<List<ApiWorks>> {
+//        logger.info("searchWorks called with: authorization=$authorization, xCsrfToken=$xCsrfToken, apiWorksWithTags=$apiWorksWithDetails")
+//        val response = workService.searchWorks(apiWorksWithDetails)
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+
+    override fun searchWorksByTags(
+        authorization: String,
+        xCsrfToken: String?,
+        requestBody: List<String>?
     ): ResponseEntity<List<ApiWorks>> {
 //        logger.info("searchWorks called with: authorization=$authorization, xCsrfToken=$xCsrfToken, apiWorksWithTags=$apiWorksWithDetails")
 //        val response = workService.searchWorks(apiWorksWithDetails)
