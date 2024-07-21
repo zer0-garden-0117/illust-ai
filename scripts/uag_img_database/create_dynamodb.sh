@@ -64,6 +64,21 @@ create_table userByViewedWork \
     --attribute-definitions AttributeName=userId,AttributeType=S AttributeName=viewedWorkId,AttributeType=S \
     --key-schema AttributeName=userId,KeyType=HASH AttributeName=viewedWorkId,KeyType=RANGE
 
+# mainTitleByWork テーブルの作成
+create_table mainTitleByWork \
+    --attribute-definitions AttributeName=mainTitle,AttributeType=S \
+    --key-schema AttributeName=mainTitle,KeyType=HASH
+
+# subTitleByWork テーブルの作成
+create_table subTitleByWork \
+    --attribute-definitions AttributeName=subTitle,AttributeType=S \
+    --key-schema AttributeName=subTitle,KeyType=HASH
+
+# descriptionByWork テーブルの作成
+create_table descriptionByWork \
+    --attribute-definitions AttributeName=description,AttributeType=S \
+    --key-schema AttributeName=description,KeyType=HASH
+
 echo "All tables created successfully."
 
 # IDを生成する関数
@@ -87,9 +102,31 @@ for i in {1..3}
 do
     work_id=$(generate_id "workId")
     work_ids+=($work_id)
+    main_title="${work_id}_Sample Work $i"
+    sub_title="${work_id}_Sample Subtitle $i"
+    description="${work_id}_Sample Description $i"
+
     aws dynamodb put-item \
         --table-name work \
-        --item "{\"workId\": {\"S\": \"$work_id\"}, \"mainTitle\": {\"S\": \"Sample Work $i\"}, \"subTitle\": {\"S\": \"Sample Subtitle $i\"}, \"description\": {\"S\": \"Sample Description $i\"}, \"pages\": {\"S\": \"30\"}, \"workSize\": {\"S\": \"30MB\"}, \"likes\": {\"N\": \"0\"}, \"downloads\": {\"N\": \"0\"}, \"titleImageUrl\": {\"S\": \"http://example.com/title_image_$i.jpg\"}, \"createdAt\": {\"S\": \"2024-07-08T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-07-08T00:00:00Z\"}}" \
+        --item "{\"workId\": {\"S\": \"$work_id\"}, \"mainTitle\": {\"S\": \"$main_title\"}, \"subTitle\": {\"S\": \"$sub_title\"}, \"description\": {\"S\": \"$description\"}, \"pages\": {\"S\": \"30\"}, \"workSize\": {\"S\": \"30MB\"}, \"likes\": {\"N\": \"0\"}, \"downloads\": {\"N\": \"0\"}, \"titleImageUrl\": {\"S\": \"http://example.com/title_image_$i.jpg\"}, \"createdAt\": {\"S\": \"2024-07-08T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-07-08T00:00:00Z\"}}" \
+        --endpoint-url $ENDPOINT_URL
+
+    # mainTitleByWork テーブルにテストデータを追加
+    aws dynamodb put-item \
+        --table-name mainTitleByWork \
+        --item "{\"mainTitle\": {\"S\": \"$main_title\"}, \"workId\": {\"S\": \"$work_id\"}}" \
+        --endpoint-url $ENDPOINT_URL
+
+    # subTitleByWork テーブルにテストデータを追加
+    aws dynamodb put-item \
+        --table-name subTitleByWork \
+        --item "{\"subTitle\": {\"S\": \"$sub_title\"}, \"workId\": {\"S\": \"$work_id\"}}" \
+        --endpoint-url $ENDPOINT_URL
+
+    # descriptionByWork テーブルにテストデータを追加
+    aws dynamodb put-item \
+        --table-name descriptionByWork \
+        --item "{\"description\": {\"S\": \"$description\"}, \"workId\": {\"S\": \"$work_id\"}}" \
         --endpoint-url $ENDPOINT_URL
 
     # workByPage テーブルにテストデータを追加
