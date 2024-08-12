@@ -11,7 +11,7 @@ export const Sidebar: React.FC = () => {
     <Box p="md">
       <Text>フリーワード検索</Text>
       <Autocomplete
-        placeholder="例：夏"
+        placeholder="例：タグ1"
         data={['React', 'Angular', 'Vue', 'Svelte']}
       />
       <Space h="md" />

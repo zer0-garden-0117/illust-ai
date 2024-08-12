@@ -1,16 +1,14 @@
 package com.uag.zer0.entity.user
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable
-import org.springframework.data.annotation.Id
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
 
-@DynamoDBTable(tableName = "user")
+@DynamoDbBean
 data class User(
-    @Id
-    @DynamoDBHashKey(attributeName = "userId")
+    @get:DynamoDbPartitionKey
     var userId: String? = null,
 
-    @DynamoDBAttribute(attributeName = "userRole")
+    @get:DynamoDbAttribute("userRole")
     var userRole: String? = null
 )

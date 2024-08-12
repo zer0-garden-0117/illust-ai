@@ -1,9 +1,7 @@
 package com.uag.zer0.config
 
 import com.uag.zer0.config.filter.CognitoTokenFilter
-import com.uag.zer0.config.filter.CsrfTokenGenFilter
 import com.uag.zer0.config.filter.UserTokenFilter
-import com.uag.zer0.config.handler.SpaCsrfTokenRequestHandler
 import com.uag.zer0.service.TokenService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -16,7 +14,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoders
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
-import org.springframework.security.web.csrf.CsrfFilter
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
@@ -83,18 +80,21 @@ class AuthConfig(
                 UsernamePasswordAuthenticationFilter::class.java
             )
             // CSRFトークンの検証の設定
-            ?.csrf { csrf ->
-                csrf
-                    .csrfTokenRepository(csrfTokenRepository())
-                    .csrfTokenRequestHandler(SpaCsrfTokenRequestHandler())
+            //            ?.csrf { csrf ->
+            //                csrf
+            //                    .csrfTokenRepository(csrfTokenRepository())
+            //                    .csrfTokenRequestHandler(SpaCsrfTokenRequestHandler())
+            //            }
+            //            ?.addFilterAfter(
+            //                CsrfTokenGenFilter(
+            //                    csrfTokenRepository(),
+            //                    csrfGenPathsString, sameSite
+            //                ),
+            //                CsrfFilter::class.java
+            //            )
+            ?.csrf {
+                it.disable()
             }
-            ?.addFilterAfter(
-                CsrfTokenGenFilter(
-                    csrfTokenRepository(),
-                    csrfGenPathsString, sameSite
-                ),
-                CsrfFilter::class.java
-            )
         return http?.build()
     }
 }

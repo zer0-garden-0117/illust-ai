@@ -3,6 +3,12 @@
 # DynamoDB Localのエンドポイント
 ENDPOINT_URL=http://localhost:10000
 
+# 初期カウンターの設定
+aws dynamodb put-item \
+    --table-name counters \
+    --item '{"counterName": {"S": "workId"}, "counterValue": {"N": "0"}}' \
+    --endpoint-url $ENDPOINT_URL
+
 # IDを生成する関数
 generate_id() {
     local counter_name=$1
@@ -24,77 +30,24 @@ for i in {1..3}
 do
     work_id=$(generate_id "workId")
     work_ids+=($work_id)
+    genre="Genre_$i"
+    format="Format_$i"
     main_title="${work_id}_Sample Work $i"
-    sub_title="${work_id}_Sample Subtitle $i"
+    subtitle="${work_id}_Sample Subtitle $i"
     description="${work_id}_Sample Description $i"
+    work_size=$((i * 100))
+    pages=$((i * 10))
+    title_img_url="https://example.com/image_$i.png"
+    likes=$((i * 10))
+    downloads=$((i * 5))
 
     aws dynamodb put-item \
         --table-name work \
-        --item "{\"workId\": {\"S\": \"$work_id\"}, \"mainTitle\": {\"S\": \"$main_title\"}, \"subTitle\": {\"S\": \"$sub_title\"}, \"description\": {\"S\": \"$description\"}, \"pages\": {\"S\": \"30\"}, \"workSize\": {\"S\": \"30MB\"}, \"likes\": {\"N\": \"0\"}, \"downloads\": {\"N\": \"0\"}, \"titleImageUrl\": {\"S\": \"http://example.com/title_image_$i.jpg\"}, \"createdAt\": {\"S\": \"2024-07-08T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-07-08T00:00:00Z\"}}" \
+        --item "{\"workId\": {\"S\": \"$work_id\"}, \"workSize\": {\"N\": \"$work_size\"}, \"pages\": {\"N\": \"$pages\"}, \"titleImgUrl\": {\"S\": \"$title_img_url\"}, \"likes\": {\"N\": \"$likes\"}, \"downloads\": {\"N\": \"$downloads\"}, \"createdAt\": {\"S\": \"2024-08-13T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-08-13T00:00:00Z\"}, \"mainTitle\": {\"S\": \"$main_title\"}, \"subtitle\": {\"S\": \"$subtitle\"}, \"description\": {\"S\": \"$description\"}, \"genre\": {\"S\": \"$genre\"}, \"format\": {\"S\": \"$format\"}}" \
         --endpoint-url $ENDPOINT_URL
-
-    # mainTitleByWork テーブルにテストデータを追加
-    aws dynamodb put-item \
-        --table-name mainTitleByWork \
-        --item "{\"mainTitle\": {\"S\": \"$main_title\"}, \"workId\": {\"S\": \"$work_id\"}}" \
-        --endpoint-url $ENDPOINT_URL
-
-    # subTitleByWork テーブルにテストデータを追加
-    aws dynamodb put-item \
-        --table-name subTitleByWork \
-        --item "{\"subTitle\": {\"S\": \"$sub_title\"}, \"workId\": {\"S\": \"$work_id\"}}" \
-        --endpoint-url $ENDPOINT_URL
-
-    # descriptionByWork テーブルにテストデータを追加
-    aws dynamodb put-item \
-        --table-name descriptionByWork \
-        --item "{\"description\": {\"S\": \"$description\"}, \"workId\": {\"S\": \"$work_id\"}}" \
-        --endpoint-url $ENDPOINT_URL
-
-    # workByPage テーブルにテストデータを追加
-    for j in {1..2}
-    do
-        aws dynamodb put-item \
-            --table-name workByPage \
-            --item "{\"workId\": {\"S\": \"$work_id\"}, \"s3Url\": {\"S\": \"http://example.com/image${i}_${j}.jpg\"}, \"pageNum\": {\"N\": \"$j\"}}" \
-            --endpoint-url $ENDPOINT_URL
-    done
 done
 
-# categoryByTag テーブルにテストデータを追加
-aws dynamodb put-item --table-name categoryByTag --item '{"categoryName": {"S": "workFormat"}, "tagName": {"S": "CG"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name categoryByTag --item '{"categoryName": {"S": "workFormat"}, "tagName": {"S": "コミック"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name categoryByTag --item '{"categoryName": {"S": "topicGenre"}, "tagName": {"S": "オリジナル"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name categoryByTag --item '{"categoryName": {"S": "topicGenre"}, "tagName": {"S": "二次創作"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name categoryByTag --item '{"categoryName": {"S": "characterName"}, "tagName": {"S": "真白"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name categoryByTag --item '{"categoryName": {"S": "creator"}, "tagName": {"S": "Sample Creator 1"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name categoryByTag --item '{"categoryName": {"S": "language"}, "tagName": {"S": "English"}}' --endpoint-url $ENDPOINT_URL
-
-# tagByCategory テーブルにテストデータを追加
-aws dynamodb put-item --table-name tagByCategory --item '{"tagName": {"S": "CG"}, "categoryName": {"S": "workFormat"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name tagByCategory --item '{"tagName": {"S": "コミック"}, "categoryName": {"S": "workFormat"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name tagByCategory --item '{"tagName": {"S": "オリジナル"}, "categoryName": {"S": "topicGenre"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name tagByCategory --item '{"tagName": {"S": "二次創作"}, "categoryName": {"S": "topicGenre"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name tagByCategory --item '{"tagName": {"S": "真白"}, "categoryName": {"S": "characterName"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name tagByCategory --item '{"tagName": {"S": "Sample Creator 1"}, "categoryName": {"S": "creator"}}' --endpoint-url $ENDPOINT_URL
-aws dynamodb put-item --table-name tagByCategory --item '{"tagName": {"S": "English"}, "categoryName": {"S": "language"}}' --endpoint-url $ENDPOINT_URL
-
-# workByTag テーブルと tagByWork テーブルにテストデータを追加
-for work_id in "${work_ids[@]}"
-do
-    for tag in "CG" "オリジナル" "真白"
-    do
-        aws dynamodb put-item \
-            --table-name workByTag \
-            --item "{\"workId\": {\"S\": \"$work_id\"}, \"tagName\": {\"S\": \"$tag\"}}" \
-            --endpoint-url $ENDPOINT_URL
-
-        aws dynamodb put-item \
-            --table-name tagByWork \
-            --item "{\"tagName\": {\"S\": \"$tag\"}, \"workId\": {\"S\": \"$work_id\"}}" \
-            --endpoint-url $ENDPOINT_URL
-    done
-done
+echo "work テーブルにテストデータが追加されました。"
 
 # user テーブルにテストデータを追加
 user_roles=("admin" "editor" "viewer")
@@ -106,28 +59,53 @@ do
         user_id="user${i}@example.com"
     fi
     user_role=${user_roles[$i]}
+
+    # likedWorkId と viewedWorkId のリストを仮定
+    liked_work_id="likedWork${i}"
+    viewed_work_id="viewedWork${i}"
+
+    # テーブルにデータを追加
     aws dynamodb put-item \
         --table-name user \
-        --item "{\"userId\": {\"S\": \"$user_id\"}, \"userRole\": {\"S\": \"$user_role\"}}" \
+        --item "{\"userId\": {\"S\": \"$user_id\"}, \"userRole\": {\"S\": \"$user_role\"}, \"likedWorkId\": {\"S\": \"$liked_work_id\"}, \"viewedWorkId\": {\"S\": \"$viewed_work_id\"}}" \
         --endpoint-url $ENDPOINT_URL
-
-    # userByLikedWork テーブルにテストデータを追加
-    for work_id in "${work_ids[@]}"
-    do
-        aws dynamodb put-item \
-            --table-name userByLikedWork \
-            --item "{\"userId\": {\"S\": \"$user_id\"}, \"likedWorkId\": {\"S\": \"$work_id\"}}" \
-            --endpoint-url $ENDPOINT_URL
-    done
-
-    # userByViewedWork テーブルにテストデータを追加
-    for work_id in "${work_ids[@]}"
-    do
-        aws dynamodb put-item \
-            --table-name userByViewedWork \
-            --item "{\"userId\": {\"S\": \"$user_id\"}, \"viewedWorkId\": {\"S\": \"$work_id\"}}" \
-            --endpoint-url $ENDPOINT_URL
-    done
 done
 
-echo "Test data inserted successfully."
+# テストデータの追加関数
+add_test_data() {
+    local table_name=$1
+    local work_id=$2
+    local attribute_name=$3
+    local attribute_value=$4
+
+    aws dynamodb put-item \
+        --table-name $table_name \
+        --item "{\"workId\": {\"S\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}}" \
+        --endpoint-url $ENDPOINT_URL
+}
+
+# tag テーブルにテストデータを追加
+add_test_data "tag" "${work_ids[0]}" "tag" "Tag_1"
+add_test_data "tag" "${work_ids[0]}" "tag" "Tag_2"
+add_test_data "tag" "${work_ids[1]}" "tag" "Tag_2"
+add_test_data "tag" "${work_ids[1]}" "tag" "Tag_3"
+add_test_data "tag" "${work_ids[2]}" "tag" "Tag_3"
+add_test_data "tag" "${work_ids[2]}" "tag" "Tag_1"
+
+# character テーブルにテストデータを追加
+add_test_data "character" "${work_ids[0]}" "character" "Character_1_1"
+add_test_data "character" "${work_ids[0]}" "character" "Character_1_2"
+add_test_data "character" "${work_ids[1]}" "character" "Character_2_1"
+add_test_data "character" "${work_ids[1]}" "character" "Character_2_2"
+add_test_data "character" "${work_ids[2]}" "character" "Character_3_1"
+add_test_data "character" "${work_ids[2]}" "character" "Character_3_2"
+
+# creator テーブルにテストデータを追加
+add_test_data "creator" "${work_ids[0]}" "creator" "Creator_1_1"
+add_test_data "creator" "${work_ids[0]}" "creator" "Creator_1_2"
+add_test_data "creator" "${work_ids[1]}" "creator" "Creator_2_1"
+add_test_data "creator" "${work_ids[1]}" "creator" "Creator_2_2"
+add_test_data "creator" "${work_ids[2]}" "creator" "Creator_3_1"
+add_test_data "creator" "${work_ids[2]}" "creator" "Creator_3_2"
+
+echo "tag, character, creator テーブルにテストデータが追加されました。"

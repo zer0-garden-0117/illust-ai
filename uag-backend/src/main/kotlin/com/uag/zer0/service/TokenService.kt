@@ -51,19 +51,19 @@ class TokenService {
     fun generateToken(user: User): String {
         val token = JWT.create()
             .withClaim("role", user.userRole)
-            .withClaim("memberId", user.userId)
+            .withClaim("userId", user.userId)
             .withExpiresAt(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
             .sign(algorithm)
         return token
     }
 
-    fun validateAndGetMemberId(token: String): Int {
+    fun validateAndGetMemberId(token: String): String {
         try {
             val algorithm = Algorithm.HMAC256(secretKey)
             val verifier = JWT.require(algorithm).build()
             val decodedJWT = verifier.verify(token)
-            val memberId = decodedJWT.getClaim("memberId").asInt()
-            return memberId
+            val userId = decodedJWT.getClaim("userId").toString()
+            return userId
         } catch (exception: JWTVerificationException) {
             throw IllegalArgumentException("Invalid token")
         }

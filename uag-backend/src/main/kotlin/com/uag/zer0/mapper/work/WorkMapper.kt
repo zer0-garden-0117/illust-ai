@@ -22,11 +22,6 @@ class WorkMapper {
                 mainTitle = it.mainTitle,
                 subTitle = it.subTitle,
                 description = it.description,
-                pages = it.pages,
-                workSize = it.workSize,
-                likes = it.likes,
-                downloads = it.downloads,
-                titleImageUrl = it.titleImageUrl
             )
         } ?: ApiWorks()
 

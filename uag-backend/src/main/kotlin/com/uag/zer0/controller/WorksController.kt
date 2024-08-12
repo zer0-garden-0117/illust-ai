@@ -3,6 +3,7 @@ package com.uag.zer0.controller
 import com.uag.zer0.generated.endpoint.WorksApi
 import com.uag.zer0.generated.model.ApiWorks
 import com.uag.zer0.generated.model.ApiWorksWithDetails
+import com.uag.zer0.service.work.WorkService
 import jakarta.validation.Valid
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
@@ -10,17 +11,22 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class WorksController : WorksApi {
+class WorksController(
+    private val workService: WorkService
+) : WorksApi {
 
-    override fun getWorksById(@PathVariable("worksId") worksId: kotlin.Int): ResponseEntity<ApiWorksWithDetails> {
+    override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWorks>> {
+        val works = requestBody?.let { workService.findWorksByTagWords(it) }
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     override fun searchWorks(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWorks>> {
+        val works = requestBody?.let { workService.findWorksByFreeWords(it) }
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWorks>> {
+    override fun getWorksById(@PathVariable("worksId") worksId: kotlin.Int): ResponseEntity<ApiWorksWithDetails> {
+        val works = workService.findWorkByWorkId(workId = worksId.toString())
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 

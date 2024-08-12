@@ -25,17 +25,15 @@ class UserTokenFilter(
         val token = resolveToken(request)
         if (token != null) {
             try {
-                val memberId = tokenService.validateAndGetMemberId(token)
+                val userId = tokenService.validateAndGetMemberId(token)
                 val role = tokenService.getRoleFromToken(token)
-                val currentAuthentication =
-                    SecurityContextHolder.getContext().authentication as? CustomAuthenticationToken
                 val customAuthentication = CustomAuthenticationToken(
-                    email = currentAuthentication?.email,
-                    memberId = memberId,
+                    email = userId,
                     role = role,
                 )
                 SecurityContextHolder.getContext().authentication =
                     customAuthentication
+                logger.info(customAuthentication)
             } catch (e: Exception) {
                 logger.error("Invalid token", e)
             }

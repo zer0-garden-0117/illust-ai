@@ -3,6 +3,8 @@
 # DynamoDB Localのエンドポイント
 ENDPOINT_URL=http://localhost:10000
 
+export AWS_PAGER=""
+
 # テーブルの作成関数
 create_table() {
     local table_name=$1
@@ -21,62 +23,94 @@ create_table counters \
 
 # work テーブルの作成
 create_table work \
-    --attribute-definitions AttributeName=workId,AttributeType=S \
-    --key-schema AttributeName=workId,KeyType=HASH
-
-# workByPage テーブルの作成
-create_table workByPage \
-    --attribute-definitions AttributeName=workId,AttributeType=S AttributeName=pageNum,AttributeType=N \
-    --key-schema AttributeName=workId,KeyType=HASH AttributeName=pageNum,KeyType=RANGE
-
-# workByTag テーブルの作成
-create_table workByTag \
-    --attribute-definitions AttributeName=workId,AttributeType=S AttributeName=tagName,AttributeType=S \
-    --key-schema AttributeName=workId,KeyType=HASH AttributeName=tagName,KeyType=RANGE
-
-# tagByWork テーブルの作成
-create_table tagByWork \
-    --attribute-definitions AttributeName=tagName,AttributeType=S AttributeName=workId,AttributeType=S \
-    --key-schema AttributeName=tagName,KeyType=HASH AttributeName=workId,KeyType=RANGE
-
-# tagByCategory テーブルの作成
-create_table tagByCategory \
-    --attribute-definitions AttributeName=tagName,AttributeType=S AttributeName=categoryName,AttributeType=S \
-    --key-schema AttributeName=tagName,KeyType=HASH AttributeName=categoryName,KeyType=RANGE
-
-# categoryByTag テーブルの作成
-create_table categoryByTag \
-    --attribute-definitions AttributeName=categoryName,AttributeType=S AttributeName=tagName,AttributeType=S \
-    --key-schema AttributeName=categoryName,KeyType=HASH AttributeName=tagName,KeyType=RANGE
+    --attribute-definitions \
+        AttributeName=workId,AttributeType=S \
+        AttributeName=genre,AttributeType=S \
+        AttributeName=format,AttributeType=S \
+    --key-schema \
+        AttributeName=workId,KeyType=HASH \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"GenreIndex\",
+                \"KeySchema\": [{\"AttributeName\":\"genre\",\"KeyType\":\"HASH\"}],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            },
+            {
+                \"IndexName\": \"FormatIndex\",
+                \"KeySchema\": [{\"AttributeName\":\"format\",\"KeyType\":\"HASH\"}],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            }
+        ]"
 
 # user テーブルの作成
 create_table user \
     --attribute-definitions AttributeName=userId,AttributeType=S \
     --key-schema AttributeName=userId,KeyType=HASH
 
-# userByLikedWork テーブルの作成
-create_table userByLikedWork \
-    --attribute-definitions AttributeName=userId,AttributeType=S AttributeName=likedWorkId,AttributeType=S \
-    --key-schema AttributeName=userId,KeyType=HASH AttributeName=likedWorkId,KeyType=RANGE
+# tag テーブルの作成
+create_table tag \
+    --attribute-definitions \
+        AttributeName=workId,AttributeType=S \
+        AttributeName=tag,AttributeType=S \
+    --key-schema \
+        AttributeName=workId,KeyType=HASH \
+        AttributeName=tag,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"TagIndex\",
+                \"KeySchema\": [{\"AttributeName\":\"tag\",\"KeyType\":\"HASH\"}],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            }
+        ]"
 
-# userByViewedWork テーブルの作成
-create_table userByViewedWork \
-    --attribute-definitions AttributeName=userId,AttributeType=S AttributeName=viewedWorkId,AttributeType=S \
-    --key-schema AttributeName=userId,KeyType=HASH AttributeName=viewedWorkId,KeyType=RANGE
+# character テーブルの作成
+create_table character \
+    --attribute-definitions \
+        AttributeName=workId,AttributeType=S \
+        AttributeName=character,AttributeType=S \
+    --key-schema \
+        AttributeName=workId,KeyType=HASH \
+        AttributeName=character,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"CharacterIndex\",
+                \"KeySchema\": [{\"AttributeName\":\"character\",\"KeyType\":\"HASH\"}],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            }
+        ]"
 
-# mainTitleByWork テーブルの作成
-create_table mainTitleByWork \
-    --attribute-definitions AttributeName=mainTitle,AttributeType=S \
-    --key-schema AttributeName=mainTitle,KeyType=HASH
+# creator テーブルの作成
+create_table creator \
+    --attribute-definitions \
+        AttributeName=workId,AttributeType=S \
+        AttributeName=creator,AttributeType=S \
+    --key-schema \
+        AttributeName=workId,KeyType=HASH \
+        AttributeName=creator,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"CreatorIndex\",
+                \"KeySchema\": [{\"AttributeName\":\"creator\",\"KeyType\":\"HASH\"}],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            }
+        ]"
 
-# subTitleByWork テーブルの作成
-create_table subTitleByWork \
-    --attribute-definitions AttributeName=subTitle,AttributeType=S \
-    --key-schema AttributeName=subTitle,KeyType=HASH
+# img テーブルの作成
+create_table img \
+    --attribute-definitions \
+        AttributeName=workId,AttributeType=S \
+        AttributeName=ImgUrl,AttributeType=S \
+    --key-schema \
+        AttributeName=workId,KeyType=HASH \
+        AttributeName=ImgUrl,KeyType=RANGE
 
-# descriptionByWork テーブルの作成
-create_table descriptionByWork \
-    --attribute-definitions AttributeName=description,AttributeType=S \
-    --key-schema AttributeName=description,KeyType=HASH
-
-echo "All tables created successfully."
+echo "すべてのテーブルが作成されました。"

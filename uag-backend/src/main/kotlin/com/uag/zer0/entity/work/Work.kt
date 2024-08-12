@@ -1,48 +1,41 @@
 package com.uag.zer0.entity.work
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted
-import com.uag.zer0.converter.LocalDateTimeConverter
-import org.springframework.data.annotation.Id
-import java.time.LocalDateTime
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey
+import java.time.Instant
 
-@DynamoDBTable(tableName = "work")
+@DynamoDbBean
 data class Work(
-    @Id
-    @DynamoDBHashKey(attributeName = "workId")
+    @get:DynamoDbPartitionKey
     var workId: String = "",
 
-    @DynamoDBAttribute(attributeName = "mainTitle")
+    @get:DynamoDbSecondaryPartitionKey(indexNames = ["GenreIndex"])
+    var genre: String? = null,
+
+    @get:DynamoDbSecondaryPartitionKey(indexNames = ["FormatIndex"])
+    var format: String? = null,
+
     var mainTitle: String = "",
-
-    @DynamoDBAttribute(attributeName = "subTitle")
     var subTitle: String = "",
-
-    @DynamoDBAttribute(attributeName = "description")
     var description: String = "",
 
-    @DynamoDBAttribute(attributeName = "pages")
-    var pages: String = "",
+    @get:DynamoDbAttribute("workSize")
+    var workSize: Int = 0,
 
-    @DynamoDBAttribute(attributeName = "workSize")
-    var workSize: String = "",
+    @get:DynamoDbAttribute("pages")
+    var pages: Int = 0,
 
-    @DynamoDBAttribute(attributeName = "likes")
+    @get:DynamoDbAttribute("titleImgUrl")
+    var titleImgUrl: String = "",
+
+    @get:DynamoDbAttribute("likes")
     var likes: Int = 0,
 
-    @DynamoDBAttribute(attributeName = "downloads")
+    @get:DynamoDbAttribute("downloads")
     var downloads: Int = 0,
 
-    @DynamoDBAttribute(attributeName = "titleImageUrl")
-    var titleImageUrl: String = "",
-
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter::class)
-    @DynamoDBAttribute(attributeName = "createdAt")
-    var createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter::class)
-    @DynamoDBAttribute(attributeName = "updatedAt")
-    var updatedAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: Instant = Instant.now(),
+    var updatedAt: Instant = Instant.now()
 )
