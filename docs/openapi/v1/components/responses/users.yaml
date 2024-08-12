@@ -1,13 +1,17 @@
-UsersMeGetResponse:
+UsersTokenGetResponse:
   description: |-
     200 OK
     - 正常終了
-    - CSRFトークンがクッキーに設定される。
-  content: {}
+    - ユーザートークン(JWT)が返される
+    - CSRFトークンがクッキーに設定される
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/users.yaml#/ApiUserToken"
   headers:
     Set-Cookie:
       description: |-
-        CSRFトークンが含まれるクッキー。
+        CSRFトークンが含まれるクッキー
       schema:
         type: string
         example: "CSRF-Token=abcdef12345; Path=/; Secure; HttpOnly=false"

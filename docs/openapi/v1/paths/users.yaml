@@ -1,16 +1,17 @@
-UsersMe:
+UsersToken:
   get:
-    operationId: getUsersMe
+    operationId: getUsersToken
     tags:
       - users
-    summary: CSRFトークンがクッキーに設定される
+    summary: ユーザートークンを取得する
     description: |
+      ユーザートークンを取得する
       CSRFトークンがクッキーに設定される
-    parameters:
-      - $ref: "../components/parameters/headerParams.yaml#/AccessTokenHeaderParam"
+    security:
+      - AccessTokenAuth: []
     responses:
       "200":
-        $ref: "../components/responses/users.yaml#/UsersMeGetResponse"
+        $ref: "../components/responses/users.yaml#/UsersTokenGetResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":

@@ -1,0 +1,82 @@
+package com.uag.zer0.service
+
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTVerificationException
+import com.uag.zer0.entity.user.User
+import org.slf4j.LoggerFactory
+import org.springframework.core.ParameterizedTypeReference
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.UriComponentsBuilder
+import java.util.*
+
+@Service
+class TokenService {
+    private val logger = LoggerFactory.getLogger(TokenService::class.java)
+
+    private val secretKey: String = "mysecretekey"
+    private val algorithm = Algorithm.HMAC256(secretKey)
+
+    fun getEmailFromAccessToken(accessToken: String): String? {
+        val restTemplate = RestTemplate()
+        val url =
+            UriComponentsBuilder.fromHttpUrl("https://angels-graffiti.auth.us-east-1.amazoncognito.com")
+                .path("/oauth2/userInfo")
+                .build()
+                .toUri()
+
+        val headers = HttpHeaders().apply {
+            set("Authorization", "Bearer $accessToken")
+        }
+
+        val requestEntity = HttpEntity<Any>(headers)
+        val responseType =
+            object : ParameterizedTypeReference<Map<String, Any>>() {}
+        val response: ResponseEntity<Map<String, Any>> = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            requestEntity,
+            responseType
+        )
+
+        val userInfo = response.body
+        return userInfo?.get("email") as String?
+    }
+
+    fun generateToken(user: User): String {
+        val token = JWT.create()
+            .withClaim("role", user.userRole)
+            .withClaim("memberId", user.userId)
+            .withExpiresAt(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+            .sign(algorithm)
+        return token
+    }
+
+    fun validateAndGetMemberId(token: String): Int {
+        try {
+            val algorithm = Algorithm.HMAC256(secretKey)
+            val verifier = JWT.require(algorithm).build()
+            val decodedJWT = verifier.verify(token)
+            val memberId = decodedJWT.getClaim("memberId").asInt()
+            return memberId
+        } catch (exception: JWTVerificationException) {
+            throw IllegalArgumentException("Invalid token")
+        }
+    }
+
+    fun getRoleFromToken(token: String): String {
+        try {
+            val algorithm = Algorithm.HMAC256(secretKey)
+            val verifier = JWT.require(algorithm).build()
+            val decodedJWT = verifier.verify(token)
+            return decodedJWT.getClaim("role").asString()
+        } catch (exception: JWTVerificationException) {
+            throw IllegalArgumentException("Invalid token")
+        }
+    }
+}

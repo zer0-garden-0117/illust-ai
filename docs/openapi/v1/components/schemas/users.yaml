@@ -1,0 +1,8 @@
+ApiUserToken:
+  description: ユーザートークン
+  type: object
+  properties:
+    userToken:
+      type: string
+      description: ユーザートークン（JWT）
+      example: abcdef12345

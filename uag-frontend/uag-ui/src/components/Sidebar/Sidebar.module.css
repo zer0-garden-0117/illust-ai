@@ -1,0 +1,10 @@
+.root {
+  --badge-padding-x: 10px;
+  margin-right: 6px;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.root:hover {
+  transform: scale(1.1you) translate(1px, 1px);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+}

@@ -3,6 +3,7 @@
 import { AppShell, Burger, Text, Loader, Center } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar/Navbar';
+import { Sidebar } from '../Sidebar/Sidebar'
 import { Header } from '../Header/Header';
 import { useTranslations } from "next-intl";
 
@@ -35,7 +36,9 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      aside={{ width: 200, breakpoint: 'md', collapsed: { desktop: false, mobile: true } }}
+      footer={{ height: 20 }}
       padding="md"
       transitionDuration={500}
       transitionTimingFunction="ease"
@@ -49,6 +52,9 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
         />
       </AppShell.Header>
       <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Aside>
+        <Sidebar />
+      </AppShell.Aside>
       <AppShell.Footer>
         <Text w="full" size="sm" ta="right" pr="20">
           {t('copyright')}

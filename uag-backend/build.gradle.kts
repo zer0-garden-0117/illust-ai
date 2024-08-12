@@ -35,6 +35,12 @@ dependencies {
     implementation("io.github.boostchicken:spring-data-dynamodb:5.2.5")
     implementation(platform("software.amazon.awssdk:bom:2.26.18"))
     implementation("software.amazon.awssdk:dynamodb-enhanced")
+    implementation("software.amazon.awssdk:cognitoidentityprovider:2.20.126")
+    implementation("software.amazon.awssdk:secretsmanager:2.26.20")
+
+    // JWT,JSON
+    implementation("com.auth0:java-jwt:4.2.1")
+    implementation("org.json:json:20240303")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

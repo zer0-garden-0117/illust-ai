@@ -9,4 +9,5 @@ import org.springframework.data.repository.query.Param
 @EnableScan
 interface TagByWorkRepository : CrudRepository<TagByWork, TagByWorkId> {
     fun findByTagByWorkIdTagName(@Param("tagName") tagName: String): List<TagByWork>
+    fun findByTagByWorkIdTagNameContaining(@Param("tagName") partialTagName: String): List<TagByWork>
 }

@@ -3,81 +3,46 @@ package com.uag.zer0.controller
 import com.uag.zer0.generated.endpoint.WorksApi
 import com.uag.zer0.generated.model.ApiWorks
 import com.uag.zer0.generated.model.ApiWorksWithDetails
-import com.uag.zer0.service.work.WorkService
-import org.slf4j.LoggerFactory
+import jakarta.validation.Valid
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
-class WorksController(
-    private val workService: WorkService
-) : WorksApi {
+class WorksController : WorksApi {
 
-    private val logger = LoggerFactory.getLogger(WorksController::class.java)
+    override fun getWorksById(@PathVariable("worksId") worksId: kotlin.Int): ResponseEntity<ApiWorksWithDetails> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+
+    override fun searchWorks(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWorks>> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+
+    override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWorks>> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
 
     override fun registerWorks(
-        authorization: String,
-        titleImage: Resource,
-        images: List<Resource>,
-        apiWorksWithDetails: ApiWorksWithDetails,
-        xCsrfToken: String?
+        @RequestPart("titleImage", required = true) titleImage: Resource,
+        @RequestPart("images", required = true) images: List<Resource>,
+        @RequestParam(
+            value = "ApiWorksWithDetails",
+            required = true
+        ) apiWorksWithDetails: ApiWorksWithDetails
     ): ResponseEntity<Unit> {
-//        logger.info("registerWorks called with: authorization=$authorization, titleImage=$titleImage, images=$images, apiWorksWithTags=$apiWorksWithDetails, xCsrfToken=$xCsrfToken")
-//        workService.createWork(apiWorksWithDetails)
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
-    }
-
-    override fun searchWorks(
-        authorization: String,
-        xCsrfToken: String?,
-        requestBody: List<String>?
-    ): ResponseEntity<List<ApiWorks>> {
-//        logger.info("searchWorks called with: authorization=$authorization, xCsrfToken=$xCsrfToken, apiWorksWithTags=$apiWorksWithDetails")
-//        val response = workService.searchWorks(apiWorksWithDetails)
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
-    }
-
-    override fun searchWorksByTags(
-        authorization: String,
-        xCsrfToken: String?,
-        requestBody: List<String>?
-    ): ResponseEntity<List<ApiWorks>> {
-//        logger.info("searchWorks called with: authorization=$authorization, xCsrfToken=$xCsrfToken, apiWorksWithTags=$apiWorksWithDetails")
-//        val response = workService.searchWorks(apiWorksWithDetails)
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
-    }
-
-    override fun getWorksById(
-        worksId: Int,
-        authorization: String,
-        xCsrfToken: String?
-    ): ResponseEntity<ApiWorksWithDetails> {
-        logger.info("getWorksById called with: pathParamWorksId=$worksId, authorization=$authorization, xCsrfToken=$xCsrfToken")
-        val response = workService.getWorkById(worksId.toString())
-        logger.info("getWorksById found work: $response")
-        return ResponseEntity.ok(response)
     }
 
     override fun updateWorksById(
-        worksId: Int,
-        authorization: String,
-        apiWorksWithDetails: ApiWorksWithDetails,
-        xCsrfToken: String?
+        @PathVariable("worksId") worksId: kotlin.Int,
+        @Valid @RequestBody apiWorksWithDetails: ApiWorksWithDetails
     ): ResponseEntity<Unit> {
-//        logger.info("updateWorksById called with: pathParamWorksId=$worksId, authorization=$authorization, apiWorksWithTags=$apiWorksWithDetails, xCsrfToken=$xCsrfToken")
-//        workService.updateWork(worksId.toString(), apiWorksWithDetails)
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    override fun deleteWorksById(
-        tagsId: Int,
-        authorization: String,
-        xCsrfToken: String?
-    ): ResponseEntity<Unit> {
-//        logger.info("deleteWorksById called with: pathParamTagsId=$tagsId, authorization=$authorization, xCsrfToken=$xCsrfToken")
-//        workService.deleteWork(tagsId.toString())
+    override fun deleteWorksById(@PathVariable("tagsId") tagsId: kotlin.Int): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 }

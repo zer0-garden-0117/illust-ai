@@ -25,7 +25,6 @@ export const Navbar: React.FC<NavbarProps> = () => {
     { label: t('freeicon'), icon: MdOutlineFileDownload },
     { label: t('freeillust'), icon: MdOutlineFileDownload },
     { label: t('oc'), icon: MdOutlineFileDownload },
-    { label: t('tag'), icon: MdOutlineFileDownload },
   ];
 
   const links = navLinks.map(item => <NavLinksGroup key={item.label} {...item} />);

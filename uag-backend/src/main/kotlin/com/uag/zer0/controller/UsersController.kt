@@ -1,26 +1,32 @@
-//package com.uag.zer0.controller
-//
-//import com.uag.zer0.generated.endpoint.UsersApi
-//import org.slf4j.Logger
-//import org.slf4j.LoggerFactory
-//import org.springframework.http.HttpStatus
-//import org.springframework.http.ResponseEntity
-//import org.springframework.web.bind.annotation.RequestHeader
-//import org.springframework.web.bind.annotation.RestController
-//
-//@RestController
-//class UsersController : UsersApi {
-//
-//    private val logger: Logger =
-//        LoggerFactory.getLogger(UsersController::class.java)
-//
-//    override fun getUsersMe(
-//        @RequestHeader(
-//            value = "authorization",
-//            required = true
-//        ) authorization: String
-//    ): ResponseEntity<Unit> {
-//        logger.info("getUsersMe called with authorization: $authorization")
-//        return ResponseEntity(HttpStatus.OK)
-//    }
-//}
+package com.uag.zer0.controller
+
+import com.uag.zer0.config.CustomAuthenticationToken
+import com.uag.zer0.entity.user.User
+import com.uag.zer0.generated.endpoint.UsersApi
+import com.uag.zer0.generated.model.ApiUserToken
+import com.uag.zer0.service.TokenService
+import com.uag.zer0.service.user.UserService
+import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+class UsersController(
+    private val tokenService: TokenService,
+    private val userService: UserService
+) : UsersApi {
+
+    override fun getUsersToken(): ResponseEntity<ApiUserToken> {
+        val authentication: Authentication? =
+            SecurityContextHolder.getContext().authentication
+        val customAuth = authentication as? CustomAuthenticationToken
+        val email = customAuth?.email ?: return ResponseEntity.ok(
+            ApiUserToken(userToken = "unregistered")
+        )
+        val currentUser: User = userService.hasUser(email)
+            ?: return ResponseEntity.ok(ApiUserToken(userToken = "unregistered"))
+        val userToken = tokenService.generateToken(currentUser)
+        return ResponseEntity.ok(ApiUserToken(userToken = userToken))
+    }
+}
