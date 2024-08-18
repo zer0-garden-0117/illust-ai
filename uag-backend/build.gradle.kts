@@ -37,6 +37,8 @@ dependencies {
     implementation("software.amazon.awssdk:dynamodb-enhanced")
     implementation("software.amazon.awssdk:cognitoidentityprovider:2.20.126")
     implementation("software.amazon.awssdk:secretsmanager:2.26.20")
+    implementation("software.amazon.awssdk:s3")
+    implementation("software.amazon.awssdk:dynamodb-enhanced")
 
     // JWT,JSON
     implementation("com.auth0:java-jwt:4.2.1")
@@ -82,6 +84,7 @@ openApiGenerate {
             "gradleBuildFile" to "false"
         )
     )
+    typeMappings.set(mapOf("file" to "org.springframework.web.multipart.MultipartFile"))
 }
 
 // OpenAPI Generatorの追加設定
