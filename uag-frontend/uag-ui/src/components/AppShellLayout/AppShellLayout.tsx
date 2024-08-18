@@ -1,5 +1,5 @@
 'use client';
-// ブラウザのwidthにより動的にバーガーメニュー表示切替のレイアウトのためCSR
+
 import { AppShell, Burger, Text, Loader, Center } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import { Navbar } from '../Navbar/Navbar';
@@ -17,8 +17,6 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const toggle = () => setOpened((o) => !o);
 
   useEffect(() => {
-    // 初回や再マウントのレンダリング時にアイコンだけ遅延表示するのを防ぐために
-    // ローディングスピナーを表示（0.5秒は必ず表示する設定）
     const timer = setTimeout(() => {
       setLoading(false);
     }, 500);
