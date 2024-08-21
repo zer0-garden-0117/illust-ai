@@ -9,8 +9,9 @@
       "about": "About",
       "freeicon": "Free Icon",
       "freeillust": "Free Illustration",
-      "oc": "Original Character",
-      "tag": "Search By Tag"
+      "utinoko": "Original Character",
+      "tag": "Search By Tag",
+      "admin": "Admin"
     }
   },
   "toppage": {
@@ -18,5 +19,8 @@
   },
   "appshell": {
     "copyright": "© 2024 Unlimited Angel Generation"
+  },
+  "admin": {
+    "title": "Admin"
   }
 }

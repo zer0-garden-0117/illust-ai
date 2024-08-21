@@ -9,8 +9,9 @@
       "about": "はじめに",
       "freeicon": "フリーアイコン",
       "freeillust": "フリーイラスト",
-      "oc": "うちの子",
-      "tag": "タグで検索"
+      "utinoko": "うちの子",
+      "tag": "タグで検索",
+      "admin": "管理"
     }
   },
   "toppage": {
@@ -18,5 +19,8 @@
   },
   "appshell": {
     "copyright": "© 2024 無限天使生成"
+  },
+  "admin": {
+    "title": "管理"
   }
 }
