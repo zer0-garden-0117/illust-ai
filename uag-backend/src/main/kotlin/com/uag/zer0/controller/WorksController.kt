@@ -7,12 +7,14 @@ import com.uag.zer0.service.ImageConversionService
 import com.uag.zer0.service.ImageUploadService
 import com.uag.zer0.service.work.WorkService
 import jakarta.validation.Valid
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 @RestController
 class WorksController(
@@ -36,6 +38,8 @@ class WorksController(
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
+    private val logger = LoggerFactory.getLogger(WorksController::class.java)
+
     @PostMapping(
         "/works",
         consumes = ["multipart/form-data"],
@@ -49,6 +53,11 @@ class WorksController(
             required = true
         ) worksDetailsBase64: String
     ): ResponseEntity<Unit> {
+        val decodedWorksDetails = String(
+            Base64.getDecoder().decode(worksDetailsBase64),
+            Charsets.UTF_8
+        )
+        logger.info("Decoded worksDetails: $decodedWorksDetails")
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
         val titleImageAvif =
             imageConversionService.convertToAvifWithStream(titleImage)
