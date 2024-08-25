@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.uag.zer0.entity.work.Character
+import com.uag.zer0.entity.work.Creator
+import com.uag.zer0.entity.work.Tag
 import com.uag.zer0.generated.endpoint.WorksApi
-import com.uag.zer0.generated.model.ApiWorks
-import com.uag.zer0.generated.model.ApiWorksWithDetails
-import com.uag.zer0.mapper.work.WorkMapper
+import com.uag.zer0.generated.model.ApiWork
+import com.uag.zer0.generated.model.ApiWorkWithDetails
+import com.uag.zer0.mapper.WorkMapper
 import com.uag.zer0.service.WorkService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
@@ -23,17 +26,17 @@ class WorksController(
     private val workMapper: WorkMapper
 ) : WorksApi {
 
-    override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWorks>> {
+    override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWork>> {
         val works = requestBody?.let { workService.findWorksByTags(it) }
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    override fun searchWorks(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWorks>> {
+    override fun searchWorks(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWork>> {
         val works = requestBody?.let { workService.findWorksByFreeWords(it) }
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    override fun getWorksById(@PathVariable("worksId") worksId: Int): ResponseEntity<ApiWorksWithDetails> {
+    override fun getWorksById(@PathVariable("worksId") worksId: Int): ResponseEntity<ApiWorkWithDetails> {
         val works = workService.findWorkByWorkId(workId = worksId)
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
@@ -60,21 +63,27 @@ class WorksController(
         val objectMapper: ObjectMapper = jacksonObjectMapper().apply {
             registerModule(JavaTimeModule())
         }
-        val apiWorksWithDetails: ApiWorksWithDetails =
+        val apiWorkWithDetails: ApiWorkWithDetails =
             objectMapper.readValue(decodedWorksDetails)
         logger.info("Decoded worksDetails: $decodedWorksDetails")
-        logger.info("apiWorksWithDetails: $apiWorksWithDetails")
+        logger.info("apiWorksWithDetails: $apiWorkWithDetails")
 
-        if (apiWorksWithDetails.apiWorks == null) {
+        if (apiWorkWithDetails.apiWork == null) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        val work = workMapper.toWork(apiWorksWithDetails.apiWorks)
-        val tags = mutableListOf<String>()
-        apiWorksWithDetails.apiTags?.forEach { apiTag ->
-            apiTag.tags?.let { tags.add(it) }
+        val work = workMapper.toWork(apiWorkWithDetails.apiWork)
+        val characters = mutableListOf<Character>()
+        apiWorkWithDetails.apiCharacters?.forEach { apiCharacter ->
+            characters.add(workMapper.toCharacter(apiCharacter))
         }
-        val characters = apiWorksWithDetails.apiWorks.character
-        val creators = apiWorksWithDetails.apiWorks.creator
+        val creators = mutableListOf<Creator>()
+        apiWorkWithDetails.apiCreators?.forEach { apiCreator ->
+            creators.add(workMapper.toCreator(apiCreator))
+        }
+        val tags = mutableListOf<Tag>()
+        apiWorkWithDetails.apiTags?.forEach { apiTag ->
+            tags.add(workMapper.toTag(apiTag))
+        }
         workService.registerWork(
             work = work,
             characters = characters,
@@ -88,7 +97,7 @@ class WorksController(
 
     override fun updateWorksById(
         @PathVariable("worksId") worksId: Int,
-        @Valid @RequestBody apiWorksWithDetails: ApiWorksWithDetails
+        @Valid @RequestBody apiWorkWithDetails: ApiWorkWithDetails
     ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }

@@ -6,3 +6,42 @@ ApiUserToken:
       type: string
       description: ユーザートークン（JWT）
       example: abcdef12345
+
+ApiUser:
+  description: ユーザー
+  type: object
+  properties:
+    userId:
+      type: string
+      description: メールアドレス
+      example: test@gmail.com
+    userRole:
+      type: string
+      description: ユーザーロール
+      example: user(or admin)
+
+ApiLiked:
+  description: いいね
+  type: object
+  properties:
+    userId:
+      type: string
+      description: メールアドレス
+      example: test@gmail.com
+    workId:
+      type: integer
+      description: 作品ID
+      example: 1
+
+ApiViewed:
+  description: 閲覧
+  type: object
+  properties:
+    userId:
+      type: string
+      description: メールアドレス
+      example: test@gmail.com
+    workId:
+      type: integer
+      description: 作品ID
+      example: 1

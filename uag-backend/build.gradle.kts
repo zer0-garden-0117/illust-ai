@@ -5,6 +5,7 @@ plugins {
     id("org.openapi.generator") version "7.4.0"
     kotlin("jvm") version "1.9.24"
     kotlin("plugin.spring") version "1.9.24"
+    kotlin("kapt") version "2.0.20"
 }
 
 group = "com.uag"
@@ -47,6 +48,10 @@ dependencies {
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
+
+    // MapStruct
+    implementation("org.mapstruct:mapstruct:1.6.0")
+    kapt("org.mapstruct:mapstruct-processor:1.6.0")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -107,9 +107,9 @@ class WorkService(
 
     fun registerWork(
         work: Work,
-        characters: List<String>?,
-        creators: List<String>?,
-        tags: List<String>?,
+        characters: List<Character>?,
+        creators: List<Creator>?,
+        tags: List<Tag>?,
         titleImage: MultipartFile,
         images: List<MultipartFile>
     ) {
@@ -121,42 +121,15 @@ class WorkService(
         workRepository.registerWork(work)
         // characterをregister
         if (characters != null) {
-            val charactersObjects = mutableListOf<Character>()
-            characters.forEach { character ->
-                charactersObjects.add(
-                    Character(
-                        workId = nextWorkId,
-                        character = character
-                    )
-                )
-            }
-            characterRepository.registerCharacters(charactersObjects)
+            characterRepository.registerCharacters(characters)
         }
         // creatorをregister
         if (creators != null) {
-            val creatorObjects = mutableListOf<Creator>()
-            creators.forEach { creator ->
-                creatorObjects.add(
-                    Creator(
-                        workId = nextWorkId,
-                        creator = creator
-                    )
-                )
-            }
-            creatorRepository.registerCreators(creatorObjects)
+            creatorRepository.registerCreators(creators)
         }
         // tagをregister
         if (tags != null) {
-            val tagsObjects = mutableListOf<Tag>()
-            tags.forEach { tag ->
-                tagsObjects.add(
-                    Tag(
-                        workId = nextWorkId,
-                        tag = tag
-                    )
-                )
-            }
-            tagRepository.registerTags(tagsObjects)
+            tagRepository.registerTags(tags)
         }
         // imgをregister
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
