@@ -13,6 +13,6 @@ data class Img(
     @get:DynamoDbSortKey
     var imgUrl: String = "",
 
-    @get:DynamoDbAttribute("imgType")
-    var imgType: String = "",
+    @get:DynamoDbAttribute("imgPageNum")
+    var imgPageNum: Int = 0,
 )

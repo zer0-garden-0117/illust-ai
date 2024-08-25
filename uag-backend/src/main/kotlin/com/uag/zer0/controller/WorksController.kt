@@ -56,16 +56,19 @@ class WorksController(
             required = true
         ) worksDetailsBase64: String
     ): ResponseEntity<Unit> {
+        logger.info("registerWorks start!!!")
         val decodedWorksDetails = String(
             Base64.getDecoder().decode(worksDetailsBase64),
             Charsets.UTF_8
         )
+        logger.info("Decoded worksDetails: $decodedWorksDetails")
+        logger.info("registerWorks start2!!!")
         val objectMapper: ObjectMapper = jacksonObjectMapper().apply {
             registerModule(JavaTimeModule())
         }
+        logger.info("registerWorks start3!!!")
         val apiWorkWithDetails: ApiWorkWithDetails =
             objectMapper.readValue(decodedWorksDetails)
-        logger.info("Decoded worksDetails: $decodedWorksDetails")
         logger.info("apiWorksWithDetails: $apiWorkWithDetails")
 
         if (apiWorkWithDetails.apiWork == null) {

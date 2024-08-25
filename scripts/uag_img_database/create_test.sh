@@ -68,11 +68,11 @@ add_test_data2() {
     local work_id=$2
     local attribute_name=$3
     local attribute_value=$4
-    local type=$5
+    local img_page_num=$5
 
     aws dynamodb put-item \
         --table-name $table_name \
-        --item "{\"workId\": {\"N\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}, \"imgType\": {\"S\": \"$type\"}}" \
+        --item "{\"workId\": {\"N\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}, \"imgPageNum\": {\"N\": \"$img_page_num\"}}" \
         --endpoint-url $ENDPOINT_URL
 }
 
@@ -101,12 +101,12 @@ add_test_data "creator" "${work_ids[2]}" "creator" "Creator_3_1"
 add_test_data "creator" "${work_ids[2]}" "creator" "Creator_3_2"
 
 # img テーブルにテストデータを追加
-add_test_data2 "img" "${work_ids[0]}" "imgUrl" "https://example.com/work1_image1.avif" "title"
-add_test_data2 "img" "${work_ids[0]}" "imgUrl" "https://example.com/work1_image2.avif" "content"
-add_test_data2 "img" "${work_ids[1]}" "imgUrl" "https://example.com/work2_image1.avif" "title"
-add_test_data2 "img" "${work_ids[1]}" "imgUrl" "https://example.com/work2_image2.avif" "content"
-add_test_data2 "img" "${work_ids[2]}" "imgUrl" "https://example.com/work3_image1.avif" "title"
-add_test_data2 "img" "${work_ids[2]}" "imgUrl" "https://example.com/work3_image2.avif" "content"
+add_test_data2 "img" "${work_ids[0]}" "imgUrl" "https://example.com/work1_image1.avif" "1"
+add_test_data2 "img" "${work_ids[0]}" "imgUrl" "https://example.com/work1_image2.avif" "2"
+add_test_data2 "img" "${work_ids[1]}" "imgUrl" "https://example.com/work2_image1.avif" "1"
+add_test_data2 "img" "${work_ids[1]}" "imgUrl" "https://example.com/work2_image2.avif" "2"
+add_test_data2 "img" "${work_ids[2]}" "imgUrl" "https://example.com/work3_image1.avif" "1"
+add_test_data2 "img" "${work_ids[2]}" "imgUrl" "https://example.com/work3_image2.avif" "2"
 
 # user テーブルにテストデータを追加
 user_roles=("admin" "editor" "viewer")

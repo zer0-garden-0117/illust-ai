@@ -5,6 +5,7 @@ import com.uag.zer0.repository.counters.CountersRepository
 import com.uag.zer0.repository.work.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -105,6 +106,7 @@ class WorkService(
         return works
     }
 
+    @Transactional
     fun registerWork(
         work: Work,
         characters: List<Character>?,
@@ -115,23 +117,9 @@ class WorkService(
     ) {
         // countersからcounterValueを取得
         val nextWorkId = countersRepository.findByCounterName("workId") + 1
-        work.workId = nextWorkId
-        logger.info(work.toString())
+
         // workをregister
-        workRepository.registerWork(work)
-        // characterをregister
-        if (characters != null) {
-            characterRepository.registerCharacters(characters)
-        }
-        // creatorをregister
-        if (creators != null) {
-            creatorRepository.registerCreators(creators)
-        }
-        // tagをregister
-        if (tags != null) {
-            tagRepository.registerTags(tags)
-        }
-        // imgをregister
+        work.workId = nextWorkId
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
         val titleImageAvif =
             convertService.convertToAvifWithStream(titleImage)
@@ -140,6 +128,35 @@ class WorkService(
             titleImageAvif,
             "titleImage_$titleTimestamp.avif"
         )
+        // ToDo: ImgURLはCloudFrontのURLに変換してDBに格納する
+        work.titleImgUrl = titleImageUrl
+        workRepository.registerWork(work)
+
+        // characterをregister
+        if (characters != null) {
+            characters.forEach { character ->
+                character.workId = nextWorkId
+            }
+            characterRepository.registerCharacters(characters)
+        }
+
+        // creatorをregister
+        if (creators != null) {
+            creators.forEach { creator ->
+                creator.workId = nextWorkId
+            }
+            creatorRepository.registerCreators(creators)
+        }
+
+        // tagをregister
+        if (tags != null) {
+            tags.forEach { tag ->
+                tag.workId = nextWorkId
+            }
+            tagRepository.registerTags(tags)
+        }
+
+        // imgをregister
         val imageUrls = images.map { image ->
             val avifImage =
                 convertService.convertToAvifWithStream(image)
@@ -149,19 +166,13 @@ class WorkService(
         }
         // ToDo: ImgURLはCloudFrontのURLに変換してDBに格納する
         val imgObjects = mutableListOf<Img>()
-        imgObjects.add(
-            Img(
-                workId = nextWorkId,
-                imgUrl = titleImageUrl,
-                imgType = "title"
-            )
-        )
+        var pageNum = 1
         imageUrls.forEach { imageUrl ->
             imgObjects.add(
                 Img(
                     workId = nextWorkId,
                     imgUrl = imageUrl,
-                    imgType = "content"
+                    imgPageNum = pageNum++
                 )
             )
         }
