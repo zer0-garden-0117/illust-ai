@@ -9,7 +9,7 @@ import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 
 @Service
-class ImageUploadService(
+class UploadService(
     private val s3Client: S3Client,
 ) {
     @Value("\${cloud.aws.s3.bucket}")

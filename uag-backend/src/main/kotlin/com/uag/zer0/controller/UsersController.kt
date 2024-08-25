@@ -5,7 +5,7 @@ import com.uag.zer0.entity.user.User
 import com.uag.zer0.generated.endpoint.UsersApi
 import com.uag.zer0.generated.model.ApiUserToken
 import com.uag.zer0.service.TokenService
-import com.uag.zer0.service.user.UserService
+import com.uag.zer0.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
@@ -24,8 +24,8 @@ class UsersController(
         val email = customAuth?.email ?: return ResponseEntity.ok(
             ApiUserToken(userToken = "unregistered")
         )
-        val currentUser: User = userService.hasUser(email)
-            ?: return ResponseEntity.ok(ApiUserToken(userToken = "unregistered"))
+        val currentUser: User =
+            userService.hasUser(email) ?: userService.registerUser(email)
         val userToken = tokenService.generateToken(currentUser)
         return ResponseEntity.ok(ApiUserToken(userToken = userToken))
     }

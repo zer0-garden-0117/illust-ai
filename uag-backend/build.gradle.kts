@@ -44,6 +44,10 @@ dependencies {
     implementation("com.auth0:java-jwt:4.2.1")
     implementation("org.json:json:20240303")
 
+    // Jackson
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
+
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

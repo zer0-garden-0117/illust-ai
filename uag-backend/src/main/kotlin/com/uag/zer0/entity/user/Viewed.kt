@@ -5,10 +5,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
 
 @DynamoDbBean
-data class User(
+data class Viewed(
     @get:DynamoDbPartitionKey
     var userId: String = "",
 
     @get:DynamoDbAttribute("userRole")
-    var userRole: String = "",
+    var workId: Int = 0,
 )

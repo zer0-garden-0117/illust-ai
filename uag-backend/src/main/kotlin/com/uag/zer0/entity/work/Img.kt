@@ -1,14 +1,18 @@
-package com.uag.zer0.entity.user
+package com.uag.zer0.entity.work
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
 
 @DynamoDbBean
-data class User(
+data class Img(
     @get:DynamoDbPartitionKey
-    var userId: String = "",
+    var workId: Int = 0,
 
-    @get:DynamoDbAttribute("userRole")
-    var userRole: String = "",
+    @get:DynamoDbSortKey
+    var imgUrl: String = "",
+
+    @get:DynamoDbAttribute("imgType")
+    var imgType: String = "",
 )

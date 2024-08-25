@@ -9,16 +9,21 @@ import java.time.Instant
 @DynamoDbBean
 data class Work(
     @get:DynamoDbPartitionKey
-    var workId: String = "",
+    var workId: Int = 0,
 
     @get:DynamoDbSecondaryPartitionKey(indexNames = ["GenreIndex"])
-    var genre: String? = null,
+    var genre: String = "",
 
     @get:DynamoDbSecondaryPartitionKey(indexNames = ["FormatIndex"])
-    var format: String? = null,
+    var format: String = "",
 
+    @get:DynamoDbAttribute("mainTitle")
     var mainTitle: String = "",
+
+    @get:DynamoDbAttribute("subTitle")
     var subTitle: String = "",
+
+    @get:DynamoDbAttribute("description")
     var description: String = "",
 
     @get:DynamoDbAttribute("workSize")
@@ -36,6 +41,9 @@ data class Work(
     @get:DynamoDbAttribute("downloads")
     var downloads: Int = 0,
 
+    @get:DynamoDbAttribute("createdAt")
     var createdAt: Instant = Instant.now(),
+
+    @get:DynamoDbAttribute("updatedAt")
     var updatedAt: Instant = Instant.now()
 )

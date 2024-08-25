@@ -1,4 +1,4 @@
-package com.uag.zer0.entity.tag
+package com.uag.zer0.entity.work
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
@@ -6,11 +6,11 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecon
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
 
 @DynamoDbBean
-data class Tag(
+data class Creator(
     @get:DynamoDbPartitionKey
-    var workId: String = "",
+    var workId: Int = 0,
 
     @get:DynamoDbSortKey
-    @get:DynamoDbSecondaryPartitionKey(indexNames = ["TagIndex"])
-    var tag: String = ""
+    @get:DynamoDbSecondaryPartitionKey(indexNames = ["CreatorIndex"])
+    var creator: String = "",
 )

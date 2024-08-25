@@ -8,7 +8,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 @Service
-class ImageConversionService {
+class ConvertService {
     fun convertToAvifWithStream(image: MultipartFile): ByteArray {
         try {
             val nodeScriptPath = "node-scripts/sharpConvertWithStream.js"

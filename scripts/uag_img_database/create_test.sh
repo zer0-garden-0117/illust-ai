@@ -43,33 +43,11 @@ do
 
     aws dynamodb put-item \
         --table-name work \
-        --item "{\"workId\": {\"S\": \"$work_id\"}, \"workSize\": {\"N\": \"$work_size\"}, \"pages\": {\"N\": \"$pages\"}, \"titleImgUrl\": {\"S\": \"$title_img_url\"}, \"likes\": {\"N\": \"$likes\"}, \"downloads\": {\"N\": \"$downloads\"}, \"createdAt\": {\"S\": \"2024-08-13T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-08-13T00:00:00Z\"}, \"mainTitle\": {\"S\": \"$main_title\"}, \"subtitle\": {\"S\": \"$subtitle\"}, \"description\": {\"S\": \"$description\"}, \"genre\": {\"S\": \"$genre\"}, \"format\": {\"S\": \"$format\"}}" \
+        --item "{\"workId\": {\"N\": \"$work_id\"}, \"workSize\": {\"N\": \"$work_size\"}, \"pages\": {\"N\": \"$pages\"}, \"titleImgUrl\": {\"S\": \"$title_img_url\"}, \"likes\": {\"N\": \"$likes\"}, \"downloads\": {\"N\": \"$downloads\"}, \"createdAt\": {\"S\": \"2024-08-13T00:00:00Z\"}, \"updatedAt\": {\"S\": \"2024-08-13T00:00:00Z\"}, \"mainTitle\": {\"S\": \"$main_title\"}, \"subTitle\": {\"S\": \"$subtitle\"}, \"description\": {\"S\": \"$description\"}, \"genre\": {\"S\": \"$genre\"}, \"format\": {\"S\": \"$format\"}}" \
         --endpoint-url $ENDPOINT_URL
 done
 
 echo "work テーブルにテストデータが追加されました。"
-
-# user テーブルにテストデータを追加
-user_roles=("admin" "editor" "viewer")
-for i in "${!user_roles[@]}"
-do
-    if [ "$i" -eq 0 ]; then
-        user_id="t.t.m.roien@gmail.com"  # 特定のメールアドレスに修正
-    else
-        user_id="user${i}@example.com"
-    fi
-    user_role=${user_roles[$i]}
-
-    # likedWorkId と viewedWorkId のリストを仮定
-    liked_work_id="likedWork${i}"
-    viewed_work_id="viewedWork${i}"
-
-    # テーブルにデータを追加
-    aws dynamodb put-item \
-        --table-name user \
-        --item "{\"userId\": {\"S\": \"$user_id\"}, \"userRole\": {\"S\": \"$user_role\"}, \"likedWorkId\": {\"S\": \"$liked_work_id\"}, \"viewedWorkId\": {\"S\": \"$viewed_work_id\"}}" \
-        --endpoint-url $ENDPOINT_URL
-done
 
 # テストデータの追加関数
 add_test_data() {
@@ -80,7 +58,21 @@ add_test_data() {
 
     aws dynamodb put-item \
         --table-name $table_name \
-        --item "{\"workId\": {\"S\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}}" \
+        --item "{\"workId\": {\"N\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}}" \
+        --endpoint-url $ENDPOINT_URL
+}
+
+# テストデータの追加関数
+add_test_data2() {
+    local table_name=$1
+    local work_id=$2
+    local attribute_name=$3
+    local attribute_value=$4
+    local type=$5
+
+    aws dynamodb put-item \
+        --table-name $table_name \
+        --item "{\"workId\": {\"N\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}, \"imgType\": {\"S\": \"$type\"}}" \
         --endpoint-url $ENDPOINT_URL
 }
 
@@ -107,5 +99,49 @@ add_test_data "creator" "${work_ids[1]}" "creator" "Creator_2_1"
 add_test_data "creator" "${work_ids[1]}" "creator" "Creator_2_2"
 add_test_data "creator" "${work_ids[2]}" "creator" "Creator_3_1"
 add_test_data "creator" "${work_ids[2]}" "creator" "Creator_3_2"
+
+# img テーブルにテストデータを追加
+add_test_data2 "img" "${work_ids[0]}" "imgUrl" "https://example.com/work1_image1.avif" "title"
+add_test_data2 "img" "${work_ids[0]}" "imgUrl" "https://example.com/work1_image2.avif" "content"
+add_test_data2 "img" "${work_ids[1]}" "imgUrl" "https://example.com/work2_image1.avif" "title"
+add_test_data2 "img" "${work_ids[1]}" "imgUrl" "https://example.com/work2_image2.avif" "content"
+add_test_data2 "img" "${work_ids[2]}" "imgUrl" "https://example.com/work3_image1.avif" "title"
+add_test_data2 "img" "${work_ids[2]}" "imgUrl" "https://example.com/work3_image2.avif" "content"
+
+# user テーブルにテストデータを追加
+user_roles=("admin" "editor" "viewer")
+for i in "${!user_roles[@]}"
+do
+    if [ "$i" -eq 0 ]; then
+        user_id="t.t.m.roien@gmail.com"  # 特定のメールアドレスに修正
+    else
+        user_id="user${i}@example.com"
+    fi
+    user_role=${user_roles[$i]}
+
+    # テーブルにデータを追加
+    aws dynamodb put-item \
+    --table-name user \
+    --item "{\"userId\": {\"S\": \"$user_id\"}, \"userRole\": {\"S\": \"$user_role\"}}" \
+    --endpoint-url $ENDPOINT_URL
+
+    # liked テーブルにテストデータを追加
+    for work_id in "${!work_ids[@]}"
+    do
+        aws dynamodb put-item \
+            --table-name liked \
+            --item "{\"userId\": {\"S\": \"$user_id\"}, \"workId\": {\"N\": \"${work_ids[$work_id]}\"}}" \
+            --endpoint-url $ENDPOINT_URL
+    done
+
+    # viewed テーブルにテストデータを追加
+    for work_id in "${!work_ids[@]}"
+    do
+        aws dynamodb put-item \
+            --table-name viewed \
+            --item "{\"userId\": {\"S\": \"$user_id\"}, \"workId\": {\"N\": \"${work_ids[$work_id]}\"}}" \
+            --endpoint-url $ENDPOINT_URL
+    done
+done
 
 echo "tag, character, creator テーブルにテストデータが追加されました。"

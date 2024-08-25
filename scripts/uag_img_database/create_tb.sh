@@ -24,7 +24,7 @@ create_table counters \
 # work テーブルの作成
 create_table work \
     --attribute-definitions \
-        AttributeName=workId,AttributeType=S \
+        AttributeName=workId,AttributeType=N \
         AttributeName=genre,AttributeType=S \
         AttributeName=format,AttributeType=S \
     --key-schema \
@@ -45,15 +45,10 @@ create_table work \
             }
         ]"
 
-# user テーブルの作成
-create_table user \
-    --attribute-definitions AttributeName=userId,AttributeType=S \
-    --key-schema AttributeName=userId,KeyType=HASH
-
 # tag テーブルの作成
 create_table tag \
     --attribute-definitions \
-        AttributeName=workId,AttributeType=S \
+        AttributeName=workId,AttributeType=N \
         AttributeName=tag,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
@@ -71,7 +66,7 @@ create_table tag \
 # character テーブルの作成
 create_table character \
     --attribute-definitions \
-        AttributeName=workId,AttributeType=S \
+        AttributeName=workId,AttributeType=N \
         AttributeName=character,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
@@ -89,7 +84,7 @@ create_table character \
 # creator テーブルの作成
 create_table creator \
     --attribute-definitions \
-        AttributeName=workId,AttributeType=S \
+        AttributeName=workId,AttributeType=N \
         AttributeName=creator,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
@@ -107,10 +102,33 @@ create_table creator \
 # img テーブルの作成
 create_table img \
     --attribute-definitions \
-        AttributeName=workId,AttributeType=S \
-        AttributeName=ImgUrl,AttributeType=S \
+        AttributeName=workId,AttributeType=N \
+        AttributeName=imgUrl,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
-        AttributeName=ImgUrl,KeyType=RANGE
+        AttributeName=imgUrl,KeyType=RANGE
+
+# user テーブルの作成
+create_table user \
+    --attribute-definitions AttributeName=userId,AttributeType=S \
+    --key-schema AttributeName=userId,KeyType=HASH
+
+# liked テーブルの作成
+create_table liked \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=workId,AttributeType=N \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH \
+        AttributeName=workId,KeyType=RANGE
+
+# viewed テーブルの作成
+create_table viewed \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=workId,AttributeType=N \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH \
+        AttributeName=workId,KeyType=RANGE
 
 echo "すべてのテーブルが作成されました。"

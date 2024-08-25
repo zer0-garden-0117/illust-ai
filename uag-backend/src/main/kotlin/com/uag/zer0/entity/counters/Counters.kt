@@ -1,14 +1,14 @@
-package com.uag.zer0.entity.user
+package com.uag.zer0.entity.counters
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
 
 @DynamoDbBean
-data class User(
+data class Counters(
     @get:DynamoDbPartitionKey
-    var userId: String = "",
+    var counterName: String = "",
 
-    @get:DynamoDbAttribute("userRole")
-    var userRole: String = "",
+    @get:DynamoDbAttribute("counterValue")
+    var counterValue: Int = 0
 )

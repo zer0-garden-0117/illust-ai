@@ -1,4 +1,4 @@
-package com.uag.zer0.service.user
+package com.uag.zer0.service
 
 import com.uag.zer0.entity.user.User
 import com.uag.zer0.repository.user.UserRepository
@@ -14,6 +14,14 @@ class UserService(
     fun hasUser(email: String): User? {
         val users = userRepository.findByUserId(email)
         return users
+    }
+
+    fun registerUser(email: String): User {
+        val user = User(
+            userId = email,
+            userRole = "user"
+        )
+        return userRepository.registerUser(user)
     }
 
 }
