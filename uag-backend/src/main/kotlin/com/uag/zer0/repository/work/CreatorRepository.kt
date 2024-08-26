@@ -29,33 +29,29 @@ class CreatorRepository(
     private val logger =
         LoggerFactory.getLogger(CreatorRepository::class.java)
 
-    fun findWorkIdsByCreator(creator: String): List<Int> {
+    fun findByCreator(creator: String): List<Creator> {
         val index = table.index("CreatorIndex")
         val queryConditional = QueryConditional.keyEqualTo(
             Key.builder().partitionValue(creator).build()
         )
         val results = index.query { r -> r.queryConditional(queryConditional) }
-        val workIds = mutableListOf<Int>()
+        val creators = mutableListOf<Creator>()
         results.forEach { page ->
-            page.items().forEach { item ->
-                workIds.add(item.workId)
-            }
+            creators.addAll(page.items())
         }
-        return workIds
+        return creators
     }
-    
-    fun findCreatorsByWorkId(workId: String): List<String> {
+
+    fun findByWorkId(workId: Int): List<Creator> {
         return try {
             val queryConditional = QueryConditional.keyEqualTo(
                 Key.builder().partitionValue(workId).build()
             )
             val results =
                 table.query { r -> r.queryConditional(queryConditional) }
-            val creators = mutableListOf<String>()
+            val creators = mutableListOf<Creator>()
             results.forEach { page ->
-                page.items().forEach { item ->
-                    creators.add(item.creator)
-                }
+                creators.addAll(page.items())
             }
             creators
         } catch (e: DynamoDbException) {

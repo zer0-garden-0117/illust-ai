@@ -30,18 +30,16 @@ class ImgRepository(
         LoggerFactory.getLogger(ImgRepository::class.java)
 
     // 指定された workId に関連するImgのリストを取得するメソッド
-    fun findImgUrlsByWorkId(workId: String): List<String> {
+    fun findByWorkId(workId: Int): List<Img> {
         return try {
             val queryConditional = QueryConditional.keyEqualTo(
                 Key.builder().partitionValue(workId).build()
             )
             val results =
                 table.query { r -> r.queryConditional(queryConditional) }
-            val imgs = mutableListOf<String>()
+            val imgs = mutableListOf<Img>()
             results.forEach { page ->
-                page.items().forEach { item ->
-                    imgs.add(item.imgUrl)
-                }
+                imgs.addAll(page.items())
             }
             imgs
         } catch (e: DynamoDbException) {

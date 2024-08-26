@@ -90,7 +90,8 @@ openApiGenerate {
             "interfaceOnly" to "true",
             "useSpringBoot3" to "true",
             "useTags" to "true",
-            "gradleBuildFile" to "false"
+            "gradleBuildFile" to "false",
+            "modelMutable" to "true",
         )
     )
     typeMappings.set(mapOf("file" to "org.springframework.web.multipart.MultipartFile"))

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.uag.zer0.dto.WorkWithDetails
 import com.uag.zer0.entity.work.Character
 import com.uag.zer0.entity.work.Creator
 import com.uag.zer0.entity.work.Tag
@@ -28,17 +29,28 @@ class WorksController(
 
     override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWork>> {
         val works = requestBody?.let { workService.findWorksByTags(it) }
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val apiWorks = mutableListOf<ApiWork>()
+        works?.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            apiWorks.add(apiWork)
+        }
+        return ResponseEntity.ok(apiWorks)
     }
 
     override fun searchWorks(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWork>> {
         val works = requestBody?.let { workService.findWorksByFreeWords(it) }
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val apiWorks = mutableListOf<ApiWork>()
+        works?.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            apiWorks.add(apiWork)
+        }
+        return ResponseEntity.ok(apiWorks)
     }
 
     override fun getWorksById(@PathVariable("worksId") worksId: Int): ResponseEntity<ApiWorkWithDetails> {
-        val works = workService.findWorkByWorkId(workId = worksId)
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val workWithDetails = workService.findWorkByWorkId(workId = worksId)
+        val response = toApiWorkWithDetails(workWithDetails)
+        return ResponseEntity.ok(response)
     }
 
     private val logger = LoggerFactory.getLogger(WorksController::class.java)
@@ -55,7 +67,7 @@ class WorksController(
             value = "worksDetailsBase64",
             required = true
         ) worksDetailsBase64: String
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<ApiWorkWithDetails> {
         logger.info("registerWorks start!!!")
         val decodedWorksDetails = String(
             Base64.getDecoder().decode(worksDetailsBase64),
@@ -74,7 +86,7 @@ class WorksController(
         if (apiWorkWithDetails.apiWork == null) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        val work = workMapper.toWork(apiWorkWithDetails.apiWork)
+        val work = workMapper.toWork(apiWorkWithDetails.apiWork!!)
         val characters = mutableListOf<Character>()
         apiWorkWithDetails.apiCharacters?.forEach { apiCharacter ->
             characters.add(workMapper.toCharacter(apiCharacter))
@@ -87,7 +99,7 @@ class WorksController(
         apiWorkWithDetails.apiTags?.forEach { apiTag ->
             tags.add(workMapper.toTag(apiTag))
         }
-        workService.registerWork(
+        val workWithDetails = workService.registerWork(
             work = work,
             characters = characters,
             creators = creators,
@@ -95,7 +107,8 @@ class WorksController(
             titleImage = titleImage,
             images = images
         )
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val response = toApiWorkWithDetails(workWithDetails)
+        return ResponseEntity.ok(response)
     }
 
     override fun updateWorksById(
@@ -107,5 +120,33 @@ class WorksController(
 
     override fun deleteWorksById(@PathVariable("tagsId") tagsId: Int): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+
+    private fun toApiWorkWithDetails(workWithDetails: WorkWithDetails): ApiWorkWithDetails {
+        val apiWork = workMapper.toApiWork(workWithDetails.work)
+        logger.info(apiWork.toString())
+        val apiCharacters =
+            workWithDetails.characters?.map { workMapper.toApiCharacter(it) }
+                ?.toMutableList()
+        logger.info(apiCharacters.toString())
+        val apiCreators =
+            workWithDetails.creators?.map { workMapper.toApiCreator(it) }
+                ?.toMutableList()
+        logger.info(apiCreators.toString())
+        val apiTags = workWithDetails.tags?.map { workMapper.toApiTag(it) }
+            ?.toMutableList()
+        logger.info(apiTags.toString())
+        val apiImgs = workWithDetails.imgs.map { workMapper.toApiImg(it) }
+            .toMutableList()
+        logger.info(apiImgs.toString())
+
+        val apiWorkWithDetails = ApiWorkWithDetails(
+            apiWork = apiWork,
+            apiCharacters = apiCharacters,
+            apiCreators = apiCreators,
+            apiTags = apiTags,
+            apiImgs = apiImgs
+        )
+        return apiWorkWithDetails
     }
 }

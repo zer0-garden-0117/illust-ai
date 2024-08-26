@@ -29,34 +29,30 @@ class CharacterRepository(
     private val logger =
         LoggerFactory.getLogger(CharacterRepository::class.java)
 
-    fun findWorkIdsByCharacter(character: String): List<Int> {
+    fun findByCharacter(character: String): List<Character> {
         val index = table.index("CharacterIndex")
         val queryConditional = QueryConditional.keyEqualTo(
             Key.builder().partitionValue(character).build()
         )
         val results = index.query { r -> r.queryConditional(queryConditional) }
-        val workIds = mutableListOf<Int>()
+        val characters = mutableListOf<Character>()
         results.forEach { page ->
-            page.items().forEach { item ->
-                workIds.add(item.workId)
-            }
+            characters.addAll(page.items())
         }
-        return workIds
+        return characters
     }
 
     // 指定された workId に関連するキャラクターのリストを取得するメソッド
-    fun findCharactersByWorkId(workId: String): List<String> {
+    fun findByWorkId(workId: Int): List<Character> {
         return try {
             val queryConditional = QueryConditional.keyEqualTo(
                 Key.builder().partitionValue(workId).build()
             )
             val results =
                 table.query { r -> r.queryConditional(queryConditional) }
-            val characters = mutableListOf<String>()
+            val characters = mutableListOf<Character>()
             results.forEach { page ->
-                page.items().forEach { item ->
-                    characters.add(item.character)
-                }
+                characters.addAll(page.items())
             }
             characters
         } catch (e: DynamoDbException) {

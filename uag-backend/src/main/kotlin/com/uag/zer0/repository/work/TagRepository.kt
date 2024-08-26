@@ -25,33 +25,29 @@ class TagRepository(
         enhancedClient.table("tag", TableSchema.fromClass(Tag::class.java))
     private val logger = LoggerFactory.getLogger(TagRepository::class.java)
 
-    fun findWorkIdsByTag(tag: String): List<Int> {
+    fun findByTag(tag: String): List<Tag> {
         val index = table.index("TagIndex")
         val queryConditional = QueryConditional.keyEqualTo(
             Key.builder().partitionValue(tag).build()
         )
         val results = index.query { r -> r.queryConditional(queryConditional) }
-        val workIds = mutableListOf<Int>()
+        val tags = mutableListOf<Tag>()
         results.forEach { page ->
-            page.items().forEach { item ->
-                workIds.add(item.workId)
-            }
+            tags.addAll(page.items())
         }
-        return workIds
+        return tags
     }
 
-    fun findTagsByWorkId(workId: String): List<String> {
+    fun findByWorkId(workId: Int): List<Tag> {
         return try {
             val queryConditional = QueryConditional.keyEqualTo(
                 Key.builder().partitionValue(workId).build()
             )
             val results =
                 table.query { r -> r.queryConditional(queryConditional) }
-            val tags = mutableListOf<String>()
+            val tags = mutableListOf<Tag>()
             results.forEach { page ->
-                page.items().forEach { item ->
-                    tags.add(item.tag)
-                }
+                tags.addAll(page.items())
             }
             tags
         } catch (e: DynamoDbException) {
