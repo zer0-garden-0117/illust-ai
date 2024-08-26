@@ -177,5 +177,5 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/macos,gradle,intellij
 
 .idea/
-
 .kotlin/
+keystore.p12

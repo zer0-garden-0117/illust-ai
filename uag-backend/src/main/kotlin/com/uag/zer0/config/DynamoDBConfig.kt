@@ -20,7 +20,7 @@ class DynamoDBConfig {
     @Primary
     fun dynamoDbClient(): DynamoDbClient {
         return DynamoDbClient.builder()
-            .region(Region.US_WEST_2)
+            .region(Region.US_EAST_1)
             .endpointOverride(java.net.URI.create("http://localhost:10000"))
             .credentialsProvider(DefaultCredentialsProvider.create())
             .overrideConfiguration(

@@ -18,12 +18,12 @@ export const Logo: React.FC<LogoProps> = () => {
     <Flex direction="row" align="center" gap={4}>
       <Link href="/" className={classes.heading}>
         <Text fw="bolder" size={isSmallScreen ? "sm" : ""}>
-          {t('title')}
+          {/* {t('title')} */}
         </Text>
       </Link>
       {!isSmallScreen && (
         <Text className={classes.subtitle}>
-          {t('subtitle')}
+          {/* {t('subtitle')} */}
         </Text>
       )}
     </Flex>
