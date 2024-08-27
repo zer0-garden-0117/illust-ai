@@ -4,15 +4,13 @@ import {
   signInWithRedirect,
   signOut,
   getCurrentUser,
-  fetchUserAttributes
 } from 'aws-amplify/auth';
-import { AuthSession } from '@aws-amplify/core';
+import { clearUserTokenFromCookies } from '../../utils/authCookies';
 
-// ユーザーの認証状態の管理や副作用の処理のカプセル化
-// useAuthenticatorでは実現できなかったuserInfoの取得等も行う
-export const useAuth = () => {
+export const useAccessToken = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState<string | null | undefined>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -22,15 +20,18 @@ export const useAuth = () => {
           setIsAuthenticated(true);
           const info = await fetchAuthSession();
           setEmail(info.tokens?.idToken?.payload.email?.toString())
+          setAccessToken(info.tokens?.accessToken.toString() ?? null);
         } else {
           setIsAuthenticated(false);
           setEmail(null)
+          setAccessToken(null);
           // 未ログイン時はログイン画面へリダイレクトを検討
           // initiateSignIn();
         }
       } catch {
         setIsAuthenticated(false);
         setEmail(null)
+        setAccessToken(null);
         // 未ログイン時はログイン画面へリダイレクトを検討
         // initiateSignIn();
       }
@@ -50,12 +51,15 @@ export const useAuth = () => {
   const logout = () => {
     signOut();
     setIsAuthenticated(false);
-    setEmail(null)
+    setEmail(null);
+    setAccessToken(null);
+    clearUserTokenFromCookies();
   };
 
   return {
     isAuthenticated,
     email,
+    accessToken,
     login,
     logout
   };

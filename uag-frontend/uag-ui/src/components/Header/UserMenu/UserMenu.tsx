@@ -1,18 +1,16 @@
 import React from 'react';
+import { useAccessToken } from '../../../apis/auth/useAccessToken';
 import { Avatar, Menu } from '@mantine/core';
 import { MdLogin, MdLogout } from "react-icons/md";
 import {
-  RiShieldKeyholeLine,
-  RiDeleteBin6Line,
-  RiUserSettingsLine
+  RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine
 } from "react-icons/ri";
 import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
-import { useAuth } from '../../../hooks/auth/useAuth';
 import classes from './UserMenu.module.css';
 
 export const UserMenu: React.FC = () => {
-  const { isAuthenticated, login, logout, email } = useAuth();
+  const { isAuthenticated, login, logout, email } = useAccessToken();
 
   const handleLoginClick = () => {
     login();

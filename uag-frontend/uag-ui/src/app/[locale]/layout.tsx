@@ -3,6 +3,8 @@ import { getMessages } from 'next-intl/server';
 import { CustomMantineProvider } from '../../providers/mantine/mantineProvider';
 import { AuthProvider } from '../../providers/auth/authProvider';
 import { AppShellLayout } from '../../components/AppShellLayout/AppShellLayout';
+import { ErrorProvider } from '@/providers/error/errorProvider';
+import { UserTokenProvider } from '@/providers/auth/userTokenProvider';
 
 const LocaleLayout = async ({
   children,
@@ -18,11 +20,15 @@ const LocaleLayout = async ({
       <body>
         <CustomMantineProvider>
           <NextIntlClientProvider messages={messages}>
-            <AuthProvider>
-              <AppShellLayout>
-                {children}
-              </AppShellLayout>
-            </AuthProvider>
+            <ErrorProvider>
+              <AuthProvider>
+                <UserTokenProvider>
+                  <AppShellLayout>
+                    {children}
+                  </AppShellLayout>
+                </UserTokenProvider>
+              </AuthProvider>
+            </ErrorProvider>
           </NextIntlClientProvider>
         </CustomMantineProvider>
       </body>

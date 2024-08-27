@@ -5,7 +5,7 @@ export interface AccessTokenHeader {
   "x-access-token"?: string;
 }
 
-export interface MemberTokenHeader {
+export interface UserTokenHeader {
   Authorization: `Bearer ${string}`;
 }
 
