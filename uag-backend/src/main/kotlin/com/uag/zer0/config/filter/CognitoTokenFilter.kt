@@ -2,6 +2,7 @@ package com.uag.zer0.config.filter
 
 import com.uag.zer0.config.CustomAuthenticationToken
 import com.uag.zer0.service.TokenService
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtException
@@ -20,16 +21,23 @@ class CognitoTokenFilter(
         val requestURI = request.requestURI
         if (requestURI in noBearerTokenPathSet) {
             val token = request.getHeader("x-access-token")
+            logger.info(token)
             if (token != null) {
                 try {
-                    val email = tokenService.getEmailFromAccessToken(token)
+                    // JWT検証
+                    val jwt = jwtDecoder.decode(token)
                     val customAuthentication = CustomAuthenticationToken(
-                        email = email
                     )
                     SecurityContextHolder.getContext().authentication =
                         customAuthentication
                 } catch (e: JwtException) {
                     SecurityContextHolder.clearContext()
+                    // エラーレスポンスを設定
+                    response.status = HttpServletResponse.SC_UNAUTHORIZED
+                    response.contentType = "application/json"
+                    response.characterEncoding = "UTF-8"
+                    response.writer.write("""{"error": "Invalid or expired token"}""")
+                    return
                 }
             }
         }
