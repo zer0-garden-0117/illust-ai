@@ -26,7 +26,11 @@ class CognitoTokenFilter(
                 try {
                     // JWT検証
                     val jwt = jwtDecoder.decode(token)
+                    val username = jwt.getClaimAsString("username")
+                    logger.info("JWT Username: $username")
+
                     val customAuthentication = CustomAuthenticationToken(
+                        userId = username
                     )
                     SecurityContextHolder.getContext().authentication =
                         customAuthentication

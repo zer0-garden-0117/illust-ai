@@ -4,8 +4,8 @@ import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 
 data class CustomAuthenticationToken(
-    val userId: Int? = null,
-    val email: String? = null,
+    val id: Int? = null,
+    val userId: String? = null,
     val role: String? = null,
     val customAuthorities: Collection<GrantedAuthority>? = null
 ) : AbstractAuthenticationToken(customAuthorities) {
@@ -18,10 +18,10 @@ data class CustomAuthenticationToken(
     }
 
     override fun getPrincipal(): Int? {
-        return userId
+        return id
     }
 
     override fun toString(): String {
-        return "CustomAuthenticationToken(userId=$userId, email=$email, role=$role, authorities=$authorities)"
+        return "CustomAuthenticationToken(id=$id, userId=$userId, role=$role, authorities=$authorities)"
     }
 }

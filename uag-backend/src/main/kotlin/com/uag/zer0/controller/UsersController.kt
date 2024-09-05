@@ -21,11 +21,11 @@ class UsersController(
         val authentication: Authentication? =
             SecurityContextHolder.getContext().authentication
         val customAuth = authentication as? CustomAuthenticationToken
-        val email = customAuth?.email ?: return ResponseEntity.ok(
+        val userId = customAuth?.userId ?: return ResponseEntity.ok(
             ApiUserToken(userToken = "unregistered")
         )
         val currentUser: User =
-            userService.hasUser(email) ?: userService.registerUser(email)
+            userService.hasUser(userId) ?: userService.registerUser(userId)
         val userToken = tokenService.generateToken(currentUser)
         return ResponseEntity.ok(ApiUserToken(userToken = userToken))
     }

@@ -28,7 +28,7 @@ class UserTokenFilter(
                 val userId = tokenService.validateAndGetMemberId(token)
                 val role = tokenService.getRoleFromToken(token)
                 val customAuthentication = CustomAuthenticationToken(
-                    email = userId,
+                    userId = userId,
                     role = role,
                 )
                 SecurityContextHolder.getContext().authentication =

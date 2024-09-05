@@ -11,14 +11,14 @@ class UserService(
 ) {
     private val logger = LoggerFactory.getLogger(UserService::class.java)
 
-    fun hasUser(email: String): User? {
-        val users = userRepository.findByUserId(email)
+    fun hasUser(userId: String): User? {
+        val users = userRepository.findByUserId(userId)
         return users
     }
 
-    fun registerUser(email: String): User {
+    fun registerUser(userId: String): User {
         val user = User(
-            userId = email,
+            userId = userId,
             userRole = "user"
         )
         return userRepository.registerUser(user)
