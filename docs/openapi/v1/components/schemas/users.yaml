@@ -32,6 +32,11 @@ ApiLiked:
       type: integer
       description: 作品ID
       example: 1
+    updatedAt:
+      type: string
+      format: date-time
+      description: "最終更新日時"
+      example: "2024-07-08T00:00:00+09:00"
 
 ApiViewed:
   description: 閲覧
@@ -45,3 +50,8 @@ ApiViewed:
       type: integer
       description: 作品ID
       example: 1
+    updatedAt:
+      type: string
+      format: date-time
+      description: "最終更新日時"
+      example: "2024-07-08T00:00:00+09:00"

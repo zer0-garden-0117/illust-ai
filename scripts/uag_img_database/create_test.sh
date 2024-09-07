@@ -76,29 +76,42 @@ add_test_data2() {
         --endpoint-url $ENDPOINT_URL
 }
 
+add_test_data3() {
+    local table_name=$1
+    local work_id=$2
+    local attribute_name=$3
+    local attribute_value=$4
+    local created_at=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+    aws dynamodb put-item \
+        --table-name $table_name \
+        --item "{\"workId\": {\"N\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}, \"createdAt\": {\"S\": \"$created_at\"}}" \
+        --endpoint-url $ENDPOINT_URL
+}
+
 # tag テーブルにテストデータを追加
-add_test_data "tag" "${work_ids[0]}" "tag" "Tag_1"
-add_test_data "tag" "${work_ids[0]}" "tag" "Tag_2"
-add_test_data "tag" "${work_ids[1]}" "tag" "Tag_2"
-add_test_data "tag" "${work_ids[1]}" "tag" "Tag_3"
-add_test_data "tag" "${work_ids[2]}" "tag" "Tag_3"
-add_test_data "tag" "${work_ids[2]}" "tag" "Tag_1"
+add_test_data3 "tag" "${work_ids[0]}" "tag" "Tag_1"
+add_test_data3 "tag" "${work_ids[0]}" "tag" "Tag_2"
+add_test_data3 "tag" "${work_ids[1]}" "tag" "Tag_2"
+add_test_data3 "tag" "${work_ids[1]}" "tag" "Tag_3"
+add_test_data3 "tag" "${work_ids[2]}" "tag" "Tag_3"
+add_test_data3 "tag" "${work_ids[2]}" "tag" "Tag_1"
 
 # character テーブルにテストデータを追加
-add_test_data "character" "${work_ids[0]}" "character" "Character_1_1"
-add_test_data "character" "${work_ids[0]}" "character" "Character_1_2"
-add_test_data "character" "${work_ids[1]}" "character" "Character_2_1"
-add_test_data "character" "${work_ids[1]}" "character" "Character_2_2"
-add_test_data "character" "${work_ids[2]}" "character" "Character_3_1"
-add_test_data "character" "${work_ids[2]}" "character" "Character_3_2"
+add_test_data3 "character" "${work_ids[0]}" "character" "Character_1_1"
+add_test_data3 "character" "${work_ids[0]}" "character" "Character_1_2"
+add_test_data3 "character" "${work_ids[1]}" "character" "Character_2_1"
+add_test_data3 "character" "${work_ids[1]}" "character" "Character_2_2"
+add_test_data3 "character" "${work_ids[2]}" "character" "Character_3_1"
+add_test_data3 "character" "${work_ids[2]}" "character" "Character_3_2"
 
 # creator テーブルにテストデータを追加
-add_test_data "creator" "${work_ids[0]}" "creator" "Creator_1_1"
-add_test_data "creator" "${work_ids[0]}" "creator" "Creator_1_2"
-add_test_data "creator" "${work_ids[1]}" "creator" "Creator_2_1"
-add_test_data "creator" "${work_ids[1]}" "creator" "Creator_2_2"
-add_test_data "creator" "${work_ids[2]}" "creator" "Creator_3_1"
-add_test_data "creator" "${work_ids[2]}" "creator" "Creator_3_2"
+add_test_data3 "creator" "${work_ids[0]}" "creator" "Creator_1_1"
+add_test_data3 "creator" "${work_ids[0]}" "creator" "Creator_1_2"
+add_test_data3 "creator" "${work_ids[1]}" "creator" "Creator_2_1"
+add_test_data3 "creator" "${work_ids[1]}" "creator" "Creator_2_2"
+add_test_data3 "creator" "${work_ids[2]}" "creator" "Creator_3_1"
+add_test_data3 "creator" "${work_ids[2]}" "creator" "Creator_3_2"
 
 # img テーブルにテストデータを追加
 add_test_data2 "img" "${work_ids[0]}" "imgUrl" "https://example.com/work1_image1.avif" "1"
@@ -113,7 +126,7 @@ user_roles=("admin" "editor" "viewer")
 for i in "${!user_roles[@]}"
 do
     if [ "$i" -eq 0 ]; then
-        user_id="t.t.m.roien@gmail.com"  # 特定のメールアドレスに修正
+        user_id="t.t.m.roien@gmail.com"
     else
         user_id="user${i}@example.com"
     fi
@@ -128,18 +141,22 @@ do
     # liked テーブルにテストデータを追加
     for work_id in "${!work_ids[@]}"
     do
+        # updatedAtを現在の時刻で設定
+        updated_at=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
         aws dynamodb put-item \
             --table-name liked \
-            --item "{\"userId\": {\"S\": \"$user_id\"}, \"workId\": {\"N\": \"${work_ids[$work_id]}\"}}" \
+            --item "{\"userId\": {\"S\": \"$user_id\"}, \"workId\": {\"N\": \"${work_ids[$work_id]}\"}, \"updatedAt\": {\"S\": \"$updated_at\"}}" \
             --endpoint-url $ENDPOINT_URL
     done
 
     # viewed テーブルにテストデータを追加
     for work_id in "${!work_ids[@]}"
     do
+        # updatedAtを現在の時刻で設定
+        updated_at=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
         aws dynamodb put-item \
             --table-name viewed \
-            --item "{\"userId\": {\"S\": \"$user_id\"}, \"workId\": {\"N\": \"${work_ids[$work_id]}\"}}" \
+            --item "{\"userId\": {\"S\": \"$user_id\"}, \"workId\": {\"N\": \"${work_ids[$work_id]}\"}, \"updatedAt\": {\"S\": \"$updated_at\"}}" \
             --endpoint-url $ENDPOINT_URL
     done
 done

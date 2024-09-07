@@ -27,19 +27,26 @@ create_table work \
         AttributeName=workId,AttributeType=N \
         AttributeName=genre,AttributeType=S \
         AttributeName=format,AttributeType=S \
+        AttributeName=updatedAt,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
     --global-secondary-indexes \
         "[
             {
                 \"IndexName\": \"GenreIndex\",
-                \"KeySchema\": [{\"AttributeName\":\"genre\",\"KeyType\":\"HASH\"}],
+                \"KeySchema\": [
+                    {\"AttributeName\":\"genre\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
+                ],
                 \"Projection\": {\"ProjectionType\":\"ALL\"},
                 \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
             },
             {
                 \"IndexName\": \"FormatIndex\",
-                \"KeySchema\": [{\"AttributeName\":\"format\",\"KeyType\":\"HASH\"}],
+                \"KeySchema\": [
+                    {\"AttributeName\":\"format\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
+                ],
                 \"Projection\": {\"ProjectionType\":\"ALL\"},
                 \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
             }
@@ -50,6 +57,7 @@ create_table tag \
     --attribute-definitions \
         AttributeName=workId,AttributeType=N \
         AttributeName=tag,AttributeType=S \
+        AttributeName=createdAt,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
         AttributeName=tag,KeyType=RANGE \
@@ -57,7 +65,10 @@ create_table tag \
         "[
             {
                 \"IndexName\": \"TagIndex\",
-                \"KeySchema\": [{\"AttributeName\":\"tag\",\"KeyType\":\"HASH\"}],
+                 \"KeySchema\": [
+                    {\"AttributeName\":\"tag\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"createdAt\",\"KeyType\":\"RANGE\"}
+                ],
                 \"Projection\": {\"ProjectionType\":\"ALL\"},
                 \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
             }
@@ -68,6 +79,7 @@ create_table character \
     --attribute-definitions \
         AttributeName=workId,AttributeType=N \
         AttributeName=character,AttributeType=S \
+        AttributeName=createdAt,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
         AttributeName=character,KeyType=RANGE \
@@ -75,7 +87,10 @@ create_table character \
         "[
             {
                 \"IndexName\": \"CharacterIndex\",
-                \"KeySchema\": [{\"AttributeName\":\"character\",\"KeyType\":\"HASH\"}],
+                \"KeySchema\": [
+                    {\"AttributeName\":\"character\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"createdAt\",\"KeyType\":\"RANGE\"}
+                ],
                 \"Projection\": {\"ProjectionType\":\"ALL\"},
                 \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
             }
@@ -86,6 +101,7 @@ create_table creator \
     --attribute-definitions \
         AttributeName=workId,AttributeType=N \
         AttributeName=creator,AttributeType=S \
+        AttributeName=createdAt,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
         AttributeName=creator,KeyType=RANGE \
@@ -93,7 +109,10 @@ create_table creator \
         "[
             {
                 \"IndexName\": \"CreatorIndex\",
-                \"KeySchema\": [{\"AttributeName\":\"creator\",\"KeyType\":\"HASH\"}],
+                \"KeySchema\": [
+                    {\"AttributeName\":\"creator\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"createdAt\",\"KeyType\":\"RANGE\"}
+                ],
                 \"Projection\": {\"ProjectionType\":\"ALL\"},
                 \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
             }
@@ -118,17 +137,43 @@ create_table liked \
     --attribute-definitions \
         AttributeName=userId,AttributeType=S \
         AttributeName=workId,AttributeType=N \
+        AttributeName=updatedAt,AttributeType=S \
     --key-schema \
         AttributeName=userId,KeyType=HASH \
-        AttributeName=workId,KeyType=RANGE
+        AttributeName=workId,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"UserUpdatedAtIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"userId\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            }
+        ]"
 
 # viewed テーブルの作成
 create_table viewed \
     --attribute-definitions \
         AttributeName=userId,AttributeType=S \
         AttributeName=workId,AttributeType=N \
+        AttributeName=updatedAt,AttributeType=S \
     --key-schema \
         AttributeName=userId,KeyType=HASH \
-        AttributeName=workId,KeyType=RANGE
+        AttributeName=workId,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"UserViewedUpdatedAtIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"userId\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            }
+        ]"
 
 echo "すべてのテーブルが作成されました。"

@@ -34,12 +34,41 @@ class CharacterRepository(
         val queryConditional = QueryConditional.keyEqualTo(
             Key.builder().partitionValue(character).build()
         )
-        val results = index.query { r -> r.queryConditional(queryConditional) }
+        val results = index.query { r ->
+            r.queryConditional(queryConditional)
+                .scanIndexForward(false)
+        }
         val characters = mutableListOf<Character>()
         results.forEach { page ->
             characters.addAll(page.items())
         }
         return characters
+    }
+
+    // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
+    // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
+    fun findByCreatorWithOffset(
+        tag: String,
+        offset: Int,
+        limit: Int
+    ): List<Character> {
+        val index = table.index("CharacterIndex")
+        val queryConditional = QueryConditional.keyEqualTo(
+            Key.builder().partitionValue(tag).build()
+        )
+        val queryRequest = index.query { r ->
+            r.queryConditional(queryConditional)
+                .scanIndexForward(false)
+        }
+
+        // 全件取得後に指定範囲をスキップしてフィルタ
+        val characters = mutableListOf<Character>()
+        queryRequest.forEach { page ->
+            characters.addAll(page.items())
+        }
+
+        // offsetで指定した件数分スキップし、limit分だけ返す
+        return characters.drop(offset).take(limit)
     }
 
     // 指定された workId に関連するキャラクターのリストを取得するメソッド

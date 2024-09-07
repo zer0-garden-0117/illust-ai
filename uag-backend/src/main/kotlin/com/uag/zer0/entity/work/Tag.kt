@@ -1,9 +1,7 @@
 package com.uag.zer0.entity.work
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*
+import java.time.Instant
 
 @DynamoDbBean
 data class Tag(
@@ -12,5 +10,8 @@ data class Tag(
 
     @get:DynamoDbSortKey
     @get:DynamoDbSecondaryPartitionKey(indexNames = ["TagIndex"])
-    var tag: String = ""
+    var tag: String = "",
+
+    @get:DynamoDbSecondarySortKey(indexNames = ["TagIndex"])
+    var updatedAt: Instant = Instant.now()
 )

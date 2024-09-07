@@ -19,8 +19,25 @@ interface WorkMapper {
     )
     fun toWork(apiWork: ApiWork): Work
 
+    @Mapping(
+        source = "updatedAt",
+        target = "updatedAt",
+        qualifiedByName = ["offsetDateTimeToInstant"]
+    )
     fun toCreator(apiCreator: ApiCreator): Creator
+
+    @Mapping(
+        source = "updatedAt",
+        target = "updatedAt",
+        qualifiedByName = ["offsetDateTimeToInstant"]
+    )
     fun toCharacter(apiCharacter: ApiCharacter): Character
+
+    @Mapping(
+        source = "updatedAt",
+        target = "updatedAt",
+        qualifiedByName = ["offsetDateTimeToInstant"]
+    )
     fun toTag(apiTags: ApiTag): Tag
 
     @Mapping(
@@ -34,8 +51,26 @@ interface WorkMapper {
         qualifiedByName = ["instantToOffsetDateTime"]
     )
     fun toApiWork(work: Work): ApiWork
+
+    @Mapping(
+        source = "updatedAt",
+        target = "updatedAt",
+        qualifiedByName = ["instantToOffsetDateTime"]
+    )
     fun toApiCharacter(character: Character): ApiCharacter
+
+    @Mapping(
+        source = "updatedAt",
+        target = "updatedAt",
+        qualifiedByName = ["instantToOffsetDateTime"]
+    )
     fun toApiCreator(creator: Creator): ApiCreator
+
+    @Mapping(
+        source = "updatedAt",
+        target = "updatedAt",
+        qualifiedByName = ["instantToOffsetDateTime"]
+    )
     fun toApiTag(tag: Tag): ApiTag
     fun toApiImg(img: Img): ApiImg
 }

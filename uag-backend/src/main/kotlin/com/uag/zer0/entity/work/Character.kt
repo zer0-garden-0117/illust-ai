@@ -1,9 +1,7 @@
 package com.uag.zer0.entity.work
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*
+import java.time.Instant
 
 @DynamoDbBean
 data class Character(
@@ -13,4 +11,7 @@ data class Character(
     @get:DynamoDbSortKey
     @get:DynamoDbSecondaryPartitionKey(indexNames = ["CharacterIndex"])
     var character: String = "",
+
+    @get:DynamoDbSecondarySortKey(indexNames = ["CharacterIndex"])
+    var updatedAt: Instant = Instant.now()
 )

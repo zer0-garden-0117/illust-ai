@@ -7,7 +7,6 @@ import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
 
 @Repository
@@ -42,7 +41,10 @@ class WorkRepository(
             val index = table.index("GenreIndex")
             val queryConditional =
                 QueryConditional.keyEqualTo { key -> key.partitionValue(genre) }
-            val results = index.query(queryConditional)
+            val results = index.query { r ->
+                r.queryConditional(queryConditional)
+                    .scanIndexForward(false)
+            }
             val workList = mutableListOf<Work>()
             results.forEach { page ->
                 workList.addAll(page.items())
@@ -53,36 +55,30 @@ class WorkRepository(
         }
     }
 
-    fun findByGenreWithPagination(
-        genre: String,
-        lastEvaluatedKey: Map<String, AttributeValue>? = null,
-        pageSize: Int = 10
-    ): Pair<List<Work>, Map<String, AttributeValue>?> {
-        return try {
-            val index = table.index("GenreIndex")
-            val queryConditional =
-                QueryConditional.keyEqualTo { key -> key.partitionValue(genre) }
-
-            val queryBuilder = index.query { r ->
-                r.queryConditional(queryConditional).limit(pageSize)
-                lastEvaluatedKey?.let { r.exclusiveStartKey(it) }
-            }
-
-            val workList = mutableListOf<Work>()
-            var nextKey: Map<String, AttributeValue>? = null
-
-            queryBuilder.forEach { page ->
-                workList.addAll(page.items())
-                nextKey = page.lastEvaluatedKey()
-            }
-
-            Pair(workList, nextKey)
-        } catch (e: DynamoDbException) {
-            throw RuntimeException(
-                "Failed to query by genre with pagination: $genre",
-                e
-            )
+    // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
+    // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
+    fun findByGenreWithOffset(
+        tag: String,
+        offset: Int,
+        limit: Int
+    ): List<Work> {
+        val index = table.index("GenreIndex")
+        val queryConditional = QueryConditional.keyEqualTo(
+            Key.builder().partitionValue(tag).build()
+        )
+        val queryRequest = index.query { r ->
+            r.queryConditional(queryConditional)
+                .scanIndexForward(false)
         }
+
+        // 全件取得後に指定範囲をスキップしてフィルタ
+        val works = mutableListOf<Work>()
+        queryRequest.forEach { page ->
+            works.addAll(page.items())
+        }
+
+        // offsetで指定した件数分スキップし、limit分だけ返す
+        return works.drop(offset).take(limit)
     }
 
     fun findByFormat(format: String): List<Work> {
@@ -90,7 +86,10 @@ class WorkRepository(
             val index = table.index("FormatIndex")
             val queryConditional =
                 QueryConditional.keyEqualTo { key -> key.partitionValue(format) }
-            val results = index.query(queryConditional)
+            val results = index.query { r ->
+                r.queryConditional(queryConditional)
+                    .scanIndexForward(false)
+            }
             val workList = mutableListOf<Work>()
             results.forEach { page ->
                 workList.addAll(page.items())
@@ -99,6 +98,32 @@ class WorkRepository(
         } catch (e: DynamoDbException) {
             throw RuntimeException("Failed to query by format: $format", e)
         }
+    }
+
+    // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
+    // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
+    fun findByFormatWithOffset(
+        tag: String,
+        offset: Int,
+        limit: Int
+    ): List<Work> {
+        val index = table.index("FormatIndex")
+        val queryConditional = QueryConditional.keyEqualTo(
+            Key.builder().partitionValue(tag).build()
+        )
+        val queryRequest = index.query { r ->
+            r.queryConditional(queryConditional)
+                .scanIndexForward(false)
+        }
+
+        // 全件取得後に指定範囲をスキップしてフィルタ
+        val works = mutableListOf<Work>()
+        queryRequest.forEach { page ->
+            works.addAll(page.items())
+        }
+
+        // offsetで指定した件数分スキップし、limit分だけ返す
+        return works.drop(offset).take(limit)
     }
 
     fun registerWork(work: Work): Work {
