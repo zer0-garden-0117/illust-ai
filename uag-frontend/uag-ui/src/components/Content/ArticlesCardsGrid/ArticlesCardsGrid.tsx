@@ -37,7 +37,7 @@ export default function ArticlesCardsGrid() {
     <Card key={article.title} p="md" radius="md" component="a" href="#" className={classes.card}>
       {/* <AspectRatio ratio={1920 / 1080}> */}
       <AspectRatio ratio={2 / 2}>
-        <Image src={article.image} />
+        <Image src={article.image} alt={article.title || "Image without title"} />
       </AspectRatio>
       <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
         {article.date}

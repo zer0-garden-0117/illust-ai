@@ -17,7 +17,7 @@ export const Sidebar: React.FC = () => {
       <Space h="md" />
       <Text>タグ検索</Text>
       {tags.map((tag, index) => (
-        <Badge className={classes.root}>{tag}</Badge>
+        <Badge key={index} className={classes.root}>{tag}</Badge>
       ))}
     </Box>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   fetchAuthSession,
   signInWithRedirect,
@@ -21,8 +21,7 @@ export const useAccessToken = () => {
   const [email, setEmail] = useState<string | null | undefined>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  const checkAuth = async () => {
-    console.log("aaaaaaaaaaaaaaas")
+  const checkAuth = useCallback(async () => {
     try {
       const user = await getCurrentUser();
       if (user) {
@@ -30,8 +29,6 @@ export const useAccessToken = () => {
         const info = await fetchAuthSession();
         setEmail(info.tokens?.idToken?.payload.email?.toString());
         setAccessToken(info.tokens?.accessToken.toString() ?? null);
-        console.log("Bbbbbbbbbbbbbb")
-        console.log(isAuthenticated)
       } else {
         setIsAuthenticated(false);
         setEmail(null);
@@ -42,11 +39,15 @@ export const useAccessToken = () => {
       setEmail(null);
       setAccessToken(null);
     }
-  };
+  }, []);
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const loginWithHosted = async () => {
     try {
