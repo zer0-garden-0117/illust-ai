@@ -27,20 +27,20 @@ class WorksController(
     private val workMapper: WorkMapper
 ) : WorksApi {
 
-    override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWork>> {
-        val works = requestBody?.let { workService.findWorksByTags(it) }
+    override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>): ResponseEntity<List<ApiWork>> {
+        val works = requestBody.let { workService.findWorksByTags(it) }
         val apiWorks = mutableListOf<ApiWork>()
-        works?.forEach { work ->
+        works.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
             apiWorks.add(apiWork)
         }
         return ResponseEntity.ok(apiWorks)
     }
 
-    override fun searchWorks(@RequestBody(required = false) requestBody: List<String>?): ResponseEntity<List<ApiWork>> {
-        val works = requestBody?.let { workService.findWorksByFreeWords(it) }
+    override fun searchWorks(@RequestBody(required = false) requestBody: List<String>): ResponseEntity<List<ApiWork>> {
+        val works = requestBody.let { workService.findWorksByFreeWords(it) }
         val apiWorks = mutableListOf<ApiWork>()
-        works?.forEach { work ->
+        works.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
             apiWorks.add(apiWork)
         }
@@ -68,6 +68,7 @@ class WorksController(
             required = true
         ) worksDetailsBase64: String
     ): ResponseEntity<ApiWorkWithDetails> {
+        // 作品情報のデコード
         logger.info("registerWorks start!!!")
         val decodedWorksDetails = String(
             Base64.getDecoder().decode(worksDetailsBase64),
@@ -82,7 +83,6 @@ class WorksController(
         val apiWorkWithDetails: ApiWorkWithDetails =
             objectMapper.readValue(decodedWorksDetails)
         logger.info("apiWorksWithDetails: $apiWorkWithDetails")
-
         if (apiWorkWithDetails.apiWork == null) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
@@ -114,11 +114,11 @@ class WorksController(
     override fun updateWorksById(
         @PathVariable("worksId") worksId: Int,
         @Valid @RequestBody apiWorkWithDetails: ApiWorkWithDetails
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<ApiWorkWithDetails> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    override fun deleteWorksById(@PathVariable("tagsId") tagsId: Int): ResponseEntity<Unit> {
+    override fun deleteWorksById(@PathVariable("tagsId") worksId: Int): ResponseEntity<ApiWorkWithDetails> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 

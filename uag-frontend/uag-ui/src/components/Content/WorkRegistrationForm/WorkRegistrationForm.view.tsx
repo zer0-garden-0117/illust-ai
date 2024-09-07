@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
-import { Button, TextInput, Textarea, NumberInput, MultiSelect, Fieldset, Space, Grid } from '@mantine/core';
+import { Button, TextInput, Textarea, Grid, Space, Fieldset } from '@mantine/core';
+import { FileInput } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from 'next-intl';
 
+export type WorkData = {
+  mainTitle: string;
+  subTitle: string;
+  description: string;
+  format: string;
+  genre: string;
+  character: string;
+  creator: string;
+  tags: string;
+  titleImage: File;
+};
+
 type WorkRegistrationFormViewProps = {
-  onSubmit: (formData: any) => void;
+  onSubmit: (workData: WorkData) => void;
 };
 
 export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewComponent({
@@ -13,26 +26,26 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
   const t = useTranslations('');
 
   // フォームのステート
-  const [formData, setFormData] = useState({
+  const [workData, setWorkData] = useState<WorkData>({
     mainTitle: '',
     subTitle: '',
     description: '',
-    format: [],
-    genre: [],
-    character: [],
+    format: '',
+    genre: '',
+    character: '',
     creator: '',
-    tags: [],
-    apiImgs: [{ imgId: '', imgPageNum: '', imgUrl: '' }]
+    tags: '',
+    titleImage: new File([], "placeholder.jpg")
   });
 
   // フォームの入力ハンドラ
   const handleInputChange = (field: string, value: any) => {
-    setFormData({ ...formData, [field]: value });
+    setWorkData({ ...workData, [field]: value });
   };
 
   // 送信ハンドラ
   const handleSubmit = () => {
-    onSubmit(formData);
+    onSubmit(workData);
   };
 
   return (
@@ -41,7 +54,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
         <Grid.Col span={6}>
           <TextInput
             label={t('Main Title')}
-            value={formData.mainTitle}
+            value={workData.mainTitle}
             onChange={(e) => handleInputChange('mainTitle', e.currentTarget.value)}
           />
           <Space h="md" />
@@ -49,60 +62,64 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
         <Grid.Col span={6}>
           <TextInput
             label={t('Subtitle')}
-            value={formData.subTitle}
+            value={workData.subTitle}
             onChange={(e) => handleInputChange('subTitle', e.currentTarget.value)}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-          <Textarea
+          <TextInput
             label={t('Description')}
-            value={formData.description}
+            value={workData.description}
             onChange={(e) => handleInputChange('description', e.currentTarget.value)}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-          <MultiSelect
+          <TextInput
             label={t('Format')}
-            data={['CG', 'コミック', 'ゲーム']}
-            value={formData.format}
-            onChange={(value) => handleInputChange('format', value)}
+            value={workData.format}
+            onChange={(e) => handleInputChange('format', e.currentTarget.value)}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-          <MultiSelect
+          <TextInput
             label={t('Genre')}
-            data={['オリジナル', '二次創作', 'パロディ']}
-            value={formData.genre}
-            onChange={(value) => handleInputChange('genre', value)}
+            value={workData.genre}
+            onChange={(e) => handleInputChange('genre', e.currentTarget.value)}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-          <MultiSelect
+          <TextInput
             label={t('Character')}
-            data={['真白']}
-            value={formData.character}
-            onChange={(value) => handleInputChange('character', value)}
+            value={workData.character}
+            onChange={(e) => handleInputChange('character', e.currentTarget.value)}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
           <TextInput
             label={t('Creator')}
-            value={formData.creator}
+            value={workData.creator}
             onChange={(e) => handleInputChange('creator', e.currentTarget.value)}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-          <MultiSelect
+          <TextInput
             label={t('Tags')}
-            data={['夜景']}
-            value={formData.tags}
-            onChange={(value) => handleInputChange('tags', value)}
+            value={workData.tags}
+            onChange={(e) => handleInputChange('tags', e.currentTarget.value)}
+          />
+          <Space h="md" />
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <FileInput
+            label={t('Title Image')}
+            placeholder="Choose file"
+            onChange={(file) => handleInputChange('titleImage', file)}
           />
           <Space h="md" />
         </Grid.Col>
