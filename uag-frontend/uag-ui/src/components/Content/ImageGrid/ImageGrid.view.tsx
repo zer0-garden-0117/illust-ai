@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import classes from './ImageGrid.module.css';
+import { RiHeartAdd2Line } from "react-icons/ri";
 
 export type ImageData = {
   workId: number;
@@ -69,6 +70,24 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       <Text className={classes.title} mt={5}>
         {imageData.mainTitle}
       </Text>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px', gap: '8px' }}>
+        {/* レーティングを右寄せ */}
+        <Rating value={0} onChange={(value) => handleRating(imageData.workId, value)} />
+        {/* いいねボタン */}
+        <ActionIcon
+          variant="transparent"
+          color="gray"
+          style={{
+            color: 'gray',
+            transition: 'color 0.3s ease',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = 'red')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = 'gray')}
+          onClick={() => handleLike(imageData.workId)}
+        >
+          <RiHeartAdd2Line />
+        </ActionIcon>
+      </div>
     </Card>
   ));
 
@@ -86,8 +105,18 @@ export const ImageGridView = memo(function ImageGridViewComponent({
           onChange={onPageChange}
           total={totalPages}
           mt="lg"
+          radius="md"
+          withEdges
         />
       )}
     </>
   );
 });
+
+function handleRating(workId: number, value: number): void {
+  throw new Error('Function not implemented.');
+}
+function handleLike(workId: number): void {
+  throw new Error('Function not implemented.');
+}
+
