@@ -1,5 +1,5 @@
-import React from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Image } from '@mantine/core';
+import React, { useState } from 'react';
+import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, Loader } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import classes from './ImageGrid.module.css';
@@ -13,17 +13,54 @@ export type ImageData = {
 
 type ImageGridViewProps = {
   imageData: ImageData[];
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  loading: boolean; // ローディング状態
 };
 
 export const ImageGridView = memo(function ImageGridViewComponent({
   imageData,
+  currentPage,
+  totalPages,
+  onPageChange,
+  loading
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
+
+  // カスタム Image コンポーネント
+  const CustomImage = ({ src, alt }: { src: string; alt: string }) => {
+    const [isLoading, setIsLoading] = useState(true); // ロード中フラグ
+
+    return (
+      <>
+        {isLoading && (
+          <div style={{ backgroundColor: 'transparent', width: '100%', height: '100%' }} />
+        )}
+
+        <MantineImage
+          src={src}
+          alt={alt}
+          onLoad={() => {
+            setIsLoading(false); // ロードが完了したらローディングを解除
+          }}
+          onError={() => {
+            setIsLoading(false); // エラーでもローディングを解除
+          }}
+          style={{ display: isLoading ? 'none' : 'block' }} // ローディング中は画像を非表示
+        />
+      </>
+    );
+  };
+
+  // カードコンポーネントの生成
   const cards = imageData.map((imageData) => (
     <Card key={imageData.mainTitle} p="md" radius="md" component="a" href="#" className={classes.card}>
-      {/* <AspectRatio ratio={1920 / 1080}> */}
       <AspectRatio ratio={2 / 2}>
-        <Image src={imageData.titleImage} alt={imageData.mainTitle || "Image without title"} />
+        <CustomImage
+          src={imageData.titleImage}
+          alt={imageData.mainTitle || "Image without title"}
+        />
       </AspectRatio>
       <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
         {imageData.date}
@@ -34,13 +71,22 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     </Card>
   ));
 
-
   return (
-    <SimpleGrid
-      cols={{ base: 1, sm: 2, lg: 3 }}
-      spacing={{ base: 20 }}
-    >
-      {cards}
-    </SimpleGrid>
+    <>
+      <SimpleGrid
+        cols={{ base: 1, sm: 2, lg: 3 }}
+        spacing={{ base: 20 }}
+      >
+        {cards}
+      </SimpleGrid>
+      {!loading && (
+        <Pagination
+          value={currentPage}
+          onChange={onPageChange}
+          total={totalPages}
+          mt="lg"
+        />
+      )}
+    </>
   );
 });
