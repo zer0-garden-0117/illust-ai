@@ -85,7 +85,7 @@ add_test_data3() {
 
     aws dynamodb put-item \
         --table-name $table_name \
-        --item "{\"workId\": {\"N\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}, \"createdAt\": {\"S\": \"$created_at\"}}" \
+        --item "{\"workId\": {\"N\": \"$work_id\"}, \"$attribute_name\": {\"S\": \"$attribute_value\"}, \"updatedAt\": {\"S\": \"$created_at\"}}" \
         --endpoint-url $ENDPOINT_URL
 }
 

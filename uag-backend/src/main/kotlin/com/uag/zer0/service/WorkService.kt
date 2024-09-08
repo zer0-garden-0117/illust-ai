@@ -158,6 +158,7 @@ class WorkService(
     ): WorkWithDetails {
         // countersからcounterValueを取得
         val nextWorkId = countersRepository.findByCounterName("workId") + 1
+        val nowDate = Instant.now()
 
         // workをregister
         work.workId = nextWorkId
@@ -171,14 +172,15 @@ class WorkService(
         )
         // ToDo: ImgURLはCloudFrontのURLに変換してDBに格納する
         work.titleImgUrl = titleImageUrl
-        work.updatedAt = Instant.now()
-        work.createdAt = Instant.now()
+        work.updatedAt = nowDate
+        work.createdAt = nowDate
         workRepository.registerWork(work)
 
         // characterをregister
         if (characters != null) {
             characters.forEach { character ->
                 character.workId = nextWorkId
+                character.updatedAt = nowDate
             }
             characterRepository.registerCharacters(characters)
         }
@@ -187,6 +189,7 @@ class WorkService(
         if (creators != null) {
             creators.forEach { creator ->
                 creator.workId = nextWorkId
+                creator.updatedAt = nowDate
             }
             creatorRepository.registerCreators(creators)
         }
@@ -195,6 +198,7 @@ class WorkService(
         if (tags != null) {
             tags.forEach { tag ->
                 tag.workId = nextWorkId
+                tag.updatedAt = nowDate
             }
             tagRepository.registerTags(tags)
         }

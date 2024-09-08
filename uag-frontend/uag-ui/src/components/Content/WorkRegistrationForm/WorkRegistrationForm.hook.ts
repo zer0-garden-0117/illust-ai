@@ -40,13 +40,16 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
         updatedAt: new Date().toISOString(),
       },
       apiTags: tagsArray.map((tag) => ({
-        tag: tag.trim() || ''
+        tag: tag.trim() || '',
+        updatedAt: new Date().toISOString()
       })),
       apiCharacters: charactersArray.map((character) => ({
-        character: character.trim() || ''
+        character: character.trim() || '',
+        updatedAt: new Date().toISOString()
       })),
       apiCreators: creatorsArray.map((creator) => ({
-        creator: creator.trim() || ''
+        creator: creator.trim() || '',
+        updatedAt: new Date().toISOString()
       }))
     };
 

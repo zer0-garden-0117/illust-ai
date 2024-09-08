@@ -57,7 +57,7 @@ create_table tag \
     --attribute-definitions \
         AttributeName=workId,AttributeType=N \
         AttributeName=tag,AttributeType=S \
-        AttributeName=createdAt,AttributeType=S \
+        AttributeName=updatedAt,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
         AttributeName=tag,KeyType=RANGE \
@@ -67,7 +67,7 @@ create_table tag \
                 \"IndexName\": \"TagIndex\",
                  \"KeySchema\": [
                     {\"AttributeName\":\"tag\",\"KeyType\":\"HASH\"},
-                    {\"AttributeName\":\"createdAt\",\"KeyType\":\"RANGE\"}
+                    {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
                 ],
                 \"Projection\": {\"ProjectionType\":\"ALL\"},
                 \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
@@ -79,7 +79,7 @@ create_table character \
     --attribute-definitions \
         AttributeName=workId,AttributeType=N \
         AttributeName=character,AttributeType=S \
-        AttributeName=createdAt,AttributeType=S \
+        AttributeName=updatedAt,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
         AttributeName=character,KeyType=RANGE \
@@ -89,7 +89,7 @@ create_table character \
                 \"IndexName\": \"CharacterIndex\",
                 \"KeySchema\": [
                     {\"AttributeName\":\"character\",\"KeyType\":\"HASH\"},
-                    {\"AttributeName\":\"createdAt\",\"KeyType\":\"RANGE\"}
+                    {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
                 ],
                 \"Projection\": {\"ProjectionType\":\"ALL\"},
                 \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
@@ -101,7 +101,7 @@ create_table creator \
     --attribute-definitions \
         AttributeName=workId,AttributeType=N \
         AttributeName=creator,AttributeType=S \
-        AttributeName=createdAt,AttributeType=S \
+        AttributeName=updatedAt,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
         AttributeName=creator,KeyType=RANGE \
@@ -111,7 +111,7 @@ create_table creator \
                 \"IndexName\": \"CreatorIndex\",
                 \"KeySchema\": [
                     {\"AttributeName\":\"creator\",\"KeyType\":\"HASH\"},
-                    {\"AttributeName\":\"createdAt\",\"KeyType\":\"RANGE\"}
+                    {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
                 ],
                 \"Projection\": {\"ProjectionType\":\"ALL\"},
                 \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
