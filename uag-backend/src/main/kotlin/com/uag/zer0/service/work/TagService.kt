@@ -1,5 +1,6 @@
 package com.uag.zer0.service.work
 
+import com.uag.zer0.dto.TagsWithSearchResult
 import com.uag.zer0.entity.work.Tag
 import com.uag.zer0.repository.work.TagRepository
 import org.springframework.stereotype.Service
@@ -14,7 +15,7 @@ class TagService(
         tags: List<String>,
         offset: Int,
         limit: Int
-    ): List<Tag> {
+    ): TagsWithSearchResult {
         val allTags = tags.flatMap { tagRepository.findByTag(it) }
 
         // 重複削除 (workId を基準にする)
@@ -24,7 +25,12 @@ class TagService(
         val sortedTags = uniqueTags.sortedByDescending { it.updatedAt }
 
         // offsetで指定した件数分スキップし、limit分だけ返す
-        return sortedTags.drop(offset).take(limit)
+        val filteredTags = sortedTags.drop(offset).take(limit)
+        val count = sortedTags.size
+        return TagsWithSearchResult(
+            tags = filteredTags,
+            totalCount = count
+        )
     }
 
     fun findByTags(
@@ -37,7 +43,7 @@ class TagService(
 
         // updatedAt順にソート（降順）
         val sortedTags = uniqueTags.sortedByDescending { it.updatedAt }
-        
+
         return sortedTags
     }
 }

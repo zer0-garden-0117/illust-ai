@@ -45,7 +45,8 @@ export const useImageGrid = (): React.ComponentPropsWithoutRef<typeof ImageGridV
   // データが変更されたときの処理
   useEffect(() => {
     if (data) {
-      const fetchedImages: ImageData[] = data.map(work => ({
+      // worksから作品データを取得
+      const fetchedImages: ImageData[] = data.works.map(work => ({
         workId: work.workId || 0,
         mainTitle: work.mainTitle || "No Title",
         titleImage: work.titleImgUrl || "",
@@ -53,8 +54,8 @@ export const useImageGrid = (): React.ComponentPropsWithoutRef<typeof ImageGridV
       }));
       setImageData(fetchedImages);
 
-      // 総ページ数を更新（仮にデータ全体が100件あると仮定して表示）
-      setTotalPages(Math.ceil(100 / itemsPerPage));
+      // totalCountから総ページ数を計算して更新
+      setTotalPages(Math.ceil(data.totalCount / itemsPerPage));
     }
   }, [data]);
 

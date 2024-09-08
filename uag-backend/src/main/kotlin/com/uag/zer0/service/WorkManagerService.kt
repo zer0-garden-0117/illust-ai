@@ -1,6 +1,7 @@
 package com.uag.zer0.service
 
 import com.uag.zer0.dto.WorkWithDetails
+import com.uag.zer0.dto.WorksWithSearchResult
 import com.uag.zer0.entity.work.*
 import com.uag.zer0.repository.counters.CountersRepository
 import com.uag.zer0.repository.work.*
@@ -61,19 +62,19 @@ class WorkManagerService(
         words: List<String>?,
         offset: Int,
         limit: Int
-    ): List<Work> {
+    ): WorksWithSearchResult? {
         // 空のリストやnullチェック
         if (words.isNullOrEmpty()) {
             logger.info("入力されたタグが空、もしくはnullです。")
-            return emptyList()
+            return null
         }
         logger.info("入力されたタグ: $words")
 
         // 各単語でタグ検索
         val workIds = mutableListOf<Int>()
-        val results = tagService.findByTagsWithOffset(words, offset, limit)
-        logger.info("タグ検索結果: ${results.map { it.workId }}")
-        results.forEach { tag ->
+        val tagResult = tagService.findByTagsWithOffset(words, offset, limit)
+        logger.info("タグ検索結果: ${tagResult.tags.map { it.workId }}")
+        tagResult.tags.forEach { tag ->
             workIds.add(tag.workId)
         }
 
@@ -86,7 +87,10 @@ class WorkManagerService(
         }
 
         logger.info("最終的にタグ検索で取得した作品リスト: $works")
-        return works
+        return WorksWithSearchResult(
+            works = works,
+            totalCount = tagResult.totalCount
+        )
     }
 
     @Transactional
@@ -94,11 +98,11 @@ class WorkManagerService(
         words: List<String>?,
         offset: Int,
         limit: Int
-    ): List<Work> {
+    ): WorksWithSearchResult? {
         // 空のリストやnullチェック
         if (words.isNullOrEmpty()) {
             logger.info("入力されたワードが空、もしくはnullです。")
-            return emptyList()
+            return null
         }
         logger.info("入力されたワード: $words")
 
@@ -139,7 +143,6 @@ class WorkManagerService(
         val uniqueWorkInfos = workInfos.distinct()
         logger.info("ユニークな作品ID一覧: $uniqueWorkInfos")
 
-
         // updatedAt順にソート（降順）
         val sortedWorkInfos =
             uniqueWorkInfos.sortedByDescending { it.updatedAt }
@@ -156,7 +159,10 @@ class WorkManagerService(
         }
 
         logger.info("最終的に取得した作品リスト: $works")
-        return works
+        return WorksWithSearchResult(
+            works = works,
+            totalCount = uniqueWorkInfos.size
+        )
     }
 
     @Transactional

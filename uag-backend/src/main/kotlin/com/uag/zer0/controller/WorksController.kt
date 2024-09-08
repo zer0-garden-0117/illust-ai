@@ -9,10 +9,7 @@ import com.uag.zer0.entity.work.Character
 import com.uag.zer0.entity.work.Creator
 import com.uag.zer0.entity.work.Tag
 import com.uag.zer0.generated.endpoint.WorksApi
-import com.uag.zer0.generated.model.ApiWork
-import com.uag.zer0.generated.model.ApiWorkSearch
-import com.uag.zer0.generated.model.ApiWorkSearchByTags
-import com.uag.zer0.generated.model.ApiWorkWithDetails
+import com.uag.zer0.generated.model.*
 import com.uag.zer0.mapper.WorkMapper
 import com.uag.zer0.service.WorkManagerService
 import jakarta.validation.Valid
@@ -31,27 +28,28 @@ class WorksController(
 
     override fun searchWorksByTags(
         @RequestBody(required = false) apiWorkSearchByTags: ApiWorkSearchByTags
-    ): ResponseEntity<List<ApiWork>> {
-        val works =
-            apiWorkSearchByTags.tags.let { tag ->
-                workManagerService.findWorksByTags(
-                    tag,
-                    apiWorkSearchByTags.offset,
-                    apiWorkSearchByTags.limit
-                )
-            }
+    ): ResponseEntity<ApiWorksWithSearchResult> {
+        val workResult = workManagerService.findWorksByTags(
+            apiWorkSearchByTags.tags,
+            apiWorkSearchByTags.offset,
+            apiWorkSearchByTags.limit
+        )
         val apiWorks = mutableListOf<ApiWork>()
-        works.forEach { work ->
+        workResult?.works?.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
             apiWorks.add(apiWork)
         }
-        return ResponseEntity.ok(apiWorks)
+        val apiWorkWithDetails = ApiWorksWithSearchResult(
+            works = apiWorks,
+            totalCount = workResult?.totalCount ?: 0
+        )
+        return ResponseEntity.ok(apiWorkWithDetails)
     }
 
     override fun searchWorks(
         @RequestBody(required = false) apiWorkSearch: ApiWorkSearch
-    ): ResponseEntity<List<ApiWork>> {
-        val works = apiWorkSearch.words.let { word ->
+    ): ResponseEntity<ApiWorksWithSearchResult> {
+        val workResult = apiWorkSearch.words.let { word ->
             workManagerService.findWorksByFreeWords(
                 word,
                 apiWorkSearch.offset,
@@ -59,11 +57,15 @@ class WorksController(
             )
         }
         val apiWorks = mutableListOf<ApiWork>()
-        works.forEach { work ->
+        workResult?.works?.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
             apiWorks.add(apiWork)
         }
-        return ResponseEntity.ok(apiWorks)
+        val apiWorkWithDetails = ApiWorksWithSearchResult(
+            works = apiWorks,
+            totalCount = workResult?.totalCount ?: 0
+        )
+        return ResponseEntity.ok(apiWorkWithDetails)
     }
 
     override fun getWorksById(
