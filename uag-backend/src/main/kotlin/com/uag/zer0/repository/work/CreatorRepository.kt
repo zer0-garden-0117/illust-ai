@@ -45,32 +45,6 @@ class CreatorRepository(
         return creators
     }
 
-    // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
-    // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
-    fun findByCreatorWithOffset(
-        tag: String,
-        offset: Int,
-        limit: Int
-    ): List<Creator> {
-        val index = table.index("CreatorIndex")
-        val queryConditional = QueryConditional.keyEqualTo(
-            Key.builder().partitionValue(tag).build()
-        )
-        val queryRequest = index.query { r ->
-            r.queryConditional(queryConditional)
-                .scanIndexForward(false)
-        }
-
-        // 全件取得後に指定範囲をスキップしてフィルタ
-        val creators = mutableListOf<Creator>()
-        queryRequest.forEach { page ->
-            creators.addAll(page.items())
-        }
-
-        // offsetで指定した件数分スキップし、limit分だけ返す
-        return creators.drop(offset).take(limit)
-    }
-
     fun findByWorkId(workId: Int): List<Creator> {
         return try {
             val queryConditional = QueryConditional.keyEqualTo(

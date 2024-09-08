@@ -10,9 +10,11 @@ import com.uag.zer0.entity.work.Creator
 import com.uag.zer0.entity.work.Tag
 import com.uag.zer0.generated.endpoint.WorksApi
 import com.uag.zer0.generated.model.ApiWork
+import com.uag.zer0.generated.model.ApiWorkSearch
+import com.uag.zer0.generated.model.ApiWorkSearchByTags
 import com.uag.zer0.generated.model.ApiWorkWithDetails
 import com.uag.zer0.mapper.WorkMapper
-import com.uag.zer0.service.WorkService
+import com.uag.zer0.service.WorkManagerService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -23,12 +25,21 @@ import java.util.*
 
 @RestController
 class WorksController(
-    private val workService: WorkService,
+    private val workManagerService: WorkManagerService,
     private val workMapper: WorkMapper
 ) : WorksApi {
 
-    override fun searchWorksByTags(@RequestBody(required = false) requestBody: List<String>): ResponseEntity<List<ApiWork>> {
-        val works = requestBody.let { workService.findWorksByTags(it) }
+    override fun searchWorksByTags(
+        @RequestBody(required = false) apiWorkSearchByTags: ApiWorkSearchByTags
+    ): ResponseEntity<List<ApiWork>> {
+        val works =
+            apiWorkSearchByTags.tags.let { tag ->
+                workManagerService.findWorksByTags(
+                    tag,
+                    apiWorkSearchByTags.offset,
+                    apiWorkSearchByTags.limit
+                )
+            }
         val apiWorks = mutableListOf<ApiWork>()
         works.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
@@ -37,8 +48,16 @@ class WorksController(
         return ResponseEntity.ok(apiWorks)
     }
 
-    override fun searchWorks(@RequestBody(required = false) requestBody: List<String>): ResponseEntity<List<ApiWork>> {
-        val works = requestBody.let { workService.findWorksByFreeWords(it) }
+    override fun searchWorks(
+        @RequestBody(required = false) apiWorkSearch: ApiWorkSearch
+    ): ResponseEntity<List<ApiWork>> {
+        val works = apiWorkSearch.words.let { word ->
+            workManagerService.findWorksByFreeWords(
+                word,
+                apiWorkSearch.offset,
+                apiWorkSearch.limit
+            )
+        }
         val apiWorks = mutableListOf<ApiWork>()
         works.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
@@ -47,8 +66,11 @@ class WorksController(
         return ResponseEntity.ok(apiWorks)
     }
 
-    override fun getWorksById(@PathVariable("worksId") worksId: Int): ResponseEntity<ApiWorkWithDetails> {
-        val workWithDetails = workService.findWorkByWorkId(workId = worksId)
+    override fun getWorksById(
+        @PathVariable("worksId") worksId: Int
+    ): ResponseEntity<ApiWorkWithDetails> {
+        val workWithDetails =
+            workManagerService.findWorkByWorkId(workId = worksId)
         val response = toApiWorkWithDetails(workWithDetails)
         return ResponseEntity.ok(response)
     }
@@ -99,7 +121,7 @@ class WorksController(
         apiWorkWithDetails.apiTags?.forEach { apiTag ->
             tags.add(workMapper.toTag(apiTag))
         }
-        val workWithDetails = workService.registerWork(
+        val workWithDetails = workManagerService.registerWork(
             work = work,
             characters = characters,
             creators = creators,
@@ -118,11 +140,15 @@ class WorksController(
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    override fun deleteWorksById(@PathVariable("tagsId") worksId: Int): ResponseEntity<ApiWorkWithDetails> {
+    override fun deleteWorksById(
+        @PathVariable("tagsId") worksId: Int
+    ): ResponseEntity<ApiWorkWithDetails> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    private fun toApiWorkWithDetails(workWithDetails: WorkWithDetails): ApiWorkWithDetails {
+    private fun toApiWorkWithDetails(
+        workWithDetails: WorkWithDetails
+    ): ApiWorkWithDetails {
         val apiWork = workMapper.toApiWork(workWithDetails.work)
         logger.info(apiWork.toString())
         val apiCharacters =

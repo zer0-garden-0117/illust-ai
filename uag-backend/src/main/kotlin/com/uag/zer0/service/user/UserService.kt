@@ -1,4 +1,4 @@
-package com.uag.zer0.service
+package com.uag.zer0.service.user
 
 import com.uag.zer0.entity.user.User
 import com.uag.zer0.repository.user.UserRepository

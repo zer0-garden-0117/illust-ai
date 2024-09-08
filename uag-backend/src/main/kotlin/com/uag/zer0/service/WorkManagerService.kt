@@ -4,6 +4,10 @@ import com.uag.zer0.dto.WorkWithDetails
 import com.uag.zer0.entity.work.*
 import com.uag.zer0.repository.counters.CountersRepository
 import com.uag.zer0.repository.work.*
+import com.uag.zer0.service.work.CharacterService
+import com.uag.zer0.service.work.CreatorService
+import com.uag.zer0.service.work.TagService
+import com.uag.zer0.service.work.WorkService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,9 +17,13 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
-class WorkService(
+class WorkManagerService(
     private val workRepository: WorkRepository,
     private val tagRepository: TagRepository,
+    private val workService: WorkService,
+    private val tagService: TagService,
+    private val characterService: CharacterService,
+    private val creatorService: CreatorService,
     private val characterRepository: CharacterRepository,
     private val creatorRepository: CreatorRepository,
     private val imgRepository: ImgRepository,
@@ -25,6 +33,11 @@ class WorkService(
 ) {
 
     private val logger = LoggerFactory.getLogger(WorkService::class.java)
+
+    private data class WorkInfo(
+        val workId: Int,
+        val updatedAt: Instant
+    )
 
     @Transactional
     fun findWorkByWorkId(workId: Int): WorkWithDetails {
@@ -44,7 +57,11 @@ class WorkService(
     }
 
     @Transactional
-    fun findWorksByTags(words: List<String>?): List<Work> {
+    fun findWorksByTags(
+        words: List<String>?,
+        offset: Int,
+        limit: Int
+    ): List<Work> {
         // 空のリストやnullチェック
         if (words.isNullOrEmpty()) {
             logger.info("入力されたタグが空、もしくはnullです。")
@@ -54,23 +71,15 @@ class WorkService(
 
         // 各単語でタグ検索
         val workIds = mutableListOf<Int>()
-        words.forEach { word ->
-            logger.info("検索タグ: $word")
-
-            val results = tagRepository.findByTag(word)
-            logger.info("タグ検索結果: ${results.map { it.workId }}")
-
-            results.forEach { tag ->
-                workIds.add(tag.workId)
-            }
+        val results = tagService.findByTagsWithOffset(words, offset, limit)
+        logger.info("タグ検索結果: ${results.map { it.workId }}")
+        results.forEach { tag ->
+            workIds.add(tag.workId)
         }
-
-        val uniqueWorkIds = workIds.distinct()
-        logger.info("タグ検索でのユニークな作品ID一覧: $uniqueWorkIds")
 
         // 作品IDで作品情報を取得
         val works = mutableListOf<Work>()
-        uniqueWorkIds.forEach { workId ->
+        workIds.forEach { workId ->
             val work = workRepository.findByWorkId(workId)
             logger.info("タグ検索での取得した作品: $work")
             works.add(work)
@@ -81,7 +90,11 @@ class WorkService(
     }
 
     @Transactional
-    fun findWorksByFreeWords(words: List<String>?): List<Work> {
+    fun findWorksByFreeWords(
+        words: List<String>?,
+        offset: Int,
+        limit: Int
+    ): List<Work> {
         // 空のリストやnullチェック
         if (words.isNullOrEmpty()) {
             logger.info("入力されたワードが空、もしくはnullです。")
@@ -90,55 +103,54 @@ class WorkService(
         logger.info("入力されたワード: $words")
 
         // 各単語でフリーワード検索
-        val workIds = mutableListOf<Int>()
-        words.forEach { word ->
-            logger.info("検索ワード: $word")
-
-            // 完全一致でタグ検索
-            val tagResults = tagRepository.findByTag(word)
-            logger.info("フリーワード検索でのタグ検索結果: ${tagResults.map { it.workId }}")
-            tagResults.forEach { tag ->
-                workIds.add(tag.workId)
-            }
-
-            // 完全一致でジャンル検索
-            val genreResults = workRepository.findByGenre(word)
-            logger.info("ジャンル検索結果: ${genreResults.map { it.workId }}")
-            genreResults.forEach { work ->
-                workIds.add(work.workId)
-            }
-
-            // 完全一致でフォーマット検索
-            val formatResults = workRepository.findByFormat(word)
-            logger.info("フォーマット検索結果: ${formatResults.map { it.workId }}")
-            formatResults.forEach { work ->
-                workIds.add(work.workId)
-            }
-
-            // 完全一致でキャラクター検索
-            val characterResults = characterRepository.findByCharacter(word)
-            logger.info("キャラクター検索結果: ${characterResults.map { it.workId }}")
-            characterResults.forEach { character ->
-                workIds.add(character.workId)
-            }
-
-            // 完全一致でクリエーター検索
-            val creatorResults = creatorRepository.findByCreator(word)
-            logger.info("クリエーター検索結果: ${creatorResults.map { it.workId }}")
-            creatorResults.forEach { creator ->
-                workIds.add(creator.workId)
-            }
-
-            // ToDo: メインタイトル、サブタイトル、説明の部分一致検索
+        val workInfos = mutableListOf<WorkInfo>()
+        // 完全一致でタグ検索
+        val tagResults = tagService.findByTags(words)
+        logger.info("フリーワード検索でのタグ検索結果: ${tagResults.map { it.workId }}")
+        tagResults.forEach { tag ->
+            workInfos.add(WorkInfo(tag.workId, tag.updatedAt))
         }
 
-        val uniqueWorkIds = workIds.distinct()
-        logger.info("ユニークな作品ID一覧: $uniqueWorkIds")
+        val genreResults = workService.findByGenre(words)
+        logger.info("フリーワード検索でのタグ検索結果: ${genreResults.map { it.workId }}")
+        genreResults.forEach { genre ->
+            workInfos.add(WorkInfo(genre.workId, genre.updatedAt))
+        }
+
+        val formatResults = workService.findByFormat(words)
+        logger.info("フリーワード検索でのタグ検索結果: ${formatResults.map { it.workId }}")
+        formatResults.forEach { format ->
+            workInfos.add(WorkInfo(format.workId, format.updatedAt))
+        }
+
+        val characterResults = characterService.findByCharacters(words)
+        logger.info("フリーワード検索でのタグ検索結果: ${characterResults.map { it.workId }}")
+        characterResults.forEach { character ->
+            workInfos.add(WorkInfo(character.workId, character.updatedAt))
+        }
+
+        val creatorResults = creatorService.findByCreators(words)
+        logger.info("フリーワード検索でのタグ検索結果: ${creatorResults.map { it.workId }}")
+        creatorResults.forEach { creator ->
+            workInfos.add(WorkInfo(creator.workId, creator.updatedAt))
+        }
+        // ToDo: メインタイトル、サブタイトル、説明の部分一致検索
+
+        val uniqueWorkInfos = workInfos.distinct()
+        logger.info("ユニークな作品ID一覧: $uniqueWorkInfos")
+
+
+        // updatedAt順にソート（降順）
+        val sortedWorkInfos =
+            uniqueWorkInfos.sortedByDescending { it.updatedAt }
+
+        // offsetで指定した件数分スキップし、limit分だけ返す
+        val filteredWorkInfos = sortedWorkInfos.drop(offset).take(limit)
 
         // 作品IDで作品情報を取得
         val works = mutableListOf<Work>()
-        uniqueWorkIds.forEach { workId ->
-            val work = workRepository.findByWorkId(workId)
+        filteredWorkInfos.forEach { workInfo ->
+            val work = workRepository.findByWorkId(workInfo.workId)
             logger.info("取得した作品: $work")
             works.add(work)
         }

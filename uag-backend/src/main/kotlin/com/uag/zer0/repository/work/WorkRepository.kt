@@ -54,33 +54,7 @@ class WorkRepository(
             throw RuntimeException("Failed to query by genre: $genre", e)
         }
     }
-
-    // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
-    // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
-    fun findByGenreWithOffset(
-        tag: String,
-        offset: Int,
-        limit: Int
-    ): List<Work> {
-        val index = table.index("GenreIndex")
-        val queryConditional = QueryConditional.keyEqualTo(
-            Key.builder().partitionValue(tag).build()
-        )
-        val queryRequest = index.query { r ->
-            r.queryConditional(queryConditional)
-                .scanIndexForward(false)
-        }
-
-        // 全件取得後に指定範囲をスキップしてフィルタ
-        val works = mutableListOf<Work>()
-        queryRequest.forEach { page ->
-            works.addAll(page.items())
-        }
-
-        // offsetで指定した件数分スキップし、limit分だけ返す
-        return works.drop(offset).take(limit)
-    }
-
+    
     fun findByFormat(format: String): List<Work> {
         return try {
             val index = table.index("FormatIndex")
@@ -98,32 +72,6 @@ class WorkRepository(
         } catch (e: DynamoDbException) {
             throw RuntimeException("Failed to query by format: $format", e)
         }
-    }
-
-    // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
-    // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
-    fun findByFormatWithOffset(
-        tag: String,
-        offset: Int,
-        limit: Int
-    ): List<Work> {
-        val index = table.index("FormatIndex")
-        val queryConditional = QueryConditional.keyEqualTo(
-            Key.builder().partitionValue(tag).build()
-        )
-        val queryRequest = index.query { r ->
-            r.queryConditional(queryConditional)
-                .scanIndexForward(false)
-        }
-
-        // 全件取得後に指定範囲をスキップしてフィルタ
-        val works = mutableListOf<Work>()
-        queryRequest.forEach { page ->
-            works.addAll(page.items())
-        }
-
-        // offsetで指定した件数分スキップし、limit分だけ返す
-        return works.drop(offset).take(limit)
     }
 
     fun registerWork(work: Work): Work {
