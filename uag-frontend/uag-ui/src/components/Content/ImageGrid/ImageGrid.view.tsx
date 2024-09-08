@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, Loader } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import classes from './ImageGrid.module.css';
@@ -48,6 +48,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             setIsLoading(false); // エラーでもローディングを解除
           }}
           style={{ display: isLoading ? 'none' : 'block' }} // ローディング中は画像を非表示
+          loading="lazy" // 直接遅延ローディングを設定
         />
       </>
     );
