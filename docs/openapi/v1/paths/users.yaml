@@ -17,6 +17,27 @@ UsersToken:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
+UsersLiked:
+  get:
+    operationId: getUsersLiked
+    tags:
+      - users
+    summary: いいねを取得する
+    description: |
+      いいねを取得する
+    security:
+      - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersLikedResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
 UsersLikedByWorkId:
   post:
     operationId: postUsersLikedByWorkdId
@@ -52,6 +73,27 @@ UsersLikedByWorkId:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
+UsersViewed:
+  get:
+    operationId: getUsersViewed
+    tags:
+      - users
+    summary: 閲覧済を取得する
+    description: |
+      いいねを取得する
+    security:
+      - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersLikedResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
 UsersViewedByWorkId:
   post:
     operationId: postUsersLikedByWorkdId
@@ -82,6 +124,28 @@ UsersViewedByWorkId:
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersViewedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+
+UsersRated:
+  get:
+    operationId: getUsersRated
+    tags:
+      - users
+    summary: レーティングを取得する
+    description: |
+      レーティングを取得する
+    security:
+      - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersRatedResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":

@@ -1,0 +1,17 @@
+OffsetQueryParam:
+  name: offset
+  in: query
+  description: 取得するデータの開始位置
+  required: true
+  schema:
+    type: integer
+    example: 0
+
+LimitQueryParam:
+  name: limit
+  in: query
+  description: 取得するデータの最大数
+  required: true
+  schema:
+    type: integer
+    example: 10

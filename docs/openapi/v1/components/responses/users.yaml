@@ -16,6 +16,17 @@ UsersTokenGetResponse:
         type: string
         example: "CSRF-Token=abcdef12345; Path=/; Secure; HttpOnly=false"
 
+UsersLikedResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: "../schemas/users.yaml#/ApiLiked"
+
 UsersLikedByWorkIdResponse:
   description: |-
     200 OK
@@ -25,6 +36,17 @@ UsersLikedByWorkIdResponse:
       schema:
         $ref: "../schemas/users.yaml#/ApiLiked"
 
+UsersViewedResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: "../schemas/users.yaml#/ApiViewed"
+
 UsersViewedByWorkIdResponse:
   description: |-
     200 OK
@@ -33,6 +55,17 @@ UsersViewedByWorkIdResponse:
     application/json:
       schema:
         $ref: "../schemas/users.yaml#/ApiViewed"
+
+UsersRatedResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: "../schemas/users.yaml#/ApiRated"
 
 UsersRatedByWorkIdResponse:
   description: |-
