@@ -17,6 +17,31 @@ UsersToken:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
+UsersActivitySearch:
+  post:
+    operationId: postUsersActivitySearch
+    tags:
+      - users
+    summary: ユーザーのアクション情報を取得
+    description: |
+      ユーザーのアクション情報を取得
+    security:
+      - UserTokenAuth: []
+      - CsrfTokenAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/users.yaml#/ApiUsersActivitySearch"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersActivitySearchResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
 UsersLiked:
   get:
     operationId: getUsersLiked
@@ -48,6 +73,8 @@ UsersLikedByWorkId:
       指定した作品にいいねを付与する
     security:
       - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersLikedByWorkIdResponse"
@@ -65,6 +92,8 @@ UsersLikedByWorkId:
       指定した作品のいいねを削除する
     security:
       - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersLikedByWorkIdResponse"
@@ -88,7 +117,7 @@ UsersViewed:
       - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
     responses:
       "200":
-        $ref: "../components/responses/users.yaml#/UsersLikedResponse"
+        $ref: "../components/responses/users.yaml#/UsersViewedResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
@@ -96,7 +125,7 @@ UsersViewed:
 
 UsersViewedByWorkId:
   post:
-    operationId: postUsersLikedByWorkdId
+    operationId: postUsersViewedByWorkdId
     tags:
       - users
     summary: 指定した作品に閲覧済を付与する
@@ -104,6 +133,8 @@ UsersViewedByWorkId:
       指定した作品に閲覧済を付与する
     security:
       - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersViewedByWorkIdResponse"
@@ -113,7 +144,7 @@ UsersViewedByWorkId:
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
   delete:
-    operationId: deleteUsersLikedByWorkdId
+    operationId: deleteUsersViewedByWorkdId
     tags:
       - users
     summary: 指定した作品の閲覧済を削除する
@@ -121,6 +152,8 @@ UsersViewedByWorkId:
       指定した作品の閲覧済を付削除する
     security:
       - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersViewedByWorkIdResponse"
@@ -153,7 +186,7 @@ UsersRated:
 
 UsersRatedByWorkId:
   post:
-    operationId: postUsersLikedByWorkdId
+    operationId: postUsersRatedByWorkdId
     tags:
       - users
     summary: 指定した作品にレーティングを付与する
@@ -161,6 +194,14 @@ UsersRatedByWorkId:
       指定した作品にレーティングを付与する
     security:
       - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/users.yaml#/ApiRated"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersRatedByWorkIdResponse"
@@ -170,7 +211,7 @@ UsersRatedByWorkId:
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
   delete:
-    operationId: deleteUsersLikedByWorkdId
+    operationId: deleteUsersRatedByWorkdId
     tags:
       - users
     summary: 指定した作品のレーティングを削除する
@@ -178,6 +219,8 @@ UsersRatedByWorkId:
       指定した作品のレーティングを削除する
     security:
       - UserTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersRatedByWorkIdResponse"

@@ -20,13 +20,13 @@ import java.time.format.DateTimeFormatter
 @Service
 class WorkManagerService(
     private val workRepository: WorkRepository,
-    private val tagRepository: TagRepository,
     private val workService: WorkService,
+    private val tagRepository: TagRepository,
     private val tagService: TagService,
-    private val characterService: CharacterService,
-    private val creatorService: CreatorService,
     private val characterRepository: CharacterRepository,
+    private val characterService: CharacterService,
     private val creatorRepository: CreatorRepository,
+    private val creatorService: CreatorService,
     private val imgRepository: ImgRepository,
     private val countersRepository: CountersRepository,
     private val convertService: ConvertService,

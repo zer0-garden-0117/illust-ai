@@ -7,6 +7,20 @@ ApiUserToken:
       description: ユーザートークン（JWT）
       example: abcdef12345
 
+ApiUsersActivitySearch:
+  type: object
+  properties:
+    workIds:
+      description: "作品IDリスト"
+      type: array
+      items:
+        type: integer
+      example:
+        - 1
+        - 2
+  required:
+    - workIds
+
 ApiUser:
   description: ユーザー
   type: object
@@ -19,6 +33,19 @@ ApiUser:
       type: string
       description: ユーザーロール
       example: user(or admin)
+
+ApiUsersActivity:
+  description: 検索結果
+  type: object
+  properties:
+    apiLikeds:
+      type: array
+      items:
+        $ref: "../schemas/users.yaml#/ApiLiked"
+    apiRateds:
+      type: array
+      items:
+        $ref: "../schemas/users.yaml#/ApiRated"
 
 ApiLiked:
   description: いいね
@@ -68,12 +95,12 @@ ApiRated:
       type: integer
       description: 作品ID
       example: 1
+    rating:
+      type: integer
+      description: レーティング
+      example: 5
     updatedAt:
       type: string
       format: date-time
       description: "最終更新日時"
       example: "2024-07-08T00:00:00+09:00"
-    rating:
-      type: integer
-      description: レーティング
-      example: 5

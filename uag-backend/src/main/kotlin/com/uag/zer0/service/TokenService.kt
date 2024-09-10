@@ -62,7 +62,7 @@ class TokenService {
             val algorithm = Algorithm.HMAC256(secretKey)
             val verifier = JWT.require(algorithm).build()
             val decodedJWT = verifier.verify(token)
-            val userId = decodedJWT.getClaim("userId").toString()
+            val userId = decodedJWT.getClaim("userId").asString()
             return userId
         } catch (exception: JWTVerificationException) {
             throw IllegalArgumentException("Invalid token")

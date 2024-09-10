@@ -8,10 +8,10 @@ import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import software.amazon.awssdk.services.dynamodb.model.BatchGetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
-import software.amazon.awssdk.services.dynamodb.model.PutRequest
-import software.amazon.awssdk.services.dynamodb.model.WriteRequest
+import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes
 
 @Repository
 class RatedRepository(
@@ -44,6 +44,39 @@ class RatedRepository(
         } catch (e: DynamoDbException) {
             throw RuntimeException(
                 "Failed to query rated items by userId with updatedAt: $userId",
+                e
+            )
+        }
+    }
+
+    fun findByUserIdsAndWorkIds(ids: List<Pair<String, Int>>): List<Rated> {
+        return try {
+            val keys = ids.map { (userId, workId) ->
+                mapOf(
+                    "userId" to AttributeValue.builder().s(userId).build(),
+                    "workId" to AttributeValue.builder().n(workId.toString())
+                        .build()
+                )
+            }
+
+            val batchGetRequest = BatchGetItemRequest.builder()
+                .requestItems(
+                    mapOf(
+                        "rated" to KeysAndAttributes.builder().keys(keys)
+                            .build()
+                    )
+                )
+                .build()
+
+            val response = dynamoDbClient.batchGetItem(batchGetRequest)
+            val ratedItems = response.responses()["rated"]?.map { item ->
+                TableSchema.fromClass(Rated::class.java).mapToItem(item)
+            } ?: emptyList()
+
+            ratedItems
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "指定された userId と workId の組み合わせに対する rated アイテムのバッチ取得に失敗しました",
                 e
             )
         }
@@ -87,29 +120,7 @@ class RatedRepository(
         }
     }
 
-    fun registerRatedItems(ratedItems: List<Rated>) {
-        try {
-            val tableSchema = TableSchema.fromClass(Rated::class.java)
-            val writeRequests = ratedItems.map { rated ->
-                WriteRequest.builder()
-                    .putRequest(
-                        PutRequest.builder()
-                            .item(tableSchema.itemToMap(rated, true)).build()
-                    )
-                    .build()
-            }
-
-            val batchWriteItemRequest = BatchWriteItemRequest.builder()
-                .requestItems(mapOf("rated" to writeRequests))
-                .build()
-
-            dynamoDbClient.batchWriteItem(batchWriteItemRequest)
-        } catch (e: DynamoDbException) {
-            throw RuntimeException("Failed to register rated items", e)
-        }
-    }
-
-    fun deleteRated(userId: String, workId: Int): Rated? {
+    fun deleteRated(userId: String, workId: Int): Rated {
         return try {
             val key =
                 Key.builder().partitionValue(userId).sortValue(workId).build()

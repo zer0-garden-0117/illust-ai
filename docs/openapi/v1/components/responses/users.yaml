@@ -16,6 +16,15 @@ UsersTokenGetResponse:
         type: string
         example: "CSRF-Token=abcdef12345; Path=/; Secure; HttpOnly=false"
 
+UsersActivitySearchResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/users.yaml#/ApiUsersActivity"
+
 UsersLikedResponse:
   description: |-
     200 OK

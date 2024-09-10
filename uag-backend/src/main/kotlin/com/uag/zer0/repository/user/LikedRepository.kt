@@ -8,10 +8,10 @@ import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import software.amazon.awssdk.services.dynamodb.model.BatchGetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
-import software.amazon.awssdk.services.dynamodb.model.PutRequest
-import software.amazon.awssdk.services.dynamodb.model.WriteRequest
+import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes
 
 @Repository
 class LikedRepository(
@@ -49,6 +49,39 @@ class LikedRepository(
         }
     }
 
+    fun findByUserIdsAndWorkIds(ids: List<Pair<String, Int>>): List<Liked> {
+        return try {
+            val keys = ids.map { (userId, workId) ->
+                mapOf(
+                    "userId" to AttributeValue.builder().s(userId).build(),
+                    "workId" to AttributeValue.builder().n(workId.toString())
+                        .build()
+                )
+            }
+
+            val batchGetRequest = BatchGetItemRequest.builder()
+                .requestItems(
+                    mapOf(
+                        "liked" to KeysAndAttributes.builder().keys(keys)
+                            .build()
+                    )
+                )
+                .build()
+
+            val response = dynamoDbClient.batchGetItem(batchGetRequest)
+            val likedItems = response.responses()["liked"]?.map { item ->
+                TableSchema.fromClass(Liked::class.java).mapToItem(item)
+            } ?: emptyList()
+
+            likedItems
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "指定された userId と workId の組み合わせに対する liked アイテムのバッチ取得に失敗しました",
+                e
+            )
+        }
+    }
+
     fun registerLiked(liked: Liked): Liked {
         return try {
             table.putItem(liked)
@@ -61,29 +94,7 @@ class LikedRepository(
         }
     }
 
-    fun registerLikedItems(likedItems: List<Liked>) {
-        try {
-            val tableSchema = TableSchema.fromClass(Liked::class.java)
-            val writeRequests = likedItems.map { liked ->
-                WriteRequest.builder()
-                    .putRequest(
-                        PutRequest.builder()
-                            .item(tableSchema.itemToMap(liked, true)).build()
-                    )
-                    .build()
-            }
-
-            val batchWriteItemRequest = BatchWriteItemRequest.builder()
-                .requestItems(mapOf("liked" to writeRequests))
-                .build()
-
-            dynamoDbClient.batchWriteItem(batchWriteItemRequest)
-        } catch (e: DynamoDbException) {
-            throw RuntimeException("Failed to register liked items", e)
-        }
-    }
-
-    fun deleteLiked(userId: String, workId: Int): Liked? {
+    fun deleteLiked(userId: String, workId: Int): Liked {
         return try {
             val key =
                 Key.builder().partitionValue(userId).sortValue(workId).build()

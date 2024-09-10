@@ -8,10 +8,7 @@ import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
-import software.amazon.awssdk.services.dynamodb.model.PutRequest
-import software.amazon.awssdk.services.dynamodb.model.WriteRequest
 
 @Repository
 class ViewedRepository(
@@ -64,29 +61,7 @@ class ViewedRepository(
         }
     }
 
-    fun registerViewedItems(viewedItems: List<Viewed>) {
-        try {
-            val tableSchema = TableSchema.fromClass(Viewed::class.java)
-            val writeRequests = viewedItems.map { viewed ->
-                WriteRequest.builder()
-                    .putRequest(
-                        PutRequest.builder()
-                            .item(tableSchema.itemToMap(viewed, true)).build()
-                    )
-                    .build()
-            }
-
-            val batchWriteItemRequest = BatchWriteItemRequest.builder()
-                .requestItems(mapOf("viewed" to writeRequests))
-                .build()
-
-            dynamoDbClient.batchWriteItem(batchWriteItemRequest)
-        } catch (e: DynamoDbException) {
-            throw RuntimeException("Failed to register viewed items", e)
-        }
-    }
-
-    fun deleteViewed(userId: String, workId: Int): Viewed? {
+    fun deleteViewed(userId: String, workId: Int): Viewed {
         return try {
             val key =
                 Key.builder().partitionValue(userId).sortValue(workId).build()

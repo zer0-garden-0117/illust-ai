@@ -1,6 +1,7 @@
 package com.uag.zer0.entity.user
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*
+import java.time.Instant
 
 @DynamoDbBean
 data class Viewed(
@@ -11,7 +12,7 @@ data class Viewed(
     @get:DynamoDbSortKey
     @get:DynamoDbAttribute("workId")
     var workId: Int = 0,
-    
+
     @get:DynamoDbSecondarySortKey(indexNames = ["UserViewedUpdatedAtIndex"])
-    var updatedAt: String = ""
+    var updatedAt: Instant = Instant.now()
 )
