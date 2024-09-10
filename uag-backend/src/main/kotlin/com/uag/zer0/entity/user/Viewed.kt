@@ -8,10 +8,10 @@ data class Viewed(
     @get:DynamoDbSecondaryPartitionKey(indexNames = ["UserViewedUpdatedAtIndex"])
     var userId: String = "",
 
+    @get:DynamoDbSortKey
     @get:DynamoDbAttribute("workId")
     var workId: Int = 0,
-
-    @get:DynamoDbSortKey
+    
     @get:DynamoDbSecondarySortKey(indexNames = ["UserViewedUpdatedAtIndex"])
     var updatedAt: String = ""
 )

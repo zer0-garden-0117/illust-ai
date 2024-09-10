@@ -176,4 +176,36 @@ create_table viewed \
             }
         ]"
 
+# rated テーブルの作成
+create_table rated \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=workId,AttributeType=N \
+        AttributeName=updatedAt,AttributeType=S \
+        AttributeName=rating,AttributeType=N \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH \
+        AttributeName=workId,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"UserUpdatedAtIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"userId\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            },
+            {
+                \"IndexName\": \"UserRatingIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"userId\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"rating\",\"KeyType\":\"RANGE\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"},
+                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+            }
+        ]"
+
 echo "すべてのテーブルが作成されました。"

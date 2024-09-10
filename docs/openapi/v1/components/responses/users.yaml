@@ -15,3 +15,30 @@ UsersTokenGetResponse:
       schema:
         type: string
         example: "CSRF-Token=abcdef12345; Path=/; Secure; HttpOnly=false"
+
+UsersLikedByWorkIdResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/users.yaml#/ApiLiked"
+
+UsersViewedByWorkIdResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/users.yaml#/ApiViewed"
+
+UsersRatedByWorkIdResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/users.yaml#/ApiRated"

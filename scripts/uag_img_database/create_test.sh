@@ -159,6 +159,20 @@ do
             --item "{\"userId\": {\"S\": \"$user_id\"}, \"workId\": {\"N\": \"${work_ids[$work_id]}\"}, \"updatedAt\": {\"S\": \"$updated_at\"}}" \
             --endpoint-url $ENDPOINT_URL
     done
+
+    # rated テーブルにテストデータを追加
+    for work_id in "${!work_ids[@]}"
+    do
+        # updatedAtを現在の時刻で設定
+        updated_at=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        # ratingを1〜5のランダムな値で設定
+        rating=$(( ( RANDOM % 5 )  + 1 ))
+
+        aws dynamodb put-item \
+            --table-name rated \
+            --item "{\"userId\": {\"S\": \"$user_id\"}, \"workId\": {\"N\": \"${work_ids[$work_id]}\"}, \"rating\": {\"N\": \"$rating\"}, \"updatedAt\": {\"S\": \"$updated_at\"}}" \
+            --endpoint-url $ENDPOINT_URL
+    done
 done
 
 echo "tag, character, creator テーブルにテストデータが追加されました。"

@@ -16,3 +16,108 @@ UsersToken:
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+UsersLikedByWorkId:
+  post:
+    operationId: postUsersLikedByWorkdId
+    tags:
+      - users
+    summary: 指定した作品にいいねを付与する
+    description: |
+      指定した作品にいいねを付与する
+    security:
+      - UserTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersLikedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+  delete:
+    operationId: deleteUsersLikedByWorkdId
+    tags:
+      - users
+    summary: 指定した作品のいいねを削除する
+    description: |
+      指定した作品のいいねを削除する
+    security:
+      - UserTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersLikedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+UsersViewedByWorkId:
+  post:
+    operationId: postUsersLikedByWorkdId
+    tags:
+      - users
+    summary: 指定した作品に閲覧済を付与する
+    description: |
+      指定した作品に閲覧済を付与する
+    security:
+      - UserTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersViewedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+  delete:
+    operationId: deleteUsersLikedByWorkdId
+    tags:
+      - users
+    summary: 指定した作品の閲覧済を削除する
+    description: |
+      指定した作品の閲覧済を付削除する
+    security:
+      - UserTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersViewedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+UsersRatedByWorkId:
+  post:
+    operationId: postUsersLikedByWorkdId
+    tags:
+      - users
+    summary: 指定した作品にレーティングを付与する
+    description: |
+      指定した作品にレーティングを付与する
+    security:
+      - UserTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersRatedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+  delete:
+    operationId: deleteUsersLikedByWorkdId
+    tags:
+      - users
+    summary: 指定した作品のレーティングを削除する
+    description: |
+      指定した作品のレーティングを削除する
+    security:
+      - UserTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersRatedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
