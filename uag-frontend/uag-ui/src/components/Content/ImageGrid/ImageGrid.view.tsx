@@ -65,7 +65,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
         />
       </AspectRatio>
       <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
-        {imageData.date}
+        {new Date(imageData.date).toISOString().split('T')[0]}
       </Text>
       <Text className={classes.title} mt={5}>
         {imageData.mainTitle}
