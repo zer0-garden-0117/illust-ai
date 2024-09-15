@@ -73,6 +73,7 @@ UsersLikedByWorkId:
       指定した作品にいいねを付与する
     security:
       - UserTokenAuth: []
+      - CsrfTokenAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -92,6 +93,7 @@ UsersLikedByWorkId:
       指定した作品のいいねを削除する
     security:
       - UserTokenAuth: []
+      - CsrfTokenAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -133,6 +135,7 @@ UsersViewedByWorkId:
       指定した作品に閲覧済を付与する
     security:
       - UserTokenAuth: []
+      - CsrfTokenAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -152,6 +155,7 @@ UsersViewedByWorkId:
       指定した作品の閲覧済を付削除する
     security:
       - UserTokenAuth: []
+      - CsrfTokenAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -194,6 +198,7 @@ UsersRatedByWorkId:
       指定した作品にレーティングを付与する
     security:
       - UserTokenAuth: []
+      - CsrfTokenAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     requestBody:
@@ -219,6 +224,7 @@ UsersRatedByWorkId:
       指定した作品のレーティングを削除する
     security:
       - UserTokenAuth: []
+      - CsrfTokenAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
