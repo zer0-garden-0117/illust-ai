@@ -9,7 +9,7 @@ export type WorkDeleteByIdPath = operations["deleteWorksById"]["parameters"]["pa
 export type WorkDeleteByIdHeaders = AccessTokenHeader & CsrfTokenHeader;
 
 export type WorkDeleteByIdArgs = {
-  worksId: WorkDeleteByIdPath["worksId"];
+  workId: WorkDeleteByIdPath["workId"];
   headers?: WorkDeleteByIdHeaders;
 };
 
@@ -22,10 +22,10 @@ export const useWorksDeleteById = (
   >
 ): SWRMutationResponse<WorkDeleteByIdResult, Error, string, WorkDeleteByIdArgs> => {
   return useSWRMutation<WorkDeleteByIdResult, Error, string, WorkDeleteByIdArgs>(
-    `/works/{worksId}`,
-    async (_, { arg: { headers, worksId } }): Promise<WorkDeleteByIdResult> => {
+    `/works/{workId}`,
+    async (_, { arg: { headers, workId } }): Promise<WorkDeleteByIdResult> => {
       const { data, error } = await client.DELETE(
-        `/works/{worksId}`,
+        `/works/{workId}`,
         {
           headers: {
             "x-access-token": headers?.["x-access-token"] || '',
@@ -33,7 +33,7 @@ export const useWorksDeleteById = (
           },
           params: {
             path: {
-              worksId: worksId
+              workId: workId
             },
           }
         }

@@ -22,10 +22,10 @@ export const useWorksTagsDelete = (
   >
 ): SWRMutationResponse<WorksTagsDeleteResult, Error, string, WorksTagsDeleteArgs> => {
   return useSWRMutation<WorksTagsDeleteResult, Error, string, WorksTagsDeleteArgs>(
-    `/works/tags/{tagsId}`,
+    `/works/tags/{tagId}`,
     async (_, { arg: { headers, path } }): Promise<WorksTagsDeleteResult> => {
       const { data, error } = await client.DELETE(
-        `/works/tags/{tagsId}`,
+        `/works/tags/{tagId}`,
         {
           headers: {
             "x-access-token": headers?.["x-access-token"] || '',
@@ -33,7 +33,7 @@ export const useWorksTagsDelete = (
           },
           params: {
             path: {
-              tagsId: path.tagsId
+              tagId: path.tagId
             },
           }
         }

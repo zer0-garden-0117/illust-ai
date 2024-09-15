@@ -11,7 +11,7 @@ export type WorkUpdateByIdHeaders = AccessTokenHeader & CsrfTokenHeader;
 
 export type WorkUpdateByIdArgs = {
   headers?: WorkUpdateByIdHeaders;
-  worksId: WorkUpdateByIdPath["worksId"];
+  workId: WorkUpdateByIdPath["workId"];
   body: WorkUpdateByIdRequestBody;
 };
 
@@ -24,10 +24,10 @@ export const useWorksUpdateById = (
   >
 ): SWRMutationResponse<WorkUpdateByIdResult, Error, string, WorkUpdateByIdArgs> => {
   return useSWRMutation<WorkUpdateByIdResult, Error, string, WorkUpdateByIdArgs>(
-    `/works/{worksId}`,
-    async (_, { arg: { headers, body, worksId } }): Promise<WorkUpdateByIdResult> => {
+    `/works/{workId}`,
+    async (_, { arg: { headers, body, workId } }): Promise<WorkUpdateByIdResult> => {
       const { data, error } = await client.PUT(
-        `/works/{worksId}`,
+        `/works/{workId}`,
         {
           headers: {
             "x-access-token": headers?.["x-access-token"] || '',
@@ -35,7 +35,7 @@ export const useWorksUpdateById = (
           },
           params: {
             path: {
-              worksId: worksId
+              workId: workId
             },
           },
           body: body

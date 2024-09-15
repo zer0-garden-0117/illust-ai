@@ -10,24 +10,24 @@ export type WorkGetByIdPath = operations["getWorksById"]["parameters"]["path"];
 
 export const useWorksGetById = (
   headers: WorkGetByIdHeader,
-  worksId: WorkGetByIdPath["worksId"],
+  workId: WorkGetByIdPath["workId"],
   options?: SWRConfiguration<WorkGetByIdResult, Error>
 ): SWRResponse<WorkGetByIdResult, Error> => {
   const accessToken = headers["x-access-token"] !== 'null' ? headers["x-access-token"] : null;
-  const shouldFetch = accessToken ? `/works/${worksId}` : null;
+  const shouldFetch = accessToken ? `/works/${workId}` : null;
 
   return useSWR<WorkGetByIdResult, Error>(
     shouldFetch,
     async (): Promise<WorkGetByIdResult> => {
       const { data, error } = await client.GET(
-        `/works/{worksId}`,
+        `/works/{workId}`,
         {
           headers: {
             "x-access-token": accessToken,
           },
           params: {
             path: {
-              worksId: worksId
+              workId: workId
             },
           }
         }
