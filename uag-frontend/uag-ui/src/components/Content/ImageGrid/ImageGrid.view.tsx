@@ -35,8 +35,8 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   onRateChange
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
+  console.log("re-rednering")
 
-  const [hoverValue, setHoverValue] = useState<number | null>(null); // ホバーされた値
   const [isCleared, setIsCleared] = useState(false); // レーティングがクリアされたかどうかを追跡
 
   const handleRateChange = (workId: number, value: number) => {
@@ -47,15 +47,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       setIsCleared(false);
     }
     onRateChange(workId, value);
-  };
-
-  const handleHover = (value: number) => {
-    // レーティングがクリアされた後はホバーされた値を表示しない
-    if (!isCleared) {
-      setHoverValue(value);
-    } else {
-      setHoverValue(null); // クリア後はホバー値を無効にする
-    }
   };
 
   // カスタム Image コンポーネント
@@ -121,8 +112,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
         <Rating
           value={imageData.rating}
           onChange={(value) => handleRateChange(imageData.workId, value)} // レーティング値の変更
-          onHover={(value) => handleHover(value)} // ホバーされた時の値を管理
-          onMouseLeave={() => setHoverValue(null)} // ホバーが解除されたら元に戻す
         />
 
         {/* いいねボタン */}
