@@ -35,12 +35,11 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   onRateChange
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
-  console.log("re-rednering")
+  console.log("ImageGridView re-rendering");
 
-  const [isCleared, setIsCleared] = useState(false); // レーティングがクリアされたかどうかを追跡
+  const [isCleared, setIsCleared] = useState(false);
 
   const handleRateChange = (workId: number, value: number) => {
-    // レーティングを削除した後はクリアフラグを立てる
     if (value === 0) {
       setIsCleared(true);
     } else {
@@ -53,20 +52,27 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   const CustomImage = ({ src, alt }: { src: string; alt: string }) => {
     const [isLoading, setIsLoading] = useState(true); // ロード中フラグ
 
+    console.log(`Rendering CustomImage for src: ${src}, isLoading: ${isLoading}`);
+
     return (
       <>
         {isLoading && (
-          <div style={{ backgroundColor: 'transparent', width: '100%', height: '100%' }} />
+          <div style={{ backgroundColor: 'transparent', width: '100%', height: '100%' }}>
+            {/* ローディング中のプレースホルダー */}
+            <p>Loading image...</p>
+          </div>
         )}
 
         <MantineImage
           src={src}
           alt={alt}
           onLoad={() => {
-            setIsLoading(false); // ロードが完了したらローディングを解除
+            setIsLoading(false);
+            console.log(`Image loaded: ${src}`);
           }}
           onError={() => {
-            setIsLoading(false); // エラーでもローディングを解除
+            setIsLoading(false);
+            console.log(`Image load error: ${src}`);
           }}
           style={{ display: isLoading ? 'none' : 'block' }} // ローディング中は画像を非表示
           loading="lazy" // 直接遅延ローディングを設定
@@ -75,61 +81,94 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     );
   };
 
-  // カードコンポーネントの生成
-  const cards = imageData.map((imageData) => (
-    <Card key={imageData.mainTitle} p="md" radius="md" className={classes.card}>
-      <AspectRatio ratio={2 / 2}>
-        <CustomImage
-          src={imageData.titleImage}
-          alt={imageData.mainTitle || "Image without title"}
-        />
-      </AspectRatio>
-      <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
-        {new Date(imageData.date).toISOString().split('T')[0]}
-      </Text>
-      <Text className={classes.title} mt={5}>
-        {imageData.mainTitle}
-      </Text>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
-        {/* 透明な星アイコン（隙間なしで配置） */}
-        <ActionIcon
-          variant="transparent"
-          style={{
-            color: 'rgba(255, 215, 0, 0.2)', // 薄いクリアカラー
-            padding: 0,
-            margin: 0,
-            marginRight: '-4px', // 隙間を縮める
-            width: '12px',
-            height: '12px',
-            cursor: 'pointer',
-          }}
-          onClick={() => onRateChange(imageData.workId, 0)} // 評価を0にリセット
-        >
-          <Rating value={1} count={1} readOnly color="rgba(212, 212, 212, 0.18)" /> {/* デフォルトの星アイコン */}
-        </ActionIcon>
+  const MemoizedCard = memo(
+    ({ imageData, onRateChange, onLikeChange }: { imageData: ImageData, onRateChange: (workId: number, value: number) => void, onLikeChange: (workId: number) => void }) => {
+      const [localIsLiked, setLocalIsLiked] = useState(imageData.isLiked);
+      const [localRating, setLocalRating] = useState(imageData.rating);
 
-        {/* レーティング */}
-        <Rating
-          value={imageData.rating}
-          onChange={(value) => handleRateChange(imageData.workId, value)} // レーティング値の変更
-        />
+      const handleLikeClick = () => {
+        setLocalIsLiked(!localIsLiked);
+        onLikeChange(imageData.workId);
+      };
 
-        {/* いいねボタン */}
-        <ActionIcon
-          variant="transparent"
-          color="gray"
-          style={{
-            color: imageData.isLiked ? 'red' : 'gray',
-            transition: 'color 0.3s ease',
-            padding: 0,
-            marginLeft: '8px',
-          }}
-          onClick={() => onLikeChange(imageData.workId)} // Likeの状態変更関数を呼び出す
-        >
-          <RiHeartAdd2Line />
-        </ActionIcon>
-      </div>
-    </Card >
+      const handleRateClick = (rating: number) => {
+        setLocalRating(rating);
+        onRateChange(imageData.workId, rating);
+      };
+
+      const handleRateClearClick = () => {
+        setLocalRating(0);
+        onRateChange(imageData.workId, 0);
+      };
+
+      return (
+        <Card key={imageData.workId} p="md" radius="md" className={classes.card}>
+          <AspectRatio ratio={2 / 2}>
+            <CustomImage
+              src={imageData.titleImage}
+              alt={imageData.mainTitle || "Image without title"}
+            />
+          </AspectRatio>
+          <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
+            {new Date(imageData.date).toISOString().split('T')[0]}
+          </Text>
+          <Text className={classes.title} mt={5}>
+            {imageData.mainTitle}
+          </Text>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
+            <ActionIcon
+              variant="transparent"
+              style={{
+                color: 'rgba(255, 215, 0, 0.2)',
+                padding: 0,
+                margin: 0,
+                marginRight: '-4px',
+                width: '12px',
+                height: '12px',
+                cursor: 'pointer',
+              }}
+              onClick={handleRateClearClick}
+            >
+              <Rating
+                value={1}
+                count={1}
+                readOnly color="rgba(212, 212, 212, 0.18)"
+                style={{ pointerEvents: 'none' }}
+              />
+            </ActionIcon>
+
+            <Rating
+              value={localRating}
+              onChange={handleRateClick}
+            />
+
+            <ActionIcon
+              variant="transparent"
+              color="gray"
+              style={{
+                color: localIsLiked ? 'red' : 'gray',
+                transition: 'color 0.3s ease',
+                padding: 0,
+                marginLeft: '8px',
+              }}
+              onClick={handleLikeClick}
+            >
+              <RiHeartAdd2Line />
+            </ActionIcon>
+          </div>
+        </Card>
+      );
+    },
+    (prevProps, nextProps) => prevProps.imageData.rating === nextProps.imageData.rating && prevProps.imageData.isLiked === nextProps.imageData.isLiked
+  );
+
+  const cards = imageData.map((data) => (
+    <MemoizedCard
+      key={data.workId}
+      imageData={data}
+      onRateChange={onRateChange}
+      onLikeChange={onLikeChange}
+    />
   ));
 
   return (

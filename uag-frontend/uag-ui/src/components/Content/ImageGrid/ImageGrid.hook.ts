@@ -88,27 +88,11 @@ export const useImageGrid = (): React.ComponentPropsWithoutRef<typeof ImageGridV
   };
 
   const onRateChange = (workId: number, value: number) => {
-    setImageData((prevData) =>
-      prevData.map((image) =>
-        image.workId === workId
-          ? { ...image, rating: value }
-          : image
-      )
-    );
     triggerRated({ headers, workId, rating: value });
   };
 
   const onLikeChange = (workId: number) => {
     const isCurrentlyLiked = imageData.find((image) => image.workId === workId)?.isLiked;
-
-    // UIの更新
-    setImageData((prevData) =>
-      prevData.map((image) =>
-        image.workId === workId
-          ? { ...image, isLiked: !isCurrentlyLiked }
-          : image
-      )
-    );
 
     // 現在の状態に基づいて "いいね" または "取り消し" を実行
     if (isCurrentlyLiked) {
