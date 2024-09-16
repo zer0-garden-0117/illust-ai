@@ -4,30 +4,59 @@ import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line } from "react-icons/ri";
+import { RiStarLine, RiStarFill } from "react-icons/ri";
 
 export type ImageData = {
   workId: number;
   mainTitle: string;
   titleImage: string;
   date: string;
+  isLiked: boolean | undefined;
+  rating: number | undefined;
 };
 
 type ImageGridViewProps = {
   imageData: ImageData[];
   currentPage: number;
   totalPages: number;
+  loading: boolean;
   onPageChange: (page: number) => void;
-  loading: boolean; // ローディング状態
+  onRateChange: (workId: number, value: number) => void;
+  onLikeChange: (workId: number) => void;
 };
 
 export const ImageGridView = memo(function ImageGridViewComponent({
   imageData,
   currentPage,
   totalPages,
+  loading,
   onPageChange,
-  loading
+  onLikeChange,
+  onRateChange
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
+
+  const [hoverValue, setHoverValue] = useState<number | null>(null); // ホバーされた値
+  const [isCleared, setIsCleared] = useState(false); // レーティングがクリアされたかどうかを追跡
+
+  const handleRateChange = (workId: number, value: number) => {
+    // レーティングを削除した後はクリアフラグを立てる
+    if (value === 0) {
+      setIsCleared(true);
+    } else {
+      setIsCleared(false);
+    }
+    onRateChange(workId, value);
+  };
+
+  const handleHover = (value: number) => {
+    // レーティングがクリアされた後はホバーされた値を表示しない
+    if (!isCleared) {
+      setHoverValue(value);
+    } else {
+      setHoverValue(null); // クリア後はホバー値を無効にする
+    }
+  };
 
   // カスタム Image コンポーネント
   const CustomImage = ({ src, alt }: { src: string; alt: string }) => {
@@ -57,7 +86,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
 
   // カードコンポーネントの生成
   const cards = imageData.map((imageData) => (
-    <Card key={imageData.mainTitle} p="md" radius="md" component="a" href="#" className={classes.card}>
+    <Card key={imageData.mainTitle} p="md" radius="md" className={classes.card}>
       <AspectRatio ratio={2 / 2}>
         <CustomImage
           src={imageData.titleImage}
@@ -70,25 +99,48 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       <Text className={classes.title} mt={5}>
         {imageData.mainTitle}
       </Text>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px', gap: '8px' }}>
-        {/* レーティングを右寄せ */}
-        <Rating value={0} onChange={(value) => handleRating(imageData.workId, value)} />
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
+        {/* 透明な星アイコン（隙間なしで配置） */}
+        <ActionIcon
+          variant="transparent"
+          style={{
+            color: 'rgba(255, 215, 0, 0.2)', // 薄いクリアカラー
+            padding: 0,
+            margin: 0,
+            marginRight: '-4px', // 隙間を縮める
+            width: '12px',
+            height: '12px',
+            cursor: 'pointer',
+          }}
+          onClick={() => onRateChange(imageData.workId, 0)} // 評価を0にリセット
+        >
+          <Rating value={1} count={1} readOnly color="rgba(212, 212, 212, 0.18)" /> {/* デフォルトの星アイコン */}
+        </ActionIcon>
+
+        {/* レーティング */}
+        <Rating
+          value={imageData.rating}
+          onChange={(value) => handleRateChange(imageData.workId, value)} // レーティング値の変更
+          onHover={(value) => handleHover(value)} // ホバーされた時の値を管理
+          onMouseLeave={() => setHoverValue(null)} // ホバーが解除されたら元に戻す
+        />
+
         {/* いいねボタン */}
         <ActionIcon
           variant="transparent"
           color="gray"
           style={{
-            color: 'gray',
+            color: imageData.isLiked ? 'red' : 'gray',
             transition: 'color 0.3s ease',
+            padding: 0,
+            marginLeft: '8px',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'red')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'gray')}
-          onClick={() => handleLike(imageData.workId)}
+          onClick={() => onLikeChange(imageData.workId)} // Likeの状態変更関数を呼び出す
         >
           <RiHeartAdd2Line />
         </ActionIcon>
       </div>
-    </Card>
+    </Card >
   ));
 
   return (
@@ -112,11 +164,3 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     </>
   );
 });
-
-function handleRating(workId: number, value: number): void {
-  throw new Error('Function not implemented.');
-}
-function handleLike(workId: number): void {
-  throw new Error('Function not implemented.');
-}
-
