@@ -17,3 +17,21 @@
   font-family: 'Greycliff CF', var(--mantine-font-family);
   font-weight: bold;
 }
+
+.customactionicon {
+  color: rgba(255, 215, 0, 0.2);
+  padding: 0;
+  margin: 0;
+  margin-right: -4px;
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+  transition: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.customactionicon:active {
+  transform: none;
+  box-shadow: none;
+}

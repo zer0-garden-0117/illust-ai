@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line } from "react-icons/ri";
-import { RiStarLine, RiStarFill } from "react-icons/ri";
 
 export type ImageData = {
   workId: number;
@@ -35,56 +34,89 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   onRateChange
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
-  console.log("ImageGridView re-rendering");
 
-  const [isCleared, setIsCleared] = useState(false);
+  const [allPlaceholdersVisible, setAllPlaceholdersVisible] = useState(false);
+
+  // 各画像のプレースホルダー表示状態を管理する配列
+  const visibleStatus = useRef(Array(imageData.length).fill(false));
+
+  // 全てのプレースホルダーが表示されたかを確認する関数
+  const checkAllPlaceholdersVisible = () => {
+    if (visibleStatus.current.every(status => status === true)) {
+      setAllPlaceholdersVisible(true);  // 全てのプレースホルダーが表示された
+    }
+  };
 
   const handleRateChange = (workId: number, value: number) => {
-    if (value === 0) {
-      setIsCleared(true);
-    } else {
-      setIsCleared(false);
-    }
     onRateChange(workId, value);
   };
 
-  // カスタム Image コンポーネント
-  const CustomImage = ({ src, alt }: { src: string; alt: string }) => {
-    const [isLoading, setIsLoading] = useState(true); // ロード中フラグ
+  const CustomImage = ({ src, alt, index }: { src: string; alt: string; index: number }) => {
+    const [isVisible, setIsVisible] = useState(false);
+    const imgRef = useRef<HTMLDivElement>(null);
 
-    console.log(`Rendering CustomImage for src: ${src}, isLoading: ${isLoading}`);
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setIsVisible(true);
+              visibleStatus.current[index] = true;  // 該当するプレースホルダーが表示されたことを更新
+              checkAllPlaceholdersVisible();  // 全てのプレースホルダーが表示されたかをチェック
+              observer.disconnect();
+            }
+          });
+        },
+        {
+          threshold: 0.1,
+        }
+      );
+
+      if (imgRef.current) {
+        observer.observe(imgRef.current);
+      }
+
+      return () => {
+        if (imgRef.current) {
+          observer.unobserve(imgRef.current);
+        }
+      };
+    }, []);
 
     return (
-      <>
-        {isLoading && (
-          <div style={{ backgroundColor: 'transparent', width: '100%', height: '100%' }}>
-            {/* ローディング中のプレースホルダー */}
-            <p>Loading image...</p>
-          </div>
+      <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
+        {isVisible && (
+          <MantineImage
+            src={src}
+            alt={alt}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          />
         )}
-
-        <MantineImage
-          src={src}
-          alt={alt}
-          onLoad={() => {
-            setIsLoading(false);
-            console.log(`Image loaded: ${src}`);
-          }}
-          onError={() => {
-            setIsLoading(false);
-            console.log(`Image load error: ${src}`);
-          }}
-          style={{ display: isLoading ? 'none' : 'block' }} // ローディング中は画像を非表示
-          loading="lazy" // 直接遅延ローディングを設定
-        />
-      </>
+        {!isVisible && (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'transparent', // Transparent placeholder
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: 1, // Ensure the placeholder is above the image
+            }}
+          />
+        )}
+      </div>
     );
   };
 
   const MemoizedCard = memo(
-    ({ imageData, onRateChange, onLikeChange }: { imageData: ImageData, onRateChange: (workId: number, value: number) => void, onLikeChange: (workId: number) => void }) => {
+    ({ imageData, index, onRateChange, onLikeChange }: { imageData: ImageData, index: number, onRateChange: (workId: number, value: number) => void, onLikeChange: (workId: number) => void }) => {
       const [localIsLiked, setLocalIsLiked] = useState(imageData.isLiked);
       const [localRating, setLocalRating] = useState(imageData.rating);
+      const [localPrevRating, setLocalPrevRating] = useState(imageData.rating);
 
       const handleLikeClick = () => {
         setLocalIsLiked(!localIsLiked);
@@ -107,6 +139,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             <CustomImage
               src={imageData.titleImage}
               alt={imageData.mainTitle || "Image without title"}
+              index={index}  // indexを渡す
             />
           </AspectRatio>
           <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
@@ -116,8 +149,10 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             {imageData.mainTitle}
           </Text>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
-            <ActionIcon
+
+            {/* <ActionIcon
               variant="transparent"
+              className={classes.customactionicon}
               style={{
                 color: 'rgba(255, 215, 0, 0.2)',
                 padding: 0,
@@ -126,6 +161,12 @@ export const ImageGridView = memo(function ImageGridViewComponent({
                 width: '12px',
                 height: '12px',
                 cursor: 'pointer',
+                transition: 'none', // アニメーションを無効にする
+                outline: 'none', // クリック時のアウトラインを無効にする
+                boxShadow: 'none', // クリック時のボックスシャドウを無効にする
+                ':active': {
+                  transform: 'translateY(0)', // クリック時の移動を無効にする
+                },
               }}
               onClick={handleRateClearClick}
             >
@@ -135,13 +176,9 @@ export const ImageGridView = memo(function ImageGridViewComponent({
                 readOnly color="rgba(212, 212, 212, 0.18)"
                 style={{ pointerEvents: 'none' }}
               />
-            </ActionIcon>
+            </ActionIcon> */}
 
-            <Rating
-              value={localRating}
-              onChange={handleRateClick}
-            />
-
+            <Rating value={localRating} onChange={handleRateClick} />
             <ActionIcon
               variant="transparent"
               color="gray"
@@ -162,10 +199,11 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     (prevProps, nextProps) => prevProps.imageData.rating === nextProps.imageData.rating && prevProps.imageData.isLiked === nextProps.imageData.isLiked
   );
 
-  const cards = imageData.map((data) => (
+  const cards = imageData.map((data, index) => (
     <MemoizedCard
       key={data.workId}
       imageData={data}
+      index={index}  // indexを渡す
       onRateChange={onRateChange}
       onLikeChange={onLikeChange}
     />
@@ -179,7 +217,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       >
         {cards}
       </SimpleGrid>
-      {!loading && (
+      {!loading && allPlaceholdersVisible && (
         <Pagination
           value={currentPage}
           onChange={onPageChange}
