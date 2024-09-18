@@ -1,12 +1,12 @@
 import useSWRMutation from 'swr/mutation';
 import client from "../apiClient";
-import type { AccessTokenHeader, CsrfTokenHeader } from '../apiClient';
+import type { UserTokenHeader, CsrfTokenHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/uag-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type WorkSearchResult = operations["searchWorks"]["responses"]["200"]["content"]["application/json"];
 export type WorkSearchRequestBody = operations["searchWorks"]["requestBody"]["content"]["application/json"]
-export type WorkSearchHeaders = AccessTokenHeader & CsrfTokenHeader;
+export type WorkSearchHeaders = UserTokenHeader & CsrfTokenHeader;
 export type WorkSearchArgs = {
   headers?: WorkSearchHeaders;
   body: WorkSearchRequestBody;
@@ -27,7 +27,7 @@ export const useWorksSearch = (
         `/works/search`,
         {
           headers: {
-            "x-access-token": headers?.["x-access-token"] || '',
+            Authorization: `${headers?.Authorization}`,
             "x-xsrf-token": headers?.["x-xsrf-token"] || '',
           },
           body: body

@@ -217,7 +217,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       >
         {cards}
       </SimpleGrid>
-      {!loading && allPlaceholdersVisible && (
+      {!loading && allPlaceholdersVisible && totalPages > 1 && (
         <Pagination
           value={currentPage}
           onChange={onPageChange}

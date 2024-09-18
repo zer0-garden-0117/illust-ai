@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ImageGridView } from "./ImageGrid.view";
 import { ImageData } from "./ImageGrid.view";
 import { useWorksSearchByTags, WorkSearchByTagRequestBody } from "@/apis/openapi/works/useWorksSearchByTags";
+import { useWorksSearch, WorkSearchRequestBody, WorkSearchResult } from "@/apis/openapi/works/useWorksSearch";
 import { useUserToken } from "@/apis/auth/useUserToken";
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
@@ -9,12 +10,21 @@ import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegiste
 import { useUsersActivitySearch } from "@/apis/openapi/users/useUsersActivitySearch";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
 
-export const useImageGrid = (): React.ComponentPropsWithoutRef<typeof ImageGridView> => {
+type UseImageGridProps = {
+  words: string[];
+  isTag: boolean;
+};
+
+export const useImageGrid = (
+  { words, isTag }: UseImageGridProps
+): React.ComponentPropsWithoutRef<typeof ImageGridView> => {
   const [imageData, setImageData] = useState<ImageData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true); // ローディング状態
-  const { trigger, data } = useWorksSearchByTags();
+  const [worksData, setWorksData] = useState<WorkSearchResult>();
+  const { trigger: triggerSearchWithTags, data: dataByTags } = useWorksSearchByTags();
+  const { trigger: triggerSearch, data: dataByFreewords } = useWorksSearch();
   const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
   const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
@@ -28,16 +38,16 @@ export const useImageGrid = (): React.ComponentPropsWithoutRef<typeof ImageGridV
     "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
   };
 
-  const fetchImages = async (page: number) => {
+  const fetchImagesWithTags = async (page: number) => {
     setLoading(true);  // ローディング開始
     const body: WorkSearchByTagRequestBody = {
-      tags: ["freeicon"],
+      tags: words,
       offset: (page - 1) * itemsPerPage,  // ページごとのoffsetを計算
       limit: itemsPerPage  // 1ページに表示する件数
     };
     try {
       // 作品のデータを取得
-      await trigger({ headers, body });
+      await triggerSearchWithTags({ headers, body });
     } catch (err) {
       console.error("Failed to fetch images:", err);
     } finally {
@@ -45,26 +55,54 @@ export const useImageGrid = (): React.ComponentPropsWithoutRef<typeof ImageGridV
     }
   };
 
+  const fetchImagesWithFreewords = async (page: number) => {
+    setLoading(true);  // ローディング開始
+    const body: WorkSearchRequestBody = {
+      words: words,
+      offset: (page - 1) * itemsPerPage,  // ページごとのoffsetを計算
+      limit: itemsPerPage  // 1ページに表示する件数
+    };
+    try {
+      // 作品のデータを取得
+      await triggerSearch({ headers, body });
+    } catch (err) {
+      console.error("Failed to fetch images:", err);
+    }
+  };
+
   // ページ変更時にデータをリセットし、データを再取得
   useEffect(() => {
     setImageData([]);  // データをリセット
-    fetchImages(currentPage);
+    if (isTag) {
+      fetchImagesWithTags(currentPage);
+    } else {
+      fetchImagesWithFreewords(currentPage);
+    }
   }, [currentPage]);
+
+  // dataが変更された時の処理
+  useEffect(() => {
+    if (isTag && dataByTags) {
+      setWorksData(dataByTags);
+    } else if (!isTag && dataByFreewords) {
+      setWorksData(dataByFreewords);
+    }
+  }, [dataByTags, dataByFreewords, isTag]);
 
   // works データが変更されたときの処理
   useEffect(() => {
-    if (data) {
-      const workIds = data.works.map(work => work.workId).filter((id): id is number => id !== undefined);
+    if (worksData) {
+      const workIds = worksData.works.map(work => work.workId).filter((id): id is number => id !== undefined);
       // アクティビティ情報を取得
       triggerActivity({ headers, body: { workIds } });
     }
-  }, [data]);
+  }, [worksData]);
 
   // activityData が変更されたときの処理
   useEffect(() => {
-    if (data && activityData) {
+    if (worksData && activityData) {
       // works と activityData を結合して imageData にセット
-      const fetchedImages: ImageData[] = data.works.map(work => {
+      const fetchedImages: ImageData[] = worksData.works.map(work => {
         const activity = activityData?.apiRateds?.find(a => a.workId === work.workId);
         return {
           workId: work.workId || 0,
@@ -78,9 +116,10 @@ export const useImageGrid = (): React.ComponentPropsWithoutRef<typeof ImageGridV
       setImageData(fetchedImages);
 
       // totalCountから総ページ数を計算して更新
-      setTotalPages(Math.ceil(data.totalCount / itemsPerPage));
+      setTotalPages(Math.ceil(worksData.totalCount / itemsPerPage));
+      setLoading(false);
     }
-  }, [data, activityData]);
+  }, [worksData, activityData]);
 
   // ページ変更時にデータを更新する関数
   const onPageChange = (page: number) => {
