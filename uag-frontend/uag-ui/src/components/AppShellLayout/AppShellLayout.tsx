@@ -38,11 +38,11 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       aside={{ width: 200, breakpoint: 'md', collapsed: { desktop: false, mobile: true } }}
       footer={{ height: 20 }}
       padding="md"
-      transitionDuration={500}
+      transitionDuration={0}
       transitionTimingFunction="ease"
     >
       <AppShell.Navbar>
-        <Navbar />
+        <Navbar setOpened={setOpened} />
       </AppShell.Navbar>
       <AppShell.Header>
         <Header

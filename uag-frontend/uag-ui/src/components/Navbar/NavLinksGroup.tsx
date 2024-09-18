@@ -10,15 +10,18 @@ export interface NavLinksGroupProps {
   icon: IconType;
   label: string;
   href: string;
+  onClick: () => void;
 }
 
 export const NavLinksGroup: React.FC<NavLinksGroupProps> = ({
   icon: Icon,
   label,
   href,
+  onClick
 }) => {
   const router = useRouter();
   const handleClick = () => {
+    onClick();
     router.push(href);
   };
 
