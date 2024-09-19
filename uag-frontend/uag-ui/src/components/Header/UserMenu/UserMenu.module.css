@@ -1,21 +1,22 @@
-.menuDropdown {
-  transform: translateX(-15px);
-}
-
 .clickableAvatar {
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.avatar {
-  radius: xl;
-  variant: light;
-  color: blue;
-  size: 1.9rem;
+.clickableAvatar.active .userIcon {
+  color: orange;
+  /* メニューが開かれたときの色を指定 */
 }
 
 .userIcon {
   margin-top: 5px;
+  /* transition: color 0.3s ease; */
+  /* 色の変更を滑らかにするためにトランジションを追加 */
+}
+
+.menuDropdown {
+  transform: translateX(-15px);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .accountlabel {
@@ -33,12 +34,4 @@
 .icon {
   width: 14px;
   height: 14px;
-}
-
-.clickableAvatar:focus,
-.clickableAvatar:active {
-  outline: none;
-  /* フォーカス時のアウトラインを消す */
-  background-color: transparent;
-  /* クリック時に背景色が変わらないようにする */
 }

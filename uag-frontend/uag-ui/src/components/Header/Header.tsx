@@ -23,7 +23,9 @@ export const Header: React.FC<HeaderProps> = (
         <Logo />
         <Box className={classes.flexGrow} />
         {/* 検索状態によって表示を切り替え */}
-        <QuickSearch onSearchClick={() => onSearchClick()} />
+        <QuickSearch
+          onSearchClick={() => onSearchClick()}
+          isSearching={isSearching} />
         <UserMenu />
         <BurgerMenu />
       </header>
@@ -39,8 +41,15 @@ export const Header: React.FC<HeaderProps> = (
               // onBlur={() => onSearchClick()}
               size="xs"
               styles={{ input: { fontSize: '16px' } }}
+              radius="xl"
             />
-            <Button className={classes.searchButton} size="xs">
+            <Button
+              className={classes.searchButton}
+              size="xs"
+              color="orange"
+              variant="light"
+              radius="xl"
+            >
               検索
             </Button>
           </Box>

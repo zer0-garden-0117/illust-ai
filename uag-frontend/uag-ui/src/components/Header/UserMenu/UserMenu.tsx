@@ -1,49 +1,42 @@
 import React, { useState } from 'react';
 import { useAccessToken } from '../../../apis/auth/useAccessToken';
-import { Avatar, Menu } from '@mantine/core';
+import { Menu } from '@mantine/core';
 import { MdLogin, MdLogout } from "react-icons/md";
 import {
   RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine
 } from "react-icons/ri";
-import { FiUser } from "react-icons/fi";
 import { RiUserLine } from "react-icons/ri";
-import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
-import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import LoginModal from '../LoginModal/LoginModal';
-import classes from './UserMenu.module.css';
 import SignupModal from '../SignupModal/SignupModal';
+import classes from './UserMenu.module.css';
 
 export const UserMenu: React.FC = () => {
   const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessToken();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
+  const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
 
   const handleLoginClick = () => {
-    // 独自ログイン画面を使う場合
     setLoginModalOpen(true);
-
-    // HostedUIを使う場合
-    // loginWithHosted();
   };
 
   const handleSignupClick = () => {
-    // 独自ログイン画面を使う場合
     setSignupModalOpen(true);
-
-    // HostedUIを使う場合
-    // loginWithHosted();
   };
-
 
   return (
     <>
-      <Menu>
+      <Menu
+        opened={menuOpened} // メニューが開かれているかどうかを制御
+        onOpen={() => setMenuOpened(true)} // メニューが開かれたときの処理
+        onClose={() => setMenuOpened(false)} // メニューが閉じられたときの処理
+      >
         <Menu.Target>
-          <div className={classes.clickableAvatar}>
+          <div className={`${classes.clickableAvatar} ${menuOpened ? classes.active : ''}`}>
             <RiUserLine
               size="1.3rem"
               className={classes.userIcon}
-              aria-label="Open search menu"
+              aria-label="Open user menu"
             />
           </div>
         </Menu.Target>

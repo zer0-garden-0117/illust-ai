@@ -10,17 +10,26 @@ export interface LogoProps {
   height?: string;
 }
 
+
+
 export const Logo: React.FC<LogoProps> = () => {
+  const onClickLogo = () => {
+    window.location.href = "/";
+  };
+
   return (
-    <Flex direction="row" align="center" gap={4}>
+    <Flex
+      direction="row"
+      align="center"
+      gap={4}
+      onClick={onClickLogo}
+      className={classes.logoContainer}
+    >
       <>
-        <span>
+        <Text fw={700} size='xl'>
           Angel Sandbox
-        </span>
+        </Text>
       </>
-      {/* <span className={classes.subtitle}>
-        猫耳天使のフリーイラストサイト
-      </span> */}
     </Flex>
   );
 };

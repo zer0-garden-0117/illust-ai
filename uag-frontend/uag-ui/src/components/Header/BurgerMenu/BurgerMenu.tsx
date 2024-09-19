@@ -1,5 +1,6 @@
-import React from 'react';
-import { Menu, Burger } from '@mantine/core';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Menu } from '@mantine/core';
 import { MdLogout } from "react-icons/md";
 import {
   RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine
@@ -10,31 +11,53 @@ import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import classes from './BurgerMenu.module.css';
 
 export const BurgerMenu: React.FC = () => {
+  const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
+  const router = useRouter();
+
+  const onClickFreeicon = () => {
+    router.push("/icon");
+  };
+
+  const onClickFreeillustration = () => {
+    router.push("/illustration");
+  };
+
+  const onClickUtinoko = () => {
+    router.push("/utinoko");
+  };
+
   return (
     <>
-      <Menu>
+      <Menu
+        opened={menuOpened} // メニューが開かれているかどうかを制御
+        onOpen={() => setMenuOpened(true)} // メニューが開かれたときの処理
+        onClose={() => setMenuOpened(false)} // メニューが閉じられたときの処理
+      >
         <Menu.Target>
-          <div className={classes.clickableIcon}>
+          <div className={`${classes.clickableIcon} ${menuOpened ? classes.active : ''}`}>
             <RxHamburgerMenu
               size="1.3rem"
               className={classes.userIcon}
-              aria-label="Open search menu"
+              aria-label="Open menu"
             />
           </div>
         </Menu.Target>
         <Menu.Dropdown className={classes.menuDropdown}>
           <Menu.Item
             leftSection={<RiUserSettingsLine className={classes.icon} />}
+            onClick={onClickFreeicon}
           >
             フリーアイコン
           </Menu.Item>
           <Menu.Item
             leftSection={<RiShieldKeyholeLine className={classes.icon} />}
+            onClick={onClickFreeillustration}
           >
             フリーイラスト
           </Menu.Item>
           <Menu.Item
             leftSection={<RiDeleteBin6Line className={classes.icon} />}
+            onClick={onClickUtinoko}
           >
             うちの子
           </Menu.Item>
@@ -47,7 +70,6 @@ export const BurgerMenu: React.FC = () => {
           <Menu.Divider />
           <LanguagePicker />
           <ThemeSwitcher />
-          <Menu.Divider />
         </Menu.Dropdown>
       </Menu>
     </>

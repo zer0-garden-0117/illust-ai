@@ -18,6 +18,10 @@
   margin-top: 8px;
 }
 
+.searchIcon.active {
+  color: orange;
+}
+
 .accountlabel {
   padding: 3px 0;
   font-size: 0.875rem;

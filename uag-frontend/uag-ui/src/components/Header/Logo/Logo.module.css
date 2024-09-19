@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+
 .heading {
   font-size: 2rem;
   /* ロゴのサイズを大きく */
@@ -40,4 +42,11 @@
   /* 白っぽい文字色 */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   /* 影をつけて立体感を出す */
+}
+
+.logoContainer {
+  cursor: pointer;
+  /* カーソルをポインターにする */
+  font-family: 'Montserrat', sans-serif;
+  /* Montserratを代わりに使用 */
 }

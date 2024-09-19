@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import classes from './ImageGrid.module.css';
@@ -135,19 +135,21 @@ export const ImageGridView = memo(function ImageGridViewComponent({
 
       return (
         <Card key={imageData.workId} p="md" radius="md" className={classes.card}>
-          <AspectRatio ratio={2 / 2}>
+          <AspectRatio ratio={4 / 2}>
             <CustomImage
               src={imageData.titleImage}
               alt={imageData.mainTitle || "Image without title"}
               index={index}  // indexを渡す
             />
           </AspectRatio>
-          <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
-            {new Date(imageData.date).toISOString().split('T')[0]}
-          </Text>
-          <Text className={classes.title} mt={5}>
-            {imageData.mainTitle}
-          </Text>
+          <Group>
+            <Text className={classes.title} mt={5}>
+              {imageData.mainTitle}
+            </Text>
+            <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
+              {new Date(imageData.date).toISOString().split('T')[0]}
+            </Text>
+          </Group>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
 
             {/* <ActionIcon
