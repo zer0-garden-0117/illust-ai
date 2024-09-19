@@ -5,6 +5,8 @@ import { MdLogin, MdLogout } from "react-icons/md";
 import {
   RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine
 } from "react-icons/ri";
+import { FiUser } from "react-icons/fi";
+import { RiUserLine } from "react-icons/ri";
 import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import LoginModal from '../LoginModal/LoginModal';
@@ -38,16 +40,11 @@ export const UserMenu: React.FC = () => {
       <Menu>
         <Menu.Target>
           <div className={classes.clickableAvatar}>
-            <Avatar
-              alt="User Avatar"
-              radius="xl"
-              variant="light"
-              color="yellow"
-              size="1.9rem"
-              className={classes.avatar}
-            >
-              {isAuthenticated ? email?.charAt(0) : ''}
-            </Avatar>
+            <RiUserLine
+              size="1.3rem"
+              className={classes.userIcon}
+              aria-label="Open search menu"
+            />
           </div>
         </Menu.Target>
         <Menu.Dropdown className={classes.menuDropdown}>
@@ -97,11 +94,8 @@ export const UserMenu: React.FC = () => {
               >
                 登録削除
               </Menu.Item>
-              <Menu.Divider />
             </>
           )}
-          <LanguagePicker />
-          <ThemeSwitcher />
         </Menu.Dropdown>
       </Menu>
 

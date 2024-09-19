@@ -11,21 +11,16 @@ export interface LogoProps {
 }
 
 export const Logo: React.FC<LogoProps> = () => {
-  const isSmallScreen = useMediaQuery('(max-width: 768px)');
-  const t = useTranslations("header");
-
   return (
     <Flex direction="row" align="center" gap={4}>
-      <Link href="/" className={classes.heading}>
-        <Text fw="bolder" size={isSmallScreen ? "sm" : ""}>
-          {/* {t('title')} */}
-        </Text>
-      </Link>
-      {!isSmallScreen && (
-        <Text className={classes.subtitle}>
-          {/* {t('subtitle')} */}
-        </Text>
-      )}
+      <>
+        <span>
+          Angel Sandbox
+        </span>
+      </>
+      {/* <span className={classes.subtitle}>
+        猫耳天使のフリーイラストサイト
+      </span> */}
     </Flex>
   );
 };

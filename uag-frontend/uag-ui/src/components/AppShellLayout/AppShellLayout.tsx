@@ -13,6 +13,14 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const t = useTranslations("appshell");
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [headerHeight, setHeaderHeight] = useState(60); // 初期値を60に設定
+  const [isSearching, setIsSearching] = useState(false);
+
+  // 検索アイコンがクリックされたときに高さを切り替える関数
+  const toggleHeaderHeight = () => {
+    setIsSearching(!isSearching);
+    setHeaderHeight(isSearching ? 60 : 120); // クリック時に60か120に切り替える
+  };
 
   const toggle = () => setOpened((o) => !o);
 
@@ -33,31 +41,33 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AppShell
-      header={{ height: 60 }}
-      navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
-      aside={{ width: 200, breakpoint: 'md', collapsed: { desktop: false, mobile: true } }}
+      header={{ height: headerHeight }}
+      // navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      // aside={{ width: 200, breakpoint: 'md', collapsed: { desktop: false, mobile: true } }}
       footer={{ height: 20 }}
       padding="md"
       transitionDuration={0}
       transitionTimingFunction="ease"
     >
-      <AppShell.Navbar>
+      {/* <AppShell.Navbar>
         <Navbar setOpened={setOpened} />
-      </AppShell.Navbar>
+      </AppShell.Navbar> */}
       <AppShell.Header>
         <Header
-          burger={<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" mr="xl" />}
+          // burger={<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" mr="xl" />}
+          onSearchClick={toggleHeaderHeight}
+          isSearching={isSearching}
         />
       </AppShell.Header>
       <AppShell.Main>{children}</AppShell.Main>
-      <AppShell.Aside>
+      {/* <AppShell.Aside>
         <Sidebar />
-      </AppShell.Aside>
-      <AppShell.Footer>
+      </AppShell.Aside> */}
+      {/* <AppShell.Footer>
         <Text w="full" size="sm" ta="right" pr="20">
           {t('copyright')}
         </Text>
-      </AppShell.Footer>
+      </AppShell.Footer> */}
     </AppShell>
   );
 };

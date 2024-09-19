@@ -2,7 +2,7 @@
   transform: translateX(-15px);
 }
 
-.clickableAvatar {
+.clickableIcon {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -17,6 +17,7 @@
 .userIcon {
   margin-top: 5px;
 }
+
 
 .accountlabel {
   padding: 3px 0;
@@ -33,12 +34,4 @@
 .icon {
   width: 14px;
   height: 14px;
-}
-
-.clickableAvatar:focus,
-.clickableAvatar:active {
-  outline: none;
-  /* フォーカス時のアウトラインを消す */
-  background-color: transparent;
-  /* クリック時に背景色が変わらないようにする */
 }
