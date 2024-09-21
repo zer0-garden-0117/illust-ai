@@ -58,6 +58,21 @@ class WorkManagerService(
     }
 
     @Transactional
+    fun findLatestWorks(numberOfWorks: Int): WorksWithSearchResult {
+        val latestWorkId = countersRepository.findByCounterName("workId")
+        // Create a list of integers from latestWorkId down to the specified number of entries prior
+        val workIds = (maxOf(
+            latestWorkId - (numberOfWorks - 1),
+            1
+        )..latestWorkId).toList()
+        val works = workService.findWorksByIds(workIds).filterNotNull()
+        return WorksWithSearchResult(
+            works = works,
+            totalCount = works.size
+        )
+    }
+
+    @Transactional
     fun findWorksByTags(
         words: List<String>?,
         offset: Int,

@@ -26,6 +26,10 @@ export const BurgerMenu: React.FC = () => {
     router.push("/utinoko");
   };
 
+  const onClickAdmin = () => {
+    router.push("/admin");
+  };
+
   return (
     <>
       <Menu
@@ -66,6 +70,12 @@ export const BurgerMenu: React.FC = () => {
             leftSection={<MdLogout className={classes.icon} />}
           >
             本サイトについて
+          </Menu.Item>
+          <Menu.Item
+            leftSection={<MdLogout className={classes.icon} />}
+            onClick={onClickAdmin}
+          >
+            管理
           </Menu.Item>
           <Menu.Divider />
           <LanguagePicker />

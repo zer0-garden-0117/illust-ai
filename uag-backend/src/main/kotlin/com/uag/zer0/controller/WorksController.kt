@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.uag.zer0.dto.WorkWithDetails
+import com.uag.zer0.dto.WorksWithSearchResult
 import com.uag.zer0.entity.work.Character
 import com.uag.zer0.entity.work.Creator
 import com.uag.zer0.entity.work.Tag
@@ -49,12 +50,18 @@ class WorksController(
     override fun searchWorks(
         @RequestBody(required = false) apiWorkSearch: ApiWorkSearch
     ): ResponseEntity<ApiWorksWithSearchResult> {
-        val workResult = apiWorkSearch.words.let { word ->
-            workManagerService.findWorksByFreeWords(
-                word,
-                apiWorkSearch.offset,
-                apiWorkSearch.limit
-            )
+        var workResult: WorksWithSearchResult? = null
+        if (apiWorkSearch.words?.size == 0) {
+            // 検索ワードが指定されてない時は最新作品を返す
+            workResult = workManagerService.findLatestWorks(20)
+        } else {
+            workResult = apiWorkSearch.words.let { word ->
+                workManagerService.findWorksByFreeWords(
+                    word,
+                    apiWorkSearch.offset,
+                    apiWorkSearch.limit
+                )
+            }
         }
         val apiWorks = mutableListOf<ApiWork>()
         workResult?.works?.forEach { work ->
@@ -69,10 +76,10 @@ class WorksController(
     }
 
     override fun getWorksById(
-        @PathVariable("worksId") worksId: Int
+        @PathVariable("workId") workId: Int
     ): ResponseEntity<ApiWorkWithDetails> {
         val workWithDetails =
-            workManagerService.findWorkByWorkId(workId = worksId)
+            workManagerService.findWorkByWorkId(workId = workId)
         val response = toApiWorkWithDetails(workWithDetails)
         return ResponseEntity.ok(response)
     }
@@ -136,14 +143,14 @@ class WorksController(
     }
 
     override fun updateWorksById(
-        @PathVariable("worksId") worksId: Int,
+        @PathVariable("workId") workId: Int,
         @Valid @RequestBody apiWorkWithDetails: ApiWorkWithDetails
     ): ResponseEntity<ApiWorkWithDetails> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     override fun deleteWorksById(
-        @PathVariable("tagsId") worksId: Int
+        @PathVariable("workId") workId: Int
     ): ResponseEntity<ApiWorkWithDetails> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }

@@ -214,20 +214,24 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   return (
     <>
       <SimpleGrid
-        cols={{ base: 2, sm: 2, lg: 3 }}
+        cols={{ base: 2, sm: 3, lg: 3 }}
         spacing={{ base: 20 }}
       >
         {cards}
       </SimpleGrid>
       {!loading && allPlaceholdersVisible && totalPages > 1 && (
-        <Pagination
-          value={currentPage}
-          onChange={onPageChange}
-          total={totalPages}
-          mt="lg"
-          radius="md"
-          withEdges
-        />
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Pagination
+            value={currentPage}
+            onChange={onPageChange}
+            total={totalPages}
+            mt="lg"
+            radius="xl"
+            withEdges
+            color="gray"
+            size="sm"
+          />
+        </div>
       )}
     </>
   );

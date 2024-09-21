@@ -31,6 +31,14 @@ class WorkService(
         return sortedTags.drop(offset).take(limit)
     }
 
+    fun findWorksByIds(workIds: List<Int>): List<Work> {
+        val works = mutableListOf<Work>()
+        workIds.forEach { workId ->
+            works.add(workRepository.findByWorkId(workId))
+        }
+        return works
+    }
+
     fun findByGenre(
         genres: List<String>,
     ): List<Work> {

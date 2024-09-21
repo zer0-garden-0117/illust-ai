@@ -6,9 +6,7 @@ import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation
 
 export type WorkSearchByTagResult = operations["searchWorksByTags"]["responses"]["200"]["content"]["application/json"];
 export type WorkSearchByTagRequestBody = operations["searchWorksByTags"]["requestBody"]["content"]["application/json"];
-export type WorkSearchByTagHeaders = UserTokenHeader & CsrfTokenHeader;
 export type WorkSearchByTagArgs = {
-  headers?: WorkSearchByTagHeaders;
   body: WorkSearchByTagRequestBody;
 };
 
@@ -22,14 +20,10 @@ export const useWorksSearchByTags = (
 ): SWRMutationResponse<WorkSearchByTagResult, Error, string, WorkSearchByTagArgs> => {
   return useSWRMutation<WorkSearchByTagResult, Error, string, WorkSearchByTagArgs>(
     `/works/serachByTags`,
-    async (_, { arg: { headers, body } }): Promise<WorkSearchByTagResult> => {
+    async (_, { arg: { body } }): Promise<WorkSearchByTagResult> => {
       const { data, error } = await client.POST(
         `/works/serachByTags`,
         {
-          headers: {
-            Authorization: `${headers?.Authorization}`,
-            "x-xsrf-token": headers?.["x-xsrf-token"] || '',
-          },
           body: body,
         }
       );

@@ -7,8 +7,9 @@ import { useUserToken } from "@/apis/auth/useUserToken";
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
 import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
-import { useUsersActivitySearch } from "@/apis/openapi/users/useUsersActivitySearch";
+import { useUsersActivitySearch, UsersActivitySearchResult } from "@/apis/openapi/users/useUsersActivitySearch";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
+import { useAccessToken } from "@/apis/auth/useAccessToken";
 
 type UseImageGridProps = {
   words: string[];
@@ -23,15 +24,17 @@ export const useImageGrid = (
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true); // ローディング状態
   const [worksData, setWorksData] = useState<WorkSearchResult>();
+  const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
   const { trigger: triggerSearchWithTags, data: dataByTags } = useWorksSearchByTags();
   const { trigger: triggerSearch, data: dataByFreewords } = useWorksSearch();
   const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
   const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
   const { trigger: triggerDeliked } = useUsersLikedDelete();
+  const { isAuthenticated } = useAccessToken();
   const { userToken } = useUserToken();
 
-  const itemsPerPage = 2;  // 1ページあたりに表示するアイテム数
+  const itemsPerPage = 12;  // 1ページあたりに表示するアイテム数
 
   const headers = {
     Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
@@ -47,7 +50,7 @@ export const useImageGrid = (
     };
     try {
       // 作品のデータを取得
-      await triggerSearchWithTags({ headers, body });
+      await triggerSearchWithTags({ body });
     } catch (err) {
       console.error("Failed to fetch images:", err);
     } finally {
@@ -64,7 +67,7 @@ export const useImageGrid = (
     };
     try {
       // 作品のデータを取得
-      await triggerSearch({ headers, body });
+      await triggerSearch({ body });
     } catch (err) {
       console.error("Failed to fetch images:", err);
     }
@@ -91,25 +94,37 @@ export const useImageGrid = (
 
   // works データが変更されたときの処理
   useEffect(() => {
+    console.log("worksData:", worksData);
     if (worksData) {
-      const workIds = worksData.works.map(work => work.workId).filter((id): id is number => id !== undefined);
-      // アクティビティ情報を取得
-      triggerActivity({ headers, body: { workIds } });
+      if (isAuthenticated) {
+        const workIds = worksData.works.map(work => work.workId).filter((id): id is number => id !== undefined);
+        // アクティビティ情報を取得
+        triggerActivity({ headers, body: { workIds } });
+      } else {
+        setActivitiesData({})
+      }
     }
   }, [worksData]);
 
-  // activityData が変更されたときの処理
+  // activityDataが変更されたときの処理
   useEffect(() => {
     if (worksData && activityData) {
+      setActivitiesData(activityData)
+    }
+  }, [activityData]);
+
+  // activityData が変更されたときの処理
+  useEffect(() => {
+    if (worksData && activitiesData) {
       // works と activityData を結合して imageData にセット
       const fetchedImages: ImageData[] = worksData.works.map(work => {
-        const activity = activityData?.apiRateds?.find(a => a.workId === work.workId);
+        const activity = activitiesData?.apiRateds?.find(a => a.workId === work.workId);
         return {
           workId: work.workId || 0,
           mainTitle: work.mainTitle || "No Title",
           titleImage: work.titleImgUrl || "",
           date: work.createdAt || "",
-          isLiked: activityData?.apiLikeds?.some(a => a.workId === work.workId),  // liked の確認
+          isLiked: activitiesData?.apiLikeds?.some(a => a.workId === work.workId),  // liked の確認
           rating: activity?.rating || 0,  // レーティングの確認
         };
       });
@@ -119,7 +134,7 @@ export const useImageGrid = (
       setTotalPages(Math.ceil(worksData.totalCount / itemsPerPage));
       setLoading(false);
     }
-  }, [worksData, activityData]);
+  }, [worksData, activitiesData]);
 
   // ページ変更時にデータを更新する関数
   const onPageChange = (page: number) => {

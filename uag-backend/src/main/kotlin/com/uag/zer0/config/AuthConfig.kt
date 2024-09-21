@@ -56,6 +56,8 @@ class AuthConfig(
     fun filterChain(http: HttpSecurity?): SecurityFilterChain? {
         val noBearerTokenPathSet = noBearerTokenPaths.split(",")
             .map { it.trim() }.toSet()
+        val csrfGenPathsSet = csrfGenPathsString.split(",")
+            .map { it.trim() }.toSet()
         http
             // 認可設定
             ?.authorizeHttpRequests { authorize ->
@@ -70,7 +72,7 @@ class AuthConfig(
                 CognitoTokenFilter(
                     cognitoJwtDecoder(),
                     tokenService,
-                    noBearerTokenPathSet
+                    csrfGenPathsSet
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             )
