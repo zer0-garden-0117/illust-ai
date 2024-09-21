@@ -1,7 +1,7 @@
 import { Flex, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useTranslations } from "next-intl";
-
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import classes from './Logo.module.css';
 
@@ -10,11 +10,12 @@ export interface LogoProps {
   height?: string;
 }
 
-
-
 export const Logo: React.FC<LogoProps> = () => {
+  const router = useRouter();
+
   const onClickLogo = () => {
-    window.location.href = "/";
+    router.push("/");
+    // window.location.href = "/";
   };
 
   return (

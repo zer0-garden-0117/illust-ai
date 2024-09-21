@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useAccessToken } from '../../../apis/auth/useAccessToken';
-import { Menu } from '@mantine/core';
+import { Avatar, Group, Menu, Space } from '@mantine/core';
 import { MdLogin, MdLogout } from "react-icons/md";
 import {
-  RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine
+  RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine, RiHeartAdd2Line
 } from "react-icons/ri";
+import { FaRegStar, FaRegHeart } from "react-icons/fa";
 import { RiUserLine } from "react-icons/ri";
 import classes from './UserMenu.module.css';
 import AuthModal from '../AuthModal/AuthModal';
@@ -42,8 +43,15 @@ export const UserMenu: React.FC = () => {
         <Menu.Dropdown className={classes.menuDropdown}>
           {isAuthenticated && (
             <>
-              <div className={classes.accountlabel}>アカウント情報</div>
-              <div className={classes.email}>{email}</div>
+              <Menu.Item
+                leftSection={<RiUserLine className={classes.icon} />}
+                style={{ pointerEvents: 'none' }}
+              >
+                {/* <div style={{ display: 'flex', alignItems: 'center', marginTop: '3px' }}> */}
+                <div className={classes.accountlabel2}>ユーザー情報</div> {/* ユーザー情報 */}
+                {/* </div> */}
+              </Menu.Item>
+              <div className={classes.email} style={{ marginTop: '-12px', marginRight: '10px' }}>{email}</div> {/* 余白を調整 */}
               <Menu.Divider />
             </>
           )}
@@ -66,25 +74,20 @@ export const UserMenu: React.FC = () => {
           {isAuthenticated && (
             <>
               <Menu.Item
+                leftSection={<FaRegHeart className={classes.icon} />}
+              >
+                いいね一覧
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<FaRegStar className={classes.icon} />}
+              >
+                評価一覧
+              </Menu.Item>
+              <Menu.Item
                 leftSection={<MdLogout className={classes.icon} />}
                 onClick={logout}
               >
                 ログアウト
-              </Menu.Item>
-              <Menu.Item
-                leftSection={<RiUserSettingsLine className={classes.icon} />}
-              >
-                登録内容変更
-              </Menu.Item>
-              <Menu.Item
-                leftSection={<RiShieldKeyholeLine className={classes.icon} />}
-              >
-                パスワード変更
-              </Menu.Item>
-              <Menu.Item
-                leftSection={<RiDeleteBin6Line className={classes.icon} />}
-              >
-                登録削除
               </Menu.Item>
             </>
           )}

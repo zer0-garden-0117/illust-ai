@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
+import { useRouter } from 'next/navigation'; // useRouter をインポート
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line } from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
@@ -37,6 +38,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   isAuthenticated
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
+  const router = useRouter();  // useRouter フックを使用
   const [loginModalOpen, setLoginModalOpen] = useState(false);  // ログインモーダルの開閉状態を管理
 
   const [allPlaceholdersVisible, setAllPlaceholdersVisible] = useState(false);
@@ -128,14 +130,20 @@ export const ImageGridView = memo(function ImageGridViewComponent({
         onRateChange(imageData.workId, rating);
       };
 
+      const handleImageClick = () => {
+        router.push(`/posts/${imageData.workId}`);  // クリック時に posts/{workId} に遷移
+      };
+
       return (
         <Card key={imageData.workId} p="md" radius="md" className={classes.card}>
           <AspectRatio ratio={4 / 2}>
-            <CustomImage
-              src={imageData.titleImage}
-              alt={imageData.mainTitle || "Image without title"}
-              index={index}
-            />
+            <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
+              <CustomImage
+                src={imageData.titleImage}
+                alt={imageData.mainTitle || "Image without title"}
+                index={index}
+              />
+            </div>
           </AspectRatio>
           <Group>
             <Text className={classes.title} mt={5}>
