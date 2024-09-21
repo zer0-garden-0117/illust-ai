@@ -4,6 +4,7 @@ import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line } from "react-icons/ri";
+import AuthModal from '@/components/Header/AuthModal/AuthModal';
 
 export type ImageData = {
   workId: number;
@@ -22,6 +23,7 @@ type ImageGridViewProps = {
   onPageChange: (page: number) => void;
   onRateChange: (workId: number, value: number) => void;
   onLikeChange: (workId: number) => void;
+  isAuthenticated: boolean;  // 認証状態を追加
 };
 
 export const ImageGridView = memo(function ImageGridViewComponent({
@@ -31,24 +33,19 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   loading,
   onPageChange,
   onLikeChange,
-  onRateChange
+  onRateChange,
+  isAuthenticated
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
+  const [loginModalOpen, setLoginModalOpen] = useState(false);  // ログインモーダルの開閉状態を管理
 
   const [allPlaceholdersVisible, setAllPlaceholdersVisible] = useState(false);
-
-  // 各画像のプレースホルダー表示状態を管理する配列
   const visibleStatus = useRef(Array(imageData.length).fill(false));
 
-  // 全てのプレースホルダーが表示されたかを確認する関数
   const checkAllPlaceholdersVisible = () => {
     if (visibleStatus.current.every(status => status === true)) {
-      setAllPlaceholdersVisible(true);  // 全てのプレースホルダーが表示された
+      setAllPlaceholdersVisible(true);
     }
-  };
-
-  const handleRateChange = (workId: number, value: number) => {
-    onRateChange(workId, value);
   };
 
   const CustomImage = ({ src, alt, index }: { src: string; alt: string; index: number }) => {
@@ -61,15 +58,13 @@ export const ImageGridView = memo(function ImageGridViewComponent({
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               setIsVisible(true);
-              visibleStatus.current[index] = true;  // 該当するプレースホルダーが表示されたことを更新
-              checkAllPlaceholdersVisible();  // 全てのプレースホルダーが表示されたかをチェック
+              visibleStatus.current[index] = true;
+              checkAllPlaceholdersVisible();
               observer.disconnect();
             }
           });
         },
-        {
-          threshold: 0.1,
-        }
+        { threshold: 0.1 }
       );
 
       if (imgRef.current) {
@@ -89,10 +84,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
           <MantineImage
             src={src}
             alt={alt}
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
+            style={{ width: '100%', height: '100%' }}
           />
         )}
         {!isVisible && (
@@ -100,11 +92,11 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             style={{
               width: '100%',
               height: '100%',
-              backgroundColor: 'transparent', // Transparent placeholder
+              backgroundColor: 'transparent',
               position: 'absolute',
               top: 0,
               left: 0,
-              zIndex: 1, // Ensure the placeholder is above the image
+              zIndex: 1,
             }}
           />
         )}
@@ -116,21 +108,24 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     ({ imageData, index, onRateChange, onLikeChange }: { imageData: ImageData, index: number, onRateChange: (workId: number, value: number) => void, onLikeChange: (workId: number) => void }) => {
       const [localIsLiked, setLocalIsLiked] = useState(imageData.isLiked);
       const [localRating, setLocalRating] = useState(imageData.rating);
-      const [localPrevRating, setLocalPrevRating] = useState(imageData.rating);
 
       const handleLikeClick = () => {
+        if (!isAuthenticated) {
+          setLoginModalOpen(true);
+          return;
+        }
+
         setLocalIsLiked(!localIsLiked);
         onLikeChange(imageData.workId);
       };
 
       const handleRateClick = (rating: number) => {
+        if (!isAuthenticated) {
+          setLoginModalOpen(true);
+          return;
+        }
         setLocalRating(rating);
         onRateChange(imageData.workId, rating);
-      };
-
-      const handleRateClearClick = () => {
-        setLocalRating(0);
-        onRateChange(imageData.workId, 0);
       };
 
       return (
@@ -139,7 +134,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             <CustomImage
               src={imageData.titleImage}
               alt={imageData.mainTitle || "Image without title"}
-              index={index}  // indexを渡す
+              index={index}
             />
           </AspectRatio>
           <Group>
@@ -151,35 +146,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             </Text>
           </Group>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
-
-            {/* <ActionIcon
-              variant="transparent"
-              className={classes.customactionicon}
-              style={{
-                color: 'rgba(255, 215, 0, 0.2)',
-                padding: 0,
-                margin: 0,
-                marginRight: '-4px',
-                width: '12px',
-                height: '12px',
-                cursor: 'pointer',
-                transition: 'none', // アニメーションを無効にする
-                outline: 'none', // クリック時のアウトラインを無効にする
-                boxShadow: 'none', // クリック時のボックスシャドウを無効にする
-                ':active': {
-                  transform: 'translateY(0)', // クリック時の移動を無効にする
-                },
-              }}
-              onClick={handleRateClearClick}
-            >
-              <Rating
-                value={1}
-                count={1}
-                readOnly color="rgba(212, 212, 212, 0.18)"
-                style={{ pointerEvents: 'none' }}
-              />
-            </ActionIcon> */}
-
             <Rating value={localRating} onChange={handleRateClick} />
             <ActionIcon
               variant="transparent"
@@ -205,7 +171,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     <MemoizedCard
       key={data.workId}
       imageData={data}
-      index={index}  // indexを渡す
+      index={index}
       onRateChange={onRateChange}
       onLikeChange={onLikeChange}
     />
@@ -213,10 +179,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
 
   return (
     <>
-      <SimpleGrid
-        cols={{ base: 2, sm: 3, lg: 3 }}
-        spacing={{ base: 20 }}
-      >
+      <SimpleGrid cols={{ base: 2, sm: 3, lg: 3 }} spacing={{ base: 20 }}>
         {cards}
       </SimpleGrid>
       {!loading && allPlaceholdersVisible && totalPages > 1 && (
@@ -233,6 +196,11 @@ export const ImageGridView = memo(function ImageGridViewComponent({
           />
         </div>
       )}
+
+      <AuthModal
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+      />
     </>
   );
 });

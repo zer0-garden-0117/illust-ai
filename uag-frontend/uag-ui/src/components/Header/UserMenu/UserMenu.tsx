@@ -6,9 +6,8 @@ import {
   RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine
 } from "react-icons/ri";
 import { RiUserLine } from "react-icons/ri";
-import LoginModal from '../LoginModal/LoginModal';
-import SignupModal from '../SignupModal/SignupModal';
 import classes from './UserMenu.module.css';
+import AuthModal from '../AuthModal/AuthModal';
 
 export const UserMenu: React.FC = () => {
   const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessToken();
@@ -92,13 +91,15 @@ export const UserMenu: React.FC = () => {
         </Menu.Dropdown>
       </Menu>
 
-      <LoginModal
+      <AuthModal
         isOpen={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}
+        isLogin={true}
       />
-      <SignupModal
+      <AuthModal
         isOpen={signupModalOpen}
         onClose={() => setSignupModalOpen(false)}
+        isLogin={false}
       />
     </>
   );

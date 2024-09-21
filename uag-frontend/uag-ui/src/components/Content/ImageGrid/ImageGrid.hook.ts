@@ -163,6 +163,7 @@ export const useImageGrid = (
     loading,
     onPageChange,
     onLikeChange,
-    onRateChange
+    onRateChange,
+    isAuthenticated
   };
 };

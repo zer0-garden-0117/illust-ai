@@ -64,11 +64,16 @@ class WorkManagerService(
         val workIds = (maxOf(
             latestWorkId - (numberOfWorks - 1),
             1
-        )..latestWorkId).toList()
+        )..latestWorkId).toList().reversed()
         val works = workService.findWorksByIds(workIds).filterNotNull()
+
+        // works のリストから最新の4個を取得
+        val latestWorks = works.take(4)
+        logger.info(latestWorks.toString())
+
         return WorksWithSearchResult(
-            works = works,
-            totalCount = works.size
+            works = latestWorks,
+            totalCount = latestWorks.size
         )
     }
 
