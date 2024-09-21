@@ -21,6 +21,7 @@ class UserTokenFilter(
             filterChain.doFilter(request, response)
             return
         }
+        logger.info(requestURI)
 
         val token = resolveToken(request)
         if (token != null) {

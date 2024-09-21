@@ -14,7 +14,11 @@ export const useUsersTokenGet = (
 ): SWRResponse<UserTokenGetResult, Error> => {
   const accessToken = headers["x-access-token"] !== 'null' ? headers["x-access-token"] : null;
   const userToken = getUserTokenFromCookies();
+
+  // 条件に基づいてリクエストを実行するか決定
   const shouldFetch = accessToken && !userToken ? `/users/token` : null;
+
+  // `shouldFetch` が `null` の場合はリクエストをスキップ
   return useSWR<UserTokenGetResult, Error>(
     shouldFetch,
     async (): Promise<UserTokenGetResult> => {

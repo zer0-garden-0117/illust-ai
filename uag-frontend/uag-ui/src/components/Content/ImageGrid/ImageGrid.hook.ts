@@ -36,10 +36,17 @@ export const useImageGrid = (
 
   const itemsPerPage = 12;  // 1ページあたりに表示するアイテム数
 
-  const headers = {
+  const [headers, setHeaders] = useState({
     Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
     "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-  };
+  });
+
+  useEffect(() => {
+    setHeaders({
+      Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    });
+  }, [userToken]);
 
   const fetchImagesWithTags = async (page: number) => {
     setLoading(true);  // ローディング開始
@@ -75,13 +82,20 @@ export const useImageGrid = (
 
   // ページ変更時にデータをリセットし、データを再取得
   useEffect(() => {
+    console.log("xxxxxxxxxxxxxx")
+    console.log(userToken)
+    console.log(isAuthenticated)
     setImageData([]);  // データをリセット
     if (isTag) {
       fetchImagesWithTags(currentPage);
     } else {
       fetchImagesWithFreewords(currentPage);
     }
-  }, [currentPage]);
+  }, [currentPage, isAuthenticated, userToken]);
+
+  useEffect(() => {
+    console.log("userToken updated:", userToken);  // userTokenの更新を確認
+  }, [userToken]);
 
   // dataが変更された時の処理
   useEffect(() => {
@@ -96,7 +110,7 @@ export const useImageGrid = (
   useEffect(() => {
     console.log("worksData:", worksData);
     if (worksData) {
-      if (isAuthenticated) {
+      if (isAuthenticated && userToken != null) {
         const workIds = worksData.works.map(work => work.workId).filter((id): id is number => id !== undefined);
         // アクティビティ情報を取得
         triggerActivity({ headers, body: { workIds } });

@@ -20,6 +20,7 @@ class CognitoTokenFilter(
     ) {
         val requestURI = request.requestURI
         if (requestURI in noBearerTokenPathSet) {
+            logger.info(requestURI)
             val token = request.getHeader("x-access-token")
             logger.info(token)
             if (token != null) {

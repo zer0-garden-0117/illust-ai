@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAccessToken } from './useAccessToken';
 import {
   UserTokenGetHeader, useUsersTokenGet, UserTokenGetResult
@@ -7,7 +7,7 @@ import {
   getUserTokenFromCookies, setUserTokenToCookies
 } from '../../utils/authCookies';
 import { decodeUserToken } from '../../utils/authJwt';
-import { useError } from "../../providers/error/errorProvider"
+import { useError } from "../../providers/error/errorProvider";
 
 export const useUserToken = () => {
   const initialUserToken = getUserTokenFromCookies();
@@ -16,38 +16,28 @@ export const useUserToken = () => {
   const [userId, setUserId] = useState<number | null>(Number(initialUserId));
   const [role, setRole] = useState<string | null>(initialRole);
   const [isSetup, setIsSetup] = useState<boolean>(false);
-  const { accessToken } = useAccessToken();
-  const userTokenHeaders: UserTokenGetHeader = { "x-access-token": `${accessToken}` };
+  const { accessToken } = useAccessToken();  // ここからaccessTokenを取得
   const { setError } = useError();
 
-  const swrOptions = {
-    fallbackData: null as unknown as UserTokenGetResult
-  };
-  const { data, error, isLoading } = useUsersTokenGet(userTokenHeaders, swrOptions);
-  if (error) {
-    setError("Error fetching user token");
-  }
+  // `accessToken` がある場合にのみ `useUsersTokenGet` を実行
+  const userTokenHeaders: UserTokenGetHeader = { "x-access-token": `${accessToken}` };
+  const { data, error } = useUsersTokenGet(userTokenHeaders, {
+    fallbackData: null as unknown as UserTokenGetResult,
+  });
 
-  // 未登録時の状態設定
-  if (data?.userToken && !userToken) {
-    if (data.userToken == "unregistered" && !isSetup) {
-      setIsSetup(true);
-    } else if (data.userToken != "unregistered" && isSetup) {
-      setIsSetup(false);
+  useEffect(() => {
+    if (error) {
+      setError("Error fetching user token");
     }
-  }
 
-  // メンバートークン、userID、roleの設定
-  if (data?.userToken && !userToken && !isSetup) {
-    const { userId, role } = decodeUserToken(data.userToken);
-    if (userId && role) {
+    if (data?.userToken) {
+      const { userId, role } = decodeUserToken(data.userToken);
       setUserToken(data.userToken);
       setUserId(Number(userId));
       setRole(role);
       setUserTokenToCookies(data.userToken);
-    } else {
-      console.log('Invalid user token');
     }
-  }
-  return { isSetup, userToken, userId, role, error };
+  }, [data, error]);
+
+  return { isSetup, userToken, userId, role };
 };
