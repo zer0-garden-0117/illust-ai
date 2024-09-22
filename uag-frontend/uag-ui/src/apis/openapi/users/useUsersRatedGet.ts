@@ -14,6 +14,7 @@ export const useUsersRatedGet = (
   options?: SWRConfiguration<UsersRatedGetResult, Error>
 ): SWRResponse<UsersRatedGetResult, Error> => {
   return useSWR<UsersRatedGetResult, Error>(
+    `/users/rated`,
     async (): Promise<UsersRatedGetResult> => {
       const { data, error } = await client.GET(
         `/users/rated`,

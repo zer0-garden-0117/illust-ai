@@ -14,6 +14,7 @@ export const useUsersLikedGet = (
   options?: SWRConfiguration<UsersLikedGetResult, Error>
 ): SWRResponse<UsersLikedGetResult, Error> => {
   return useSWR<UsersLikedGetResult, Error>(
+    `/users/liked`,
     async (): Promise<UsersLikedGetResult> => {
       const { data, error } = await client.GET(
         `/users/liked`,

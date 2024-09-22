@@ -11,6 +11,7 @@ export const useWorksGetById = (
   options?: SWRConfiguration<WorkGetByIdResult, Error>
 ): SWRResponse<WorkGetByIdResult, Error> => {
   return useSWR<WorkGetByIdResult, Error>(
+    `/works/{workId}`,
     async (): Promise<WorkGetByIdResult> => {
       const { data, error } = await client.GET(
         `/works/{workId}`,
