@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -28,11 +29,14 @@ class AuthConfig(
     @Value("\${cognito.pool-id}")
     private lateinit var cognitoPoolId: String
 
+    @Value("\${security.paths.no-bearer-token}")
+    private lateinit var noBearerTokenPathAndMethodString: String
+
+    @Value("\${security.paths.need-access-token}")
+    private lateinit var needAccessTokenPathsString: String
+
     @Value("\${security.paths.csrf-gen}")
     private lateinit var csrfGenPathsString: String
-
-    @Value("\${security.paths.no-bearer-token}")
-    private lateinit var noBearerTokenPaths: String
 
     @Value("\${security.csrf.same-site}")
     private lateinit var sameSite: String
@@ -54,31 +58,39 @@ class AuthConfig(
     @Bean
     @kotlin.Throws(Exception::class)
     fun filterChain(http: HttpSecurity?): SecurityFilterChain? {
-        val noBearerTokenPathSet = noBearerTokenPaths.split(",")
+        val noBearerTokenPathSet = noBearerTokenPathAndMethodString.split(",")
             .map { it.trim() }.toSet()
-        val csrfGenPathsSet = csrfGenPathsString.split(",")
+        val needAccessTokenPathsSet = needAccessTokenPathsString.split(",")
             .map { it.trim() }.toSet()
         http
-            // 認可設定
             ?.authorizeHttpRequests { authorize ->
-                authorize
-                    .requestMatchers(
-                        *noBearerTokenPaths.split(",").toTypedArray()
-                    ).permitAll()
-                    .anyRequest().authenticated()
+                // 認証を免除するパス+メソッドの設定
+                noBearerTokenPathAndMethodString.split(",")
+                    .forEach { pathWithMethod ->
+                        val (path, method) = pathWithMethod.split(":")
+                        authorize.requestMatchers(
+                            HttpMethod.valueOf(method),
+                            path
+                        ).permitAll()
+                    }
+                // それ以外は認証を必要とする設定
+                authorize.anyRequest().authenticated()
             }
             // アクセストークンの検証の設定
             ?.addFilterBefore(
                 CognitoTokenFilter(
                     cognitoJwtDecoder(),
                     tokenService,
-                    csrfGenPathsSet
+                    needAccessTokenPathsSet
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             )
             // カスタムトークンの検証の設定
             ?.addFilterBefore(
-                UserTokenFilter(tokenService, noBearerTokenPathSet),
+                UserTokenFilter(
+                    tokenService,
+                    noBearerTokenPathSet
+                ),
                 UsernamePasswordAuthenticationFilter::class.java
             )
             // CSRFトークンの検証の設定

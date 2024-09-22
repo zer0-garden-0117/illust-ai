@@ -16,12 +16,10 @@ class UserTokenFilter(
         response: jakarta.servlet.http.HttpServletResponse,
         filterChain: jakarta.servlet.FilterChain
     ) {
-        val requestURI = request.requestURI
-        if (requestURI in noBearerTokenPathSet) {
+        if (isPathExempted(request)) {
             filterChain.doFilter(request, response)
             return
         }
-        logger.info(requestURI)
 
         val token = resolveToken(request)
         if (token != null) {
@@ -50,6 +48,26 @@ class UserTokenFilter(
         } else {
             logger.info("No Bearer token found in Authorization header")
             null
+        }
+    }
+
+    private fun isPathExempted(request: jakarta.servlet.http.HttpServletRequest): Boolean {
+        val requestURI = request.requestURI
+        val requestMethod = request.method
+        val pathWithMethod = "$requestURI:$requestMethod"
+
+        logger.info("Request: $pathWithMethod")
+
+        // 完全一致のパスの場合
+        if (pathWithMethod in noBearerTokenPathSet) {
+            return true
+        }
+
+        // ワイルドカードを含むパスの場合
+        return noBearerTokenPathSet.any { exemptedPath ->
+            val (exemptedUri, exemptedMethod) = exemptedPath.split(":")
+            val pathPattern = exemptedUri.replace("*", ".*") // ワイルドカードを正規表現に変換
+            pathWithMethod.matches(Regex("$pathPattern:$exemptedMethod"))
         }
     }
 }
