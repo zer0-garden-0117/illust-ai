@@ -42,10 +42,12 @@ export const useImageGrid = (
   });
 
   useEffect(() => {
-    setHeaders({
-      Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-    });
+    if (userToken != null) {
+        setHeaders({
+          Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+          "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+        });
+      }
   }, [userToken]);
 
   const fetchImagesWithTags = async (page: number) => {
@@ -91,7 +93,7 @@ export const useImageGrid = (
     } else {
       fetchImagesWithFreewords(currentPage);
     }
-  }, [currentPage, isAuthenticated, userToken]);
+  }, [currentPage, isAuthenticated]);
 
   useEffect(() => {
     console.log("userToken updated:", userToken);  // userTokenの更新を確認
@@ -109,6 +111,7 @@ export const useImageGrid = (
   // works データが変更されたときの処理
   useEffect(() => {
     console.log("worksData:", worksData);
+    console.log("headers:", headers)
     if (worksData) {
       if (isAuthenticated && userToken != null) {
         const workIds = worksData.works.map(work => work.workId).filter((id): id is number => id !== undefined);
@@ -118,7 +121,7 @@ export const useImageGrid = (
         setActivitiesData({})
       }
     }
-  }, [worksData]);
+  }, [worksData, headers]);
 
   // activityDataが変更されたときの処理
   useEffect(() => {
