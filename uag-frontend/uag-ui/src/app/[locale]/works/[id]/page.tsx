@@ -7,7 +7,6 @@ export default function PostPage({ params }: { params: { id: number } }) {
 
   return (
     <div>
-      <Text>{params.id}</Text>
       <Post workId={params.id} />
     </div>
   );

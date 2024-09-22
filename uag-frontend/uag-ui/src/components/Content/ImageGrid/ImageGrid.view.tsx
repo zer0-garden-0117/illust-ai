@@ -131,7 +131,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       };
 
       const handleImageClick = () => {
-        router.push(`/posts/${imageData.workId}`);  // クリック時に posts/{workId} に遷移
+        router.push(`/works/${imageData.workId}`);  // クリック時に posts/{workId} に遷移
       };
 
       return (
