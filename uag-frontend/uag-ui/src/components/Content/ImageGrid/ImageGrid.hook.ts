@@ -11,6 +11,8 @@ import { useUsersActivitySearch, UsersActivitySearchResult } from "@/apis/openap
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
 import { useAccessToken } from "@/apis/auth/useAccessToken";
 import { UsersLikedGetHeader, UsersLikedGetQuery, useUsersLikedGet } from "@/apis/openapi/users/useUsersLikedGet";
+import { UsersRatedGetHeader, UsersRatedGetQuery, useUsersRatedGet } from "@/apis/openapi/users/useUsersRatedGet";
+import { useRouter } from "next/navigation";
 
 type UseImageGridProps = {
   title: string;
@@ -22,8 +24,11 @@ type UseImageGridProps = {
 export const useImageGrid = (
   { title, isViewCount, type, words }: UseImageGridProps
 ): React.ComponentPropsWithoutRef<typeof ImageGridView> => {
+  const router = useRouter();  // useRouter フックを使ってルーターを取得
+  const searchParams = new URLSearchParams(window.location.search);
+  const initialPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
+  const [currentPage, setCurrentPage] = useState<number>(initialPage);
   const [imageData, setImageData] = useState<ImageData[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(1);
   const [loading, setLoading] = useState(true); // ローディング状態
@@ -32,6 +37,7 @@ export const useImageGrid = (
   const { trigger: triggerSearchWithTags, data: dataByTags } = useWorksSearchByTags();
   const { trigger: triggerSearch, data: dataByFreewords } = useWorksSearch();
   const { trigger: triggerSearchWithLiked, data: dataByLiked } = useUsersLikedGet();
+  const { trigger: triggerSearchWithRated, data: dataByRated } = useUsersRatedGet();
   const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
   const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
@@ -100,6 +106,22 @@ export const useImageGrid = (
     }
   };
 
+  const fetchImagesWithRated = async (page: number) => {
+    setLoading(true);  // ローディング開始
+    const headers: UsersRatedGetHeader = {
+      Authorization: `Bearer ${userToken}` as `Bearer ${string}`
+    }
+    const query: UsersRatedGetQuery = {
+      offset: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage
+    }
+    try {
+      await triggerSearchWithRated({ headers, query });
+    } catch (err) {
+      console.error("Failed to fetch images:", err);
+    }
+  };
+
   // ページ変更時にデータをリセットし、データを再取得
   useEffect(() => {
     console.log("xxxxxxxxxxxxxx")
@@ -112,6 +134,8 @@ export const useImageGrid = (
       fetchImagesWithFreewords(currentPage);
     } else if (type == "liked") {
       fetchImagesWithLiked(currentPage);
+    } else if (type === "rated") {
+      fetchImagesWithRated(currentPage);
     }
   }, [currentPage]);
   // }, [currentPage, userToken]);
@@ -124,8 +148,10 @@ export const useImageGrid = (
       setWorksData(dataByFreewords);
     } else if (type == "liked" && dataByLiked) {
       setWorksData(dataByLiked)
+    } else if (type == "rated" && dataByRated) {
+      setWorksData(dataByRated)
     }
-  }, [dataByTags, dataByFreewords, dataByLiked, type]);
+  }, [dataByTags, dataByFreewords, dataByLiked, dataByRated, type]);
 
   // works データが変更されたときの処理
   useEffect(() => {
@@ -176,7 +202,15 @@ export const useImageGrid = (
   // ページ変更時にデータを更新する関数
   const onPageChange = (page: number) => {
     setCurrentPage(page);
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', page.toString());
+    router.push(`?${params.toString()}`);  // クエリパラメータを更新してページ遷移
   };
+
+  useEffect(() => {
+    const page = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
+    setCurrentPage(page);
+  }, [searchParams.get('page')]);
 
   const onRateChange = (workId: number, value: number) => {
     triggerRated({ headers, workId, rating: value });

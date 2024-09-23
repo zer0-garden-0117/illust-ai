@@ -27,7 +27,8 @@ export const Logo: React.FC<LogoProps> = () => {
     >
       <>
         <Text fw={700} size='xl'>
-          Angel Sandbox
+          {/* Angel Sandbox */}
+          U.A.Generation
         </Text>
       </>
     </Flex>

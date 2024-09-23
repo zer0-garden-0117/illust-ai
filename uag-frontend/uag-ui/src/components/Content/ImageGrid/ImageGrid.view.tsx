@@ -156,9 +156,9 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             <Text className={classes.title} mt={5}>
               {imageData.mainTitle}
             </Text>
-            <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
+            {/* <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
               {new Date(imageData.date).toISOString().split('T')[0]}
-            </Text>
+            </Text> */}
           </Group>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
             <Rating value={localRating} onChange={handleRateClick} />
@@ -183,6 +183,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   );
 
   const cards = imageData.map((data, index) => (
+    // <div style={{ maxWidth: '300px' }}>
     <MemoizedCard
       key={data.workId}
       imageData={data}
@@ -190,6 +191,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       onRateChange={onRateChange}
       onLikeChange={onLikeChange}
     />
+    // </div>
   ));
 
   return (
@@ -214,7 +216,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
         ></Fieldset>
       )}
 
-      <SimpleGrid cols={{ base: 2, sm: 3, lg: 3 }} spacing={{ base: 20 }}>
+      <SimpleGrid cols={{ base: 2, sm: 3, xl: 4 }} spacing={{ base: 20 }}>
         {cards}
       </SimpleGrid>
       {!loading && allPlaceholdersVisible && totalPages > 1 && (

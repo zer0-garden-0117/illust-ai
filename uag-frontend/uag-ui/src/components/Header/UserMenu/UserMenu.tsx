@@ -23,6 +23,10 @@ export const UserMenu: React.FC = () => {
     router.push("/liked");
   };
 
+  const onClickRated = () => {
+    router.push("/rated");
+  };
+
   const handleLoginClick = () => {
     setLoginModalOpen(true);
   };
@@ -84,12 +88,13 @@ export const UserMenu: React.FC = () => {
                 leftSection={<FaRegHeart className={classes.icon} />}
                 onClick={onClickLiked}
               >
-                いいね一覧
+                お気に入りリスト
               </Menu.Item>
               <Menu.Item
                 leftSection={<FaRegStar className={classes.icon} />}
+                onClick={onClickRated}
               >
-                評価一覧
+                レビューリスト
               </Menu.Item>
               <Menu.Item
                 leftSection={<MdLogout className={classes.icon} />}

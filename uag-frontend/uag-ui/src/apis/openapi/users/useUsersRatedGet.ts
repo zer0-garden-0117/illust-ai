@@ -3,19 +3,28 @@ import client from "../apiClient";
 import type { UserTokenHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/uag-v1";
 import type { SWRConfiguration, SWRResponse } from 'swr';
+import useSWRMutation, { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type UsersRatedGetResult = operations["getUsersRated"]["responses"]["200"]["content"]["application/json"];
 export type UsersRatedGetHeader = UserTokenHeader;
 export type UsersRatedGetQuery = operations["getUsersRated"]["parameters"]["query"];
 
-export const useUsersRatedGet = (
-  headers: UsersRatedGetHeader,
+export type UsersRatedGetArgs = {
+  headers?: UsersRatedGetHeader;
   query: UsersRatedGetQuery,
-  options?: SWRConfiguration<UsersRatedGetResult, Error>
-): SWRResponse<UsersRatedGetResult, Error> => {
-  return useSWR<UsersRatedGetResult, Error>(
+};
+
+export const useUsersRatedGet = (
+  options?: SWRMutationConfiguration<
+    UsersRatedGetResult,
+    Error,
+    string,
+    UsersRatedGetArgs
+  >
+): SWRMutationResponse<UsersRatedGetResult, Error, string, UsersRatedGetArgs> => {
+  return useSWRMutation<UsersRatedGetResult, Error, string, UsersRatedGetArgs>(
     `/users/rated`,
-    async (): Promise<UsersRatedGetResult> => {
+    async (_, { arg: { headers, query } }): Promise<UsersRatedGetResult> => {
       const { data, error } = await client.GET(
         `/users/rated`,
         {
