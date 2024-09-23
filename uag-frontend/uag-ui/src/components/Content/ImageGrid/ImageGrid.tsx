@@ -3,14 +3,14 @@ import { useImageGrid } from './ImageGrid.hook';
 import { ImageGridView } from './ImageGrid.view';
 
 type ImageGridProps = {
+  type: string;
   words: string[];
-  isTag: boolean;
 };
 
 export const ImageGrid: React.FC<ImageGridProps> = (
-  { words, isTag }
+  { type, words }
 ): JSX.Element => {
-  const viewProps = useImageGrid({ words, isTag });
+  const viewProps = useImageGrid({ type, words });
   return <ImageGridView {...viewProps} />;
 };
 

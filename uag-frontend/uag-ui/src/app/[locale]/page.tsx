@@ -27,7 +27,7 @@ const TopPage: React.FC = () => {
         </div>
       }
     >
-      <ImageGrid words={[]} isTag={false} />
+      <ImageGrid words={[]} type={"free"} />
     </Fieldset>
   );
 };

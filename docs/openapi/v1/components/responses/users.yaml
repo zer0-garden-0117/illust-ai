@@ -32,9 +32,7 @@ UsersLikedResponse:
   content:
     application/json:
       schema:
-        type: array
-        items:
-          $ref: "../schemas/users.yaml#/ApiLiked"
+        $ref: "../schemas/works.yaml#/ApiWorksWithSearchResult"
 
 UsersLikedByWorkIdResponse:
   description: |-
@@ -72,9 +70,7 @@ UsersRatedResponse:
   content:
     application/json:
       schema:
-        type: array
-        items:
-          $ref: "../schemas/users.yaml#/ApiRated"
+        $ref: "../schemas/works.yaml#/ApiWorksWithSearchResult"
 
 UsersRatedByWorkIdResponse:
   description: |-

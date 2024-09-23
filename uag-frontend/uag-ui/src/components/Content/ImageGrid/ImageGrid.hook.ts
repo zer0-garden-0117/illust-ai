@@ -10,14 +10,15 @@ import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegiste
 import { useUsersActivitySearch, UsersActivitySearchResult } from "@/apis/openapi/users/useUsersActivitySearch";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
 import { useAccessToken } from "@/apis/auth/useAccessToken";
+import { UsersLikedGetHeader, UsersLikedGetQuery, useUsersLikedGet } from "@/apis/openapi/users/useUsersLikedGet";
 
 type UseImageGridProps = {
+  type: string;
   words: string[];
-  isTag: boolean;
 };
 
 export const useImageGrid = (
-  { words, isTag }: UseImageGridProps
+  { type, words }: UseImageGridProps
 ): React.ComponentPropsWithoutRef<typeof ImageGridView> => {
   const [imageData, setImageData] = useState<ImageData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,13 +28,13 @@ export const useImageGrid = (
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
   const { trigger: triggerSearchWithTags, data: dataByTags } = useWorksSearchByTags();
   const { trigger: triggerSearch, data: dataByFreewords } = useWorksSearch();
+  const { trigger: triggerSearchWithLiked, data: dataByLiked } = useUsersLikedGet();
   const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
   const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
   const { trigger: triggerDeliked } = useUsersLikedDelete();
   const { isAuthenticated } = useAccessToken();
   const { userToken } = useUserToken();
-
   const itemsPerPage = 12;
 
   const [headers, setHeaders] = useState({
@@ -80,31 +81,48 @@ export const useImageGrid = (
     }
   };
 
+  const fetchImagesWithLiked = async (page: number) => {
+    setLoading(true);  // ローディング開始
+    const headers: UsersLikedGetHeader = {
+      Authorization: `Bearer ${userToken}` as `Bearer ${string}`
+    }
+    const query: UsersLikedGetQuery = {
+      offset: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage
+    }
+    try {
+      await triggerSearchWithLiked({ headers, query });
+    } catch (err) {
+      console.error("Failed to fetch images:", err);
+    }
+  };
+
   // ページ変更時にデータをリセットし、データを再取得
   useEffect(() => {
     console.log("xxxxxxxxxxxxxx")
-    console.log(userToken)
-    console.log(isAuthenticated)
+    console.log("userToken:", userToken)
+    console.log("currentPage:", currentPage)
     setImageData([]);  // データをリセット
-    if (isTag) {
+    if (type == "tag") {
       fetchImagesWithTags(currentPage);
-    } else {
+    } else if (type == "free") {
       fetchImagesWithFreewords(currentPage);
+    } else if (type == "liked") {
+      fetchImagesWithLiked(currentPage);
     }
-  }, [currentPage, isAuthenticated]);
-
-  useEffect(() => {
-    console.log("userToken updated:", userToken);  // userTokenの更新を確認
-  }, [userToken]);
+  }, [currentPage]);
+  // }, [currentPage, userToken]);
 
   // dataが変更された時の処理
   useEffect(() => {
-    if (isTag && dataByTags) {
+    if (type == "tag" && dataByTags) {
       setWorksData(dataByTags);
-    } else if (!isTag && dataByFreewords) {
+    } else if (type == "free" && dataByFreewords) {
       setWorksData(dataByFreewords);
+    } else if (type == "liked" && dataByLiked) {
+      setWorksData(dataByLiked)
     }
-  }, [dataByTags, dataByFreewords, isTag]);
+  }, [dataByTags, dataByFreewords, dataByLiked, type]);
 
   // works データが変更されたときの処理
   useEffect(() => {

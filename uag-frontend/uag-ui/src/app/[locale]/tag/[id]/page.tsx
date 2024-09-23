@@ -8,7 +8,7 @@ const TagPage: React.FC<{ params: { id: string } }> = (
 
   return (
     <>
-      <ImageGrid words={[decodedId]} isTag={true} />
+      <ImageGrid words={[decodedId]} type={"type"} />
     </>
   )
 };

@@ -8,7 +8,7 @@ const GenrePage: React.FC<{ params: { id: string } }> = (
 
   return (
     <>
-      <ImageGrid words={[decodedId]} isTag={false} />
+      <ImageGrid words={[decodedId]} type={"free"} />
     </>
   )
 };

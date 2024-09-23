@@ -1,5 +1,6 @@
 package com.uag.zer0.service.user
 
+import com.uag.zer0.dto.RatedWithSearchResult
 import com.uag.zer0.entity.user.Rated
 import com.uag.zer0.repository.user.RatedRepository
 import org.springframework.stereotype.Service
@@ -15,11 +16,17 @@ class RatedService(
         userId: String,
         offset: Int,
         limit: Int
-    ): List<Rated> {
-        val liked = ratedRepository.findByUserId(userId)
+    ): RatedWithSearchResult {
+        val rated = ratedRepository.findByUserId(userId)
 
-        // offsetで指定した件数分スキップし、limit分だけ返す
-        return liked.drop(offset).take(limit)
+        // offsetで指定した件数分スキップしlimit分だけ取得
+        val filteredRated = rated.drop(offset).take(limit)
+        val count = rated.size
+
+        return RatedWithSearchResult(
+            rated = filteredRated,
+            totalCount = count
+        )
     }
 
     fun findByUserIdsAndWorkIds(

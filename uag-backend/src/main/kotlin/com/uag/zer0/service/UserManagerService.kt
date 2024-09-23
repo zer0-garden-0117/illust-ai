@@ -1,9 +1,12 @@
 package com.uag.zer0.service
 
 import com.uag.zer0.dto.UsersActivity
+import com.uag.zer0.dto.WorksWithSearchResult
 import com.uag.zer0.entity.user.Liked
 import com.uag.zer0.entity.user.Rated
 import com.uag.zer0.entity.user.Viewed
+import com.uag.zer0.entity.work.Work
+import com.uag.zer0.repository.work.WorkRepository
 import com.uag.zer0.service.user.LikedService
 import com.uag.zer0.service.user.RatedService
 import com.uag.zer0.service.user.ViewedService
@@ -14,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 class UserManagerService(
     private val likedService: LikedService,
     private val retedService: RatedService,
-    private val viewedService: ViewedService
+    private val viewedService: ViewedService,
+    private val workRepository: WorkRepository,
 ) {
 
     @Transactional
@@ -28,8 +32,24 @@ class UserManagerService(
     }
 
     @Transactional
-    fun getUsersLiked(userId: String, offset: Int, limit: Int): List<Liked> {
-        return likedService.findByUserIdWithOffset(userId, offset, limit)
+    fun getUsersLiked(
+        userId: String,
+        offset: Int,
+        limit: Int
+    ): WorksWithSearchResult {
+        val likedWithSearchResult =
+            likedService.findByUserIdWithOffset(userId, offset, limit)
+
+        val works = mutableListOf<Work>()
+        likedWithSearchResult.liked.forEach { liked ->
+            val work = workRepository.findByWorkId(liked.workId)
+            works.add(work)
+        }
+
+        return WorksWithSearchResult(
+            works = works,
+            totalCount = likedWithSearchResult.totalCount
+        )
     }
 
     @Transactional
@@ -43,8 +63,24 @@ class UserManagerService(
     }
 
     @Transactional
-    fun getUsersRated(userId: String, offset: Int, limit: Int): List<Rated> {
-        return retedService.findByUserIdWithOffset(userId, offset, limit)
+    fun getUsersRated(
+        userId: String,
+        offset: Int,
+        limit: Int
+    ): WorksWithSearchResult {
+        val ratedWithSearchResult =
+            retedService.findByUserIdWithOffset(userId, offset, limit)
+
+        val works = mutableListOf<Work>()
+        ratedWithSearchResult.rated.forEach { rated ->
+            val work = workRepository.findByWorkId(rated.workId)
+            works.add(work)
+        }
+
+        return WorksWithSearchResult(
+            works = works,
+            totalCount = ratedWithSearchResult.totalCount
+        )
     }
 
     @Transactional

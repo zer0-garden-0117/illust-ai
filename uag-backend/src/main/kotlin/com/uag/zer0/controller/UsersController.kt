@@ -6,6 +6,7 @@ import com.uag.zer0.entity.user.User
 import com.uag.zer0.generated.endpoint.UsersApi
 import com.uag.zer0.generated.model.*
 import com.uag.zer0.mapper.UserMapper
+import com.uag.zer0.mapper.WorkMapper
 import com.uag.zer0.service.TokenService
 import com.uag.zer0.service.UserManagerService
 import com.uag.zer0.service.user.UserService
@@ -22,7 +23,8 @@ class UsersController(
     private val tokenService: TokenService,
     private val userService: UserService,
     private val userManagerService: UserManagerService,
-    private val userMapper: UserMapper
+    private val userMapper: UserMapper,
+    private val workMapper: WorkMapper
 ) : UsersApi {
 
     private fun getUserId(): String? {
@@ -121,30 +123,44 @@ class UsersController(
     override fun getUsersLiked(
         offset: Int,
         limit: Int
-    ): ResponseEntity<List<ApiLiked>> {
+    ): ResponseEntity<ApiWorksWithSearchResult> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val likedList = userManagerService.getUsersLiked(userId, offset, limit)
-        val apiLiked = mutableListOf<ApiLiked>()
-        likedList.forEach { liked ->
-            apiLiked.add(userMapper.toApiLiked(liked))
+        val likedResult =
+            userManagerService.getUsersLiked(userId, offset, limit)
+
+        val apiWorks = mutableListOf<ApiWork>()
+        likedResult.works.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            apiWorks.add(apiWork)
         }
-        return ResponseEntity.ok(apiLiked)
+        val apiWorkWithDetails = ApiWorksWithSearchResult(
+            works = apiWorks,
+            totalCount = likedResult.totalCount ?: 0
+        )
+        return ResponseEntity.ok(apiWorkWithDetails)
     }
 
     // レーティング取得
     override fun getUsersRated(
         offset: Int,
         limit: Int
-    ): ResponseEntity<List<ApiRated>> {
+    ): ResponseEntity<ApiWorksWithSearchResult> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val ratedList = userManagerService.getUsersRated(userId, offset, limit)
-        val apiRated = mutableListOf<ApiRated>()
-        ratedList.forEach { rated ->
-            apiRated.add(userMapper.toApiRated(rated))
+        val ratedList =
+            userManagerService.getUsersRated(userId, offset, limit)
+
+        val apiWorks = mutableListOf<ApiWork>()
+        ratedList.works.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            apiWorks.add(apiWork)
         }
-        return ResponseEntity.ok(apiRated)
+        val apiWorkWithDetails = ApiWorksWithSearchResult(
+            works = apiWorks,
+            totalCount = ratedList.totalCount ?: 0
+        )
+        return ResponseEntity.ok(apiWorkWithDetails)
     }
 
     // 閲覧済取得

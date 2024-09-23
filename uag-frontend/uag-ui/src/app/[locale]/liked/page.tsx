@@ -1,16 +1,16 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
 
-const CreatorPage: React.FC<{ params: { id: string } }> = (
+const TagPage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
   const decodedId = decodeURIComponent(params.id);
 
   return (
     <>
-      <ImageGrid words={[decodedId]} type={"free"} />
+      <ImageGrid words={[]} type={"liked"} />
     </>
   )
 };
 
-export default CreatorPage;
+export default TagPage;

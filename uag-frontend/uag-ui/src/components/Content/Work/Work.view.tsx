@@ -153,7 +153,7 @@ export const WorkView = memo(function WorkViewComponent({
                 variant="light"
                 color='gray'
                 size="xs"
-                radius="xs"
+                radius="xl"
                 leftSection={<GoDownload size={14} />}
               >
                 Download

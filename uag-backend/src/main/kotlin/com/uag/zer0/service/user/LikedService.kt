@@ -1,5 +1,6 @@
 package com.uag.zer0.service.user
 
+import com.uag.zer0.dto.LikedWithSearchResult
 import com.uag.zer0.entity.user.Liked
 import com.uag.zer0.repository.user.LikedRepository
 import org.springframework.stereotype.Service
@@ -15,11 +16,17 @@ class LikedService(
         userId: String,
         offset: Int,
         limit: Int
-    ): List<Liked> {
+    ): LikedWithSearchResult {
         val liked = likedRepository.findByUserId(userId)
 
-        // offsetで指定した件数分スキップし、limit分だけ返す
-        return liked.drop(offset).take(limit)
+        // offsetで指定した件数分スキップしlimit分だけ取得
+        val filteredLiked = liked.drop(offset).take(limit)
+        val count = liked.size
+
+        return LikedWithSearchResult(
+            liked = filteredLiked,
+            totalCount = count
+        )
     }
 
     fun findByUserIdsAndWorkIds(

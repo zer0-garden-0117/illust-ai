@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAccessToken } from '../../../apis/auth/useAccessToken';
 import { Avatar, Group, Menu, Space } from '@mantine/core';
 import { MdLogin, MdLogout } from "react-icons/md";
@@ -15,6 +16,12 @@ export const UserMenu: React.FC = () => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
+
+  const router = useRouter();
+
+  const onClickLiked = () => {
+    router.push("/liked");
+  };
 
   const handleLoginClick = () => {
     setLoginModalOpen(true);
@@ -75,6 +82,7 @@ export const UserMenu: React.FC = () => {
             <>
               <Menu.Item
                 leftSection={<FaRegHeart className={classes.icon} />}
+                onClick={onClickLiked}
               >
                 いいね一覧
               </Menu.Item>
