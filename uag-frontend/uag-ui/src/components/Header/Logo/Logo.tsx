@@ -15,7 +15,6 @@ export const Logo: React.FC<LogoProps> = () => {
 
   const onClickLogo = () => {
     router.push("/");
-    // window.location.href = "/";
   };
 
   return (

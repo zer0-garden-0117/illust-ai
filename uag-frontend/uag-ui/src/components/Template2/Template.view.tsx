@@ -13,9 +13,8 @@ export const TemplateView = memo(function TemplateViewComponent({
   const t = useTranslations("");
 
   return (
-    <Fieldset legend={t('')}>
+    <Fieldset legend={""}>
       <Button onClick={onOpen}>
-        {t('')}
       </Button>
     </Fieldset>
   );

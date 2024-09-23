@@ -6,42 +6,64 @@ import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import { WorkGetByIdResult } from '@/apis/openapi/works/useWorksGetById';
 import { RiHeartAdd2Line } from "react-icons/ri";
+import { useRouter } from 'next/navigation'; // useRouterをインポート
 
-type PostViewProps = {
+type WorkViewProps = {
   workData?: WorkGetByIdResult;
   loading: boolean;
   onOpen: () => void;
 };
 
-export const PostView = memo(function PostViewComponent({
+export const WorkView = memo(function WorkViewComponent({
   workData,
   loading,
   onOpen
-}: PostViewProps): JSX.Element {
+}: WorkViewProps): JSX.Element {
   const t = useTranslations("");
-  const [localIsLiked, setLocalIsLiked] = useState();
-  const [localRating, setLocalRating] = useState();
+  const [localIsLiked, setLocalIsLiked] = useState(false);
+  const [localRating, setLocalRating] = useState<number | undefined>();
+  const router = useRouter(); // useRouterフックを使用
 
   if (loading) {
     return <></>;
   }
 
   const handleRateClick = (rating: number) => {
+    setLocalRating(rating);
   };
-
 
   const handleLikeClick = () => {
+    setLocalIsLiked(!localIsLiked);
   };
 
+  const handleTagClick = (tag: string | undefined) => {
+    if (tag) {
+      router.push(`/tag/${encodeURIComponent(tag)}`);
+    }
+  };
+
+  const handleCreatorClick = (creator: string | undefined) => {
+    if (creator) {
+      router.push(`/creator/${encodeURIComponent(creator)}`);
+    }
+  };
+
+  const handleCharacterClick = (character: string | undefined) => {
+    if (character) {
+      router.push(`/character/${encodeURIComponent(character)}`);
+    }
+  };
+
+  const handleGenreClick = (genre: string | undefined) => {
+    if (genre) {
+      router.push(`/genre/${encodeURIComponent(genre)}`);
+    }
+  };
 
   return (
-    <Fieldset legend={t('')}>
+    <Fieldset legend={""}>
       <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
         <Grid.Col span={{ base: 12, sm: 6, lg: 6 }} style={{ display: 'flex', justifyContent: 'center' }}>
-          <Space h="md" />
-          <Space h="md" />
-          <Space h="md" />
-          <Space h="md" />
           {workData?.apiWork?.titleImgUrl ? (
             <MantineImage
               src={workData.apiWork.titleImgUrl}
@@ -62,25 +84,33 @@ export const PostView = memo(function PostViewComponent({
             <Text>タグ:</Text>
             <Pill.Group gap={3}>
               {workData?.apiTags?.map((tagItem, index) => (
-                <Pill key={index}>{tagItem.tag}</Pill>
+                <Pill key={index} onClick={() => handleTagClick(tagItem.tag)} style={{ cursor: 'pointer' }}>
+                  {tagItem.tag}
+                </Pill>
               ))}
             </Pill.Group>
           </Group>
           <Group style={{ marginTop: '5px' }}>
             <Text>作者:</Text>
             {workData?.apiCreators?.map((creatorItem, index) => (
-              <Pill key={index}>{creatorItem.creator}</Pill>
+              <Pill key={index} onClick={() => handleCreatorClick(creatorItem.creator)} style={{ cursor: 'pointer' }}>
+                {creatorItem.creator}
+              </Pill>
             ))}
           </Group>
           <Group style={{ marginTop: '5px' }}>
             <Text>キャラクター名:</Text>
             {workData?.apiCharacters?.map((characterItem, index) => (
-              <Pill key={index}>{characterItem.character}</Pill>
+              <Pill key={index} onClick={() => handleCharacterClick(characterItem.character)} style={{ cursor: 'pointer' }}>
+                {characterItem.character}
+              </Pill>
             ))}
           </Group>
           <Group style={{ marginTop: '5px' }}>
             <Text>タイプ:</Text>
-            <Pill>{workData?.apiWork?.genre}</Pill>
+            <Pill onClick={() => handleGenreClick(workData?.apiWork?.genre)} style={{ cursor: 'pointer' }}>
+              {workData?.apiWork?.genre}
+            </Pill>
           </Group>
           <Group style={{ marginTop: '5px' }}>
             <Text>更新日:</Text>

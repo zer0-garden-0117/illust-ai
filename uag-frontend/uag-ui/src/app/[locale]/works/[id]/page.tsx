@@ -1,13 +1,15 @@
 'use client';
 
-import Post from '@/components/Content/Post/Post';
-import { Text } from '@mantine/core';
+import Work from '@/components/Content/Work/Work';
 
-export default function PostPage({ params }: { params: { id: number } }) {
-
+const PostPage: React.FC<{ params: { id: number } }> = (
+  { params }
+) => {
   return (
     <div>
-      <Post workId={params.id} />
+      <Work workId={params.id} />
     </div>
   );
-}
+};
+
+export default PostPage;

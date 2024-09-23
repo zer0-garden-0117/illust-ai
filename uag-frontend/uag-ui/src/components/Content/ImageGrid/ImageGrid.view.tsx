@@ -24,7 +24,7 @@ type ImageGridViewProps = {
   onPageChange: (page: number) => void;
   onRateChange: (workId: number, value: number) => void;
   onLikeChange: (workId: number) => void;
-  isAuthenticated: boolean;  // 認証状態を追加
+  isAuthenticated: boolean;
 };
 
 export const ImageGridView = memo(function ImageGridViewComponent({

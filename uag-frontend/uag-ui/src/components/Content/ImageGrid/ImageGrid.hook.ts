@@ -43,11 +43,11 @@ export const useImageGrid = (
 
   useEffect(() => {
     if (userToken != null) {
-        setHeaders({
-          Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-          "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-        });
-      }
+      setHeaders({
+        Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+        "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+      });
+    }
   }, [userToken]);
 
   const fetchImagesWithTags = async (page: number) => {
@@ -62,8 +62,6 @@ export const useImageGrid = (
       await triggerSearchWithTags({ body });
     } catch (err) {
       console.error("Failed to fetch images:", err);
-    } finally {
-      setLoading(false);  // ローディング終了
     }
   };
 

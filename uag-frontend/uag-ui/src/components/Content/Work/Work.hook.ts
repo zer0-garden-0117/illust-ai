@@ -1,14 +1,14 @@
 import { useWorksGetById, WorkGetByIdResult } from "@/apis/openapi/works/useWorksGetById";
-import { PostView } from "./Post.view";
+import { WorkView } from "./Work.view";
 import { useEffect, useState } from "react";
 
-type UsePostProps = {
+type UseWorkProps = {
   workId: number;
 };
 
-export const usePost = (
-  { workId }: UsePostProps
-): React.ComponentPropsWithoutRef<typeof PostView> => {
+export const useWork = (
+  { workId }: UseWorkProps
+): React.ComponentPropsWithoutRef<typeof WorkView> => {
   const { data, error, isValidating } = useWorksGetById(workId);
   const [workData, setWorkData] = useState<WorkGetByIdResult>();
   useEffect(() => {

@@ -1,7 +1,7 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
 
-const FreeIconPage: React.FC = () => {
+const IllustrationPage: React.FC = () => {
   return (
     <>
       <ImageGrid words={["illustration"]} isTag={false} />
@@ -9,4 +9,4 @@ const FreeIconPage: React.FC = () => {
   )
 };
 
-export default FreeIconPage;
+export default IllustrationPage;

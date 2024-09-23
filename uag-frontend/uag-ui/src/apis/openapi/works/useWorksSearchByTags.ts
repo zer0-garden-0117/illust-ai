@@ -19,10 +19,10 @@ export const useWorksSearchByTags = (
   >
 ): SWRMutationResponse<WorkSearchByTagResult, Error, string, WorkSearchByTagArgs> => {
   return useSWRMutation<WorkSearchByTagResult, Error, string, WorkSearchByTagArgs>(
-    `/works/serachByTags`,
+    `/works/searchByTags`,
     async (_, { arg: { body } }): Promise<WorkSearchByTagResult> => {
       const { data, error } = await client.POST(
-        `/works/serachByTags`,
+        `/works/searchByTags`,
         {
           body: body,
         }

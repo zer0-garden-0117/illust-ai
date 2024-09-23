@@ -1,0 +1,7 @@
+/* Google Fontsのインポート */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&family=Noto+Sans+JP:wght@400&display=swap');
+
+/* 全体にフォントを適用 */
+body {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+}
