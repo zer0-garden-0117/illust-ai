@@ -6,6 +6,7 @@ import { BurgerMenu } from './BurgerMenu/BurgerMenu';
 import { QuickSearch } from './QuickSearch/QuickSearch';
 import classes from './Header.module.css';
 import { Butterfly_Kids } from 'next/font/google';
+import { useRouter } from 'next/navigation';
 
 export interface HeaderProps {
   burger?: React.ReactNode;
@@ -16,6 +17,22 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = (
   { burger, onSearchClick, isSearching }
 ) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const onSearchButtonClick = () => {
+    if (searchQuery.trim()) {
+      router.push(`/search/${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      router.push(`/search/${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+
   return (
     <>
       <header className={classes.header}>
@@ -38,10 +55,12 @@ export const Header: React.FC<HeaderProps> = (
             <TextInput
               placeholder="Search..."
               className={classes.searchBox}
-              // onBlur={() => onSearchClick()}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.currentTarget.value)}
               size="xs"
               styles={{ input: { fontSize: '16px' } }}
               radius="xl"
+              onKeyDown={onKeyDown}
             />
             <Button
               className={classes.searchButton}
@@ -49,6 +68,7 @@ export const Header: React.FC<HeaderProps> = (
               color="orange"
               variant="light"
               radius="xl"
+              onClick={onSearchButtonClick}
             >
               検索
             </Button>
