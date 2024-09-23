@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group, Fieldset } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import { useRouter } from 'next/navigation'; // useRouter をインポート
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line } from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
+import { BsSuitDiamondFill } from "react-icons/bs";
 
 export type ImageData = {
   workId: number;
@@ -17,9 +18,12 @@ export type ImageData = {
 };
 
 type ImageGridViewProps = {
+  title: string;
+  isViewCount: boolean;
   imageData: ImageData[];
   currentPage: number;
   totalPages: number;
+  totalCount: number;
   loading: boolean;
   onPageChange: (page: number) => void;
   onRateChange: (workId: number, value: number) => void;
@@ -28,9 +32,12 @@ type ImageGridViewProps = {
 };
 
 export const ImageGridView = memo(function ImageGridViewComponent({
+  title,
+  isViewCount,
   imageData,
   currentPage,
   totalPages,
+  totalCount,
   loading,
   onPageChange,
   onLikeChange,
@@ -187,6 +194,26 @@ export const ImageGridView = memo(function ImageGridViewComponent({
 
   return (
     <>
+      {!loading && (
+        <Fieldset
+          variant="unstyled"
+          legend={
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <BsSuitDiamondFill
+                style={{
+                  marginRight: '8px',
+                  position: 'relative',
+                  top: '-2px',
+                }}
+              />
+              <Text fw={200} size='md'>
+                {title} {isViewCount && `(${totalCount}件)`}
+              </Text>
+            </div>
+          }
+        ></Fieldset>
+      )}
+
       <SimpleGrid cols={{ base: 2, sm: 3, lg: 3 }} spacing={{ base: 20 }}>
         {cards}
       </SimpleGrid>

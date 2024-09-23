@@ -8,7 +8,12 @@ const CharacterPage: React.FC<{ params: { id: string } }> = (
 
   return (
     <>
-      <ImageGrid words={[decodedId]} type={"free"} />
+      <ImageGrid
+        title={decodedId}
+        isViewCount={true}
+        words={[decodedId]}
+        type={"free"}
+      />
     </>
   )
 };

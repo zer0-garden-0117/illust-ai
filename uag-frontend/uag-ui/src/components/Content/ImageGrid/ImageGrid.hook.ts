@@ -13,16 +13,19 @@ import { useAccessToken } from "@/apis/auth/useAccessToken";
 import { UsersLikedGetHeader, UsersLikedGetQuery, useUsersLikedGet } from "@/apis/openapi/users/useUsersLikedGet";
 
 type UseImageGridProps = {
+  title: string;
+  isViewCount: boolean;
   type: string;
   words: string[];
 };
 
 export const useImageGrid = (
-  { type, words }: UseImageGridProps
+  { title, isViewCount, type, words }: UseImageGridProps
 ): React.ComponentPropsWithoutRef<typeof ImageGridView> => {
   const [imageData, setImageData] = useState<ImageData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(1);
   const [loading, setLoading] = useState(true); // ローディング状態
   const [worksData, setWorksData] = useState<WorkSearchResult>();
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
@@ -165,6 +168,7 @@ export const useImageGrid = (
 
       // totalCountから総ページ数を計算して更新
       setTotalPages(Math.ceil(worksData.totalCount / itemsPerPage));
+      setTotalCount(worksData.totalCount)
       setLoading(false);
     }
   }, [worksData, activitiesData]);
@@ -190,9 +194,12 @@ export const useImageGrid = (
   };
 
   return {
+    title,
+    isViewCount,
     imageData,
     currentPage,
     totalPages,
+    totalCount,
     loading,
     onPageChange,
     onLikeChange,

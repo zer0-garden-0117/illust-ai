@@ -10,25 +10,12 @@ const TopPage: React.FC = () => {
   const t = useTranslations("toppage");
 
   return (
-    <Fieldset
-      variant="unstyled"
-      legend={
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <BsSuitDiamondFill
-            style={{
-              marginRight: '8px',
-              position: 'relative',
-              top: '-2px',
-            }}
-          />
-          <Text fw={200} size='md'>
-            新着
-          </Text>
-        </div>
-      }
-    >
-      <ImageGrid words={[]} type={"free"} />
-    </Fieldset>
+    <ImageGrid
+      title={"新着"}
+      isViewCount={false}
+      words={[]}
+      type={"free"}
+    />
   );
 };
 
