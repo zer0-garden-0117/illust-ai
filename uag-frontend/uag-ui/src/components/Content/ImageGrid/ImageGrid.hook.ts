@@ -34,7 +34,7 @@ export const useImageGrid = (
   const { isAuthenticated } = useAccessToken();
   const { userToken } = useUserToken();
 
-  const itemsPerPage = 12;  // 1ページあたりに表示するアイテム数
+  const itemsPerPage = 12;
 
   const [headers, setHeaders] = useState({
     Authorization: `Bearer ${userToken}` as `Bearer ${string}`,

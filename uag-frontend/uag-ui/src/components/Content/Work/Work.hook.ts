@@ -1,6 +1,14 @@
 import { useWorksGetById, WorkGetByIdResult } from "@/apis/openapi/works/useWorksGetById";
-import { WorkView } from "./Work.view";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
+import { UsersActivitySearchResult, useUsersActivitySearch } from "@/apis/openapi/users/useUsersActivitySearch";
+import { getCsrfTokenFromCookies } from "@/utils/authCookies";
+import { useUserToken } from "@/apis/auth/useUserToken";
+import { useAccessToken } from "@/apis/auth/useAccessToken";
+import { ActionIcon } from "@mantine/core";
+import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
+import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
+import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
 
 type UseWorkProps = {
   workId: number;
@@ -8,17 +16,38 @@ type UseWorkProps = {
 
 export const useWork = (
   { workId }: UseWorkProps
-): React.ComponentPropsWithoutRef<typeof WorkView> => {
+) => {
+  const router = useRouter();
   const { data, error, isValidating } = useWorksGetById(workId);
   const [workData, setWorkData] = useState<WorkGetByIdResult>();
-  useEffect(() => {
-    console.log("useEffect (data):", data);
-    if (data) {
-      console.log("データ取得が完了しました:", data);
-    }
-  }, [data]);
+  const [localIsLiked, setLocalIsLiked] = useState(false);
+  const [localRating, setLocalRating] = useState<number | undefined>();
+  const [loading, setLoading] = useState(true); // ローディング状態
+  const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
+  const { trigger: triggerRated } = useUsersRatedRegister();
+  const { trigger: triggerLiked } = useUsersLikedRegister();
+  const { trigger: triggerDeliked } = useUsersLikedDelete();
+  const { isAuthenticated } = useAccessToken();
+  const { userToken } = useUserToken();
+  const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
+
+  const [headers, setHeaders] = useState({
+    Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+    "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+  });
 
   useEffect(() => {
+    if (userToken != null) {
+      setHeaders({
+        Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+        "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+      });
+    }
+  }, [userToken]);
+
+  // workの取得
+  useEffect(() => {
+    console.log(isAuthenticated)
     if (data) {
       setWorkData(data);
     }
@@ -27,13 +56,111 @@ export const useWork = (
     }
   }, [data, error, isValidating]);
 
-  const handleOpen = async () => {
-    console.log("handleOpen called");
+  // works データが変更されたときの処理
+  useEffect(() => {
+    console.log("worksData:", workData);
+    console.log("headers:", headers)
+    if (workData) {
+      console.log("workData", workData);
+      console.log("isAuthenticated:", isAuthenticated)
+      console.log("userToken:", userToken)
+      if (isAuthenticated && userToken != null) {
+        console.log("isAuthenticated is true and userToken isnot null");
+        if (workData.apiWork?.workId) {
+          console.log("workData.apiWork?.workId isnot null");
+          const workIds = [workData.apiWork?.workId]
+          // アクティビティ情報を取得
+          triggerActivity({ headers, body: { workIds } });
+        }
+      } else {
+        console.log("setActivitiesData:0");
+        setActivitiesData({})
+      }
+    }
+  }, [workData, headers, isAuthenticated]);
+
+  // activityDataの取得
+  useEffect(() => {
+    if (workData && activityData) {
+      setActivitiesData(activityData)
+    }
+  }, [activityData]);
+
+  // activityData が変更されたときの処理
+  useEffect(() => {
+    if (workData && activitiesData) {
+      console.log("workData", workData)
+      console.log("activitiesData", activitiesData)
+      if (activitiesData.apiLikeds != undefined &&
+        activitiesData.apiLikeds.length > 0 &&
+        activitiesData.apiLikeds[0].workId != undefined) {
+        console.log("setLocalIsLiked true")
+        setLocalIsLiked(true)
+      } else {
+        console.log("setLocalIsLiked false")
+        setLocalIsLiked(false)
+      }
+      if (activitiesData?.apiRateds != undefined &&
+        activitiesData.apiRateds.length > 0 &&
+        activitiesData.apiRateds[0].rating != undefined) {
+        setLocalRating(activitiesData.apiRateds[0].rating)
+      } else {
+        setLocalRating(0)
+      }
+      setLoading(false);
+    }
+  }, [workData, activitiesData]);
+
+  const onRateClick = (rating: number) => {
+    triggerRated({ headers, workId, rating: rating });
+    setLocalRating(rating);
+  };
+
+  const onLikeClick = () => {
+    if (localIsLiked) {
+      triggerDeliked({ headers, workId });
+      setLocalIsLiked(false);
+    } else {
+      triggerLiked({ headers, workId });
+      setLocalIsLiked(true);
+    }
+  };
+
+  const onTagClick = (tag: string | undefined) => {
+    if (tag) {
+      router.push(`/tag/${encodeURIComponent(tag)}`);
+    }
+  };
+
+  const onCreatorClick = (creator: string | undefined) => {
+    if (creator) {
+      router.push(`/creator/${encodeURIComponent(creator)}`);
+    }
+  };
+
+  const onCharacterClick = (character: string | undefined) => {
+    if (character) {
+      router.push(`/character/${encodeURIComponent(character)}`);
+    }
+  };
+
+  const onGenreClick = (genre: string | undefined) => {
+    if (genre) {
+      router.push(`/genre/${encodeURIComponent(genre)}`);
+    }
   };
 
   return {
     workData,
     loading: isValidating,
-    onOpen: handleOpen,
+    localIsLiked,
+    localRating,
+    onRateClick,
+    onLikeClick,
+    onTagClick,
+    onCreatorClick,
+    onCharacterClick,
+    onGenreClick,
+    isAuthenticated
   };
 };
