@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group, Fieldset, ScrollArea, Button, Box } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group, Fieldset, ScrollArea, Button, Box, Transition } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import { useRouter } from 'next/navigation'; // useRouter をインポート
@@ -73,7 +73,10 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             }
           });
         },
-        { threshold: 0.1 }
+        {
+          threshold: 0.0,
+          rootMargin: '0px'
+        }
       );
 
       if (imgRef.current) {
@@ -89,13 +92,27 @@ export const ImageGridView = memo(function ImageGridViewComponent({
 
     return (
       <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
-        {isVisible && (
-          <MantineImage
-            src={src}
-            alt={alt}
-            style={{ width: '100%', height: '100%' }}
-          />
-        )}
+        {/* MantineのTransitionコンポーネントを使用 */}
+        <Transition
+          mounted={isVisible}
+          transition="fade-up" // Mantineが提供するトランジションの種類を指定
+          duration={300}   // アニメーションの長さ（ミリ秒）
+          timingFunction="ease"
+          enterDelay={index * 10}  // 左端から順に表示するために、インデックスに応じてディレイを設定
+        >
+          {(styles) => (
+            <MantineImage
+              src={src}
+              alt={alt}
+              style={{
+                width: '100%',
+                height: '100%',
+                ...styles, // トランジションのスタイルをここに適用
+              }}
+            />
+          )}
+        </Transition>
+
         {!isVisible && (
           <div
             style={{
@@ -216,7 +233,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
               </div>
             }
           ></Fieldset>
-          <ScrollArea h={50} type="always" offsetScrollbars classNames={classes}>
+          {/* <ScrollArea h={50} type="always" offsetScrollbars classNames={classes}>
             <Box w={600}>
               {pills.map((pill, index) => (
                 <Button key={index} variant="outline" radius="xl">
@@ -224,7 +241,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
                 </Button>
               ))}
             </Box>
-          </ScrollArea>
+          </ScrollArea> */}
         </>
       )}
 

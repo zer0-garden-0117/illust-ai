@@ -107,6 +107,8 @@ export const useWork = (
       } else {
         setLocalRating(0)
       }
+      console.log("workData:", workData)
+      console.log("activitiesData:", activitiesData)
       setLoading(false);
     }
   }, [workData, activitiesData]);
@@ -152,7 +154,7 @@ export const useWork = (
 
   return {
     workData,
-    loading: isValidating,
+    loading: loading,
     localIsLiked,
     localRating,
     onRateClick,
