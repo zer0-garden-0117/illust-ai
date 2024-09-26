@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group, Fieldset, ScrollArea, Button, Box, Transition } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group, Fieldset, Transition } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
-import { useRouter } from 'next/navigation'; // useRouter をインポート
+import { useRouter } from 'next/navigation';
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line } from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
@@ -45,9 +45,8 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   isAuthenticated
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
-  const router = useRouter();  // useRouter フックを使用
-  const [loginModalOpen, setLoginModalOpen] = useState(false);  // ログインモーダルの開閉状態を管理
-
+  const router = useRouter();
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [allPlaceholdersVisible, setAllPlaceholdersVisible] = useState(false);
   const visibleStatus = useRef(Array(imageData.length).fill(false));
 
@@ -65,7 +64,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && !isVisible) {
               setIsVisible(true);
               visibleStatus.current[index] = true;
               checkAllPlaceholdersVisible();
@@ -88,17 +87,17 @@ export const ImageGridView = memo(function ImageGridViewComponent({
           observer.unobserve(imgRef.current);
         }
       };
-    }, []);
+    }, [isVisible]);
 
     return (
       <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
         {/* MantineのTransitionコンポーネントを使用 */}
         <Transition
-          mounted={isVisible}
-          transition="fade-up" // Mantineが提供するトランジションの種類を指定
-          duration={300}   // アニメーションの長さ（ミリ秒）
+          mounted={isVisible && !loginModalOpen} // モーダルが開いている場合はトランジションをスキップ
+          transition="fade-up"
+          duration={300}
           timingFunction="ease"
-          enterDelay={index * 10}  // 左端から順に表示するために、インデックスに応じてディレイを設定
+          enterDelay={index * 10}
         >
           {(styles) => (
             <MantineImage
@@ -107,7 +106,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
               style={{
                 width: '100%',
                 height: '100%',
-                ...styles, // トランジションのスタイルをここに適用
+                ...styles,
               }}
             />
           )}
@@ -123,6 +122,22 @@ export const ImageGridView = memo(function ImageGridViewComponent({
               top: 0,
               left: 0,
               zIndex: 1,
+            }}
+          />
+        )}
+
+        {/* モーダルが開いている場合はトランジションを無効化して画像を表示 */}
+        {loginModalOpen && (
+          <MantineImage
+            src={src}
+            alt={alt}
+            style={{
+              width: '100%',
+              height: '100%',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: 2, // トランジションを無視して表示
             }}
           />
         )}
@@ -155,7 +170,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       };
 
       const handleImageClick = () => {
-        router.push(`/works/${imageData.workId}`);  // クリック時に posts/{workId} に遷移
+        router.push(`/works/${imageData.workId}`);
       };
 
       return (
@@ -173,9 +188,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             <Text className={classes.title} mt={5}>
               {imageData.mainTitle}
             </Text>
-            {/* <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
-              {new Date(imageData.date).toISOString().split('T')[0]}
-            </Text> */}
           </Group>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
             <Rating value={localRating} onChange={handleRateClick} />
@@ -200,7 +212,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   );
 
   const cards = imageData.map((data, index) => (
-    // <div style={{ maxWidth: '300px' }}>
     <MemoizedCard
       key={data.workId}
       imageData={data}
@@ -208,9 +219,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       onRateChange={onRateChange}
       onLikeChange={onLikeChange}
     />
-    // </div>
   ));
-  const pills = ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7'];
 
   return (
     <>
@@ -233,15 +242,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
               </div>
             }
           ></Fieldset>
-          {/* <ScrollArea h={50} type="always" offsetScrollbars classNames={classes}>
-            <Box w={600}>
-              {pills.map((pill, index) => (
-                <Button key={index} variant="outline" radius="xl">
-                  {pill}
-                </Button>
-              ))}
-            </Box>
-          </ScrollArea> */}
         </>
       )}
 
