@@ -10,6 +10,10 @@ import com.uag.zer0.repository.work.WorkRepository
 import com.uag.zer0.service.user.LikedService
 import com.uag.zer0.service.user.RatedService
 import com.uag.zer0.service.user.ViewedService
+import com.uag.zer0.service.work.CharacterService
+import com.uag.zer0.service.work.CreatorService
+import com.uag.zer0.service.work.TagService
+import com.uag.zer0.service.work.WorkService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -19,6 +23,10 @@ class UserManagerService(
     private val retedService: RatedService,
     private val viewedService: ViewedService,
     private val workRepository: WorkRepository,
+    private val workService: WorkService,
+    private val tagService: TagService,
+    private val characterService: CharacterService,
+    private val creatorService: CreatorService
 ) {
 
     @Transactional
@@ -49,6 +57,44 @@ class UserManagerService(
         return WorksWithSearchResult(
             works = works,
             totalCount = likedWithSearchResult.totalCount
+        )
+    }
+
+    @Transactional
+    fun getUsersLikedWithFilter(
+        userId: String,
+        offset: Int,
+        limit: Int,
+        words: List<String>
+    ): WorksWithSearchResult {
+        val likeds = likedService.findByUserId(userId)
+        val likedWorkIds = likeds.map { it.workId }.toSet()
+
+        // 各検索サービスから結果を取得
+        val searchResults = listOf(
+            tagService.findByTagsAsWork(words),
+            workService.findByGenre(words),
+            workService.findByFormat(words),
+            characterService.findByCharactersAsWork(words),
+            creatorService.findByCreatorsAsWork(words)
+        )
+
+        val workIds = searchResults
+            .flatMap { results ->
+                results.filter { likedWorkIds.contains(it.workId) }.map { it }
+            }
+            .distinct()
+
+        // updatedAt順にソート（降順）
+        val sortedWorkIds =
+            workIds.sortedByDescending { it.updatedAt }
+
+        // offsetで指定した件数分スキップし、limit分だけ返す
+        val filteredWorkIds = sortedWorkIds.drop(offset).take(limit)
+
+        return WorksWithSearchResult(
+            works = filteredWorkIds,
+            totalCount = sortedWorkIds.size
         )
     }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, TextInput, Textarea, Grid, Space, Fieldset } from '@mantine/core';
+import { Button, TextInput, Textarea, Grid, Space, Fieldset, Select } from '@mantine/core';
 import { FileInput } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from 'next-intl';
@@ -64,6 +64,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
             label={t('Subtitle')}
             value={workData.subTitle}
             onChange={(e) => handleInputChange('subTitle', e.currentTarget.value)}
+            disabled={true}
           />
           <Space h="md" />
         </Grid.Col>
@@ -72,6 +73,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
             label={t('Description')}
             value={workData.description}
             onChange={(e) => handleInputChange('description', e.currentTarget.value)}
+            disabled={true}
           />
           <Space h="md" />
         </Grid.Col>
@@ -80,22 +82,32 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
             label={t('Format')}
             value={workData.format}
             onChange={(e) => handleInputChange('format', e.currentTarget.value)}
+            disabled={true}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-          <TextInput
+          <Select
             label={t('Genre')}
             value={workData.genre}
-            onChange={(e) => handleInputChange('genre', e.currentTarget.value)}
+            onChange={(value) => handleInputChange('genre', value)}
+            data={[
+              { value: 'icon', label: 'アイコン' },
+              { value: 'illustration', label: 'イラスト' }
+            ]}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-          <TextInput
+          <Select
             label={t('Character')}
             value={workData.character}
-            onChange={(e) => handleInputChange('character', e.currentTarget.value)}
+            onChange={(value) => handleInputChange('character', value)}
+            data={[
+              { value: '零崎真白', label: '零崎真白' },
+              { value: '零崎くるみ', label: '零崎くるみ' },
+              { value: '零崎鈴', label: '零崎鈴' }
+            ]}
           />
           <Space h="md" />
         </Grid.Col>

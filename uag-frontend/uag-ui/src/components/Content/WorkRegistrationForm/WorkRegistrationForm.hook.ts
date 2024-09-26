@@ -15,7 +15,9 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
     "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
   };
 
-
+  const utf8ToBase64 = (str: string) => {
+    return btoa(unescape(encodeURIComponent(str)));
+  };
 
   const handleSubmit = async (workData: WorkData) => {
 
@@ -59,7 +61,7 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
       images: [
         workData.titleImage
       ],
-      worksDetailsBase64: btoa(JSON.stringify(workDetails))
+      worksDetailsBase64: utf8ToBase64(JSON.stringify(workDetails))
     };
 
     try {

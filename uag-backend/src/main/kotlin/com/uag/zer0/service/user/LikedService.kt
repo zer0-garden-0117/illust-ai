@@ -3,12 +3,16 @@ package com.uag.zer0.service.user
 import com.uag.zer0.dto.LikedWithSearchResult
 import com.uag.zer0.entity.user.Liked
 import com.uag.zer0.repository.user.LikedRepository
+import com.uag.zer0.repository.work.WorkRepository
+import com.uag.zer0.service.work.TagService
 import org.springframework.stereotype.Service
 import java.time.Instant
 
 @Service
 class LikedService(
     private val likedRepository: LikedRepository,
+    private val tagService: TagService,
+    private val workRepository: WorkRepository
 ) {
     // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
     // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
@@ -27,6 +31,10 @@ class LikedService(
             liked = filteredLiked,
             totalCount = count
         )
+    }
+
+    fun findByUserId(userId: String): List<Liked> {
+        return likedRepository.findByUserId(userId)
     }
 
     fun findByUserIdsAndWorkIds(

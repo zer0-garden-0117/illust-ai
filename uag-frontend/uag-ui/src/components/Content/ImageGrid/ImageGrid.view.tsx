@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group, Fieldset } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Image as MantineImage, Pagination, ActionIcon, Rating, Group, Fieldset, ScrollArea, Button, Box } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import { useRouter } from 'next/navigation'; // useRouter をインポート
@@ -193,27 +193,39 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     />
     // </div>
   ));
+  const pills = ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7'];
 
   return (
     <>
       {!loading && (
-        <Fieldset
-          variant="unstyled"
-          legend={
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <BsSuitDiamondFill
-                style={{
-                  marginRight: '8px',
-                  position: 'relative',
-                  top: '-2px',
-                }}
-              />
-              <Text fw={200} size='md'>
-                {title} {isViewCount && `(${totalCount}件)`}
-              </Text>
-            </div>
-          }
-        ></Fieldset>
+        <>
+          <Fieldset
+            variant="unstyled"
+            legend={
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <BsSuitDiamondFill
+                  style={{
+                    marginRight: '8px',
+                    position: 'relative',
+                    top: '-2px',
+                  }}
+                />
+                <Text fw={200} size='md'>
+                  {title} {isViewCount && `(${totalCount}件)`}
+                </Text>
+              </div>
+            }
+          ></Fieldset>
+          <ScrollArea h={50} type="always" offsetScrollbars classNames={classes}>
+            <Box w={600}>
+              {pills.map((pill, index) => (
+                <Button key={index} variant="outline" radius="xl">
+                  {pill}
+                </Button>
+              ))}
+            </Box>
+          </ScrollArea>
+        </>
       )}
 
       <SimpleGrid cols={{ base: 2, sm: 3, xl: 4 }} spacing={{ base: 20 }}>

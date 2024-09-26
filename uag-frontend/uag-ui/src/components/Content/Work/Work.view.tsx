@@ -64,6 +64,15 @@ export const WorkView = memo(function WorkViewComponent({
     setOpened(true);
   };
 
+  const formatDate = (isoString: string | undefined) => {
+    if (!isoString) return ''; // 日付がない場合の処理
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 月は0から始まるため+1
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  };
+
   if (loading) {
     return <></>;
   }
@@ -77,7 +86,8 @@ export const WorkView = memo(function WorkViewComponent({
               <MantineImage
                 src={workData.apiWork.titleImgUrl}
                 style={{ maxWidth: '350px' }}
-                onContextMenu={(e) => e.preventDefault()}
+                onClick={() => setOpened(true)}
+              // onContextMenu={(e) => e.preventDefault()}
               />
             ) : (
               <p>No image available</p>
@@ -117,14 +127,14 @@ export const WorkView = memo(function WorkViewComponent({
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>タイプ:</Text>
+              <Text>ジャンル:</Text>
               <Pill onClick={() => onGenreClick(workData?.apiWork?.genre)} style={{ cursor: 'pointer' }}>
                 {workData?.apiWork?.genre}
               </Pill>
             </Group>
             <Group style={{ marginTop: '5px' }}>
               <Text>更新日:</Text>
-              <Text>{workData?.apiWork?.updatedAt}</Text>
+              <Text>{formatDate(workData?.apiWork?.updatedAt)}</Text>
             </Group>
             <Group style={{ marginTop: '5px' }}>
               <Text>レビュー:</Text>
@@ -170,11 +180,29 @@ export const WorkView = memo(function WorkViewComponent({
         opened={opened}
         onClose={() => setOpened(false)}
         size="auto"
-        padding="xl"
+        padding={0}
+        // padding=""
         centered
         withCloseButton={false}
+        transitionProps={{ transition: 'fade-down', duration: 600, timingFunction: 'linear' }}
+        styles={{
+          content: {
+            maxHeight: '100vh',  // モーダル自体が画面の高さを超えないようにする
+            overflow: 'hidden'   // 縦スクロールを防ぐ
+          }
+        }}
       >
-        <MantineImage src={workData?.apiWork?.titleImgUrl} alt="Preview Image" />
+        <MantineImage
+          src={workData?.apiWork?.titleImgUrl}
+          alt="Preview Image"
+          style={{
+            maxWidth: '100vw',                 // ウィンドウの幅に合わせる
+            maxHeight: 'calc(100vh - 20px)',   // ウィンドウの高さに合わせつつ余白を考慮
+            objectFit: 'contain',              // アスペクト比を保ちながら全体を表示
+            display: 'block',                  // 画像の表示をブロック要素にして余計な余白を削除
+            margin: 0                          // 余白を削除
+          }}
+        />
       </Modal>
     </>
   );
