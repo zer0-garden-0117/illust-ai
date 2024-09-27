@@ -58,37 +58,62 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   };
 
   const CustomImage = ({ src, alt, index }: { src: string; alt: string; index: number }) => {
-    const [isLoaded, setIsLoaded] = useState(false); // 画像の読み込み状態
-    const imgRef = useRef<HTMLImageElement | null>(null);
+    const [isVisible, setIsVisible] = useState(false); // IntersectionObserverの可視状態
+    const [isLoaded, setIsLoaded] = useState(false);   // onLoadのロード状態
+    const imgRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setIsVisible(true); // ビューポート内に入ったら可視状態にする
+            }
+          });
+        },
+        { threshold: 0.1 } // 要素の10%が表示されたらトリガー
+      );
+
+      if (imgRef.current) {
+        observer.observe(imgRef.current);
+      }
+
+      return () => {
+        if (imgRef.current) {
+          observer.unobserve(imgRef.current);
+        }
+      };
+    }, []);
 
     const handleImageLoad = () => {
-      setIsLoaded(true); // 画像が読み込まれたらトランジションを開始
+      setIsLoaded(true); // 画像がロードされたらロード状態にする
     };
 
+    const shouldDisplay = isVisible && isLoaded; // 両方の条件が満たされたら表示
+
     return (
-      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-        {/* onLoadイベントが発火したらフェードインと"fade-up"トランジションを開始 */}
+      <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
+        {/* 両方の条件が満たされたらフェードインと"fade-up"トランジションを開始 */}
         <img
-          ref={imgRef}
           src={src}
           alt={alt}
-          onLoad={handleImageLoad}
+          onLoad={handleImageLoad} // 画像のロード完了を確認
           style={{
             width: '100%',
             height: '100%',
-            opacity: isLoaded ? 1 : 0, // フェードイン
-            transform: isLoaded ? 'translateY(0)' : 'translateY(20px)', // 下から上に移動
-            transition: `opacity 0.3s ease-in-out ${index * 0.1}s, transform 0.3s ease-in-out ${index * 0.1}s`, // opacityとtransformのトランジション、遅延をindexに基づいて設定
+            opacity: shouldDisplay ? 1 : 0, // フェードイン
+            transform: shouldDisplay ? 'translateY(0)' : 'translateY(20px)', // 下から上に移動
+            transition: `opacity 0.3s ease-in-out ${index * 0.1}s, transform 0.3s ease-in-out ${index * 0.1}s`, // 遅延をindexに基づいて設定
           }}
         />
 
-        {/* プレースホルダー：読み込み中の間のスペース確保用 */}
-        {!isLoaded && (
+        {/* プレースホルダー：表示するまでの間のスペース確保用 */}
+        {!shouldDisplay && (
           <div
             style={{
               width: '100%',
               height: '100%',
-              backgroundColor: 'gray', // 必要に応じて背景色を設定
+              backgroundColor: 'transparent',
               position: 'absolute',
               top: 0,
               left: 0,
