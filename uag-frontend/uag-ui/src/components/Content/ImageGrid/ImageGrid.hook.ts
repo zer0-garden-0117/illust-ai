@@ -185,6 +185,7 @@ export const useImageGrid = (
           workId: work.workId || 0,
           mainTitle: work.mainTitle || "No Title",
           titleImage: work.titleImgUrl || "",
+          thumbnailImage: work.thumbnailImgUrl || "",
           date: work.createdAt || "",
           isLiked: activitiesData?.apiLikeds?.some(a => a.workId === work.workId),  // liked の確認
           rating: activity?.rating || 0,  // レーティングの確認

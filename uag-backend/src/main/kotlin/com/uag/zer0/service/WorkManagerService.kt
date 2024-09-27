@@ -197,19 +197,40 @@ class WorkManagerService(
         // countersからcounterValueを取得
         val nextWorkId = countersRepository.findByCounterName("workId") + 1
         val nowDate = Instant.now()
-
-        // workをregister
         work.workId = nextWorkId
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
-        val titleImageAvif =
+
+        val titleImageAvif = try {
             convertService.convertToAvifWithStream(titleImage)
+        } catch (e: Exception) {
+            logger.error("Failed to convert title image to AVIF: ${e.message}")
+            throw RuntimeException("Error during title image conversion")
+        }
+
         val titleTimestamp = LocalDateTime.now().format(formatter)
         val titleImageUrl = uploadService.uploadToS3(
             titleImageAvif,
             "titleImage_$titleTimestamp.avif"
         )
+
+        // 2. サムネイル生成とアップロード
+        val thumbnailImageAvif = try {
+            convertService.generateThumbnailWithCrop(titleImage)
+        } catch (e: Exception) {
+            logger.error("Failed to generate thumbnail: ${e.message}")
+            throw RuntimeException("Error during thumbnail generation")
+        }
+
+        val thumbnailImageUrl = uploadService.uploadToS3(
+            thumbnailImageAvif,
+            "thumbnailImage_$titleTimestamp.avif"
+        )
+
+        logger.info("thumbnailImageAvif: $thumbnailImageAvif thumbnailImageUrl: $thumbnailImageUrl")
+
         // ToDo: ImgURLはCloudFrontのURLに変換してDBに格納する
         work.titleImgUrl = titleImageUrl
+        work.thumbnailImgUrl = thumbnailImageUrl
         work.updatedAt = nowDate
         work.createdAt = nowDate
         workService.registerWork(work)
@@ -244,7 +265,7 @@ class WorkManagerService(
         // imgをregister
         val imageUrls = images.map { image ->
             val avifImage =
-                convertService.convertToAvifWithStream(image)
+                convertService.generateThumbnailWithCrop(image)
             val imageTimestamp = LocalDateTime.now().format(formatter)
             val imageName = "workImage_$imageTimestamp.avif"
             uploadService.uploadToS3(avifImage, imageName)

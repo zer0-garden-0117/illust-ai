@@ -10,8 +10,43 @@ import java.nio.file.Path
 @Service
 class ConvertService {
     fun convertToAvifWithStream(image: MultipartFile): ByteArray {
+        var process: Process? = null
         try {
             val nodeScriptPath = "node-scripts/sharpConvertWithStream.js"
+            val processBuilder = ProcessBuilder("node", nodeScriptPath)
+            process = processBuilder.start()
+
+            // 画像データを標準入力に送信
+            process.outputStream.use { outputStream ->
+                outputStream.write(image.bytes)
+                outputStream.flush()
+            }
+
+            // AVIF画像を標準出力から受信
+            val avifImage = process.inputStream.readBytes()
+
+            // プロセスが正常に終了したか確認
+            val exitCode = process.waitFor()
+            if (exitCode != 0) {
+                throw RuntimeException("Node.js script failed with exit code $exitCode")
+            }
+
+            return avifImage
+        } catch (e: IOException) {
+            throw RuntimeException(
+                "Failed to convert image to AVIF: ${e.message}",
+                e
+            )
+        } finally {
+            // プロセスがまだ動いている場合は終了させる
+            process?.destroy()
+        }
+    }
+
+    fun generateThumbnailWithCrop(image: MultipartFile): ByteArray {
+        try {
+            val nodeScriptPath =
+                "node-scripts/sharpGenerateThumbnailWithCrop.js"
             val processBuilder = ProcessBuilder("node", nodeScriptPath)
             val process = processBuilder.start()
 

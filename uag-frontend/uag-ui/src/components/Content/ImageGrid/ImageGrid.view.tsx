@@ -12,6 +12,7 @@ export type ImageData = {
   workId: number;
   mainTitle: string;
   titleImage: string;
+  thumbnailImage: string;
   date: string;
   isLiked: boolean | undefined;
   rating: number | undefined;
@@ -57,87 +58,40 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   };
 
   const CustomImage = ({ src, alt, index }: { src: string; alt: string; index: number }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const imgRef = useRef<HTMLDivElement>(null);
+    const [isLoaded, setIsLoaded] = useState(false); // 画像の読み込み状態
+    const imgRef = useRef<HTMLImageElement | null>(null);
 
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !isVisible) {
-              setIsVisible(true);
-              visibleStatus.current[index] = true;
-              checkAllPlaceholdersVisible();
-              observer.disconnect();
-            }
-          });
-        },
-        {
-          threshold: 0.0,
-          rootMargin: '0px'
-        }
-      );
-
-      if (imgRef.current) {
-        observer.observe(imgRef.current);
-      }
-
-      return () => {
-        if (imgRef.current) {
-          observer.unobserve(imgRef.current);
-        }
-      };
-    }, [isVisible]);
+    const handleImageLoad = () => {
+      setIsLoaded(true); // 画像が読み込まれたらトランジションを開始
+    };
 
     return (
-      <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
-        {/* MantineのTransitionコンポーネントを使用 */}
-        <Transition
-          mounted={isVisible && !loginModalOpen} // モーダルが開いている場合はトランジションをスキップ
-          transition="fade-up"
-          duration={300}
-          timingFunction="ease"
-          enterDelay={index * 10}
-        >
-          {(styles) => (
-            <MantineImage
-              src={src}
-              alt={alt}
-              style={{
-                width: '100%',
-                height: '100%',
-                ...styles,
-              }}
-            />
-          )}
-        </Transition>
+      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+        {/* onLoadイベントが発火したらフェードインと"fade-up"トランジションを開始 */}
+        <img
+          ref={imgRef}
+          src={src}
+          alt={alt}
+          onLoad={handleImageLoad}
+          style={{
+            width: '100%',
+            height: '100%',
+            opacity: isLoaded ? 1 : 0, // フェードイン
+            transform: isLoaded ? 'translateY(0)' : 'translateY(20px)', // 下から上に移動
+            transition: `opacity 0.3s ease-in-out ${index * 0.1}s, transform 0.3s ease-in-out ${index * 0.1}s`, // opacityとtransformのトランジション、遅延をindexに基づいて設定
+          }}
+        />
 
-        {!isVisible && (
+        {/* プレースホルダー：読み込み中の間のスペース確保用 */}
+        {!isLoaded && (
           <div
             style={{
               width: '100%',
               height: '100%',
-              backgroundColor: 'transparent',
+              backgroundColor: 'gray', // 必要に応じて背景色を設定
               position: 'absolute',
               top: 0,
               left: 0,
-              zIndex: 1,
-            }}
-          />
-        )}
-
-        {/* モーダルが開いている場合はトランジションを無効化して画像を表示 */}
-        {loginModalOpen && (
-          <MantineImage
-            src={src}
-            alt={alt}
-            style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              zIndex: 2, // トランジションを無視して表示
             }}
           />
         )}
@@ -178,7 +132,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
           <AspectRatio ratio={4 / 2}>
             <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
               <CustomImage
-                src={imageData.titleImage}
+                src={imageData.thumbnailImage}
                 alt={imageData.mainTitle || "Image without title"}
                 index={index}
               />

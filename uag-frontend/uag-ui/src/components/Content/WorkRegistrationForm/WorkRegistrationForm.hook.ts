@@ -38,6 +38,7 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
         downloads: 0,
         mainTitle: workData.mainTitle || '',
         titleImgUrl: '',
+        thumbnailImgUrl: '',
         likes: 0,
         updatedAt: new Date().toISOString(),
       },

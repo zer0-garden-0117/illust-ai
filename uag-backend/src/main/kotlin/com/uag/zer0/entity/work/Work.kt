@@ -32,6 +32,9 @@ data class Work(
     @get:DynamoDbAttribute("titleImgUrl")
     var titleImgUrl: String = "",
 
+    @get:DynamoDbAttribute("thumbnailImgUrl")
+    var thumbnailImgUrl: String = "",
+
     @get:DynamoDbAttribute("likes")
     var likes: Int = 0,
 
@@ -40,7 +43,7 @@ data class Work(
 
     @get:DynamoDbAttribute("createdAt")
     var createdAt: Instant = Instant.now(),
-    
+
     @get:DynamoDbSecondarySortKey(indexNames = ["GenreIndex", "FormatIndex"])
     var updatedAt: Instant = Instant.now()
 )
