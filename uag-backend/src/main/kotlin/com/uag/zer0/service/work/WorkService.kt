@@ -85,4 +85,11 @@ class WorkService(
 
         return sortedTags
     }
+
+    fun registerWork(work: Work): Work {
+        if (work.format.isEmpty()) {
+            work.format = "CG"
+        }
+        return workRepository.registerWork(work)
+    }
 }

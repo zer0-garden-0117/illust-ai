@@ -212,7 +212,7 @@ class WorkManagerService(
         work.titleImgUrl = titleImageUrl
         work.updatedAt = nowDate
         work.createdAt = nowDate
-        workRepository.registerWork(work)
+        workService.registerWork(work)
 
         // characterをregister
         if (characters != null) {
