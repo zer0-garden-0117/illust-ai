@@ -103,7 +103,7 @@ export const WorkView = memo(function WorkViewComponent({
                   console.log('Transition mounted state:', isImageVisible); // mounted状態をログに出力
                   return workData?.apiWork?.titleImgUrl ? (
                     <MantineImage
-                      src={workData.apiWork.titleImgUrl}
+                      src={isAuthenticated ? workData?.apiWork?.titleImgUrl : workData?.apiWork?.watermaskImgUrl}
                       style={{ maxWidth: '350px', ...styles }} // トランジションのスタイルを適用
                       onClick={() => setOpened(true)}
                     />
@@ -223,7 +223,7 @@ export const WorkView = memo(function WorkViewComponent({
         >
           {(styles) => (
             <MantineImage
-              src={workData?.apiWork?.titleImgUrl}
+              src={isAuthenticated ? workData?.apiWork?.titleImgUrl : workData?.apiWork?.watermaskImgUrl}
               alt="Preview Image"
               style={{
                 maxWidth: '100vw',

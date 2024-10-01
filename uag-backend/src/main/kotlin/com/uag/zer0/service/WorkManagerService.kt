@@ -201,7 +201,7 @@ class WorkManagerService(
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
 
         val titleImageAvif = try {
-            convertService.convertToAvifWithStream(titleImage)
+            convertService.toAvif(titleImage)
         } catch (e: Exception) {
             logger.error("Failed to convert title image to AVIF: ${e.message}")
             throw RuntimeException("Error during title image conversion")
@@ -215,7 +215,7 @@ class WorkManagerService(
 
         // 2. サムネイル生成とアップロード
         val thumbnailImageAvif = try {
-            convertService.generateThumbnailWithCrop(titleImage)
+            convertService.toThumbnail(titleImage)
         } catch (e: Exception) {
             logger.error("Failed to generate thumbnail: ${e.message}")
             throw RuntimeException("Error during thumbnail generation")
@@ -228,9 +228,25 @@ class WorkManagerService(
 
         logger.info("thumbnailImageAvif: $thumbnailImageAvif thumbnailImageUrl: $thumbnailImageUrl")
 
+        // 2. ウォーターマスク生成とアップロード
+        val watermaskImageAvif = try {
+            convertService.toWatermask(titleImage)
+        } catch (e: Exception) {
+            logger.error("Failed to generate watermask: ${e.message}")
+            throw RuntimeException("Error during watermask generation")
+        }
+
+        val watermaskImageUrl = uploadService.uploadToS3(
+            watermaskImageAvif,
+            "watermaskImage_$titleTimestamp.avif"
+        )
+
+        logger.info("thumbnailImageAvif: $watermaskImageUrl thumbnailImageUrl: $watermaskImageUrl")
+
         // ToDo: ImgURLはCloudFrontのURLに変換してDBに格納する
         work.titleImgUrl = titleImageUrl
         work.thumbnailImgUrl = thumbnailImageUrl
+        work.watermaskImgUrl = watermaskImageUrl
         work.updatedAt = nowDate
         work.createdAt = nowDate
         workService.registerWork(work)
@@ -265,7 +281,7 @@ class WorkManagerService(
         // imgをregister
         val imageUrls = images.map { image ->
             val avifImage =
-                convertService.generateThumbnailWithCrop(image)
+                convertService.toThumbnail(image)
             val imageTimestamp = LocalDateTime.now().format(formatter)
             val imageName = "workImage_$imageTimestamp.avif"
             uploadService.uploadToS3(avifImage, imageName)

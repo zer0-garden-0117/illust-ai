@@ -13,6 +13,7 @@ export type ImageData = {
   mainTitle: string;
   titleImage: string;
   thumbnailImage: string;
+  watermaskImage: string;
   date: string;
   isLiked: boolean | undefined;
   rating: number | undefined;

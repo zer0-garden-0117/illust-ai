@@ -22,7 +22,8 @@ process.stdin.on('end', async () => {
       .toBuffer();
 
     // watermask.pngを読み込み、input.pngのサイズにリサイズしてAVIFに変換（バッファに保持）
-    const watermaskBuffer = await fs.readFile('../common/watermask.png');
+//    const watermaskBuffer = await fs.readFile('../common/watermask.png');
+    const watermaskBuffer = await fs.readFile('node-scripts/service/convert/common/watermask.png');
     const watermaskSharp = sharp(watermaskBuffer);
     const watermaskAvifBuffer = await watermaskSharp
       .resize(inputMetadata.width, inputMetadata.height) // input.pngのサイズにリサイズ
