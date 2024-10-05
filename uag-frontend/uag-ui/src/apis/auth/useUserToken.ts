@@ -37,7 +37,7 @@ export const useUserToken = () => {
       setRole(role);
       setUserTokenToCookies(data.userToken);
     }
-  }, [data, error]);
+  }, [data, error, setError]);
 
-  return { isSetup, userToken, userId, role };
+  return { isSetup, userToken, userId, role, error };
 };

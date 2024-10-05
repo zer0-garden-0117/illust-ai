@@ -124,9 +124,6 @@ export const useImageGrid = (
 
   // ページ変更時にデータをリセットし、データを再取得
   useEffect(() => {
-    console.log("xxxxxxxxxxxxxx")
-    console.log("userToken:", userToken)
-    console.log("currentPage:", currentPage)
     setImageData([]);  // データをリセット
     if (type == "tag") {
       fetchImagesWithTags(currentPage);

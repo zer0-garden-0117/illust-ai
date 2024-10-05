@@ -48,6 +48,20 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       padding="md"
       transitionDuration={0}
       transitionTimingFunction="ease"
+      styles={(theme) => ({
+        main: {
+          maxWidth: '1200px', // コンテンツエリアの最大幅を設定
+          margin: '0 auto', // 両脇に自動で隙間を入れる
+          paddingLeft: theme.breakpoints.lg ? '20px' : '10px', // lg以上のときにパディングを調整
+          paddingRight: theme.breakpoints.lg ? '20px' : '10px',
+        },
+        header: {
+          maxWidth: '1200px', // ヘッダーの最大幅を設定
+          margin: '0 auto',   // 両脇に自動で隙間を入れる
+          paddingLeft: theme.breakpoints.lg ? '20px' : '10px', // lg以上のときにパディングを調整
+          paddingRight: theme.breakpoints.lg ? '20px' : '10px',
+        },
+      })}
     >
       {/* <AppShell.Navbar>
         <Navbar setOpened={setOpened} />

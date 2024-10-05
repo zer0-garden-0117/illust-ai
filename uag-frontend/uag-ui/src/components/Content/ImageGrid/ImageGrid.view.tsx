@@ -154,8 +154,10 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       };
 
       return (
-        <Card key={imageData.workId} p="md" radius="md" className={classes.card}>
-          <AspectRatio ratio={4 / 2}>
+        <Card
+          key={imageData.workId} p="md" radius="md" className={classes.card}
+        >
+          <AspectRatio ratio={1 / Math.sqrt(2)}>
             <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
               <CustomImage
                 src={imageData.thumbnailImage}
@@ -190,6 +192,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     },
     (prevProps, nextProps) => prevProps.imageData.rating === nextProps.imageData.rating && prevProps.imageData.isLiked === nextProps.imageData.isLiked
   );
+  MemoizedCard.displayName = 'ImageGridViewComponent';
 
   const cards = imageData.map((data, index) => (
     <MemoizedCard
@@ -225,10 +228,10 @@ export const ImageGridView = memo(function ImageGridViewComponent({
         </>
       )}
 
-      <SimpleGrid cols={{ base: 2, sm: 3, xl: 4 }} spacing={{ base: 20 }}>
+      <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
         {cards}
       </SimpleGrid>
-      {!loading && allPlaceholdersVisible && totalPages > 1 && (
+      {!loading && totalPages > 1 && (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Pagination
             value={currentPage}

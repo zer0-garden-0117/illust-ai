@@ -11,7 +11,7 @@ process.stdin.on('end', () => {
   const inputBuffer = Buffer.concat(chunks);
 
   sharp(inputBuffer)
-    .resize(400, 200)
+    .resize(400, 566)
     .toFormat('avif', { quality: 60 })
     .toBuffer()
     .then(avifBuffer => {
