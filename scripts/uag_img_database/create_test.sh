@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # DynamoDB Localのエンドポイント
-ENDPOINT_URL=http://localhost:10000
+# ENDPOINT_URL=http://localhost:10000
+ENDPOINT_URL=https://dynamodb.us-east-1.amazonaws.com
 
 # 初期カウンターの設定
 aws dynamodb put-item \
