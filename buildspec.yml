@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  pre_build:
+    commands:
+      - echo "Navigating to the backend directory..."
+      - cd uag-backend
+      - echo "Installing dependencies..."
+      - ./gradlew clean
+  build:
+    commands:
+      - echo "Building the backend..."
+      - ./gradlew build
+  post_build:
+    commands:
+      - echo "Build completed, preparing artifacts..."
+      - mkdir -p ../build-output
+      - cp build/libs/*.war ../build-output/
+
+artifacts:
+  files:
+    - build-output/**
+
+cache:
+  paths:
+    - /root/.gradle/caches/**
