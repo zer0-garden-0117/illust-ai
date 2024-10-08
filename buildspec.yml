@@ -19,10 +19,13 @@ phases:
       - echo "Build completed, preparing artifacts..."
       - mkdir -p ../build-output
       - cp build/libs/*.war ../build-output/
+      - cd ../build-output
+      - echo "Creating a zip file for deployment..."
+      - zip -r backend-artifact.zip .
 
 artifacts:
   files:
-    - build-output/**
+    - build-output/backend-artifact.zip
 
 cache:
   paths:
