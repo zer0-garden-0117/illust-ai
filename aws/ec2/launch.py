@@ -1,0 +1,1 @@
+ssh -i uag-test.pem ec2-user@98.80.194.175 "nohup java -jar zer0-0.0.1-SNAPSHOT.war --spring.profiles.active=test > app.log 2>&1 &"

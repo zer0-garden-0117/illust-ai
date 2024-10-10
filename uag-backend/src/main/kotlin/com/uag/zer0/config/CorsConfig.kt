@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableWebSecurity
-@Profile("prod", "dev")
+@Profile("prod", "dev", "test")
 class CorsConfig : WebMvcConfigurer {
 
     @Value("\${cors.origins}")

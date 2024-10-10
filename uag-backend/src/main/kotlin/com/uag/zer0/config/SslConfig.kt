@@ -16,7 +16,7 @@ import java.nio.file.StandardOpenOption
 import java.util.*
 
 @Configuration
-@Profile("prod", "dev")
+@Profile("prod", "dev", "test")
 @ComponentScan(basePackages = ["com.uag.zer0.config"])
 class SslConfig(
     private val secretsManagerClient: SecretsManagerClient,
