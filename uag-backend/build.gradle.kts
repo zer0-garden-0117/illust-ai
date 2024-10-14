@@ -136,6 +136,16 @@ tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
 }
 tasks.register<org.springframework.boot.gradle.tasks.run.BootRun>("bootRunDev") {
     doFirst {
+        exec {
+            workingDir = file("nginx")
+            commandLine("sh", "up.sh")
+        }
+
+        exec {
+            workingDir = file("db")
+            commandLine("sh", "up.sh")
+        }
+
         systemProperty("spring.profiles.active", "dev")
     }
     mainClass.set("com.uag.zer0.Application")
