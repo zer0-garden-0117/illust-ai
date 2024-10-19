@@ -19,6 +19,7 @@ phases:
       - echo "Build completed, preparing artifacts..."
       - mkdir -p ../build-output
       - cp build/libs/*.war ../build-output/
+      - cp ../aws/codedeploy/appspec.yml ../build-output/
       - cd ../build-output
       - echo "Creating a zip file for deployment..."
       - zip -r backend-artifact.zip .

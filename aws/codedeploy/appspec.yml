@@ -1,0 +1,23 @@
+version: 0.0
+os: linux
+files:
+  - source: /build-output/*.war
+    destination: /opt/zer0 # デプロイ先のディレクトリ
+
+hooks:
+  BeforeInstall:
+    - location: scripts/stop_application.sh
+      timeout: 60
+      runas: ec2-user
+  AfterInstall:
+    - location: scripts/start_application.sh
+      timeout: 60
+      runas: ec2-user
+  ApplicationStop:
+    - location: scripts/stop_application.sh
+      timeout: 60
+      runas: ec2-user
+  ValidateService:
+    - location: scripts/validate.sh
+      timeout: 30
+      runas: ec2-user
