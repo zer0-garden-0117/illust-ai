@@ -20,7 +20,7 @@ phases:
       - mkdir -p ../build-output
       - cp build/libs/*.war ../build-output/
       - cp ../aws/codedeploy/appspec.yml ../build-output/
-      - cp -r ../aws/codedeploy/scripts ../build-output/
+      - cp -r ../aws/codedeploy/scripts/*.sh ../build-output/
 
 artifacts:
   files:
