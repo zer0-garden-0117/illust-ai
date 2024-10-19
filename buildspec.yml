@@ -20,13 +20,10 @@ phases:
       - mkdir -p ../build-output
       - cp build/libs/*.war ../build-output/
       - cp ../aws/codedeploy/appspec.yml ../build-output/
-      - cd ../build-output
-      - echo "Creating a zip file for deployment..."
-      - zip -r backend-artifact.zip .
 
 artifacts:
   files:
-    - build-output/backend-artifact.zip
+    - build-output/**
 
 cache:
   paths:
