@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: zer0-0.0.1-SNAPSHOT.war
-    destination: /opt/zer0 # デプロイ先のディレクトリ
+    destination: /opt/zer0
 
 hooks:
   BeforeInstall:
