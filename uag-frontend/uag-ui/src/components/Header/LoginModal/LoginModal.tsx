@@ -168,7 +168,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               value={username}
               placeholder="メールアドレス"
               onChange={(event) => setUsername(event.currentTarget.value)}
-              style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+              style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' ,fontSize: '16px' }}
             />
             <Space h="xs" />
             <PasswordInput
@@ -180,7 +180,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 setPassword(event.currentTarget.value)
                 setLoginError(null);
               }}
-              style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+              style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' ,fontSize: '16px' }}
             />
             {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
 
@@ -218,7 +218,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             value={username}
             placeholder="メールアドレス"
             onChange={(event) => setUsername(event.currentTarget.value)}
-            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' ,fontSize: '16px' }}
           />
           <Button
             color="gray"
@@ -248,7 +248,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             value={confirmationCode}
             placeholder="確認コード"
             onChange={(event) => setConfirmationCode(event.currentTarget.value)}
-            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', fontSize: '16px' }}
           />
           <Space h="md" />
           <PasswordInput
@@ -260,7 +260,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               setNewPassword(event.currentTarget.value)
               setLoginError(null);
             }}
-            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' ,fontSize: '16px' }}
           />
           {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
           <Button
