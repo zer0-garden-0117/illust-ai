@@ -25,8 +25,8 @@ const AuthModal: React.FC<AuthModalProps> = (
     <Modal opened={isOpen} onClose={onClose} withCloseButton={false}>
       <Tabs value={activeTab} onChange={(tab) => setActiveTab(tab as 'login' | 'signup')}>
         <Tabs.List>
-          <Tabs.Tab value="login">ログイン</Tabs.Tab>
-          <Tabs.Tab value="signup">新規登録</Tabs.Tab>
+          <Tabs.Tab value="login" style={{ fontSize: '12px' }}>ログイン</Tabs.Tab>
+          <Tabs.Tab value="signup" style={{ fontSize: '12px' }}>新規登録</Tabs.Tab>
         </Tabs.List>
         <Space h="md" />
 
@@ -156,36 +156,13 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     <>
       {step === 'login' && (
         <>
-          <Text>他アカウントでログイン</Text>
-          <Button
-            color="gray"
-            variant="outline"
-            radius="xl"
-            leftSection={<FcGoogle size={14} />}
-            onClick={handleGoogleLogin}
-            style={{ marginTop: '10px', width: '80%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
-          >
-            Googleで続ける
-          </Button>
-          <Button
-            color="gray"
-            variant="outline"
-            radius="xl"
-            leftSection={<FaLine size={14} color='lightgreen' />}
-            onClick={handleLineLogin}
-            style={{ marginTop: '10px', width: '80%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
-          >
-            Lineで続ける
-          </Button>
-          <Space h="md" />
-          <Divider my="md" labelPosition="center" />
-          <Space h="md" />
-          <Text>メールアドレスでログイン</Text>
+          <Text size='xs'>メールアドレスでログイン</Text>
           <Space h="md" />
           <div style={{ width: '80%', margin: '0 auto' }}>
             <TextInput
               radius="xl"
               variant="filled"
+              size='xs'
               value={username}
               placeholder="メールアドレス"
               onChange={(event) => setUsername(event.currentTarget.value)}
@@ -195,6 +172,7 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             <PasswordInput
               radius="xl"
               variant="filled"
+              size='xs'
               value={password}
               placeholder="パスワード"
               onChange={(event) => {
@@ -212,29 +190,65 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                   variant="transparent"
                   onClick={handlePasswordReset}
                   color="gray"
+                  size="compact-xs"
                 >
-                  パスワードがわからない
+                  <Text size='xs'>パスワードリセット</Text>
                 </Button>
               </Grid.Col>
               <Grid.Col span={6}>
                 <Button
                   color="gray"
                   onClick={handleLogin}
-                  style={{ display: 'block', marginLeft: 'auto', marginTop: '10px' }}
+                  size="compact-xs"
+                  radius='xl'
+                  style={{ display: 'block', marginLeft: 'auto', marginTop: '13px' }}
                 >
-                  ログイン
+                  <Text size='xs'>ログイン</Text>
                 </Button>
               </Grid.Col>
             </Grid>
           </div>
+          <Divider my="xs" variant="dashed" label="or" labelPosition="center" />
+          <Text size='xs'>他アカウントでログイン</Text>
+          <Button
+            color="gray"
+            variant="outline"
+            radius="xl"
+            leftSection={<FcGoogle size={14} />}
+            size="xs"
+            onClick={handleGoogleLogin}
+            style={{ marginTop: '10px', width: '80%', display: 'flex', marginLeft: 'auto', marginRight: 'auto',
+              justifyContent: 'flex-start',
+              paddingLeft: '12px',
+            }}
+          >
+            Googleで続ける
+          </Button>
+          <Button
+            color="gray"
+            variant="outline"
+            radius="xl"
+            size="xs"
+            leftSection={<FaLine size={14} color='lightgreen' />}
+            onClick={handleLineLogin}
+            style={{ marginTop: '10px', width: '80%', display: 'flex', marginLeft: 'auto', marginRight: 'auto',
+              justifyContent: 'flex-start',
+              paddingLeft: '12px',
+            }}
+          >
+            Lineで続ける
+          </Button>
+          <Space h="md" />
         </>
       )}
       {step === 'reset' && (
         <>
-          <Text>パスワードのリセット</Text>
+          <Text size='xs'>パスワードのリセット</Text>
           <Space h="md" />
+          <div style={{ width: '80%', margin: '0 auto' }}>
           <TextInput
             radius="xl"
+            size='xs'
             variant="filled"
             value={username}
             placeholder="メールアドレス"
@@ -244,10 +258,13 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           <Button
             color="gray"
             onClick={() => handlePasswordResetRequest(username)}
-            style={{ display: 'block', marginLeft: 'auto', marginTop: '10px' }}
+            size='compact-xs'
+            radius='xl'
+            style={{ display: 'block', marginLeft: 'auto', marginTop: '13px' }}
           >
             パスワードをリセットする
           </Button>
+          </div>
         </>
       )}
 
@@ -291,6 +308,7 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           >
             パスワードを再設定する
           </Button>
+          <Space h="md" />
         </>
       )}
     </>
@@ -405,36 +423,13 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     <>
       {step === 'signup' && (
         <>
-          <Text>他アカウントで登録</Text>
-          <Button
-            color="gray"
-            variant="outline"
-            radius="xl"
-            leftSection={<FcGoogle size={14} />}
-            onClick={handleGoogleLogin}
-            style={{ marginTop: '10px', width: '80%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
-          >
-            Googleで続ける
-          </Button>
-          <Button
-            color="gray"
-            variant="outline"
-            radius="xl"
-            leftSection={<FaLine size={14} color='lightgreen' />}
-            onClick={handleLineLogin}
-            style={{ marginTop: '10px', width: '80%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
-          >
-            Lineで続ける
-          </Button>
-          <Space h="md" />
-          <Divider my="md" labelPosition="center" />
-          <Space h="md" />
-          <Text>メールアドレスで登録</Text>
+          <Text size='xs'>メールアドレスで登録</Text>
           <Space h="md" />
           <div style={{ width: '80%', margin: '0 auto' }}>
             <TextInput
               radius="xl"
               variant="filled"
+              size='xs'
               value={username}
               placeholder="メールアドレス"
               onChange={(event) => setUsername(event.currentTarget.value)}
@@ -444,6 +439,7 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             <PasswordInput
               radius="xl"
               variant="filled"
+              size='xs'
               value={password}
               placeholder="パスワード"
               onChange={(event) => {
@@ -457,11 +453,44 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             <Button
               color="gray"
               onClick={handleSignup}
-              style={{ display: 'block', marginLeft: 'auto', marginTop: '10px' }}
+              radius='xl'
+              size='compact-xs'
+              style={{ display: 'block', marginLeft: 'auto', marginTop: '13px' }}
             >
               新規登録
             </Button>
           </div>
+          <Divider my="xs" variant="dashed" label="or" labelPosition="center" />
+          <Text size='xs'>他アカウントで登録</Text>
+          <Button
+            color="gray"
+            variant="outline"
+            radius="xl"
+            size='xs'
+            leftSection={<FcGoogle size={14} />}
+            onClick={handleGoogleLogin}
+            style={{ marginTop: '10px', width: '80%', display: 'flex', marginLeft: 'auto', marginRight: 'auto',
+              justifyContent: 'flex-start',
+              paddingLeft: '12px',
+            }}
+          >
+            Googleで続ける
+          </Button>
+          <Button
+            color="gray"
+            variant="outline"
+            radius="xl"
+            size='xs'
+            leftSection={<FaLine size={14} color='lightgreen' />}
+            onClick={handleLineLogin}
+            style={{ marginTop: '10px', width: '80%', display: 'flex', marginLeft: 'auto', marginRight: 'auto',
+              justifyContent: 'flex-start',
+              paddingLeft: '12px',
+            }}
+          >
+            Lineで続ける
+          </Button>
+          <Space h="md" />
         </>
       )}
       {step === 'confirmation' && (
