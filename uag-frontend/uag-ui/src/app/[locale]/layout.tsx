@@ -6,6 +6,22 @@ import { AuthProvider } from '../../providers/auth/authProvider';
 import { AppShellLayout } from '../../components/AppShellLayout/AppShellLayout';
 import { ErrorProvider } from '@/providers/error/errorProvider';
 import { UserTokenProvider } from '@/providers/auth/userTokenProvider';
+import type { Metadata } from 'next';
+import type { Viewport } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Unlimited Angel Generation',
+  description: 'Unlimited Angel Generation',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  // Also supported by less commonly used
+  // interactiveWidget: 'resizes-visual',
+}
 
 const LocaleLayout = async ({
   children,
