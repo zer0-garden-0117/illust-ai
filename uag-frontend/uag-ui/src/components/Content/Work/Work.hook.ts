@@ -18,11 +18,11 @@ export const useWork = (
   { workId }: UseWorkProps
 ) => {
   const router = useRouter();
-  const { data, error, isValidating } = useWorksGetById(workId);
   const [workData, setWorkData] = useState<WorkGetByIdResult>();
   const [localIsLiked, setLocalIsLiked] = useState(false);
   const [localRating, setLocalRating] = useState<number | undefined>();
   const [loading, setLoading] = useState(true); // ローディング状態
+  const { trigger: triggerWorksGetById, data, error } = useWorksGetById();
   const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
   const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
@@ -45,6 +45,19 @@ export const useWork = (
     }
   }, [userToken]);
 
+
+  useEffect(() => {
+    const handleFetchWork = async () => {
+      try {
+        await triggerWorksGetById({ workId });
+      } catch (err) {
+        console.error("Failed to fetch work:", err);
+      }
+    };
+    setLoading(true);
+    handleFetchWork();
+  }, [workId]);
+
   // workの取得
   useEffect(() => {
     console.log(isAuthenticated)
@@ -54,7 +67,7 @@ export const useWork = (
     if (error) {
       console.error("エラーが発生しました:", error);
     }
-  }, [data, error, isValidating]);
+  }, [data, error]);
 
   // works データが変更されたときの処理
   useEffect(() => {
