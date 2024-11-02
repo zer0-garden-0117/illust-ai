@@ -24,7 +24,7 @@ type WorkViewProps = {
 };
 
 // CustomImageコンポーネントをメモ化して、画像の再レンダリングを防ぐ
-const CustomImage = memo(({ src, alt, index }: { src: string; alt: string; index: number }) => {
+const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string; alt: string; index: number; onDisplayComplete: () => void }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const imgRef = useRef<HTMLDivElement | null>(null);
@@ -47,7 +47,16 @@ const CustomImage = memo(({ src, alt, index }: { src: string; alt: string; index
     };
   }, []);
 
-  const handleImageLoad = () => setIsLoaded(true);
+  const handleImageLoad = () => {
+    setIsLoaded(true);
+  };
+
+  useEffect(() => {
+    if (isVisible && isLoaded) {
+      onDisplayComplete(); // 画像の表示が完了したら通知
+    }
+  }, [isVisible, isLoaded, onDisplayComplete]);
+
   const shouldDisplay = isVisible && isLoaded;
 
   return (
@@ -111,6 +120,7 @@ export const WorkView = memo(function WorkViewComponent({
   const t = useTranslations("");
   const [opened, setOpened] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [isImageDisplayed, setIsImageDisplayed] = useState(false);
 
   const handleLikeClick = () => {
     if (!isAuthenticated) {
@@ -155,10 +165,17 @@ export const WorkView = memo(function WorkViewComponent({
               src={isAuthenticated ? (workData?.apiWork?.titleImgUrl || '') : (workData?.apiWork?.watermaskImgUrl || '')}
               alt={workData?.apiWork?.mainTitle || "Image without title"}
               index={0}
+              onDisplayComplete={() => setIsImageDisplayed(true)}
             />
             </div>
           </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
+          <Grid.Col
+            span={{ base: 12, sm: 6, lg: 6 }}
+            style={{
+              opacity: isImageDisplayed ? 1 : 0,
+              transition: 'opacity 0.5s ease-in-out', // 情報表示のフェードイン効果
+            }}
+          >
             <Group style={{ marginTop: '20px' }}>
               <Text>タイトル:</Text>
               <Text>{workData?.apiWork?.mainTitle}</Text>
