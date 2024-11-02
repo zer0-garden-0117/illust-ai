@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Text, Fieldset, Grid, Image as MantineImage, Loader, Pill, Group, Rating, ActionIcon, Modal, Transition } from '@mantine/core';
+import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import { RiHeartAdd2Line } from "react-icons/ri";
@@ -23,6 +23,78 @@ type WorkViewProps = {
   isAuthenticated: boolean;
 };
 
+// CustomImageコンポーネントをメモ化して、画像の再レンダリングを防ぐ
+const CustomImage = memo(({ src, alt, index }: { src: string; alt: string; index: number }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const imgRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const currentImgRef = imgRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setIsVisible(true);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (currentImgRef) observer.observe(currentImgRef);
+
+    return () => {
+      if (currentImgRef) observer.unobserve(currentImgRef);
+    };
+  }, []);
+
+  const handleImageLoad = () => setIsLoaded(true);
+  const shouldDisplay = isVisible && isLoaded;
+
+  return (
+    <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <img
+        src={src}
+        alt={alt}
+        onLoad={handleImageLoad}
+        style={{
+          maxWidth: '350px',
+          width: '100%',
+          height: '100%',
+          opacity: shouldDisplay ? 1 : 0,
+          transform: shouldDisplay ? 'translateY(0)' : 'translateY(20px)',
+          transition: `opacity 0.3s ease-in-out ${index * 0.1}s, transform 0.3s ease-in-out ${index * 0.1}s`,
+        }}
+      />
+      {!shouldDisplay && <div style={{ maxWidth: '350px', width: '100%', height: '100%', backgroundColor: 'transparent', position: 'absolute', top: 0, left: 0 }} />}
+    </div>
+  );
+});
+CustomImage.displayName = 'CustomImage';
+
+const RatingAndLikeControls = memo(
+  ({ localRating, localIsLiked, onRateClick, onLikeClick }: { localRating?: number; localIsLiked: boolean; onRateClick: (rating: number) => void; onLikeClick: () => void }) => (
+    <Group style={{ marginTop: '5px' }}>
+      <Text>レビュー:</Text>
+      <Rating value={localRating} onChange={onRateClick} />
+      <ActionIcon
+        variant="transparent"
+        color="gray"
+        style={{
+          color: localIsLiked ? 'red' : 'gray',
+          transition: 'color 0.3s ease',
+          padding: 0,
+          marginLeft: '-10px',
+        }}
+        onClick={onLikeClick}
+      >
+        <RiHeartAdd2Line />
+      </ActionIcon>
+    </Group>
+  ),
+  (prevProps, nextProps) => prevProps.localRating === nextProps.localRating && prevProps.localIsLiked === nextProps.localIsLiked
+);
+RatingAndLikeControls.displayName = 'RatingAndLikeControls';
+
 export const WorkView = memo(function WorkViewComponent({
   workData,
   loading,
@@ -39,40 +111,6 @@ export const WorkView = memo(function WorkViewComponent({
   const t = useTranslations("");
   const [opened, setOpened] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const imgRef = useRef<HTMLImageElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  // 画像URLが変更されたときにロード状態をリセット
-  useEffect(() => {
-    if (workData?.apiWork?.titleImgUrl) {
-      setIsImageLoaded(false); // 新しい画像のローディング開始時にフラグをリセット
-    }
-  }, [workData]);
-
-  // IntersectionObserverでビューポート内に入ったときに表示
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true); // ビューポート内に入ったら表示
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
-    }
-
-    return () => {
-      if (imgRef.current) {
-        observer.unobserve(imgRef.current);
-      }
-    };
-  }, []);
 
   const handleLikeClick = () => {
     if (!isAuthenticated) {
@@ -107,75 +145,6 @@ export const WorkView = memo(function WorkViewComponent({
     return `${year}/${month}/${day}`;
   };
 
-  const CustomImage = ({ src, alt, index }: { src: string; alt: string; index: number }) => {
-    const [isVisible, setIsVisible] = useState(false); // IntersectionObserverの可視状態
-    const [isLoaded, setIsLoaded] = useState(false);   // onLoadのロード状態
-    const imgRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setIsVisible(true); // ビューポート内に入ったら可視状態にする
-            }
-          });
-        },
-        { threshold: 0.1 } // 要素の10%が表示されたらトリガー
-      );
-
-      if (imgRef.current) {
-        observer.observe(imgRef.current);
-      }
-
-      return () => {
-        if (imgRef.current) {
-          observer.unobserve(imgRef.current);
-        }
-      };
-    }, []);
-
-    const handleImageLoad = () => {
-      setIsLoaded(true); // 画像がロードされたらロード状態にする
-    };
-
-    const shouldDisplay = isVisible && isLoaded; // 両方の条件が満たされたら表示
-
-    return (
-      <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
-        {/* 両方の条件が満たされたらフェードインと"fade-up"トランジションを開始 */}
-        <img
-          src={src}
-          alt={alt}
-          onLoad={handleImageLoad} // 画像のロード完了を確認
-          style={{
-            maxWidth: '350px',
-            width: '100%',
-            height: '100%',
-            opacity: shouldDisplay ? 1 : 0, // フェードイン
-            transform: shouldDisplay ? 'translateY(0)' : 'translateY(20px)', // 下から上に移動
-            transition: `opacity 0.3s ease-in-out ${index * 0.1}s, transform 0.3s ease-in-out ${index * 0.1}s`, // 遅延をindexに基づいて設定
-          }}
-        />
-
-        {/* プレースホルダー：表示するまでの間のスペース確保用 */}
-        {!shouldDisplay && (
-          <div
-            style={{
-              maxWidth: '350px',
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'transparent',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-            }}
-          />
-        )}
-      </div>
-    );
-  };
-
   return (
     <>
       <Fieldset legend={""}>
@@ -183,9 +152,7 @@ export const WorkView = memo(function WorkViewComponent({
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }} style={{ display: 'flex', justifyContent: 'center' }}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
             <CustomImage
-              src={isAuthenticated ? 
-                workData?.apiWork?.titleImgUrl ? workData?.apiWork?.titleImgUrl : '' : 
-                workData?.apiWork?.watermaskImgUrl ? workData?.apiWork?.watermaskImgUrl : ''}
+              src={isAuthenticated ? (workData?.apiWork?.titleImgUrl || '') : (workData?.apiWork?.watermaskImgUrl || '')}
               alt={workData?.apiWork?.mainTitle || "Image without title"}
               index={0}
             />
@@ -232,26 +199,12 @@ export const WorkView = memo(function WorkViewComponent({
               <Text>更新日:</Text>
               <Text>{formatDate(workData?.apiWork?.updatedAt)}</Text>
             </Group>
-            <Group style={{ marginTop: '5px' }}>
-              <Text>レビュー:</Text>
-              <Rating value={localRating} onChange={handleRateClick} />
-            </Group>
-            <Group style={{ marginTop: '5px' }}>
-              <Text>お気に入り:</Text>
-              <ActionIcon
-                variant="transparent"
-                color="gray"
-                style={{
-                  color: localIsLiked ? 'red' : 'gray',
-                  transition: 'color 0.3s ease',
-                  padding: 0,
-                  marginLeft: '-10px',
-                }}
-                onClick={handleLikeClick}
-              >
-                <RiHeartAdd2Line />
-              </ActionIcon>
-            </Group>
+            <RatingAndLikeControls
+              localRating={localRating}
+              localIsLiked={localIsLiked}
+              onRateClick={handleRateClick}
+              onLikeClick={handleLikeClick}
+            />
             <Group style={{ marginTop: '5px' }}>
               <Text>ダウンロード:</Text>
               <Button
@@ -281,19 +234,19 @@ export const WorkView = memo(function WorkViewComponent({
         transitionProps={{ transition: 'fade-up', duration: 600, timingFunction: 'linear' }}
         styles={{
           content: {
-            maxHeight: '100vh',  // モーダル自体が画面の高さを超えないようにする
-            overflow: 'hidden'   // 縦スクロールを防ぐ
+            maxHeight: '100vh',
+            overflow: 'hidden'
           }
         }}
       >
         <Transition
-          mounted={opened} // モーダルが開いているときにトランジションを実行
+          mounted={opened}
           transition="fade"
           duration={600}
           timingFunction="ease"
         >
           {(styles) => (
-            <MantineImage
+            <img
               src={isAuthenticated ? workData?.apiWork?.titleImgUrl : workData?.apiWork?.watermaskImgUrl}
               alt="Preview Image"
               style={{
@@ -302,7 +255,7 @@ export const WorkView = memo(function WorkViewComponent({
                 objectFit: 'contain',
                 display: 'block',
                 margin: 0,
-                ...styles, // トランジションのスタイルを適用
+                ...styles,
               }}
             />
           )}
@@ -311,3 +264,4 @@ export const WorkView = memo(function WorkViewComponent({
     </>
   );
 });
+WorkView.displayName = 'WorkView';
