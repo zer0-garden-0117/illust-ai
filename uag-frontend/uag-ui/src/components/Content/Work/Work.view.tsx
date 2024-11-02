@@ -157,7 +157,14 @@ export const WorkView = memo(function WorkViewComponent({
 
   return (
     <>
-      <Fieldset legend={""}>
+    <Fieldset
+      legend=""
+      style={{
+        border: isImageDisplayed ? '1px solid #ccc' : 'none', // isImageDisplayedがfalseのときは枠線を非表示
+        opacity: isImageDisplayed ? 1 : 0,
+        transition: 'opacity 0.5s ease-in-out', // フェードイン効果
+      }}
+    >
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }} style={{ display: 'flex', justifyContent: 'center' }}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
