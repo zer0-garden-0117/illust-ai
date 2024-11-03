@@ -197,12 +197,14 @@ export const WorkView = memo(function WorkViewComponent({
       >
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }} style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <CustomImage
               src={isAuthenticated ? (workData?.apiWork?.titleImgUrl || '') : (workData?.apiWork?.watermaskImgUrl || '')}
               alt={workData?.apiWork?.mainTitle || "Image without title"}
               index={0}
               onDisplayComplete={() => setIsImageDisplayed(true)}
             />
+          </div>
           </Grid.Col>
           <Grid.Col
             span={{ base: 12, sm: 6, lg: 6 }}

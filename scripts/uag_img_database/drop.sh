@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # DynamoDB Localのエンドポイント
-ENDPOINT_URL=http://localhost:10000
+# ENDPOINT_URL=http://localhost:10000
+ENDPOINT_URL=https://dynamodb.us-east-1.amazonaws.com
 
 # テーブル名の一覧を取得
 tables=$(aws dynamodb list-tables --endpoint-url $ENDPOINT_URL --query "TableNames" --output text)
