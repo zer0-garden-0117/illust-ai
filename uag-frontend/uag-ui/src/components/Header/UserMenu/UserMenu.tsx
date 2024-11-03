@@ -20,7 +20,7 @@ export const UserMenu: React.FC = () => {
   const navigation = useNavigate();
 
   const onClickLiked = () => {
-    navigation("/likednavigation?page=1");
+    navigation("/liked?page=1");
   };
 
   const onClickRated = () => {
