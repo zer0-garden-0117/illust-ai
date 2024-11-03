@@ -7,6 +7,9 @@ const withNextIntl = createNextIntlPlugin(
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // reactStrictMode: false
+  experimental: {
+    scrollRestoration: false,
+}
 };
 
 export default withNextIntl(nextConfig);

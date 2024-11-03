@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Rating, Group, Fieldset } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line } from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
 import { BsSuitDiamondFill } from "react-icons/bs";
+import { useNavigate } from '@/utils/navigate';
 
 export type ImageData = {
   workId: number;
@@ -33,7 +34,7 @@ type ImageGridViewProps = {
   isAuthenticated: boolean;
 };
 
-const CustomImage = ({ src, alt, index }: { src: string; alt: string; index: number }) => {
+const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: string; index: number; onImageLoad: () => void }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const imgRef = useRef<HTMLDivElement | null>(null);
@@ -63,6 +64,8 @@ const CustomImage = ({ src, alt, index }: { src: string; alt: string; index: num
 
   const handleImageLoad = () => {
     setIsLoaded(true);
+    console.log(`Image loaded: ${src}`); // 画像のロード完了をログ出力
+    onImageLoad();
   };
 
   const shouldDisplay = isVisible && isLoaded;
@@ -101,9 +104,19 @@ const CustomImage = ({ src, alt, index }: { src: string; alt: string; index: num
 const MemoizedImage = memo(CustomImage, (prevProps, nextProps) => prevProps.src === nextProps.src);
 
 const MemoizedCard = memo(
-  ({ imageData, index, onRateChange, onLikeChange, isAuthenticated, router, setLoginModalOpen }: { imageData: ImageData, index: number, onRateChange: (workId: number, value: number) => void, onLikeChange: (workId: number) => void, isAuthenticated: boolean, router: ReturnType<typeof useRouter>, setLoginModalOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+  ({ imageData, index, onRateChange, onLikeChange, isAuthenticated, router, setLoginModalOpen, onImageLoad }: { 
+    imageData: ImageData; 
+    index: number; 
+    onRateChange: (workId: number, value: number) => void; 
+    onLikeChange: (workId: number) => void; 
+    isAuthenticated: boolean; 
+    router: ReturnType<typeof useRouter>; 
+    setLoginModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    onImageLoad: () => void;
+  }) => {
     const [localIsLiked, setLocalIsLiked] = useState(imageData.isLiked);
     const [localRating, setLocalRating] = useState(imageData.rating);
+    const navigate = useNavigate();
 
     useEffect(() => {
       setLocalRating(imageData.rating);
@@ -133,7 +146,7 @@ const MemoizedCard = memo(
     };
 
     const handleImageClick = () => {
-      router.push(`/works/${imageData.workId}`);
+      navigate(`/works/${imageData.workId}`);
     };
 
     return (
@@ -144,6 +157,7 @@ const MemoizedCard = memo(
               src={imageData.thumbnailImage}
               alt={imageData.mainTitle || "Image without title"}
               index={index}
+              onImageLoad={onImageLoad} // ロード完了時に呼ばれる
             />
           </div>
         </AspectRatio>
@@ -190,7 +204,47 @@ export const ImageGridView = memo(function ImageGridViewComponent({
 }: ImageGridViewProps): JSX.Element {
   const t = useTranslations("");
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(0);
+  const fullPath = `${pathname}?${searchParams.toString()}`;
+
+  useLayoutEffect(() => {
+    // スクロールイベントで位置をリアルタイムに保存
+    const handleScroll = () => {
+      if (!loading) {
+        sessionStorage.setItem(`scrollPosition-${fullPath}`, window.scrollY.toString());
+      } 
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      // コンポーネントがアンマウントされる際にイベントリスナーを削除
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [pathname, loading]);
+
+  // 全画像がロードされたときの処理
+  useEffect(() => {
+    console.log(`Images loaded: ${imagesLoaded} / ${imageData.length}`);
+    // if (imagesLoaded === imageData.length && imageData.length > 0) {
+    if (imageData.length > 0) {
+      const savedPosition = sessionStorage.getItem(`scrollPosition-${fullPath}`);
+      const targetPosition = savedPosition ? parseInt(savedPosition, 10) : 0;
+      setTimeout(() => {
+        console.log(`Scrolling to position: ${targetPosition}`);
+        window.scrollTo(0, targetPosition);
+      }, 100);
+    } else {
+      console.log("imagesLoaded === imageData.length && imageData.length > 0", imagesLoaded, imageData.length)
+    }
+  }, [imagesLoaded, pathname, imageData.length]);
+
+  const handleImageLoad = () => {
+    setImagesLoaded((loaded) => loaded + 1);
+  };
 
   const cards = imageData.map((data, index) => (
     <MemoizedCard
@@ -202,6 +256,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       isAuthenticated={isAuthenticated}
       router={router}
       setLoginModalOpen={setLoginModalOpen}
+      onImageLoad={handleImageLoad} // 画像ロード完了をカウント
     />
   ));
 
@@ -225,7 +280,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
                 </Text>
               </div>
             }
-          ></Fieldset>
+          />
         </>
       )}
 

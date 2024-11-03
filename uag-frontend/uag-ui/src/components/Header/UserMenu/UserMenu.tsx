@@ -10,21 +10,21 @@ import { FaRegStar, FaRegHeart } from "react-icons/fa";
 import { RiUserLine } from "react-icons/ri";
 import classes from './UserMenu.module.css';
 import AuthModal from '../AuthModal/AuthModal';
+import { useNavigate } from '@/utils/navigate';
 
 export const UserMenu: React.FC = () => {
   const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessToken();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
-
-  const router = useRouter();
+  const navigation = useNavigate();
 
   const onClickLiked = () => {
-    router.push("/liked");
+    navigation("/likednavigation?page=1");
   };
 
   const onClickRated = () => {
-    router.push("/rated");
+    navigation("/rated?page=1");
   };
 
   const handleLoginClick = () => {

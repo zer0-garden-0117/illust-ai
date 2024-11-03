@@ -9,25 +9,26 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import classes from './BurgerMenu.module.css';
+import { useNavigate } from '@/utils/navigate';
 
 export const BurgerMenu: React.FC = () => {
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
-  const router = useRouter();
+  const navigation = useNavigate();
 
   const onClickFreeicon = () => {
-    router.push("/icon");
+    navigation("/icon?page=1");
   };
 
   const onClickFreeillustration = () => {
-    router.push("/illustration");
+    navigation("/illustration?page=1");
   };
 
   const onClickUtinoko = () => {
-    router.push("/utinoko");
+    navigation("/utinoko?page=1");
   };
 
   const onClickAdmin = () => {
-    router.push("/admin");
+    navigation("/admin?page=1");
   };
 
   return (

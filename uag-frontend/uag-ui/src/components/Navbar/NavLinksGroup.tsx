@@ -5,6 +5,7 @@ import React from 'react';
 import classes from './NavLinksGroup.module.css';
 import { useRouter } from 'next/navigation';
 import { IconType } from "react-icons";
+import { useNavigate } from '@/utils/navigate';
 
 export interface NavLinksGroupProps {
   icon: IconType;
@@ -19,10 +20,10 @@ export const NavLinksGroup: React.FC<NavLinksGroupProps> = ({
   href,
   onClick
 }) => {
-  const router = useRouter();
+  const navigation = useNavigate();
   const handleClick = () => {
     onClick();
-    router.push(href);
+    navigation(href);
   };
 
   return (

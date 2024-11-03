@@ -9,6 +9,7 @@ import { ActionIcon } from "@mantine/core";
 import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
+import { useNavigate } from "@/utils/navigate";
 
 type UseWorkProps = {
   workId: number;
@@ -30,6 +31,7 @@ export const useWork = (
   const { isAuthenticated } = useAccessToken();
   const { userToken } = useUserToken();
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
+  const navigate = useNavigate();
 
   const [headers, setHeaders] = useState({
     Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
@@ -143,25 +145,25 @@ export const useWork = (
 
   const onTagClick = (tag: string | undefined) => {
     if (tag) {
-      router.push(`/tag/${encodeURIComponent(tag)}`);
+      navigate(`/tag/${encodeURIComponent(tag)}?page=1`);
     }
   };
 
   const onCreatorClick = (creator: string | undefined) => {
     if (creator) {
-      router.push(`/creator/${encodeURIComponent(creator)}`);
+      navigate(`/creator/${encodeURIComponent(creator)}?page=1`);
     }
   };
 
   const onCharacterClick = (character: string | undefined) => {
     if (character) {
-      router.push(`/character/${encodeURIComponent(character)}`);
+      navigate(`/character/${encodeURIComponent(character)}?page=1`);
     }
   };
 
   const onGenreClick = (genre: string | undefined) => {
     if (genre) {
-      router.push(`/genre/${encodeURIComponent(genre)}`);
+      navigate(`/genre/${encodeURIComponent(genre)}?page=1`);
     }
   };
 

@@ -6,6 +6,7 @@ import classes from './LanguagePicker.module.css';
 import { GrLanguage } from "react-icons/gr";
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import { useNavigate } from '@/utils/navigate';
 
 interface LanguageData {
   label: string;
@@ -24,6 +25,7 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
   const [opened, setOpened] = useState(false);
   const [selected, setSelected] = useState<LanguageData>(data[0]);
   const [pathname, setPathname] = useState<string>('');
+  const navigation = useNavigate();
   const router = useRouter();
   const locale = useLocale();
 
@@ -38,7 +40,7 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
   const handleLanguageChange = (item: LanguageData) => {
     setSelected(item);
     const newPath = pathname.replace(/^\/(en|ja)/, `/${item.lang}`);
-    router.push(newPath);
+    navigation(newPath);
   };
 
   const items = data.map((item) => (

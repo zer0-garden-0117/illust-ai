@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import classes from './Logo.module.css';
+import { useNavigate } from '@/utils/navigate';
 
 export interface LogoProps {
   width?: string;
@@ -11,10 +12,10 @@ export interface LogoProps {
 }
 
 export const Logo: React.FC<LogoProps> = () => {
-  const router = useRouter();
+  const navigation = useNavigate();
 
   const onClickLogo = () => {
-    router.push("/");
+    navigation("/");
   };
 
   return (

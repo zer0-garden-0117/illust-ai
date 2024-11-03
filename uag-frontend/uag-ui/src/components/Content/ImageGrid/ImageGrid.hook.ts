@@ -13,6 +13,7 @@ import { useAccessToken } from "@/apis/auth/useAccessToken";
 import { UsersLikedGetHeader, UsersLikedGetQuery, useUsersLikedGet } from "@/apis/openapi/users/useUsersLikedGet";
 import { UsersRatedGetHeader, UsersRatedGetQuery, useUsersRatedGet } from "@/apis/openapi/users/useUsersRatedGet";
 import { useRouter } from "next/navigation";
+import { useNavigate } from "@/utils/navigate";
 
 type UseImageGridProps = {
   title: string;
@@ -45,6 +46,7 @@ export const useImageGrid = (
   const { isAuthenticated } = useAccessToken();
   const { userToken } = useUserToken();
   const itemsPerPage = 12;
+  const navigate = useNavigate();
 
   const [headers, setHeaders] = useState({
     Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
@@ -201,9 +203,10 @@ export const useImageGrid = (
   // ページ変更時にデータを更新する関数
   const onPageChange = (page: number) => {
     setCurrentPage(page);
+    const currentPath = window.location.pathname.replace(/^\/(ja|en)/, '');
     const params = new URLSearchParams(window.location.search);
     params.set('page', page.toString());
-    router.push(`?${params.toString()}`);  // クエリパラメータを更新してページ遷移
+    navigate(`${currentPath}?${params.toString()}`);
   };
 
   useEffect(() => {

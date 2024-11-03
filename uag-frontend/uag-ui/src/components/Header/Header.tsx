@@ -7,6 +7,7 @@ import { QuickSearch } from './QuickSearch/QuickSearch';
 import classes from './Header.module.css';
 import { Butterfly_Kids } from 'next/font/google';
 import { useRouter } from 'next/navigation';
+import { useNavigate } from '@/utils/navigate';
 
 export interface HeaderProps {
   burger?: React.ReactNode;
@@ -19,16 +20,17 @@ export const Header: React.FC<HeaderProps> = (
 ) => {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
+  const navigation = useNavigate();
 
   const onSearchButtonClick = () => {
     if (searchQuery.trim()) {
-      router.push(`/search/${encodeURIComponent(searchQuery.trim())}`);
+      navigation(`/search/${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      router.push(`/search/${encodeURIComponent(searchQuery.trim())}`);
+      navigation(`/search/${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
@@ -8,6 +8,7 @@ import { RiHeartAdd2Line } from "react-icons/ri";
 import { GoDownload } from "react-icons/go";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
 import { WorkGetByIdResult } from '@/apis/openapi/works/useWorksGetById';
+import { usePathname } from 'next/navigation';
 
 type WorkViewProps = {
   workData?: WorkGetByIdResult;
@@ -121,6 +122,35 @@ export const WorkView = memo(function WorkViewComponent({
   const [opened, setOpened] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [isImageDisplayed, setIsImageDisplayed] = useState(false);
+  const pathname = usePathname();
+
+  useLayoutEffect(() => {
+    // スクロールイベントで位置をリアルタイムに保存
+    const handleScroll = () => {
+      if (!loading) {
+        sessionStorage.setItem(`scrollPosition-${pathname}`, window.scrollY.toString());
+      } 
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      // コンポーネントがアンマウントされる際にイベントリスナーを削除
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [pathname, loading]);
+
+  // 画像表示が完了したときにスクロール位置を復元
+  useEffect(() => {
+    if (isImageDisplayed) {
+      const savedPosition = sessionStorage.getItem(`scrollPosition-${pathname}`);
+      const targetPosition = savedPosition ? parseInt(savedPosition, 10) : 0;
+      setTimeout(() => {
+        console.log(`Scrolling to position: ${targetPosition}`);
+        window.scrollTo(0, targetPosition);
+      }, 100);
+    }
+  }, [isImageDisplayed, pathname]);
 
   const handleLikeClick = () => {
     if (!isAuthenticated) {
@@ -157,24 +187,22 @@ export const WorkView = memo(function WorkViewComponent({
 
   return (
     <>
-    <Fieldset
-      legend=""
-      style={{
-        border: isImageDisplayed ? '1px solid #ccc' : 'none', // isImageDisplayedがfalseのときは枠線を非表示
-        opacity: isImageDisplayed ? 1 : 0,
-        transition: 'opacity 0.5s ease-in-out', // フェードイン効果
-      }}
-    >
+      <Fieldset
+        legend=""
+        style={{
+          border: isImageDisplayed ? '1px solid #ccc' : 'none',
+          opacity: isImageDisplayed ? 1 : 0,
+          transition: 'opacity 0.5s ease-in-out',
+        }}
+      >
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }} style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
             <CustomImage
               src={isAuthenticated ? (workData?.apiWork?.titleImgUrl || '') : (workData?.apiWork?.watermaskImgUrl || '')}
               alt={workData?.apiWork?.mainTitle || "Image without title"}
               index={0}
               onDisplayComplete={() => setIsImageDisplayed(true)}
             />
-            </div>
           </Grid.Col>
           <Grid.Col
             span={{ base: 12, sm: 6, lg: 6 }}
@@ -245,7 +273,7 @@ export const WorkView = memo(function WorkViewComponent({
           </Grid.Col>
         </Grid>
       </Fieldset>
-      
+
       <AuthModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
 
       <Modal
