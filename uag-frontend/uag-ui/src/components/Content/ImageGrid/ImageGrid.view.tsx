@@ -308,6 +308,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       <AuthModal
         isOpen={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}
+        isLogin={true}
       />
     </>
   );

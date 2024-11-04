@@ -280,7 +280,11 @@ export const WorkView = memo(function WorkViewComponent({
         </Grid>
       </Card>
 
-      <AuthModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+      <AuthModal 
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        isLogin={true}
+      />
 
       <Modal
         opened={opened}
