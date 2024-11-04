@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Menu } from '@mantine/core';
+import { Menu, Text } from '@mantine/core';
 import { MdLogout } from "react-icons/md";
 import {
   RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine
@@ -10,6 +10,14 @@ import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import classes from './BurgerMenu.module.css';
 import { useNavigate } from '@/utils/navigate';
+import { PiStarOfDavidLight } from "react-icons/pi";
+import { GiLibertyWing } from "react-icons/gi";
+import { FiChevronsRight } from "react-icons/fi";
+import { PiShootingStarThin } from "react-icons/pi";
+import { PiStarFour } from "react-icons/pi";
+import { FaAngleRight } from "react-icons/fa6";
+import { MdOutlineChevronRight } from "react-icons/md";
+
 
 export const BurgerMenu: React.FC = () => {
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
@@ -48,32 +56,59 @@ export const BurgerMenu: React.FC = () => {
           </div>
         </Menu.Target>
         <Menu.Dropdown className={classes.menuDropdown}>
+          <Menu.Label>零崎家</Menu.Label>
           <Menu.Item
-            leftSection={<RiUserSettingsLine className={classes.icon} />}
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
             onClick={onClickFreeicon}
           >
-            フリーアイコン
+            真白
           </Menu.Item>
           <Menu.Item
-            leftSection={<RiShieldKeyholeLine className={classes.icon} />}
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
+            onClick={onClickFreeillustration}
+          >
+            くるみ
+          </Menu.Item>
+          <Menu.Item
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
+            onClick={onClickFreeillustration}
+          >
+            鈴
+          </Menu.Item>
+          <Menu.Item
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
+            onClick={onClickFreeillustration}
+          >
+            蒼
+          </Menu.Item>
+          <Menu.Item
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
+            onClick={onClickFreeillustration}
+          >
+            etc
+          </Menu.Item>
+          <Menu.Divider />
+          <Menu.Label>ジャンル別</Menu.Label>
+          <Menu.Item
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
             onClick={onClickFreeillustration}
           >
             フリーイラスト
           </Menu.Item>
           <Menu.Item
-            leftSection={<RiDeleteBin6Line className={classes.icon} />}
-            onClick={onClickUtinoko}
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
+            onClick={onClickFreeicon}
           >
-            うちの子
+            フリーアイコン
           </Menu.Item>
           <Menu.Divider />
           <Menu.Item
-            leftSection={<MdLogout className={classes.icon} />}
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
           >
             本サイトについて
           </Menu.Item>
           <Menu.Item
-            leftSection={<MdLogout className={classes.icon} />}
+            leftSection={<MdOutlineChevronRight className={classes.icon} />}
             onClick={onClickAdmin}
           >
             管理
