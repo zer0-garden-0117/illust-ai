@@ -6,6 +6,8 @@ const FreeIconPage: React.FC = () => {
     <ImageGrid
       title={"うちの子"}
       isViewCount={true}
+      isViewPagination={true}
+      imageCount={12}
       words={["OC"]}
       type={"free"}
     />

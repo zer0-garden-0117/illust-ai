@@ -18,12 +18,14 @@ import { useNavigate } from "@/utils/navigate";
 type UseImageGridProps = {
   title: string;
   isViewCount: boolean;
+  isViewPagination: boolean;
+  imageCount: number;
   type: string;
   words: string[];
 };
 
 export const useImageGrid = (
-  { title, isViewCount, type, words }: UseImageGridProps
+  { title, isViewCount, isViewPagination, imageCount, type, words }: UseImageGridProps
 ): React.ComponentPropsWithoutRef<typeof ImageGridView> => {
   const router = useRouter();  // useRouter フックを使ってルーターを取得
   const searchParams = new URLSearchParams(window.location.search);
@@ -45,7 +47,7 @@ export const useImageGrid = (
   const { trigger: triggerDeliked } = useUsersLikedDelete();
   const { isAuthenticated } = useAccessToken();
   const { userToken } = useUserToken();
-  const itemsPerPage = 12;
+  const itemsPerPage = imageCount;
   const navigate = useNavigate();
 
   const [headers, setHeaders] = useState({
@@ -232,6 +234,7 @@ export const useImageGrid = (
   return {
     title,
     isViewCount,
+    isViewPagination,
     imageData,
     currentPage,
     totalPages,

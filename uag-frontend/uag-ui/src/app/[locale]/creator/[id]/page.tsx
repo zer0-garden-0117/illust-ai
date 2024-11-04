@@ -11,6 +11,8 @@ const CreatorPage: React.FC<{ params: { id: string } }> = (
       <ImageGrid
         title={decodedId}
         isViewCount={true}
+        isViewPagination={true}
+        imageCount={12}
         words={[decodedId]}
         type={"free"}
       />

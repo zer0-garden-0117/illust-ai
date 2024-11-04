@@ -11,6 +11,8 @@ const TagPage: React.FC<{ params: { id: string } }> = (
       <ImageGrid
         title={"レビュー"}
         isViewCount={true}
+        isViewPagination={true}
+        imageCount={12}
         words={[]}
         type={"rated"}
       />

@@ -23,6 +23,7 @@ export type ImageData = {
 type ImageGridViewProps = {
   title: string;
   isViewCount: boolean;
+  isViewPagination: boolean;
   imageData: ImageData[];
   currentPage: number;
   totalPages: number;
@@ -193,6 +194,7 @@ MemoizedCard.displayName = 'MemoizedCard';
 export const ImageGridView = memo(function ImageGridViewComponent({
   title,
   isViewCount,
+  isViewPagination,
   imageData,
   currentPage,
   totalPages,
@@ -288,7 +290,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
         {cards}
       </SimpleGrid>
-      {!loading && totalPages > 1 && (
+      {!loading && totalPages > 1 && isViewPagination && (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Pagination
             value={currentPage}

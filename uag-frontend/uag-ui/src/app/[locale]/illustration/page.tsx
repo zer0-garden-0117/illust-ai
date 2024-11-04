@@ -7,6 +7,8 @@ const IllustrationPage: React.FC = () => {
       <ImageGrid
         title={"フリーイラスト"}
         isViewCount={true}
+        isViewPagination={true}
+        imageCount={12}
         words={["illustration"]}
         type={"free"}
       />
