@@ -18,6 +18,7 @@ const AuthModal: React.FC<AuthModalProps> = (
   useEffect(() => {
     if (isOpen) {
       setActiveTab(isLogin ? 'login' : 'signup');
+      (document.activeElement as HTMLElement)?.blur();
     }
   }, [isOpen, isLogin]);
 
@@ -25,8 +26,8 @@ const AuthModal: React.FC<AuthModalProps> = (
     <Modal opened={isOpen} onClose={onClose} withCloseButton={false}>
       <Tabs value={activeTab} onChange={(tab) => setActiveTab(tab as 'login' | 'signup')} autoFocus={false}>
         <Tabs.List>
-          <Tabs.Tab value="login" style={{ fontSize: '12px' }}>ログイン</Tabs.Tab>
-          <Tabs.Tab value="signup" style={{ fontSize: '12px' }}>新規登録</Tabs.Tab>
+          <Tabs.Tab value="login" style={{ fontSize: '12px', outline: 'none'}} tabIndex={-1}>ログイン</Tabs.Tab>
+          <Tabs.Tab value="signup" style={{ fontSize: '12px',  outline: 'none'}} tabIndex={-1}>新規登録</Tabs.Tab>
         </Tabs.List>
         <Space h="md" />
 
