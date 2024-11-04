@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Rating, Group, Fieldset } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Rating, Group, Fieldset, Image } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -72,9 +72,10 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
 
   return (
     <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <img
+      <Image
         src={src}
         alt={alt}
+        radius="md"
         onLoad={handleImageLoad}
         style={{
           width: '100%',

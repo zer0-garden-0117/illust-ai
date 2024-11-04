@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition } from '@mantine/core';
+import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from "next-intl";
 import { RiHeartAdd2Line } from "react-icons/ri";
@@ -62,9 +62,10 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
 
   return (
     <div ref={imgRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <img
+      <Image
         src={src}
         alt={alt}
+        radius="md"
         onLoad={handleImageLoad}
         style={{
           maxWidth: '350px',
@@ -187,12 +188,15 @@ export const WorkView = memo(function WorkViewComponent({
 
   return (
     <>
-      <Fieldset
-        legend=""
+      <Card
         style={{
-          border: isImageDisplayed ? '1px solid #ccc' : 'none',
           opacity: isImageDisplayed ? 1 : 0,
-          transition: 'opacity 0.5s ease-in-out',
+          transform: 'scale(1.01) translate(0px, 0px)', // 初期状態で少し浮き上がる
+          transition: 'transform 150ms ease, box-shadow 150ms ease, opacity 0.5s ease-in-out',
+          borderRadius: '8px', // 角に丸みを追加
+          boxShadow: isImageDisplayed
+          ? '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 15px -5px rgba(0, 0, 0, 0.05), 0 7px 7px -5px rgba(0, 0, 0, 0.04)'
+          : 'none', // Mantineのsm影と同様の影を設定
         }}
       >
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
@@ -274,7 +278,7 @@ export const WorkView = memo(function WorkViewComponent({
             </Group>
           </Grid.Col>
         </Grid>
-      </Fieldset>
+      </Card>
 
       <AuthModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
 
@@ -300,9 +304,10 @@ export const WorkView = memo(function WorkViewComponent({
           timingFunction="ease"
         >
           {(styles) => (
-            <img
+            <Image
               src={isAuthenticated ? workData?.apiWork?.titleImgUrl : workData?.apiWork?.watermaskImgUrl}
               alt="Preview Image"
+              radius="md"
               style={{
                 maxWidth: '100vw',
                 maxHeight: 'calc(100vh - 50px)',
