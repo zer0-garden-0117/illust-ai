@@ -1,15 +1,21 @@
 package com.uag.zer0.service
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
 
 @Service
 class ConvertService {
+    @Value("\${node.path}")
+    private lateinit var nodePath: String
+
     fun toAvif(image: MultipartFile): ByteArray {
+
         var process: Process? = null
         try {
-            val nodeScriptPath = "node-scripts/service/convert/avif/toAvif.js"
+            val nodeScriptPath =
+                nodePath + "service/convert/avif/toAvif.js"
             val processBuilder = ProcessBuilder("node", nodeScriptPath)
             process = processBuilder.start()
 
@@ -43,7 +49,7 @@ class ConvertService {
     fun toThumbnail(image: MultipartFile): ByteArray {
         try {
             val nodeScriptPath =
-                "node-scripts/service/convert/thumbnail/toThumbnail.js"
+                nodePath + "service/convert/thumbnail/toThumbnail.js"
             val processBuilder = ProcessBuilder("node", nodeScriptPath)
             val process = processBuilder.start()
 
@@ -74,8 +80,11 @@ class ConvertService {
     fun toWatermask(image: MultipartFile): ByteArray {
         try {
             val nodeScriptPath =
-                "node-scripts/service/convert/watermask/toWatermask.js"
-            val processBuilder = ProcessBuilder("node", nodeScriptPath)
+                nodePath + "service/convert/watermask/toWatermask.js"
+            val watermaskPath =
+                nodePath + "service/convert/common/watermask.png"
+            val processBuilder =
+                ProcessBuilder("node", nodeScriptPath, watermaskPath)
             val process = processBuilder.start()
 
             // 画像データを標準入力に送信

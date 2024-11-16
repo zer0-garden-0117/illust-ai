@@ -3,6 +3,15 @@ const fs = require('fs').promises;
 
 let chunks = [];
 
+// コマンドライン引数から watermask.png のパスを取得
+const watermaskPath = process.argv[2];
+
+if (!watermaskPath) {
+  console.error("Error: Watermask path is required as the first argument.");
+  process.exit(1);
+}
+
+
 // 標準入力から画像データを受け取る
 process.stdin.on('data', chunk => {
   chunks.push(chunk);
@@ -23,7 +32,7 @@ process.stdin.on('end', async () => {
 
     // watermask.pngを読み込み、input.pngのサイズにリサイズしてAVIFに変換（バッファに保持）
 //    const watermaskBuffer = await fs.readFile('../common/watermask.png');
-    const watermaskBuffer = await fs.readFile('node-scripts/service/convert/common/watermask.png');
+    const watermaskBuffer = await fs.readFile(watermaskPath);
     const watermaskSharp = sharp(watermaskBuffer);
     const watermaskAvifBuffer = await watermaskSharp
       .resize(inputMetadata.width, inputMetadata.height) // input.pngのサイズにリサイズ

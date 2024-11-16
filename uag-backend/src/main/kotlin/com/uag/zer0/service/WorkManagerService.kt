@@ -30,7 +30,8 @@ class WorkManagerService(
     private val imgRepository: ImgRepository,
     private val countersRepository: CountersRepository,
     private val convertService: ConvertService,
-    private val uploadService: UploadService
+    private val uploadService: UploadService,
+    private val cdnUrlService: CdnUrlService
 ) {
 
     private val logger = LoggerFactory.getLogger(WorkService::class.java)
@@ -200,6 +201,16 @@ class WorkManagerService(
         work.workId = nextWorkId
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
 
+        if (titleImage.isEmpty) {
+            logger.error("Title image is empty.")
+            throw IllegalArgumentException("Title image cannot be empty.")
+        }
+//
+//        if (titleImage.contentType?.startsWith("image/")!!) {
+//            logger.error("Invalid title image content type: ${titleImage.contentType}")
+//            throw IllegalArgumentException("Invalid file type. Only images are allowed.")
+//        }
+
         val titleImageAvif = try {
             convertService.toAvif(titleImage)
         } catch (e: Exception) {
@@ -212,6 +223,7 @@ class WorkManagerService(
             titleImageAvif,
             "titleImage_$titleTimestamp.avif"
         )
+        val titleCdnUrl = cdnUrlService.convertToCdnUrl(titleImageUrl)
 
         // 2. サムネイル生成とアップロード
         val thumbnailImageAvif = try {
@@ -225,8 +237,8 @@ class WorkManagerService(
             thumbnailImageAvif,
             "thumbnailImage_$titleTimestamp.avif"
         )
-
         logger.info("thumbnailImageAvif: $thumbnailImageAvif thumbnailImageUrl: $thumbnailImageUrl")
+        val thumbnailCdnUrl = cdnUrlService.convertToCdnUrl(thumbnailImageUrl)
 
         // 2. ウォーターマスク生成とアップロード
         val watermaskImageAvif = try {
@@ -240,13 +252,13 @@ class WorkManagerService(
             watermaskImageAvif,
             "watermaskImage_$titleTimestamp.avif"
         )
-
         logger.info("thumbnailImageAvif: $watermaskImageUrl thumbnailImageUrl: $watermaskImageUrl")
+        val watermaskCdnUrl = cdnUrlService.convertToCdnUrl(watermaskImageUrl)
 
         // ToDo: ImgURLはCloudFrontのURLに変換してDBに格納する
-        work.titleImgUrl = titleImageUrl
-        work.thumbnailImgUrl = thumbnailImageUrl
-        work.watermaskImgUrl = watermaskImageUrl
+        work.titleImgUrl = titleCdnUrl
+        work.thumbnailImgUrl = thumbnailCdnUrl
+        work.watermaskImgUrl = watermaskCdnUrl
         work.updatedAt = nowDate
         work.createdAt = nowDate
         workService.registerWork(work)
@@ -284,7 +296,8 @@ class WorkManagerService(
                 convertService.toThumbnail(image)
             val imageTimestamp = LocalDateTime.now().format(formatter)
             val imageName = "workImage_$imageTimestamp.avif"
-            uploadService.uploadToS3(avifImage, imageName)
+            val imgUrl = uploadService.uploadToS3(avifImage, imageName)
+            cdnUrlService.convertToCdnUrl(imgUrl)
         }
         // ToDo: ImgURLはCloudFrontのURLに変換してDBに格納する
         val imgObjects = mutableListOf<Img>()
