@@ -14,7 +14,7 @@ ApiUsersActivitySearch:
       description: "作品IDリスト"
       type: array
       items:
-        type: integer
+        type: string
       example:
         - 1
         - 2
@@ -56,7 +56,7 @@ ApiLiked:
       description: メールアドレス
       example: test@gmail.com
     workId:
-      type: integer
+      type: string
       description: 作品ID
       example: 1
     updatedAt:
@@ -74,7 +74,7 @@ ApiViewed:
       description: メールアドレス
       example: test@gmail.com
     workId:
-      type: integer
+      type: string
       description: 作品ID
       example: 1
     updatedAt:
@@ -92,7 +92,7 @@ ApiRated:
       description: メールアドレス
       example: test@gmail.com
     workId:
-      type: integer
+      type: string
       description: 作品ID
       example: 1
     rating:

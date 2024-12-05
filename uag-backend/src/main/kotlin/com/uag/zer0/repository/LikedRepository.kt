@@ -1,6 +1,6 @@
-package com.uag.zer0.repository.user
+package com.uag.zer0.repository
 
-import com.uag.zer0.entity.user.Liked
+import com.uag.zer0.entity.Liked
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
@@ -25,36 +25,30 @@ class LikedRepository(
         enhancedClient.table("liked", TableSchema.fromClass(Liked::class.java))
     private val logger = LoggerFactory.getLogger(LikedRepository::class.java)
 
+    // 指定したユーザーのLikedのリストを取得する
     fun findByUserId(userId: String): List<Liked> {
         return try {
-            val index = table.index("UserUpdatedAtIndex")
             val queryConditional = QueryConditional.keyEqualTo(
                 Key.builder().partitionValue(userId).build()
             )
-            val queryRequest = index.query { r ->
-                r.queryConditional(queryConditional)
-                    .scanIndexForward(false)
-            }
-
-            val likedItems = mutableListOf<Liked>()
-            queryRequest.forEach { page ->
-                likedItems.addAll(page.items())
-            }
-            likedItems
+            val results = table.query(queryConditional).items().toList()
+            logger.info("Found ${results.size} liked items for userId=$userId")
+            results
         } catch (e: DynamoDbException) {
             throw RuntimeException(
-                "Failed to query liked items by userId with updatedAt: $userId",
+                "Failed to find liked items for userId=$userId",
                 e
             )
         }
     }
 
-    fun findByUserIdsAndWorkIds(ids: List<Pair<String, Int>>): List<Liked> {
+    // 指定したユーザーとWorkIdのペアに対応するLikedのリストを返す
+    fun findByUserIdsAndWorkIds(ids: List<Pair<String, String>>): List<Liked> {
         return try {
             val keys = ids.map { (userId, workId) ->
                 mapOf(
                     "userId" to AttributeValue.builder().s(userId).build(),
-                    "workId" to AttributeValue.builder().n(workId.toString())
+                    "workId" to AttributeValue.builder().s(workId)
                         .build()
                 )
             }
@@ -94,7 +88,7 @@ class LikedRepository(
         }
     }
 
-    fun deleteLiked(userId: String, workId: Int): Liked {
+    fun deleteLiked(userId: String, workId: String): Liked {
         return try {
             val key =
                 Key.builder().partitionValue(userId).sortValue(workId).build()

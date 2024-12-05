@@ -33,7 +33,7 @@ export const useWorksTagsDelete = (
           },
           params: {
             path: {
-              tagId: path.tagId
+              tag: path.tag
             },
           }
         }

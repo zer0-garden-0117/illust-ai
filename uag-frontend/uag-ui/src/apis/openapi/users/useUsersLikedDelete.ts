@@ -9,7 +9,7 @@ export type DeleteLikedHeaders = UserTokenHeader & CsrfTokenHeader;
 
 export type DeleteLikedArgs = {
   headers?: DeleteLikedHeaders;
-  workId: number;
+  workId: string;
 };
 
 export const useUsersLikedDelete = (

@@ -4,17 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.uag.zer0.dto.WorkWithDetails
-import com.uag.zer0.dto.WorksWithSearchResult
-import com.uag.zer0.entity.work.Character
-import com.uag.zer0.entity.work.Creator
-import com.uag.zer0.entity.work.Tag
+import com.uag.zer0.dto.WorkWithTag
 import com.uag.zer0.generated.endpoint.WorksApi
-import com.uag.zer0.generated.model.*
+import com.uag.zer0.generated.model.ApiWork
+import com.uag.zer0.generated.model.ApiWorkSearchByTags
+import com.uag.zer0.generated.model.ApiWorkWithTag
+import com.uag.zer0.generated.model.ApiWorksWithSearchResult
+import com.uag.zer0.mapper.TagMapper
 import com.uag.zer0.mapper.WorkMapper
-import com.uag.zer0.service.WorkManagerService
+import com.uag.zer0.service.user.UserManagerService
+import com.uag.zer0.service.work.WorkManagerService
 import jakarta.validation.Valid
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -24,7 +24,9 @@ import java.util.*
 @RestController
 class WorksController(
     private val workManagerService: WorkManagerService,
-    private val workMapper: WorkMapper
+    private val workMapper: WorkMapper,
+    private val tagMapper: TagMapper,
+    private val userManagerService: UserManagerService
 ) : WorksApi {
 
     override fun searchWorksByTags(
@@ -47,44 +49,13 @@ class WorksController(
         return ResponseEntity.ok(apiWorkWithDetails)
     }
 
-    override fun searchWorks(
-        @RequestBody(required = false) apiWorkSearch: ApiWorkSearch
-    ): ResponseEntity<ApiWorksWithSearchResult> {
-        var workResult: WorksWithSearchResult? = null
-        if (apiWorkSearch.words?.size == 0) {
-            // 検索ワードが指定されてない時は最新作品を返す
-            workResult = workManagerService.findLatestWorks(20)
-        } else {
-            workResult = apiWorkSearch.words.let { word ->
-                workManagerService.findWorksByFreeWords(
-                    word,
-                    apiWorkSearch.offset,
-                    apiWorkSearch.limit
-                )
-            }
-        }
-        val apiWorks = mutableListOf<ApiWork>()
-        workResult?.works?.forEach { work ->
-            val apiWork = workMapper.toApiWork(work)
-            apiWorks.add(apiWork)
-        }
-        val apiWorkWithDetails = ApiWorksWithSearchResult(
-            works = apiWorks,
-            totalCount = workResult?.totalCount ?: 0
-        )
-        return ResponseEntity.ok(apiWorkWithDetails)
-    }
-
     override fun getWorksById(
-        @PathVariable("workId") workId: Int
-    ): ResponseEntity<ApiWorkWithDetails> {
-        val workWithDetails =
-            workManagerService.findWorkByWorkId(workId = workId)
-        val response = toApiWorkWithDetails(workWithDetails)
+        @PathVariable("workId") workId: String
+    ): ResponseEntity<ApiWorkWithTag> {
+        val workWithTag = workManagerService.findWorkById(workId = workId)
+        val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
     }
-
-    private val logger = LoggerFactory.getLogger(WorksController::class.java)
 
     @PostMapping(
         "/works",
@@ -98,90 +69,67 @@ class WorksController(
             value = "worksDetailsBase64",
             required = true
         ) worksDetailsBase64: String
-    ): ResponseEntity<ApiWorkWithDetails> {
+    ): ResponseEntity<ApiWorkWithTag> {
         // 作品情報のデコード
-        logger.info("registerWorks start!!!")
         val decodedWorksDetails = String(
             Base64.getDecoder().decode(worksDetailsBase64),
             Charsets.UTF_8
         )
-        logger.info("Decoded worksDetails: $decodedWorksDetails")
-        logger.info("registerWorks start2!!!")
         val objectMapper: ObjectMapper = jacksonObjectMapper().apply {
             registerModule(JavaTimeModule())
         }
-        logger.info("registerWorks start3!!!")
-        val apiWorkWithDetails: ApiWorkWithDetails =
+        val apiWorkWithTag: ApiWorkWithTag =
             objectMapper.readValue(decodedWorksDetails)
-        logger.info("apiWorksWithDetails: $apiWorkWithDetails")
-        if (apiWorkWithDetails.apiWork == null) {
+        if (apiWorkWithTag.apiWork == null) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        val work = workMapper.toWork(apiWorkWithDetails.apiWork!!)
-        val characters = mutableListOf<Character>()
-        apiWorkWithDetails.apiCharacters?.forEach { apiCharacter ->
-            characters.add(workMapper.toCharacter(apiCharacter))
-        }
-        val creators = mutableListOf<Creator>()
-        apiWorkWithDetails.apiCreators?.forEach { apiCreator ->
-            creators.add(workMapper.toCreator(apiCreator))
-        }
-        val tags = mutableListOf<Tag>()
-        apiWorkWithDetails.apiTags?.forEach { apiTag ->
-            tags.add(workMapper.toTag(apiTag))
-        }
+
+        // ApiのモデルをDomainのモデルに変換
+        val work = workMapper.toWork(apiWorkWithTag.apiWork!!)
+        val tags = tagMapper.toTag(apiWorkWithTag.apiTags!!)
+
+        // 作品の登録
         val workWithDetails = workManagerService.registerWork(
             work = work,
-            characters = characters,
-            creators = creators,
             tags = tags,
             titleImage = titleImage,
             images = images
         )
-        val response = toApiWorkWithDetails(workWithDetails)
+
+        // DomainのモデルをApiのモデルに変換
+        val response = toApiWorkWithTag(workWithDetails)
         return ResponseEntity.ok(response)
     }
 
     override fun updateWorksById(
-        @PathVariable("workId") workId: Int,
-        @Valid @RequestBody apiWorkWithDetails: ApiWorkWithDetails
-    ): ResponseEntity<ApiWorkWithDetails> {
+        @PathVariable("workId") workId: String,
+        @Valid @RequestBody apiWorkWithTag: ApiWorkWithTag
+    ): ResponseEntity<ApiWorkWithTag> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     override fun deleteWorksById(
-        @PathVariable("workId") workId: Int
-    ): ResponseEntity<ApiWorkWithDetails> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        @PathVariable("workId") workId: String
+    ): ResponseEntity<ApiWorkWithTag> {
+        // 作品の削除
+        val workWithTag = workManagerService.deleteWorkById(workId)
+        // ユーザーの情報からも削除
+        userManagerService.deleteWorkId(workId)
+
+        // DomainのモデルをApiのモデルに変換
+        val response = toApiWorkWithTag(workWithTag)
+        return ResponseEntity.ok(response)
     }
 
-    private fun toApiWorkWithDetails(
-        workWithDetails: WorkWithDetails
-    ): ApiWorkWithDetails {
-        val apiWork = workMapper.toApiWork(workWithDetails.work)
-        logger.info(apiWork.toString())
-        val apiCharacters =
-            workWithDetails.characters?.map { workMapper.toApiCharacter(it) }
-                ?.toMutableList()
-        logger.info(apiCharacters.toString())
-        val apiCreators =
-            workWithDetails.creators?.map { workMapper.toApiCreator(it) }
-                ?.toMutableList()
-        logger.info(apiCreators.toString())
-        val apiTags = workWithDetails.tags?.map { workMapper.toApiTag(it) }
-            ?.toMutableList()
-        logger.info(apiTags.toString())
-        val apiImgs = workWithDetails.imgs.map { workMapper.toApiImg(it) }
-            .toMutableList()
-        logger.info(apiImgs.toString())
-
-        val apiWorkWithDetails = ApiWorkWithDetails(
+    private fun toApiWorkWithTag(
+        workWithTag: WorkWithTag
+    ): ApiWorkWithTag {
+        val apiWork = workMapper.toApiWork(workWithTag.work)
+        val apiTags = tagMapper.toApiTag(workWithTag.tags)
+        val apiWorkWithTag = ApiWorkWithTag(
             apiWork = apiWork,
-            apiCharacters = apiCharacters,
-            apiCreators = apiCreators,
-            apiTags = apiTags,
-            apiImgs = apiImgs
+            apiTags = apiTags
         )
-        return apiWorkWithDetails
+        return apiWorkWithTag
     }
 }

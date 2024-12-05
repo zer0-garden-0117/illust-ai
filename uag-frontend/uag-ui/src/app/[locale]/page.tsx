@@ -12,22 +12,22 @@ const TopPage: React.FC = () => {
   return (
     <>
     <ImageGrid
-        title={"新着 フリーイラスト"}
+        title={"新着"}
         isViewCount={false}
         isViewPagination={false}
         imageCount={4}
-        words={["illustration"]}
-        type={"free"}
+        words={["GLOBAL"]}
+        type={"tag"}
       />
     <Space h='xl'/> 
-    <ImageGrid
+    {/* <ImageGrid
         title={"新着 フリーアイコン"}
         isViewCount={false}
         isViewPagination={false}
         imageCount={4}
         words={["icon"]}
         type={"free"}
-      />
+      /> */}
   </>
   );
 };

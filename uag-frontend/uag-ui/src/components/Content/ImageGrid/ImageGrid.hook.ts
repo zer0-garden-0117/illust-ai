@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { ImageGridView } from "./ImageGrid.view";
 import { ImageData } from "./ImageGrid.view";
-import { useWorksSearchByTags, WorkSearchByTagRequestBody } from "@/apis/openapi/works/useWorksSearchByTags";
-import { useWorksSearch, WorkSearchRequestBody, WorkSearchResult } from "@/apis/openapi/works/useWorksSearch";
+import { useWorksSearchByTags, WorkSearchByTagRequestBody, WorkSearchByTagResult } from "@/apis/openapi/works/useWorksSearchByTags";
 import { useUserToken } from "@/apis/auth/useUserToken";
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
@@ -35,10 +34,9 @@ export const useImageGrid = (
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(1);
   const [loading, setLoading] = useState(true); // ローディング状態
-  const [worksData, setWorksData] = useState<WorkSearchResult>();
+  const [worksData, setWorksData] = useState<WorkSearchByTagResult>();
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
   const { trigger: triggerSearchWithTags, data: dataByTags } = useWorksSearchByTags();
-  const { trigger: triggerSearch, data: dataByFreewords } = useWorksSearch();
   const { trigger: triggerSearchWithLiked, data: dataByLiked } = useUsersLikedGet();
   const { trigger: triggerSearchWithRated, data: dataByRated } = useUsersRatedGet();
   const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
@@ -74,21 +72,6 @@ export const useImageGrid = (
     try {
       // 作品のデータを取得
       await triggerSearchWithTags({ body });
-    } catch (err) {
-      console.error("Failed to fetch images:", err);
-    }
-  };
-
-  const fetchImagesWithFreewords = async (page: number) => {
-    setLoading(true);  // ローディング開始
-    const body: WorkSearchRequestBody = {
-      words: words,
-      offset: (page - 1) * itemsPerPage,  // ページごとのoffsetを計算
-      limit: itemsPerPage  // 1ページに表示する件数
-    };
-    try {
-      // 作品のデータを取得
-      await triggerSearch({ body });
     } catch (err) {
       console.error("Failed to fetch images:", err);
     }
@@ -132,7 +115,7 @@ export const useImageGrid = (
     if (type == "tag") {
       fetchImagesWithTags(currentPage);
     } else if (type == "free") {
-      fetchImagesWithFreewords(currentPage);
+      fetchImagesWithTags(currentPage);
     } else if (type == "liked") {
       fetchImagesWithLiked(currentPage);
     } else if (type === "rated") {
@@ -145,14 +128,14 @@ export const useImageGrid = (
   useEffect(() => {
     if (type == "tag" && dataByTags) {
       setWorksData(dataByTags);
-    } else if (type == "free" && dataByFreewords) {
-      setWorksData(dataByFreewords);
+    } else if (type == "free" && dataByTags) {
+      setWorksData(dataByTags);
     } else if (type == "liked" && dataByLiked) {
       setWorksData(dataByLiked)
     } else if (type == "rated" && dataByRated) {
       setWorksData(dataByRated)
     }
-  }, [dataByTags, dataByFreewords, dataByLiked, dataByRated, type]);
+  }, [dataByTags, dataByLiked, dataByRated, type]);
 
   // works データが変更されたときの処理
   useEffect(() => {
@@ -160,7 +143,9 @@ export const useImageGrid = (
     console.log("headers:", headers)
     if (worksData) {
       if (isAuthenticated && userToken != null) {
-        const workIds = worksData.works.map(work => work.workId).filter((id): id is number => id !== undefined);
+        const workIds = worksData.works
+        .map((work) => work.workId)
+        .filter((id): id is string => id !== undefined);
         // アクティビティ情報を取得
         triggerActivity({ headers, body: { workIds } });
       } else {
@@ -180,24 +165,27 @@ export const useImageGrid = (
   useEffect(() => {
     if (worksData && activitiesData) {
       // works と activityData を結合して imageData にセット
-      const fetchedImages: ImageData[] = worksData.works.map(work => {
-        const activity = activitiesData?.apiRateds?.find(a => a.workId === work.workId);
+      const fetchedImages: ImageData[] = worksData.works.map((work) => {
+        const activity = activitiesData?.apiRateds?.find((a) => a.workId === work.workId);
+        
+        // 型安全を確保しつつプロパティを処理
         return {
-          workId: work.workId || 0,
+          workId: work.workId ?? "",
           mainTitle: work.mainTitle || "No Title",
           titleImage: work.titleImgUrl || "",
           thumbnailImage: work.thumbnailImgUrl || "",
           watermaskImage: work.watermaskImgUrl || "",
           date: work.createdAt || "",
-          isLiked: activitiesData?.apiLikeds?.some(a => a.workId === work.workId),  // liked の確認
-          rating: activity?.rating || 0,  // レーティングの確認
+          isLiked: activitiesData?.apiLikeds?.some((a) => a.workId === work.workId) || false, // Liked の確認
+          rating: activity?.rating || 0, // レーティングの確認
         };
       });
+
       setImageData(fetchedImages);
 
-      // totalCountから総ページ数を計算して更新
-      setTotalPages(Math.ceil(worksData.totalCount / itemsPerPage));
-      setTotalCount(worksData.totalCount)
+      // totalCount から総ページ数を計算して更新
+      setTotalPages(Math.ceil((worksData.totalCount || 0) / itemsPerPage));
+      setTotalCount(worksData.totalCount || 0);
       setLoading(false);
     }
   }, [worksData, activitiesData]);
@@ -216,11 +204,11 @@ export const useImageGrid = (
     setCurrentPage(page);
   }, [searchParams.get('page')]);
 
-  const onRateChange = (workId: number, value: number) => {
+  const onRateChange = (workId: string, value: number) => {
     triggerRated({ headers, workId, rating: value });
   };
 
-  const onLikeChange = (workId: number) => {
+  const onLikeChange = (workId: string) => {
     const isCurrentlyLiked = imageData.find((image) => image.workId === workId)?.isLiked;
 
     // 現在の状態に基づいて "いいね" または "取り消し" を実行

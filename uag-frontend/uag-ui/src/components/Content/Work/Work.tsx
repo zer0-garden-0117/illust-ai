@@ -3,7 +3,7 @@ import { useWork } from './Work.hook';
 import { WorkView } from './Work.view';
 
 type WorkProps = {
-  workId: number;
+  workId: string;
 };
 
 export const Work: React.FC<WorkProps> = (

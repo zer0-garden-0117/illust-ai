@@ -1,6 +1,6 @@
-package com.uag.zer0.repository.user
+package com.uag.zer0.repository
 
-import com.uag.zer0.entity.user.Rated
+import com.uag.zer0.entity.Rated
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
@@ -27,34 +27,26 @@ class RatedRepository(
 
     fun findByUserId(userId: String): List<Rated> {
         return try {
-            val index = table.index("UserUpdatedAtIndex")
             val queryConditional = QueryConditional.keyEqualTo(
                 Key.builder().partitionValue(userId).build()
             )
-            val queryRequest = index.query { r ->
-                r.queryConditional(queryConditional)
-                    .scanIndexForward(false)  // updatedAtで降順にソート
-            }
-
-            val ratedItems = mutableListOf<Rated>()
-            queryRequest.forEach { page ->
-                ratedItems.addAll(page.items())
-            }
-            ratedItems
+            val results = table.query(queryConditional).items().toList()
+            logger.info("Found ${results.size} rated items for userId=$userId")
+            results
         } catch (e: DynamoDbException) {
             throw RuntimeException(
-                "Failed to query rated items by userId with updatedAt: $userId",
+                "Failed to find rated items for userId=$userId",
                 e
             )
         }
     }
 
-    fun findByUserIdsAndWorkIds(ids: List<Pair<String, Int>>): List<Rated> {
+    fun findByUserIdsAndWorkIds(ids: List<Pair<String, String>>): List<Rated> {
         return try {
             val keys = ids.map { (userId, workId) ->
                 mapOf(
                     "userId" to AttributeValue.builder().s(userId).build(),
-                    "workId" to AttributeValue.builder().n(workId.toString())
+                    "workId" to AttributeValue.builder().s(workId)
                         .build()
                 )
             }
@@ -82,32 +74,6 @@ class RatedRepository(
         }
     }
 
-    fun findByUserIdWithSpecificRating(
-        userId: String,
-        rating: Int
-    ): List<Rated> {
-        return try {
-            val index = table.index("UserRatingIndex")
-            val queryConditional = QueryConditional.keyEqualTo(
-                Key.builder().partitionValue(userId).sortValue(rating).build()
-            )
-            val queryRequest = index.query { r ->
-                r.queryConditional(queryConditional)
-            }
-
-            val ratedItems = mutableListOf<Rated>()
-            queryRequest.forEach { page ->
-                ratedItems.addAll(page.items())
-            }
-            ratedItems
-        } catch (e: DynamoDbException) {
-            throw RuntimeException(
-                "Failed to query rated items by userId: $userId with specific rating: $rating",
-                e
-            )
-        }
-    }
-
     fun registerRated(rated: Rated): Rated {
         return try {
             table.putItem(rated)
@@ -120,7 +86,7 @@ class RatedRepository(
         }
     }
 
-    fun deleteRated(userId: String, workId: Int): Rated {
+    fun deleteRated(userId: String, workId: String): Rated {
         return try {
             val key =
                 Key.builder().partitionValue(userId).sortValue(workId).build()

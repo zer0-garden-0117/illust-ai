@@ -224,34 +224,36 @@ export const WorkView = memo(function WorkViewComponent({
             <Group style={{ marginTop: '5px' }}>
               <Text>タグ:</Text>
               <Pill.Group gap={3}>
-                {workData?.apiTags?.map((tagItem, index) => (
-                  <Pill key={index} onClick={() => onTagClick(tagItem.tag)} style={{ cursor: 'pointer' }}>
-                    {tagItem.tag}
+                {workData?.apiTags?.others?.map((tagItem, index) => (
+                  <Pill key={index} onClick={() => onTagClick(tagItem)} style={{ cursor: 'pointer' }}>
+                    {tagItem}
                   </Pill>
                 ))}
               </Pill.Group>
             </Group>
             <Group style={{ marginTop: '5px' }}>
               <Text>作者:</Text>
-              {workData?.apiCreators?.map((creatorItem, index) => (
-                <Pill key={index} onClick={() => onCreatorClick(creatorItem.creator)} style={{ cursor: 'pointer' }}>
-                  {creatorItem.creator}
+              {workData?.apiTags?.creators?.map((creatorItem, index) => (
+                <Pill key={index} onClick={() => onCreatorClick(creatorItem)} style={{ cursor: 'pointer' }}>
+                  {creatorItem}
                 </Pill>
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
               <Text>キャラクター名:</Text>
-              {workData?.apiCharacters?.map((characterItem, index) => (
-                <Pill key={index} onClick={() => onCharacterClick(characterItem.character)} style={{ cursor: 'pointer' }}>
-                  {characterItem.character}
+              {workData?.apiTags?.characters?.map((characterItem, index) => (
+                <Pill key={index} onClick={() => onCharacterClick(characterItem)} style={{ cursor: 'pointer' }}>
+                  {characterItem}
                 </Pill>
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
               <Text>ジャンル:</Text>
-              <Pill onClick={() => onGenreClick(workData?.apiWork?.genre)} style={{ cursor: 'pointer' }}>
-                {workData?.apiWork?.genre}
-              </Pill>
+              {workData?.apiTags?.genres?.map((genresItem, index) => (
+                <Pill key={index} onClick={() => onGenreClick(genresItem)} style={{ cursor: 'pointer' }}>
+                  {genresItem}
+                </Pill>
+              ))}  
             </Group>
             <Group style={{ marginTop: '5px' }}>
               <Text>更新日:</Text>

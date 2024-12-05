@@ -25,36 +25,28 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
     const tagsArray = workData.tags ? workData.tags.split(',') : [];
     const charactersArray = workData.character ? workData.character.split(',') : [];
     const creatorsArray = workData.creator ? workData.creator.split(',') : [];
+    const genre = [workData.genre]
+    const format = [workData.format]
     const workDetails = {
       apiWork: {
-        workId: undefined,
-        genre: workData.genre || '',
-        format: workData.format || '',
-        workSize: undefined,
-        description: workData.description || '',
-        createdAt: new Date().toISOString(),
-        pages: undefined,
-        subTitle: workData.subTitle || '',
-        downloads: 0,
+        workId: '',
         mainTitle: workData.mainTitle || '',
+        subTitle: workData.subTitle || '',
+        description: workData.description || '',
         titleImgUrl: '',
         thumbnailImgUrl: '',
         watermaskImgUrl: '',
         likes: 0,
+        createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
-      apiTags: tagsArray.map((tag) => ({
-        tag: tag.trim() || '',
-        updatedAt: new Date().toISOString()
-      })),
-      apiCharacters: charactersArray.map((character) => ({
-        character: character.trim() || '',
-        updatedAt: new Date().toISOString()
-      })),
-      apiCreators: creatorsArray.map((creator) => ({
-        creator: creator.trim() || '',
-        updatedAt: new Date().toISOString()
-      }))
+      apiTags: {
+        characters: charactersArray,
+        creators: creatorsArray,
+        genres: genre,
+        formats: format,
+        others: tagsArray
+      }
     };
 
     // リクエストボディの作成
@@ -67,6 +59,7 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
     };
 
     try {
+      console.log(workData)
       await trigger({
         headers,
         body: requestBody

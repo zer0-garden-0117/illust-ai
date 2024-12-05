@@ -2,14 +2,12 @@ package com.uag.zer0.controller
 
 import com.uag.zer0.config.CustomAuthenticationToken
 import com.uag.zer0.dto.UsersActivity
-import com.uag.zer0.entity.user.User
 import com.uag.zer0.generated.endpoint.UsersApi
 import com.uag.zer0.generated.model.*
 import com.uag.zer0.mapper.UserMapper
 import com.uag.zer0.mapper.WorkMapper
 import com.uag.zer0.service.TokenService
-import com.uag.zer0.service.UserManagerService
-import com.uag.zer0.service.user.UserService
+import com.uag.zer0.service.user.UserManagerService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class UsersController(
     private val tokenService: TokenService,
-    private val userService: UserService,
     private val userManagerService: UserManagerService,
     private val userMapper: UserMapper,
     private val workMapper: WorkMapper
@@ -38,9 +35,7 @@ class UsersController(
         val userId = getUserId() ?: return ResponseEntity.ok(
             ApiUserToken(userToken = "unregistered")
         )
-        val currentUser: User =
-            userService.hasUser(userId) ?: userService.registerUser(userId)
-        val userToken = tokenService.generateToken(currentUser)
+        val userToken = tokenService.generateToken(userId)
         return ResponseEntity.ok(ApiUserToken(userToken = userToken))
     }
 
@@ -59,7 +54,7 @@ class UsersController(
     }
 
     // いいね付与
-    override fun postUsersLikedByWorkdId(workId: Int): ResponseEntity<ApiLiked> {
+    override fun postUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val liked = userManagerService.registerUsersLiked(userId, workId)
@@ -69,7 +64,7 @@ class UsersController(
 
     // レーティング付与
     override fun postUsersRatedByWorkdId(
-        @PathVariable workId: Int,
+        @PathVariable workId: String,
         @RequestBody apiRated: ApiRated
     ): ResponseEntity<ApiRated> {
         val userId =
@@ -83,17 +78,8 @@ class UsersController(
         return ResponseEntity.ok(apiRatedResponse)
     }
 
-    // 閲覧済付与
-    override fun postUsersViewedByWorkdId(workId: Int): ResponseEntity<ApiViewed> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val viewed = userManagerService.registerUsersViewed(userId, workId)
-        val apiViewed = userMapper.toApiViewed(viewed)
-        return ResponseEntity.ok(apiViewed)
-    }
-
     // いいね削除
-    override fun deleteUsersLikedByWorkdId(workId: Int): ResponseEntity<ApiLiked> {
+    override fun deleteUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val liked = userManagerService.deleteUsersLiked(userId, workId)
@@ -102,21 +88,12 @@ class UsersController(
     }
 
     // レーティング削除
-    override fun deleteUsersRatedByWorkdId(workId: Int): ResponseEntity<ApiRated> {
+    override fun deleteUsersRatedByWorkdId(workId: String): ResponseEntity<ApiRated> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val rated = userManagerService.deleteUsersRated(userId, workId)
         val apiRated = userMapper.toApiRated(rated)
         return ResponseEntity.ok(apiRated)
-    }
-
-    // 閲覧済削除
-    override fun deleteUsersViewedByWorkdId(workId: Int): ResponseEntity<ApiViewed> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val viewed = userManagerService.deleteUsersViewed(userId, workId)
-        val apiViewed = userMapper.toApiViewed(viewed)
-        return ResponseEntity.ok(apiViewed)
     }
 
     // いいね取得
@@ -161,22 +138,6 @@ class UsersController(
             totalCount = ratedList.totalCount ?: 0
         )
         return ResponseEntity.ok(apiWorkWithDetails)
-    }
-
-    // 閲覧済取得
-    override fun getUsersViewed(
-        offset: Int,
-        limit: Int
-    ): ResponseEntity<List<ApiViewed>> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val viewedList =
-            userManagerService.getUsersViewed(userId, offset, limit)
-        val apiViewed = mutableListOf<ApiViewed>()
-        viewedList.forEach { viewed ->
-            apiViewed.add(userMapper.toApiViewed(viewed))
-        }
-        return ResponseEntity.ok(apiViewed)
     }
 
     fun toApiUsersActivity(activityList: UsersActivity): ApiUsersActivity {

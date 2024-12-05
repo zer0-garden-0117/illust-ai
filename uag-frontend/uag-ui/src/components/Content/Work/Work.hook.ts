@@ -12,7 +12,7 @@ import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
 import { useNavigate } from "@/utils/navigate";
 
 type UseWorkProps = {
-  workId: number;
+  workId: string;
 };
 
 export const useWork = (

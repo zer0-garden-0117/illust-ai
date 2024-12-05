@@ -9,7 +9,7 @@ export type DeleteRatedHeaders = UserTokenHeader & CsrfTokenHeader;
 
 export type DeleteRatedArgs = {
   headers?: DeleteRatedHeaders;
-  workId: number;
+  workId: string;
 };
 
 export const useUsersRatedDelete = (

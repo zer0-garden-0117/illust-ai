@@ -41,6 +41,9 @@ dependencies {
     implementation("software.amazon.awssdk:s3")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 
+    // UUID
+    implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
+
     // JWT,JSON
     implementation("com.auth0:java-jwt:4.2.1")
     implementation("org.json:json:20240303")

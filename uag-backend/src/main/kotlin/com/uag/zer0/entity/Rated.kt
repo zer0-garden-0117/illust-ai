@@ -1,18 +1,23 @@
-package com.uag.zer0.entity.work
+package com.uag.zer0.entity
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
+import java.time.Instant
 
 @DynamoDbBean
-data class Img(
+data class Rated(
     @get:DynamoDbPartitionKey
-    var workId: Int = 0,
+    var userId: String = "",
 
     @get:DynamoDbSortKey
-    var imgUrl: String = "",
+    @get:DynamoDbAttribute("workId")
+    var workId: String = "",
 
-    @get:DynamoDbAttribute("imgPageNum")
-    var imgPageNum: Int = 0,
+    @get:DynamoDbAttribute("rating")
+    var rating: Int = 0,
+
+    @get:DynamoDbAttribute("updatedAt")
+    var updatedAt: Instant = Instant.now()
 )

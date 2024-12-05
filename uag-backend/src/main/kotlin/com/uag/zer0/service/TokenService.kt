@@ -3,7 +3,6 @@ package com.uag.zer0.service
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
-import com.uag.zer0.entity.user.User
 import org.slf4j.LoggerFactory
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
@@ -21,6 +20,7 @@ class TokenService {
 
     private val secretKey: String = "mysecretekey"
     private val algorithm = Algorithm.HMAC256(secretKey)
+    private val adminUserId = ""
 
     fun getEmailFromAccessToken(accessToken: String): String? {
         val restTemplate = RestTemplate()
@@ -48,10 +48,12 @@ class TokenService {
         return userInfo?.get("email") as String?
     }
 
-    fun generateToken(user: User): String {
+    fun generateToken(userId: String): String {
+        val userRole = if (userId == adminUserId)
+            "admin" else "user"
         val token = JWT.create()
-            .withClaim("role", user.userRole)
-            .withClaim("userId", user.userId)
+            .withClaim("role", userRole)
+            .withClaim("userId", userId)
             .withExpiresAt(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
             .sign(algorithm)
         return token

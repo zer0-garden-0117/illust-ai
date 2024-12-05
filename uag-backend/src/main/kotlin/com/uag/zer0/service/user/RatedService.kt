@@ -1,8 +1,8 @@
 package com.uag.zer0.service.user
 
 import com.uag.zer0.dto.RatedWithSearchResult
-import com.uag.zer0.entity.user.Rated
-import com.uag.zer0.repository.user.RatedRepository
+import com.uag.zer0.entity.Rated
+import com.uag.zer0.repository.RatedRepository
 import org.springframework.stereotype.Service
 import java.time.Instant
 
@@ -31,7 +31,7 @@ class RatedService(
 
     fun findByUserIdsAndWorkIds(
         userId: String,
-        workIds: List<Int>
+        workIds: List<String>
     ): List<Rated> {
         val userIdWorkIdPairs = workIds.map { workId ->
             Pair(userId, workId)
@@ -39,7 +39,7 @@ class RatedService(
         return ratedRepository.findByUserIdsAndWorkIds(userIdWorkIdPairs)
     }
 
-    fun registerRated(userId: String, workId: Int, rating: Int): Rated {
+    fun registerRated(userId: String, workId: String, rating: Int): Rated {
         val rated = Rated(
             userId = userId,
             workId = workId,
@@ -49,7 +49,7 @@ class RatedService(
         return ratedRepository.registerRated(rated)
     }
 
-    fun deleteRated(userId: String, workId: Int): Rated {
+    fun deleteRated(userId: String, workId: String): Rated {
         return ratedRepository.deleteRated(userId, workId)
     }
 }

@@ -1,10 +1,10 @@
-package com.uag.zer0.service.work
+package com.uag.zer0.service.tag
 
 import com.uag.zer0.dto.TagsWithSearchResult
-import com.uag.zer0.entity.work.Tag
-import com.uag.zer0.entity.work.Work
-import com.uag.zer0.repository.work.TagRepository
-import com.uag.zer0.repository.work.WorkRepository
+import com.uag.zer0.entity.Tag
+import com.uag.zer0.entity.Work
+import com.uag.zer0.repository.TagRepository
+import com.uag.zer0.repository.WorkRepository
 import org.springframework.stereotype.Service
 
 @Service
@@ -34,6 +34,17 @@ class TagService(
             tags = filteredTags,
             totalCount = count
         )
+    }
+
+    fun findByWorkIds(
+        workId: String,
+    ): List<Tag> {
+        val allTags = tagRepository.findByWorkId(workId)
+
+        // updatedAt順にソート（降順）
+        val sortedTags = allTags.sortedByDescending { it.updatedAt }
+
+        return sortedTags
     }
 
     fun findByTags(

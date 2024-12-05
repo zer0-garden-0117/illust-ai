@@ -1,6 +1,6 @@
 package com.uag.zer0.dto
 
-import com.uag.zer0.entity.work.Work
+import com.uag.zer0.entity.Work
 
 data class WorksWithSearchResult(
     val works: List<Work>,

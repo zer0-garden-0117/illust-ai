@@ -1,10 +1,10 @@
 package com.uag.zer0.service.user
 
 import com.uag.zer0.dto.LikedWithSearchResult
-import com.uag.zer0.entity.user.Liked
-import com.uag.zer0.repository.user.LikedRepository
-import com.uag.zer0.repository.work.WorkRepository
-import com.uag.zer0.service.work.TagService
+import com.uag.zer0.entity.Liked
+import com.uag.zer0.repository.LikedRepository
+import com.uag.zer0.repository.WorkRepository
+import com.uag.zer0.service.tag.TagService
 import org.springframework.stereotype.Service
 import java.time.Instant
 
@@ -26,7 +26,6 @@ class LikedService(
         // offsetで指定した件数分スキップしlimit分だけ取得
         val filteredLiked = liked.drop(offset).take(limit)
         val count = liked.size
-
         return LikedWithSearchResult(
             liked = filteredLiked,
             totalCount = count
@@ -39,7 +38,7 @@ class LikedService(
 
     fun findByUserIdsAndWorkIds(
         userId: String,
-        workIds: List<Int>
+        workIds: List<String>
     ): List<Liked> {
         val userIdWorkIdPairs = workIds.map { workId ->
             Pair(userId, workId)
@@ -47,7 +46,7 @@ class LikedService(
         return likedRepository.findByUserIdsAndWorkIds(userIdWorkIdPairs)
     }
 
-    fun registerLiked(userId: String, workId: Int): Liked {
+    fun registerLiked(userId: String, workId: String): Liked {
         val liked = Liked(
             userId = userId,
             workId = workId,
@@ -56,7 +55,7 @@ class LikedService(
         return likedRepository.registerLiked(liked)
     }
 
-    fun deleteLiked(userId: String, workId: Int): Liked {
+    fun deleteLiked(userId: String, workId: String): Liked {
         return likedRepository.deleteLiked(userId, workId)
     }
 }

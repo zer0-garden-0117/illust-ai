@@ -9,7 +9,7 @@ export type RegisterRatedHeaders = UserTokenHeader & CsrfTokenHeader;
 
 export type RegisterRatedArgs = {
   headers?: RegisterRatedHeaders;
-  workId: number;
+  workId: string;
   rating: number;
 };
 

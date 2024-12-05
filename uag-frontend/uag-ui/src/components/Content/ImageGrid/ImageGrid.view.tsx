@@ -10,7 +10,7 @@ import { BsSuitDiamondFill } from "react-icons/bs";
 import { useNavigate } from '@/utils/navigate';
 
 export type ImageData = {
-  workId: number;
+  workId: string;
   mainTitle: string;
   titleImage: string;
   thumbnailImage: string;
@@ -30,8 +30,8 @@ type ImageGridViewProps = {
   totalCount: number;
   loading: boolean;
   onPageChange: (page: number) => void;
-  onRateChange: (workId: number, value: number) => void;
-  onLikeChange: (workId: number) => void;
+  onRateChange: (workId: string, value: number) => void;
+  onLikeChange: (workId: string) => void;
   isAuthenticated: boolean;
 };
 
@@ -109,8 +109,8 @@ const MemoizedCard = memo(
   ({ imageData, index, onRateChange, onLikeChange, isAuthenticated, router, setLoginModalOpen, onImageLoad }: { 
     imageData: ImageData; 
     index: number; 
-    onRateChange: (workId: number, value: number) => void; 
-    onLikeChange: (workId: number) => void; 
+    onRateChange: (workId: string, value: number) => void; 
+    onLikeChange: (workId: string) => void; 
     isAuthenticated: boolean; 
     router: ReturnType<typeof useRouter>; 
     setLoginModalOpen: React.Dispatch<React.SetStateAction<boolean>>;

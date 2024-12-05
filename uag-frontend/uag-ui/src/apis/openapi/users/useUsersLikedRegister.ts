@@ -9,7 +9,7 @@ export type RegisterLikedHeaders = UserTokenHeader & CsrfTokenHeader;
 
 export type RegisterLikedArgs = {
   headers?: RegisterLikedHeaders;
-  workId: number;
+  workId: string;
 };
 
 export const useUsersLikedRegister = (

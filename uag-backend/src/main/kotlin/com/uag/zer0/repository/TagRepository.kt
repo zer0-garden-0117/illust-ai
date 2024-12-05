@@ -1,6 +1,6 @@
-package com.uag.zer0.repository.work
+package com.uag.zer0.repository
 
-import com.uag.zer0.entity.work.Tag
+import com.uag.zer0.entity.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
@@ -8,10 +8,7 @@ import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest
-import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
-import software.amazon.awssdk.services.dynamodb.model.PutRequest
-import software.amazon.awssdk.services.dynamodb.model.WriteRequest
+import software.amazon.awssdk.services.dynamodb.model.*
 
 @Repository
 class TagRepository(
@@ -42,7 +39,7 @@ class TagRepository(
         return tags
     }
 
-    fun findByWorkId(workId: Int): List<Tag> {
+    fun findByWorkId(workId: String): List<Tag> {
         return try {
             val queryConditional = QueryConditional.keyEqualTo(
                 Key.builder().partitionValue(workId).build()
@@ -87,6 +84,37 @@ class TagRepository(
             dynamoDbClient.batchWriteItem(batchWriteItemRequest)
         } catch (e: DynamoDbException) {
             throw RuntimeException("Failed to register tags", e)
+        }
+    }
+
+    fun deleteTagByWorkId(workId: String) {
+        try {
+            val tagsToDelete = findByWorkId(workId) // 対象のタグを取得
+            val deleteRequests = tagsToDelete.map { tag ->
+                WriteRequest.builder()
+                    .deleteRequest { dr ->
+                        dr.key(
+                            mapOf(
+                                "workId" to AttributeValue.builder()
+                                    .n(workId.toString()).build(),
+                                "tag" to AttributeValue.builder().s(tag.tag)
+                                    .build()
+                            )
+                        )
+                    }
+                    .build()
+            }
+
+            val batchWriteItemRequest = BatchWriteItemRequest.builder()
+                .requestItems(mapOf("tag" to deleteRequests))
+                .build()
+
+            dynamoDbClient.batchWriteItem(batchWriteItemRequest)
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "Failed to delete tags by workId: $workId",
+                e
+            )
         }
     }
 }

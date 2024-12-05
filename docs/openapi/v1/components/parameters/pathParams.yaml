@@ -2,20 +2,18 @@ WorksIdPathParam:
   name: workId
   in: path
   description: |-
-    ### Works Id
+    ### Work Id
     作品のId workId
   required: true
   schema:
-    type: integer
-    format: int32
+    type: string
 
-TagsIdPathParam:
-  name: tagId
+TagsPathParam:
+  name: tag
   in: path
   description: |-
-    ### Tags Id
-    タグのId tagId
+    ### Tag
+    タグ tag
   required: true
   schema:
-    type: integer
-    format: int32
+    type: string

@@ -1,6 +1,6 @@
 package com.uag.zer0.dto
 
-import com.uag.zer0.entity.user.Rated
+import com.uag.zer0.entity.Rated
 
 data class RatedWithSearchResult(
     val rated: List<Rated>,

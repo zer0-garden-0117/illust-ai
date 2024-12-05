@@ -1,19 +1,12 @@
-package com.uag.zer0.service
+package com.uag.zer0.service.user
 
 import com.uag.zer0.dto.UsersActivity
 import com.uag.zer0.dto.WorksWithSearchResult
-import com.uag.zer0.entity.user.Liked
-import com.uag.zer0.entity.user.Rated
-import com.uag.zer0.entity.user.Viewed
-import com.uag.zer0.entity.work.Work
-import com.uag.zer0.repository.work.WorkRepository
-import com.uag.zer0.service.user.LikedService
-import com.uag.zer0.service.user.RatedService
-import com.uag.zer0.service.user.ViewedService
-import com.uag.zer0.service.work.CharacterService
-import com.uag.zer0.service.work.CreatorService
-import com.uag.zer0.service.work.TagService
-import com.uag.zer0.service.work.WorkService
+import com.uag.zer0.entity.Liked
+import com.uag.zer0.entity.Rated
+import com.uag.zer0.entity.Work
+import com.uag.zer0.repository.WorkRepository
+import com.uag.zer0.service.tag.TagService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,16 +14,15 @@ import org.springframework.transaction.annotation.Transactional
 class UserManagerService(
     private val likedService: LikedService,
     private val retedService: RatedService,
-    private val viewedService: ViewedService,
     private val workRepository: WorkRepository,
-    private val workService: WorkService,
     private val tagService: TagService,
-    private val characterService: CharacterService,
-    private val creatorService: CreatorService
 ) {
 
     @Transactional
-    fun searchUsersActivity(userId: String, workIds: List<Int>): UsersActivity {
+    fun searchUsersActivity(
+        userId: String,
+        workIds: MutableList<String>
+    ): UsersActivity {
         val liked = likedService.findByUserIdsAndWorkIds(userId, workIds)
         val rated = retedService.findByUserIdsAndWorkIds(userId, workIds)
         return UsersActivity(
@@ -72,11 +64,7 @@ class UserManagerService(
 
         // 各検索サービスから結果を取得
         val searchResults = listOf(
-            tagService.findByTagsAsWork(words),
-            workService.findByGenre(words),
-            workService.findByFormat(words),
-            characterService.findByCharactersAsWork(words),
-            creatorService.findByCreatorsAsWork(words)
+            tagService.findByTagsAsWork(words)
         )
 
         val workIds = searchResults
@@ -99,12 +87,12 @@ class UserManagerService(
     }
 
     @Transactional
-    fun registerUsersLiked(userId: String, workId: Int): Liked {
+    fun registerUsersLiked(userId: String, workId: String): Liked {
         return likedService.registerLiked(userId, workId)
     }
 
     @Transactional
-    fun deleteUsersLiked(userId: String, workId: Int): Liked {
+    fun deleteUsersLiked(userId: String, workId: String): Liked {
         return likedService.deleteLiked(userId, workId)
     }
 
@@ -130,27 +118,17 @@ class UserManagerService(
     }
 
     @Transactional
-    fun registerUsersRated(userId: String, workId: Int, rating: Int): Rated {
+    fun registerUsersRated(userId: String, workId: String, rating: Int): Rated {
         return retedService.registerRated(userId, workId, rating)
     }
 
     @Transactional
-    fun deleteUsersRated(userId: String, workId: Int): Rated {
+    fun deleteUsersRated(userId: String, workId: String): Rated {
         return retedService.deleteRated(userId, workId)
     }
 
-    @Transactional
-    fun getUsersViewed(userId: String, offset: Int, limit: Int): List<Viewed> {
-        return viewedService.findByUserIdWithOffset(userId, offset, limit)
-    }
-
-    @Transactional
-    fun registerUsersViewed(userId: String, workId: Int): Viewed {
-        return viewedService.registerViewed(userId, workId)
-    }
-
-    @Transactional
-    fun deleteUsersViewed(userId: String, workId: Int): Viewed {
-        return viewedService.deleteViewed(userId, workId)
+    fun deleteWorkId(workId: String) {
+        // likedテーブルから削除
+        // ratedテーブルから削除
     }
 }

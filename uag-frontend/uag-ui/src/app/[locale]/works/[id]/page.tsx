@@ -2,7 +2,7 @@
 
 import Work from '@/components/Content/Work/Work';
 
-const PostPage: React.FC<{ params: { id: number } }> = (
+const PostPage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
   return (
