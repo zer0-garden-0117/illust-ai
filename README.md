@@ -19,7 +19,7 @@
   - next.js : https://main.dikxsy3mbqtz7.amplifyapp.com (.env.test)
 
 ### バックエンド
-- ALB : https://uag-test-staging.click
+- CloudFront : https://uag-test-staging.click
 - db : 
 - buildspec.ymlで下記を起動
   - spring
