@@ -31,6 +31,11 @@ export const UserMenu: React.FC = () => {
     setSignupModalOpen(true);
   };
 
+  const onClickLogout = async () => {
+    await logout()
+    window.location.href = "/"
+  };
+
   return (
     <>
       <Menu
@@ -94,7 +99,7 @@ export const UserMenu: React.FC = () => {
               </Menu.Item>
               <Menu.Item
                 leftSection={<MdLogout className={classes.icon} />}
-                onClick={logout}
+                onClick={onClickLogout}
               >
                 ログアウト
               </Menu.Item>

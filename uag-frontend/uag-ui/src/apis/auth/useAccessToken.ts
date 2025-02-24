@@ -162,8 +162,8 @@ export const useAccessToken = () => {
     }
   };
 
-  const logout = () => {
-    signOut();
+  const logout = async () => {
+    await signOut();
     setIsAuthenticated(false);
     setEmail(null);
     setAccessToken(null);
