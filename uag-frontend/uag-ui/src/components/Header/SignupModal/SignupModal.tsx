@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Modal, Button, TextInput, PasswordInput, Text, Divider, Space, Alert } from '@mantine/core';
-import { useAccessToken } from '../../../apis/auth/useAccessToken';
 import { FcGoogle } from "react-icons/fc";
 import { FaLine } from "react-icons/fa";
-import { log } from 'console';
+import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -11,7 +10,7 @@ interface SignupModalProps {
 }
 
 const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose }) => {
-  const { login, loginWithGoogle, loginWithLine, register, confirmSignup } = useAccessToken();
+  const { login, loginWithGoogle, loginWithLine, register, confirmSignup } = useAccessTokenContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);

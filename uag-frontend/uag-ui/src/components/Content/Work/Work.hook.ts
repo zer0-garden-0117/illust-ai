@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { UsersActivitySearchResult, useUsersActivitySearch } from "@/apis/openapi/users/useUsersActivitySearch";
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
-import { useAccessToken } from "@/apis/auth/useAccessToken";
 import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
 import { useNavigate } from "@/utils/navigate";
 import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
+import { useAccessTokenContext } from "@/providers/auth/accessTokenProvider";
 
 type UseWorkProps = {
   workId: string;
@@ -27,7 +27,7 @@ export const useWork = (
   const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
   const { trigger: triggerDeliked } = useUsersLikedDelete();
-  const { isAuthenticated } = useAccessToken();
+  const { isAuthenticated } = useAccessTokenContext();
   const { userToken } = useUserTokenContext();
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
   const navigate = useNavigate();

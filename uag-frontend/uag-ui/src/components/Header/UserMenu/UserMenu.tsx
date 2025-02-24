@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAccessToken } from '../../../apis/auth/useAccessToken';
-import { Avatar, Group, Menu, Space } from '@mantine/core';
+import { Menu } from '@mantine/core';
 import { MdLogin, MdLogout } from "react-icons/md";
-import {
-  RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine, RiHeartAdd2Line
-} from "react-icons/ri";
 import { FaRegStar, FaRegHeart } from "react-icons/fa";
 import { RiUserLine } from "react-icons/ri";
 import classes from './UserMenu.module.css';
 import AuthModal from '../AuthModal/AuthModal';
 import { useNavigate } from '@/utils/navigate';
+import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 
 export const UserMenu: React.FC = () => {
-  const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessToken();
+  const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessTokenContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理

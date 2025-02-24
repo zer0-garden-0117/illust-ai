@@ -8,6 +8,7 @@ import { ErrorProvider } from '@/providers/error/errorProvider';
 import { UserTokenProvider } from '@/providers/auth/userTokenProvider';
 import type { Metadata } from 'next';
 import type { Viewport } from 'next'
+import { AccessTokenProvider } from '@/providers/auth/accessTokenProvider';
 
 export const metadata: Metadata = {
   title: 'Unlimited Angel Generation',
@@ -39,11 +40,13 @@ const LocaleLayout = async ({
           <NextIntlClientProvider messages={messages}>
             <ErrorProvider>
               <AuthProvider>
-                <UserTokenProvider>
-                  <AppShellLayout>
-                    {children}
-                  </AppShellLayout>
-                </UserTokenProvider>
+                <AccessTokenProvider>
+                  <UserTokenProvider>
+                    <AppShellLayout>
+                      {children}
+                    </AppShellLayout>
+                  </UserTokenProvider>
+                </AccessTokenProvider>
               </AuthProvider>
             </ErrorProvider>
           </NextIntlClientProvider>

@@ -1,14 +1,13 @@
 'use client';
-import { useAccessToken } from '@/apis/auth/useAccessToken';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
-import AuthModal from '@/components/Header/AuthModal/AuthModal';
+import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { useState } from 'react';
 
 const TagPage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
   const decodedId = decodeURIComponent(params.id);
-  const { isAuthenticated } = useAccessToken();
+  const { isAuthenticated } = useAccessTokenContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   return (

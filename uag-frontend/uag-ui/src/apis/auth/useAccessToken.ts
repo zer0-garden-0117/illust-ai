@@ -124,7 +124,7 @@ export const useAccessToken = () => {
       return { success: true };
     } catch (error) {
       console.error('Failed to confirm sign up:', error);
-      return { success: false, message: error || 'Failed to confirm sign up' };
+      return { success: false, message: (error as Error)?.message || 'Failed to confirm sign up' };
     }
   };
 
@@ -137,22 +137,28 @@ export const useAccessToken = () => {
       return { success: true };
     } catch (error) {
       console.error('Failed to reset password:', error);
-      return { success: false, message: error || 'Failed to reset password' };
+      return {
+        success: false,
+        message: (error instanceof Error && error.message) ? error.message : 'Failed to reset password'
+      };
     }
   };
 
-  const confirmResetPass = async (email: string, confirmCode: string, passwordd: string) => {
+  const confirmResetPass = async (email: string, confirmCode: string, password: string) => {
     try {
       const confirmResetPasswordInput: ConfirmResetPasswordInput = {
         username: email,
-        newPassword: passwordd,
+        newPassword: password,
         confirmationCode: confirmCode
       };
       await confirmResetPassword(confirmResetPasswordInput);
       return { success: true };
     } catch (error) {
       console.error('Failed to confirm reset password:', error);
-      return { success: false, message: error || 'Failed to confirm reset password' };
+      return {
+        success: false,
+        message: (error instanceof Error && error.message) ? error.message : 'Failed to confirm reset password'
+      };
     }
   };
 

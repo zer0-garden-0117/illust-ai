@@ -7,12 +7,12 @@ import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegiste
 import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
 import { useUsersActivitySearch, UsersActivitySearchResult } from "@/apis/openapi/users/useUsersActivitySearch";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
-import { useAccessToken } from "@/apis/auth/useAccessToken";
 import { UsersLikedGetHeader, UsersLikedGetQuery, useUsersLikedGet } from "@/apis/openapi/users/useUsersLikedGet";
 import { UsersRatedGetHeader, UsersRatedGetQuery, useUsersRatedGet } from "@/apis/openapi/users/useUsersRatedGet";
 import { useRouter } from "next/navigation";
 import { useNavigate } from "@/utils/navigate";
 import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
+import { useAccessTokenContext } from "@/providers/auth/accessTokenProvider";
 
 type UseImageGridProps = {
   title: string;
@@ -43,7 +43,7 @@ export const useImageGrid = (
   const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
   const { trigger: triggerDeliked } = useUsersLikedDelete();
-  const { isAuthenticated } = useAccessToken();
+  const { isAuthenticated } = useAccessTokenContext();
   const { userToken } = useUserTokenContext();
   const itemsPerPage = imageCount;
   const navigate = useNavigate();

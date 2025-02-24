@@ -16,7 +16,7 @@ export const useUserToken = () => {
   const [userId, setUserId] = useState<number | null>(Number(initialUserId));
   const [role, setRole] = useState<string | null>(initialRole);
   const [isSetup, setIsSetup] = useState<boolean>(false);
-  const { accessToken } = useAccessToken();  // ここからaccessTokenを取得
+  const { accessToken } = useAccessToken();
   const { setError } = useError();
 
   // `accessToken` がある場合にのみ `useUsersTokenGet` を実行

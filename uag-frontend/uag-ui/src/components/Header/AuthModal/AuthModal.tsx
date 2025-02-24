@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Modal, Button, TextInput, PasswordInput, Text, Divider, Space, Grid, Alert, Tabs } from '@mantine/core';
-import { useAccessToken } from '../../../apis/auth/useAccessToken';
 import { FcGoogle } from "react-icons/fc";
 import { FaLine } from "react-icons/fa";
+import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -45,7 +45,7 @@ const AuthModal: React.FC<AuthModalProps> = (
 
 // ログインの内容を別コンポーネントに分離
 const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const { login, loginWithGoogle, loginWithLine, resetPass, confirmResetPass } = useAccessToken();
+  const { login, loginWithGoogle, loginWithLine, resetPass, confirmResetPass } = useAccessTokenContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmationCode, setConfirmationCode] = useState('');
@@ -318,7 +318,7 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
 // 新規登録の内容を別コンポーネントに分離
 const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const { login, loginWithGoogle, loginWithLine, register, confirmSignup } = useAccessToken();
+  const { login, loginWithGoogle, loginWithLine, register, confirmSignup } = useAccessTokenContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
