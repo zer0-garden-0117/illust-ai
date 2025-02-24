@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Modal, Button, TextInput, PasswordInput, Text, Divider, Space, Grid, Alert, Tabs } from '@mantine/core';
+import { Modal, Button, TextInput, PasswordInput, Text, Divider, Space, Grid, Alert, Tabs, Group } from '@mantine/core';
 import { FcGoogle } from "react-icons/fc";
 import { FaLine } from "react-icons/fa";
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
@@ -256,15 +256,24 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             onChange={(event) => setUsername(event.currentTarget.value)}
             style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
           />
-          <Button
-            color="gray"
-            onClick={() => handlePasswordResetRequest(username)}
-            size='compact-xs'
-            radius='xl'
-            style={{ display: 'block', marginLeft: 'auto', marginTop: '13px' }}
-          >
-            パスワードをリセットする
-          </Button>
+          <Group justify="space-between" mt={13}>
+            <Button
+              color="gray"
+              onClick={() => setStep("login")}
+              size='compact-xs'
+              radius='xl'
+            >
+              戻る
+            </Button>
+            <Button
+              color="gray"
+              onClick={() => handlePasswordResetRequest(username)}
+              size='compact-xs'
+              radius='xl'
+            >
+              パスワードをリセットする
+            </Button>
+          </Group>
           </div>
         </>
       )}
