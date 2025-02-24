@@ -320,10 +320,11 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const { login, loginWithGoogle, loginWithLine, register, confirmSignup } = useAccessTokenContext();
   const [username, setUsername] = useState('');
+  const [userNameError, setUserNameError] = useState<string | null>(null);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [confirmationCode, setConfirmationCode] = useState('');
-  const [loginError, setLoginError] = useState<string | null>(null);
+  const [registerError, setRegisterError] = useState<string | null>(null);
   const [step, setStep] = useState<'signup' | 'confirmation'>('signup');
 
   const validatePassword = (password: string): string | null => {
@@ -360,10 +361,14 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     }
 
     try {
-      await register(username, password);
-      setStep('confirmation');
+      const { success, message } = await register(username, password);
+      if (success) {
+        setStep('confirmation');
+      } else {
+        setUserNameError("入力されたメールアドレスは既に登録されています。")
+      }
     } catch (error) {
-      setLoginError('登録に失敗しました。');
+      setRegisterError('登録に失敗しました。');
       console.error('Registration failed:', error);
     }
   };
@@ -373,7 +378,7 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       await loginWithGoogle();
       onClose();
     } catch (error) {
-      setLoginError('Googleログインに失敗しました。');
+      setRegisterError('Googleログインに失敗しました。');
       console.error('Google login failed:', error);
     }
   };
@@ -383,7 +388,7 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       await loginWithLine();
       onClose();
     } catch (error) {
-      setLoginError('Lineログインに失敗しました。');
+      setRegisterError('Lineログインに失敗しました。');
       console.error('Line login failed:', error);
     }
   };
@@ -395,21 +400,21 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         try {
           const result = await login(username, password);
           if (result?.message == "CONFIRM_SIGN_UP") {
-            setLoginError('メールアドレスに本人確認コードを送信しました。本人確認コードを入力してください');
+            setRegisterError('メールアドレスに本人確認コードを送信しました。本人確認コードを入力してください');
           } else if (result?.success == false) {
-            setLoginError('ログインに失敗しました。');
+            setRegisterError('ログインに失敗しました。');
           } else {
             onClose();
           }
         } catch (error) {
-          setLoginError('ログインに失敗しました。');
+          setRegisterError('ログインに失敗しました。');
           console.error('Login failed:', error);
         }
       } else {
-        setLoginError('確認に失敗しました。');
+        setRegisterError('確認に失敗しました。');
       }
     } catch (error) {
-      setLoginError('確認中にエラーが発生しました。');
+      setRegisterError('確認中にエラーが発生しました。');
       console.error('Confirmation failed:', error);
     }
   };
@@ -433,8 +438,12 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               size='xs'
               value={username}
               placeholder="メールアドレス"
-              onChange={(event) => setUsername(event.currentTarget.value)}
+              onChange={(event) => {
+                setUsername(event.currentTarget.value);
+                setUserNameError(null);
+              }}
               style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+              error={userNameError}
             />
             <Space h="xs" />
             <PasswordInput
@@ -450,7 +459,7 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
               error={passwordError}
             />
-            {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
+            {registerError && <div style={{ color: 'red' }}>{registerError}</div>}
             <Button
               color="gray"
               onClick={handleSignup}

@@ -108,9 +108,15 @@ export const useAccessToken = () => {
         password,
       };
       await signUp(signUpInput);
-      // await login(username, password);
-    } catch (error) {
-      console.error('Failed to register:', error);
+      return { success: true };
+    } catch (error: any) {
+      if (error.name === 'UsernameExistsException') {
+        console.error('User already exists:', error);
+        return { success: false, message: 'User already exists' };
+      } else {
+        console.error('Failed to register:', error);
+        return { success: false, message: error.message || 'Failed to register' };
+      }
     }
   };
 

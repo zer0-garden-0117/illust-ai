@@ -10,7 +10,7 @@ interface AccessTokenContextProps {
   loginWithHosted: () => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   loginWithLine: () => Promise<void>;
-  register: (username: string, password: string) => Promise<void>;
+  register: (username: string, password: string) => Promise<{ success: boolean; message?: string }>;
   confirmSignup: (username: string, confirmCode: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
   resetPass: (username: string) => Promise<{ success: boolean; message?: string }>;
