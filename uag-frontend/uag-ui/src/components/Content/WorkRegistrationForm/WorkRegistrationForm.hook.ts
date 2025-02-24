@@ -1,14 +1,14 @@
 import { WorkRegistrationFormView } from "./WorkRegistrationForm.view";
 import { useWorksRegister } from "@/apis/openapi/works/useWorksRegister";
 import { WorkData } from "./WorkRegistrationForm.view"
-import { useUserToken } from "@/apis/auth/useUserToken";
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
+import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
 
 export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
   typeof WorkRegistrationFormView
 > => {
   const { trigger } = useWorksRegister();
-  const { userToken } = useUserToken();
+  const { userToken } = useUserTokenContext();
 
   const headers = {
     Authorization: `Bearer ${userToken}` as `Bearer ${string}`,

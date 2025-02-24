@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { ImageGridView } from "./ImageGrid.view";
 import { ImageData } from "./ImageGrid.view";
 import { useWorksSearchByTags, WorkSearchByTagRequestBody, WorkSearchByTagResult } from "@/apis/openapi/works/useWorksSearchByTags";
-import { useUserToken } from "@/apis/auth/useUserToken";
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
 import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
@@ -13,6 +12,7 @@ import { UsersLikedGetHeader, UsersLikedGetQuery, useUsersLikedGet } from "@/api
 import { UsersRatedGetHeader, UsersRatedGetQuery, useUsersRatedGet } from "@/apis/openapi/users/useUsersRatedGet";
 import { useRouter } from "next/navigation";
 import { useNavigate } from "@/utils/navigate";
+import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
 
 type UseImageGridProps = {
   title: string;
@@ -44,7 +44,7 @@ export const useImageGrid = (
   const { trigger: triggerLiked } = useUsersLikedRegister();
   const { trigger: triggerDeliked } = useUsersLikedDelete();
   const { isAuthenticated } = useAccessToken();
-  const { userToken } = useUserToken();
+  const { userToken } = useUserTokenContext();
   const itemsPerPage = imageCount;
   const navigate = useNavigate();
 

@@ -9,7 +9,9 @@ interface UserTokenContextProps {
   role: string | null;
   error: Error | undefined;
 }
+
 const UserTokenContext = createContext<UserTokenContextProps | undefined>(undefined);
+
 export const useUserTokenContext = () => {
   const context = useContext(UserTokenContext);
   if (!context) {
