@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { UnstyledButton, Menu, Group } from '@mantine/core';
+import { UnstyledButton, Menu, Group, Text } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 import Flag from 'react-world-flags';
 import classes from './LanguagePicker.module.css';
@@ -50,7 +50,7 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
     >
       <Group gap="xs">
         <Flag code={item.code} className={classes.flag} />
-        <span>{item.label}</span>
+        <span><Text size='xs'>{item.label}</Text></span>
       </Group>
     </Menu.Item>
   ));
@@ -77,7 +77,9 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
               <Group gap="xs">
                 <span className={classes.label}></span>
                 <Flag code={selected.code} className={classes.flag} />
-                <span className={classes.label}>{selected.label}</span>
+                <span className={classes.label}>
+                  <Text size='xs'>{selected.label}</Text>
+                </span>
               </Group>
               <IconChevronDown
                 size="1rem"

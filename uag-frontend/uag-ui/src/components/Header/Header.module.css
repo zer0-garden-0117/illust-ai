@@ -1,10 +1,10 @@
 .header {
-  padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-sm);
   color: lightdark(var(--mantine-color-white), var(--mantine-color-dark));
   gap: var(--mantine-spacing-md);
   display: flex;
   flex-direction: row;
-  align-items: center;
+  /* align-items: center; */
   justify-content: space-between;
 }
 
@@ -15,13 +15,13 @@
 .searchBoxWrapper {
   display: flex;
   align-items: center;
-  gap: var(--mantine-spacing-sm);
+  gap: var(--mantine-spacing-xl);
   /* ボックスとボタンの間に隙間を追加 */
-  margin-left: 20px;
+  margin-left: 15px;
   /* 左の余白 */
-  margin-right: 20px;
+  margin-right: 15px;
   /* 右の余白 */
-  width: calc(100% - 40px);
+  width: calc(100% - 25px);
   /* 幅を余白分調整 */
 }
 

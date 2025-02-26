@@ -42,10 +42,10 @@ export const Header: React.FC<HeaderProps> = (
         <Logo />
         <Box className={classes.flexGrow} />
         {/* 検索状態によって表示を切り替え */}
-        <QuickSearch
+        {/* <QuickSearch
           onSearchClick={() => onSearchClick()}
-          isSearching={isSearching} />
-        <UserMenu />
+          isSearching={isSearching} /> */}
+        {/* <UserMenu /> */}
         <BurgerMenu />
       </header>
       {isSearching && (

@@ -13,8 +13,8 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const t = useTranslations("appshell");
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [headerHeight, setHeaderHeight] = useState(60); // 初期値を60に設定
-  const [isSearching, setIsSearching] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(120); // 初期値を60に設定
+  const [isSearching, setIsSearching] = useState(true);
 
   // 検索アイコンがクリックされたときに高さを切り替える関数
   const toggleHeaderHeight = () => {

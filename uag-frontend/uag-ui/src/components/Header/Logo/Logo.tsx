@@ -21,15 +21,16 @@ export const Logo: React.FC<LogoProps> = () => {
   return (
     <Flex
       direction="row"
+      justify="flex-start"
       align="center"
       gap={4}
       onClick={onClickLogo}
       className={classes.logoContainer}
     >
       <>
-        <Text fw={700} size='xl'>
+        <Text fw={700} size='sm'>
           {/* Angel Sandbox */}
-          U.A.Generation
+          UNLIMITED ANGEL GENERATION
         </Text>
       </>
     </Flex>

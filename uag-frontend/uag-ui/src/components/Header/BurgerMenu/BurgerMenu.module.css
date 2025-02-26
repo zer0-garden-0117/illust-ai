@@ -25,3 +25,9 @@
   width: 14px;
   height: 14px;
 }
+
+.email {
+  padding: 10px 0;
+  font-size: 0.875rem;
+  padding-left: 15px;
+}
