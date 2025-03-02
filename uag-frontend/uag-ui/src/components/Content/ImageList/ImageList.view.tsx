@@ -251,17 +251,38 @@ export const ImageListView = memo(function ImageListViewComponent({
   }, [imagesLoaded, pathname, imageData.length]);
 
 
+  const imageCell = ({ cell, row }: { cell: any, row: any }) => {
+    return (
+      <Image
+        h={80}
+        w="auto"
+        fit="contain"
+        src={row.original.thumbnailImage}
+      />
+    );
+  };
+
   const columns = useMemo<MRT_ColumnDef<ImageData>[]>(
     () => [
       {
         accessorKey: 'workId',
         header: "workId",
         size: 140,
+        enableSorting: false
       },
       {
         accessorKey: 'mainTitle',
         header: "mainTitle",
         size: 140,
+        enableSorting: false
+      },
+      {
+        accessorKey: 'image',
+        id: 'image',
+        size: 80,
+        header: 'image',
+        enableSorting: false,
+        Cell: imageCell
       },
 
     ],[],);
@@ -334,11 +355,26 @@ export const ImageListView = memo(function ImageListViewComponent({
         enableColumnPinning={false}
         enableGrouping={false}
         enableFacetedValues={false}
+        enableBottomToolbar={false}
         // localization={isEn ? MRT_Localization_EN : MRT_Localization_JA}
         mantinePaginationProps={{
           display: 'flex',         // Flexboxレイアウトを適用
         }}
       />
+    {/* {!loading && totalPages > 1 && isViewPagination && ( */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Pagination
+          value={currentPage}
+          onChange={onPageChange}
+          total={totalPages}
+          mt="lg"
+          radius="xl"
+          withEdges
+          color="gray"
+          size="sm"
+        />
+      </div>
+    {/* )} */}
     </Card>
   );
 });

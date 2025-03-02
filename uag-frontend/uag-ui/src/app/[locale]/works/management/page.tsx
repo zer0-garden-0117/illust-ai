@@ -12,7 +12,7 @@ const ManagementPage: React.FC<{ params: { id: string } }> = (
         title={"新着"}
         isViewCount={false}
         isViewPagination={false}
-        imageCount={4}
+        imageCount={10}
         words={["GLOBAL"]}
         type={"tag"}
       />
