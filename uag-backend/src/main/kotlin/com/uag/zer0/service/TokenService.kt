@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -16,11 +17,13 @@ import java.util.*
 
 @Service
 class TokenService {
+    @Value("\${cognito.admin-user-id}")
+    private lateinit var adminUserId: String
+
     private val logger = LoggerFactory.getLogger(TokenService::class.java)
 
     private val secretKey: String = "mysecretekey"
     private val algorithm = Algorithm.HMAC256(secretKey)
-    private val adminUserId = ""
 
     fun getEmailFromAccessToken(accessToken: String): String? {
         val restTemplate = RestTemplate()

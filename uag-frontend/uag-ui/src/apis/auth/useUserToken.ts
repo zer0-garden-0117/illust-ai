@@ -14,7 +14,7 @@ export const useUserToken = () => {
   const { userId: initialUserId, role: initialRole } = decodeUserToken(initialUserToken || '');
   const [userToken, setUserToken] = useState<string | null>(initialUserToken);
   const [userId, setUserId] = useState<number | null>(Number(initialUserId));
-  const [role, setRole] = useState<string | null>(initialRole);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isSetup, setIsSetup] = useState<boolean>(false);
   const { accessToken } = useAccessToken();
   const { setError } = useError();
@@ -32,12 +32,13 @@ export const useUserToken = () => {
 
     if (data?.userToken) {
       const { userId, role } = decodeUserToken(data.userToken);
+      const isAdmin = role == "admin"
       setUserToken(data.userToken);
       setUserId(Number(userId));
-      setRole(role);
+      setIsAdmin(isAdmin);
       setUserTokenToCookies(data.userToken);
     }
   }, [data, error, setError]);
 
-  return { isSetup, userToken, userId, role, error };
+  return { isSetup, userToken, userId, isAdmin, error };
 };

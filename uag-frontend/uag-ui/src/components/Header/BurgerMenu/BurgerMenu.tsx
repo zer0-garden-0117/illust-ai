@@ -22,12 +22,14 @@ import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { FaRegHeart, FaRegStar } from 'react-icons/fa';
 import AuthModal from '../AuthModal/AuthModal';
 import { IconChevronRight } from '@tabler/icons-react';
+import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 
 
 export const BurgerMenu: React.FC = () => {
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
   const navigation = useNavigate();
   const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessTokenContext();
+  const { isAdmin } = useUserTokenContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
 
@@ -68,7 +70,9 @@ export const BurgerMenu: React.FC = () => {
     navigation("/admin?page=1");
   };
 
-
+  const onClickManage = () => {
+    navigation("/works/management/?page=1");
+  };
 
   return (
     <>
@@ -167,12 +171,22 @@ export const BurgerMenu: React.FC = () => {
           >
             本サイトについて
           </Menu.Item>
-          <Menu.Item
-            leftSection={<MdOutlineChevronRight className={classes.icon} />}
-            onClick={onClickAdmin}
-          >
-            管理
-          </Menu.Item>
+          {isAuthenticated && isAdmin && (
+            <>
+              <Menu.Item
+                leftSection={<MdOutlineChevronRight className={classes.icon} />}
+                onClick={onClickManage}
+              >
+                管理
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<MdOutlineChevronRight className={classes.icon} />}
+                onClick={onClickAdmin}
+              >
+                投稿
+              </Menu.Item>
+            </>
+          )}
           <Menu.Divider />
           <LanguagePicker />
           <ThemeSwitcher />
