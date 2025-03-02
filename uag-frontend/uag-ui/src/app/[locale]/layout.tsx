@@ -9,6 +9,9 @@ import { UserTokenProvider } from '@/providers/auth/userTokenProvider';
 import type { Metadata } from 'next';
 import type { Viewport } from 'next'
 import { AccessTokenProvider } from '@/providers/auth/accessTokenProvider';
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css'; //if using mantine date picker features
+import 'mantine-react-table/styles.css'; //make sure MRT styles were imported in your app root (once)
 
 export const metadata: Metadata = {
   title: 'Unlimited Angel Generation',
