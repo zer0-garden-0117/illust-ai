@@ -220,12 +220,17 @@ export const useImageGrid = (
     }
   };
 
-  const onDeleteClick = (workId: string) => {
+  const onDeleteClick = async (workId: string) => {
     const headers: WorkDeleteByIdHeaders = {
       Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
     }
-    triggerDelete({ headers, workId });
+    try {
+      await triggerDelete({ headers, workId }); // 削除を同期的に実行
+      window.location.reload(); // 削除完了後にページをリロード
+  } catch (err) {
+      console.error("Failed to delete work:", err);
+  }
   };
 
   return {
