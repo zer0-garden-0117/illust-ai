@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ImageGridView } from "./ImageGrid.view";
 import { ImageData } from "./ImageGrid.view";
 import { useWorksSearchByTags, WorkSearchByTagRequestBody, WorkSearchByTagResult } from "@/apis/openapi/works/useWorksSearchByTags";
-import { getCsrfTokenFromCookies } from "@/utils/authCookies";
+import { getCsrfTokenFromCookies, getUserTokenFromCookies } from "@/utils/authCookies";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
 import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
 import { useUsersActivitySearch, UsersActivitySearchResult } from "@/apis/openapi/users/useUsersActivitySearch";
@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useNavigate } from "@/utils/navigate";
 import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
 import { useAccessTokenContext } from "@/providers/auth/accessTokenProvider";
+import { useWorksDeleteById, WorkDeleteByIdHeaders } from "@/apis/openapi/works/useWorksDeleteById";
 
 type UseImageGridProps = {
   title: string;
@@ -43,6 +44,7 @@ export const useImageGrid = (
   const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
   const { trigger: triggerDeliked } = useUsersLikedDelete();
+  const { trigger: triggerDelete } = useWorksDeleteById();
   const { isAuthenticated } = useAccessTokenContext();
   const { userToken } = useUserTokenContext();
   const itemsPerPage = imageCount;
@@ -60,7 +62,7 @@ export const useImageGrid = (
         "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
       });
     }
-  }, [userToken]);
+  }, [userToken ,isAuthenticated]);
 
   const fetchImagesWithTags = async (page: number) => {
     setLoading(true);  // ローディング開始
@@ -167,7 +169,6 @@ export const useImageGrid = (
       // works と activityData を結合して imageData にセット
       const fetchedImages: ImageData[] = worksData.works.map((work) => {
         const activity = activitiesData?.apiRateds?.find((a) => a.workId === work.workId);
-        
         // 型安全を確保しつつプロパティを処理
         return {
           workId: work.workId ?? "",
@@ -219,6 +220,14 @@ export const useImageGrid = (
     }
   };
 
+  const onDeleteClick = (workId: string) => {
+    const headers: WorkDeleteByIdHeaders = {
+      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    }
+    triggerDelete({ headers, workId });
+  };
+
   return {
     title,
     isViewCount,
@@ -231,6 +240,7 @@ export const useImageGrid = (
     onPageChange,
     onLikeChange,
     onRateChange,
+    onDeleteClick,
     isAuthenticated
   };
 };

@@ -14,9 +14,9 @@ export const useUserToken = () => {
   const { userId: initialUserId, role: initialRole } = decodeUserToken(initialUserToken || '');
   const [userToken, setUserToken] = useState<string | null>(initialUserToken);
   const [userId, setUserId] = useState<number | null>(Number(initialUserId));
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(initialRole == 'admin');
   const [isSetup, setIsSetup] = useState<boolean>(false);
-  const { accessToken } = useAccessToken();
+  const { accessToken, isAuthenticated } = useAccessToken();
   const { setError } = useError();
 
   // `accessToken` がある場合にのみ `useUsersTokenGet` を実行
@@ -38,7 +38,7 @@ export const useUserToken = () => {
       setIsAdmin(isAdmin);
       setUserTokenToCookies(data.userToken);
     }
-  }, [data, error, setError]);
+  }, [data, error, setError, isAuthenticated, accessToken]);
 
   return { isSetup, userToken, userId, isAdmin, error };
 };

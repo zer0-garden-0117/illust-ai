@@ -1,12 +1,12 @@
 import useSWRMutation from 'swr/mutation';
 import client from "../apiClient";
-import type { AccessTokenHeader, CsrfTokenHeader } from '../apiClient';
+import type { CsrfTokenHeader, UserTokenHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/uag-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type WorkDeleteByIdResult = operations["deleteWorksById"]["responses"]["200"]["content"]["application/json"];
 export type WorkDeleteByIdPath = operations["deleteWorksById"]["parameters"]["path"];
-export type WorkDeleteByIdHeaders = AccessTokenHeader & CsrfTokenHeader;
+export type WorkDeleteByIdHeaders = UserTokenHeader & CsrfTokenHeader;
 
 export type WorkDeleteByIdArgs = {
   workId: WorkDeleteByIdPath["workId"];
@@ -28,7 +28,7 @@ export const useWorksDeleteById = (
         `/works/{workId}`,
         {
           headers: {
-            "x-access-token": headers?.["x-access-token"] || '',
+            Authorization: `${headers?.Authorization}`,
             "x-xsrf-token": headers?.["x-xsrf-token"] || '',
           },
           params: {
