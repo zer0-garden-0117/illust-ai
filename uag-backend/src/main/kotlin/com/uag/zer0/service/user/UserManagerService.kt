@@ -127,8 +127,11 @@ class UserManagerService(
         return retedService.deleteRated(userId, workId)
     }
 
+    @Transactional
     fun deleteWorkId(workId: String) {
         // likedテーブルから削除
+        likedService.deleteWork(workId)
         // ratedテーブルから削除
+        retedService.deleteWork(workId)
     }
 }

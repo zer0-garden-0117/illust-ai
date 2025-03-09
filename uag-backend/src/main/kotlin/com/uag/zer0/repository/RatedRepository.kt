@@ -98,4 +98,46 @@ class RatedRepository(
             )
         }
     }
+
+    fun deleteWork(workId: String) {
+        try {
+            // WorkIdIndex を取得
+            val index = table.index("WorkIdIndex")
+
+            // WorkIdIndex で workId をキーに検索
+            val queryConditional = QueryConditional.keyEqualTo(
+                Key.builder().partitionValue(workId).build()
+            )
+
+            val results = index.query { r ->
+                r.queryConditional(queryConditional)
+                    .scanIndexForward(false) // 降順ソート（不要なら削除可）
+            }.stream()
+                .flatMap { it.items().stream() }
+                .toList()
+
+            if (results.isEmpty()) {
+                logger.info("No liked items found for workId=$workId")
+                return
+            }
+
+            // 取得した各アイテムを削除
+            results.forEach { liked ->
+                val key = Key.builder()
+                    .partitionValue(liked.userId)
+                    .sortValue(liked.workId)
+                    .build()
+
+                table.deleteItem(key)
+                logger.info("Deleted liked item: userId=${liked.userId}, workId=${liked.workId}")
+            }
+
+            logger.info("Deleted ${results.size} liked items for workId=$workId")
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "Failed to delete liked items for workId=$workId",
+                e
+            )
+        }
+    }
 }

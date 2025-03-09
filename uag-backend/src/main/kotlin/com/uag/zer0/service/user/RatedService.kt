@@ -52,4 +52,8 @@ class RatedService(
     fun deleteRated(userId: String, workId: String): Rated {
         return ratedRepository.deleteRated(userId, workId)
     }
+
+    fun deleteWork(workId: String) {
+        return ratedRepository.deleteWork(workId)
+    }
 }

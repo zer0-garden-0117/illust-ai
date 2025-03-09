@@ -89,14 +89,18 @@ class TagRepository(
 
     fun deleteTagByWorkId(workId: String) {
         try {
+            // workId が数値に変換できるか確認し、適切な型で保存
+            val workIdAttribute = workId.toIntOrNull()?.let {
+                AttributeValue.builder().n(it.toString()).build()
+            } ?: AttributeValue.builder().s(workId).build()
+
             val tagsToDelete = findByWorkId(workId) // 対象のタグを取得
             val deleteRequests = tagsToDelete.map { tag ->
                 WriteRequest.builder()
                     .deleteRequest { dr ->
                         dr.key(
                             mapOf(
-                                "workId" to AttributeValue.builder()
-                                    .n(workId.toString()).build(),
+                                "workId" to workIdAttribute,  // 型を適切にセット
                                 "tag" to AttributeValue.builder().s(tag.tag)
                                     .build()
                             )

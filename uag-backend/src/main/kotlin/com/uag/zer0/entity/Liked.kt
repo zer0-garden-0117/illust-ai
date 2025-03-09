@@ -1,9 +1,6 @@
 package com.uag.zer0.entity
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*
 import java.time.Instant
 
 @DynamoDbBean
@@ -12,7 +9,7 @@ data class Liked(
     var userId: String = "",
 
     @get:DynamoDbSortKey
-    @get:DynamoDbAttribute("workId")
+    @get:DynamoDbSecondaryPartitionKey(indexNames = ["WorkIdIndex"])
     var workId: String = "",
 
     @get:DynamoDbAttribute("updatedAt")

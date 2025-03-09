@@ -58,4 +58,8 @@ class LikedService(
     fun deleteLiked(userId: String, workId: String): Liked {
         return likedRepository.deleteLiked(userId, workId)
     }
+
+    fun deleteWork(workId: String) {
+        return likedRepository.deleteWork(workId)
+    }
 }

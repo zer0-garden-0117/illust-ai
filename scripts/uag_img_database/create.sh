@@ -10,14 +10,14 @@ generate_uuid() {
     cat /proc/sys/kernel/random/uuid
 }
 
-# テーブルの作成関数
+# テーブルの作成関数（オンデマンド）
 create_table() {
     local table_name=$1
     shift
     aws dynamodb create-table \
         --table-name "$table_name" \
         "$@" \
-        --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+        --billing-mode PAY_PER_REQUEST \
         --endpoint-url "$ENDPOINT_URL"
 }
 
@@ -55,8 +55,7 @@ create_table tag \
                     {\"AttributeName\":\"tag\",\"KeyType\":\"HASH\"},
                     {\"AttributeName\":\"updatedAt\",\"KeyType\":\"RANGE\"}
                 ],
-                \"Projection\": {\"ProjectionType\":\"ALL\"},
-                \"ProvisionedThroughput\": {\"ReadCapacityUnits\": 5, \"WriteCapacityUnits\": 5}
+                \"Projection\": {\"ProjectionType\":\"ALL\"}
             }
         ]"
 
@@ -67,7 +66,17 @@ create_table liked \
         AttributeName=workId,AttributeType=S \
     --key-schema \
         AttributeName=userId,KeyType=HASH \
-        AttributeName=workId,KeyType=RANGE
+        AttributeName=workId,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"WorkIdIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"workId\",\"KeyType\":\"HASH\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"}
+            }
+        ]"
 
 # rated テーブルの作成
 create_table rated \
@@ -76,9 +85,19 @@ create_table rated \
         AttributeName=workId,AttributeType=S \
     --key-schema \
         AttributeName=userId,KeyType=HASH \
-        AttributeName=workId,KeyType=RANGE
+        AttributeName=workId,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"WorkIdIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"workId\",\"KeyType\":\"HASH\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"}
+            }
+        ]"
 
-echo "すべてのテーブルが作成されました。"
+echo "すべてのテーブルがオンデマンド（PAY_PER_REQUEST）で作成されました。"
 
 # # テストデータ挿入
 # echo "テストデータを挿入します..."
