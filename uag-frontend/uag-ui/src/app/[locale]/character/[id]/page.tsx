@@ -5,6 +5,7 @@ const CharacterPage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
   const decodedId = decodeURIComponent(params.id);
+  const words = "character_" + decodedId
 
   return (
     <>
@@ -13,7 +14,7 @@ const CharacterPage: React.FC<{ params: { id: string } }> = (
         isViewCount={true}
         isViewPagination={true}
         imageCount={12}
-        words={[decodedId]}
+        words={[words]}
         type={"free"}
       />
     </>

@@ -9,7 +9,7 @@ const IllustrationPage: React.FC = () => {
         isViewCount={true}
         isViewPagination={true}
         imageCount={12}
-        words={["illustration"]}
+        words={["genre_illustration"]}
         type={"free"}
       />
     </>
