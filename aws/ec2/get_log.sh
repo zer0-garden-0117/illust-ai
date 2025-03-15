@@ -1,0 +1,1 @@
+ssh -i uag-test.pem ec2-user@98.80.194.175 "ls -t /opt/zer0/logs/*.log | head -n 1" | xargs -I {} scp -i uag-test.pem ec2-user@98.80.194.175:{} .
