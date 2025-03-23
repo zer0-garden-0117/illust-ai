@@ -28,7 +28,7 @@ export const Logo: React.FC<LogoProps> = () => {
       className={classes.logoContainer}
     >
       <>
-        <Text fw={700} size='sm'>
+        <Text fw={700} size='sm' ml={-15}>
           {/* Angel Sandbox */}
           ANGEL SANDBOX
         </Text>

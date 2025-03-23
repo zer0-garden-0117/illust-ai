@@ -159,7 +159,7 @@ class WorkManagerService(
         // タグの登録
         val filteredTags = tags.filter { it.tag.isNotBlank() }
         val globalTag = Tag().apply {
-            tag = "GLOBAL"
+            tag = "other_GLOBAL"
         }
         val allTags = filteredTags + globalTag
         allTags.forEach { tag ->

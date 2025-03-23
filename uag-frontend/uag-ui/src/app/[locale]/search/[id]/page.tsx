@@ -5,6 +5,7 @@ const GenrePage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
   const decodedId = decodeURIComponent(params.id);
+  const words = ["other_" + decodedId, "character_" + decodedId, "creator_" + decodedId, "genre_" + decodedId]
 
   return (
     <>
@@ -13,7 +14,7 @@ const GenrePage: React.FC<{ params: { id: string } }> = (
         isViewCount={true}
         isViewPagination={true}
         imageCount={12}
-        words={[decodedId]}
+        words={words}
         type={"free"}
       />
     </>

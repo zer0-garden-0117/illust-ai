@@ -8,6 +8,7 @@ import { RiHeartAdd2Line, RiDeleteBin6Line} from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
 import { BsSuitDiamondFill } from "react-icons/bs";
 import { BiGame } from "react-icons/bi";
+import { PiStarOfDavidThin } from "react-icons/pi";
 import { BiSolidInvader } from "react-icons/bi";
 import { useNavigate } from '@/utils/navigate';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
@@ -296,9 +297,23 @@ export const ImageGridView = memo(function ImageGridViewComponent({
                   style={{
                     marginRight: '8px',
                     position: 'relative',
-                    // top: '-2px',
+                    fontSize: '20px',
+                    color: "#fd7e14",
+                    top: '-2px',
                   }}
                 />
+                {/* <span
+                  style={{
+                    marginRight: '8px',
+                    position: 'relative',
+                    fontSize: '24px',
+                    top: '-2px',
+                  }}
+                > */}
+                  {/* 👾 */}
+                  {/* ❄️ */}
+                  {/* 🦄‍🪽 */}
+                {/* </span> */}
                 <Text fw={200} size='md'>
                   {title} {isViewCount && `(${totalCount}件)`}
                 </Text>
@@ -308,7 +323,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
         </>
       )}
 
-      <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
+      <SimpleGrid ml={20} mr={20} cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
         {cards}
       </SimpleGrid>
       {!loading && totalPages > 1 && isViewPagination && (

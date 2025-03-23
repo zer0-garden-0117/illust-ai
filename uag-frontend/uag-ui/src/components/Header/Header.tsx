@@ -61,7 +61,7 @@ export const Header: React.FC<HeaderProps> = (
               onChange={(e) => setSearchQuery(e.currentTarget.value)}
               size="xs"
               styles={{ input: { fontSize: '16px' } }}
-              radius="xl"
+              radius="md"
               onKeyDown={onKeyDown}
             />
             <Button
