@@ -12,7 +12,7 @@ const TopPage: React.FC = () => {
   return (
     <>
     <ImageGrid
-        title={"新着"}
+        title={t("new")}
         isViewCount={false}
         isViewPagination={false}
         imageCount={4}

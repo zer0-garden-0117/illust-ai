@@ -83,9 +83,9 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
 CustomImage.displayName = 'CustomImage';
 
 const RatingControls = memo(
-  ({ localRating, onRateClick }: { localRating?: number; onRateClick: (rating: number) => void; }) => (
+  ({ localRating, onRateClick, t }: { localRating?: number; onRateClick: (rating: number) => void; t: any}) => (
     <Group style={{ marginTop: '5px' }}>
-      <Text>レビュー:</Text>
+      <Text>{t("review")}</Text>
       <Rating value={localRating} onChange={onRateClick} />
     </Group>
   ),
@@ -94,9 +94,9 @@ const RatingControls = memo(
 RatingControls.displayName = 'RatingControls';
 
 const LikeControls = memo(
-  ({ localIsLiked, onLikeClick }: { localIsLiked: boolean; onLikeClick: () => void }) => (
+  ({ localIsLiked, onLikeClick, t }: { localIsLiked: boolean; onLikeClick: () => void; t:any }) => (
     <Group style={{ marginTop: '5px' }}>
-      <Text>お気に入り:</Text>
+      <Text>{t("liked")}</Text>
       <ActionIcon
         variant="transparent"
         color="gray"
@@ -129,7 +129,7 @@ export const WorkView = memo(function WorkViewComponent({
   onGenreClick,
   isAuthenticated
 }: WorkViewProps): JSX.Element {
-  const t = useTranslations("");
+  const t = useTranslations("work");
   const [opened, setOpened] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [isImageDisplayed, setIsImageDisplayed] = useState(false);
@@ -230,11 +230,11 @@ export const WorkView = memo(function WorkViewComponent({
             }}
           >
             <Group style={{ marginTop: '20px' }}>
-              <Text>タイトル:</Text>
+              <Text>{t("title")}</Text>
               <Text>{workData?.apiWork?.mainTitle}</Text>
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>タグ:</Text>
+              <Text>{t("tag")}</Text>
               <Pill.Group gap={3}>
                 {workData?.apiTags?.others?.map((tagItem, index) => {
                   // GLOBALタグは非表示
@@ -250,7 +250,7 @@ export const WorkView = memo(function WorkViewComponent({
               </Pill.Group>
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>作者:</Text>
+              <Text>{t("creator")}</Text>
               {workData?.apiTags?.creators?.map((creatorItem, index) => (
                 <Pill key={index} onClick={() => onCreatorClick(creatorItem)} style={{ cursor: 'pointer' }}>
                   {creatorItem}
@@ -258,7 +258,7 @@ export const WorkView = memo(function WorkViewComponent({
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>キャラクター名:</Text>
+              <Text>{t("character")}</Text>
               {workData?.apiTags?.characters?.map((characterItem, index) => (
                 <Pill key={index} onClick={() => onCharacterClick(characterItem)} style={{ cursor: 'pointer' }}>
                   {characterItem}
@@ -266,7 +266,7 @@ export const WorkView = memo(function WorkViewComponent({
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>ジャンル:</Text>
+              <Text>{t("genre")}</Text>
               {workData?.apiTags?.genres?.map((genresItem, index) => (
                 <Pill key={index} onClick={() => onGenreClick(genresItem)} style={{ cursor: 'pointer' }}>
                   {genresItem}
@@ -274,19 +274,21 @@ export const WorkView = memo(function WorkViewComponent({
               ))}  
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>更新日:</Text>
+              <Text>{t("updated")}</Text>
               <Text>{formatDate(workData?.apiWork?.updatedAt)}</Text>
             </Group>
             <LikeControls
               localIsLiked={localIsLiked}
               onLikeClick={handleLikeClick}
+              t={t}
             />
             <RatingControls
               localRating={localRating}
               onRateClick={handleRateClick}
+              t={t}
             />
             <Group style={{ marginTop: '5px' }}>
-              <Text>ダウンロード:</Text>
+              <Text>{t("download")}</Text>
               <Button
                 onClick={handleDownloadClick}
                 variant="light"

@@ -29,7 +29,13 @@ export const Logo: React.FC<LogoProps> = () => {
       className={classes.logoContainer}
     >
       <>
-        <Text fw={700} size='sm' ml={-15}>
+        <Text
+          fw={900}
+          variant="gradient"
+          gradient={{ from: '#fd7e14', to: 'hotpink', deg: 90 }}
+          size='lg'
+          ml={-15}
+        >
           {/* Angel Sandbox */}
           {t("title")}
         </Text>

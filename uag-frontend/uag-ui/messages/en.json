@@ -2,6 +2,10 @@
   "logo": {
     "title": "ANGEL SANDBOX"
   },
+  "header": {
+    "search": "Search...",
+    "searchButton": "Search"
+  },
   "burgerMenu": {
     "login": "Sign In",
     "signup": "Sign Up",
@@ -14,6 +18,24 @@
     "freeicon": "Free Icon",
     "admin": "Admin",
     "post": "Post"
+  },
+  "toppage": {
+    "new": "Recently Added"
+  },
+  "imageGrid": {
+    "item": "item"
+  },
+  "work": {
+    "title": "Title:",
+    "tag": "Tag:",
+    "creator": "Creator:",
+    "character": "Character:",
+    "genre": "Genre:",
+    "updated": "UpdatedAt:",
+    "liked": "Favorite",
+    "review": "Review:",
+    "download": "Download:",
+    "downloadButton": "Download"
   },
   "appshell": {
     "copyright": "© 2025 ANGEL SANDBOX"

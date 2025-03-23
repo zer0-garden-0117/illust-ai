@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Rating, Group, Fieldset, Image } from '@mantine/core';
 import { memo } from 'react';
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line, RiDeleteBin6Line} from "react-icons/ri";
@@ -226,7 +226,8 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   onDeleteClick,
   isAuthenticated
 }: ImageGridViewProps): JSX.Element {
-  const t = useTranslations("");
+  const t = useTranslations("imageGrid");
+  const locale = useLocale()
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -314,8 +315,13 @@ export const ImageGridView = memo(function ImageGridViewComponent({
                   {/* ❄️ */}
                   {/* 🦄‍🪽 */}
                 {/* </span> */}
-                <Text fw={200} size='md'>
-                  {title} {isViewCount && `(${totalCount}件)`}
+                <Text
+                  variant="gradient"
+                  gradient={{ from: '#fd7e14', to: 'hotpink', deg: 90 }}
+                  fw={200}
+                  size='md'
+                >
+                  {title} {isViewCount && `( ${totalCount} ${t("item")}${totalCount >= 2 && locale == "en" ? "s" : ""} )`}
                 </Text>
               </div>
             }

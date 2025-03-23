@@ -2,6 +2,10 @@
   "logo": {
     "title": "ANGEL SANDBOX"
   },
+  "header": {
+    "search": "Search...",
+    "searchButton": "検索"
+  },
   "burgerMenu": {
     "login": "ログイン",
     "signup": "アカウントを作成",
@@ -14,6 +18,24 @@
     "freeicon": "フリーアイコン",
     "admin": "管理",
     "post": "投稿"
+  },
+  "toppage": {
+    "new": "新着"
+  },
+  "imageGrid": {
+    "item": "件"
+  },
+  "work": {
+    "title": "タイトル:",
+    "tag": "タグ:",
+    "creator": "作者:",
+    "character": "キャラクター名:",
+    "genre": "ジャンル:",
+    "updated": "更新日:",
+    "liked": "お気に入り:",
+    "review": "レビュー:",
+    "download": "ダウンロード:",
+    "downloadButton": "Download"
   },
   "appshell": {
     "copyright": "© 2025 ANGEL SANDBOX"

@@ -8,6 +8,7 @@ import classes from './Header.module.css';
 import { Butterfly_Kids } from 'next/font/google';
 import { useRouter } from 'next/navigation';
 import { useNavigate } from '@/utils/navigate';
+import { useTranslations } from 'next-intl';
 
 export interface HeaderProps {
   burger?: React.ReactNode;
@@ -18,6 +19,7 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = (
   { burger, onSearchClick, isSearching }
 ) => {
+  const t = useTranslations("header");
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
   const navigation = useNavigate();
@@ -55,7 +57,7 @@ export const Header: React.FC<HeaderProps> = (
           {/* 検索ボックスとボタンを横に並べる */}
           <Box className={classes.searchBoxWrapper}>
             <TextInput
-              placeholder="Search..."
+              placeholder={t("search")}
               className={classes.searchBox}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.currentTarget.value)}
@@ -72,7 +74,7 @@ export const Header: React.FC<HeaderProps> = (
               radius="xl"
               onClick={onSearchButtonClick}
             >
-              検索
+              {t("searchButton")}
             </Button>
           </Box>
           <Space w="md" />
