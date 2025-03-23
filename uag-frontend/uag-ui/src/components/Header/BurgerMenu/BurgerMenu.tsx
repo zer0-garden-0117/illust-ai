@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Menu, Text } from '@mantine/core';
 import { MdLogin, MdLogout } from "react-icons/md";
+import { FiUserPlus } from "react-icons/fi";
 import {
   RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine,
   RiUserLine
@@ -20,6 +21,8 @@ import { FaAngleRight } from "react-icons/fa6";
 import { MdOutlineChevronRight } from "react-icons/md";
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { FaRegHeart, FaRegStar } from 'react-icons/fa';
+import { MdOutlinePalette } from "react-icons/md";
+import { BiSolidInvader } from "react-icons/bi";
 import AuthModal from '../AuthModal/AuthModal';
 import { IconChevronRight } from '@tabler/icons-react';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
@@ -109,12 +112,11 @@ export const BurgerMenu: React.FC = () => {
               >
                 {email}
               </div>
-              <Menu.Divider />
             </>
           )}
           {!isAuthenticated && (
             <Menu.Item
-              leftSection={<MdLogin className={classes.icon} />}
+              leftSection={<MdLogin color="orange" className={classes.icon} />}
               onClick={handleLoginClick}
             >
               {t("login")}
@@ -122,7 +124,7 @@ export const BurgerMenu: React.FC = () => {
           )}
           {!isAuthenticated && (
             <Menu.Item
-              leftSection={<MdLogin className={classes.icon} />}
+              leftSection={<FiUserPlus color="orange" className={classes.icon} />}
               onClick={handleSignupClick}
             >
               {t("signup")}
@@ -132,19 +134,19 @@ export const BurgerMenu: React.FC = () => {
           {isAuthenticated && (
             <>
               <Menu.Item
-                leftSection={<FaRegHeart className={classes.icon} />}
+                leftSection={<FaRegHeart color="pink" className={classes.icon} />}
                 onClick={onClickLiked}
               >
                 {t("favoriteList")}
               </Menu.Item>
               <Menu.Item
-                leftSection={<FaRegStar className={classes.icon} />}
+                leftSection={<FaRegStar color="orange" className={classes.icon} />}
                 onClick={onClickRated}
               >
                 {t("reviewList")}
               </Menu.Item>
               <Menu.Item
-                leftSection={<MdLogout className={classes.icon} />}
+                leftSection={<MdLogout color="gray" className={classes.icon} />}
                 onClick={onClickLogout}
               >
                 {t("logout")}
@@ -152,19 +154,19 @@ export const BurgerMenu: React.FC = () => {
             </>
           )}
           <Menu.Item
-            leftSection={<MdOutlineChevronRight className={classes.icon} />}
+            leftSection={<BiSolidInvader color="purple" className={classes.icon} />}
             onClick={onClickFreeicon}
           >
             {t("family")}
           </Menu.Item>
           <Menu.Item
-            leftSection={<MdOutlineChevronRight className={classes.icon} />}
+            leftSection={<BiSolidInvader color="red" className={classes.icon} />}
             onClick={onClickFreeillustration}
           >
             {t("freeillust")}
           </Menu.Item>
           <Menu.Item
-            leftSection={<MdOutlineChevronRight className={classes.icon} />}
+            leftSection={<BiSolidInvader color="blue" className={classes.icon} />}
             onClick={onClickFreeicon}
           >
             {t("freeicon")}

@@ -16,11 +16,11 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = () => {
   return (
     <div className={classes.themelabel}>
       <Group>
-        <MdDarkMode />
+        <MdDarkMode color="gray"/>
         <Switch
           checked={colorScheme === 'dark'}
           onChange={handleToggle}
-          size="md"
+          size="xs"
           className={classes.switch}
         />
       </Group>

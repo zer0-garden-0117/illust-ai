@@ -58,7 +58,7 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
   return (
     <div className={classes.langlabel}>
       <Group>
-        <GrLanguage />
+        <GrLanguage color="lightblue"/>
         <Menu
           onOpen={() => setOpened(true)}
           onClose={() => setOpened(false)}
