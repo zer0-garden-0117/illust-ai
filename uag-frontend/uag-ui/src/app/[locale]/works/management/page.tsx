@@ -13,7 +13,7 @@ const ManagementPage: React.FC<{ params: { id: string } }> = (
         isViewCount={false}
         isViewPagination={false}
         imageCount={10}
-        words={["GLOBAL"]}
+        words={["other_GLOBAL"]}
         type={"tag"}
       />
     </>

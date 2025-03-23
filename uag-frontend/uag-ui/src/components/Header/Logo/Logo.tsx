@@ -12,6 +12,7 @@ export interface LogoProps {
 }
 
 export const Logo: React.FC<LogoProps> = () => {
+    const t = useTranslations("logo");
   const navigation = useNavigate();
 
   const onClickLogo = () => {
@@ -30,7 +31,7 @@ export const Logo: React.FC<LogoProps> = () => {
       <>
         <Text fw={700} size='sm' ml={-15}>
           {/* Angel Sandbox */}
-          ANGEL SANDBOX
+          {t("title")}
         </Text>
       </>
     </Flex>

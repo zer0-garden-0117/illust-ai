@@ -189,6 +189,8 @@ export const WorkView = memo(function WorkViewComponent({
   return (
     <>
       <Card
+        ml={20}
+        mr={20}
         style={{
           opacity: isImageDisplayed ? 1 : 0,
           transform: 'scale(1.01) translate(0px, 0px)', // 初期状態で少し浮き上がる
@@ -224,11 +226,17 @@ export const WorkView = memo(function WorkViewComponent({
             <Group style={{ marginTop: '5px' }}>
               <Text>タグ:</Text>
               <Pill.Group gap={3}>
-                {workData?.apiTags?.others?.map((tagItem, index) => (
-                  <Pill key={index} onClick={() => onTagClick(tagItem)} style={{ cursor: 'pointer' }}>
-                    {tagItem}
-                  </Pill>
-                ))}
+                {workData?.apiTags?.others?.map((tagItem, index) => {
+                  // GLOBALタグは非表示
+                  if (tagItem === 'GLOBAL') {
+                    return null;
+                  }
+                  return (
+                    <Pill key={index} onClick={() => onTagClick(tagItem)} style={{ cursor: 'pointer' }}>
+                      {tagItem}
+                    </Pill>
+                  );
+                })}
               </Pill.Group>
             </Group>
             <Group style={{ marginTop: '5px' }}>

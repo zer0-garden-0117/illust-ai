@@ -144,7 +144,7 @@ export const useImageGrid = (
     console.log("worksData:", worksData);
     console.log("headers:", headers)
     if (worksData) {
-      if (isAuthenticated && userToken != null) {
+      if (isAuthenticated && userToken != null && worksData.totalCount > 0) {
         const workIds = worksData.works
         .map((work) => work.workId)
         .filter((id): id is string => id !== undefined);

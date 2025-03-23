@@ -16,7 +16,7 @@ const TopPage: React.FC = () => {
         isViewCount={false}
         isViewPagination={false}
         imageCount={4}
-        words={["GLOBAL"]}
+        words={["other_GLOBAL"]}
         type={"tag"}
       />
     <Space h='xl'/> 

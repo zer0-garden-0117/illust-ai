@@ -1,7 +1,6 @@
 {
-  "header": {
-    "title": "ANGEL SANDBOX",
-    "subtitle": "- Copyright ANGEL SANDBOX -"
+  "logo": {
+    "title": "ANGEL SANDBOX"
   },
   "burgerMenu": {
     "login": "Sign In",
@@ -16,24 +15,7 @@
     "admin": "Admin",
     "post": "Post"
   },
-  "navbar": {
-    "menu": {
-      "top": "Top Page",
-      "about": "About",
-      "freeicon": "Free Icon",
-      "freeillust": "Free Illustration",
-      "utinoko": "Original Character",
-      "tag": "Search By Tag",
-      "admin": "Admin"
-    }
-  },
-  "toppage": {
-    "legend": "New Release"
-  },
   "appshell": {
     "copyright": "© 2025 ANGEL SANDBOX"
-  },
-  "admin": {
-    "title": "Admin"
   }
 }
