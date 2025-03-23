@@ -185,7 +185,7 @@ const MemoizedCard = memo(
             variant="transparent"
             color="gray"
             style={{
-              color: localIsLiked ? 'red' : 'gray',
+              color: localIsLiked ? 'hotpink' : 'gray',
               transition: 'color 0.3s ease',
               padding: 0,
               marginLeft: '8px',

@@ -82,29 +82,39 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
 });
 CustomImage.displayName = 'CustomImage';
 
-const RatingAndLikeControls = memo(
-  ({ localRating, localIsLiked, onRateClick, onLikeClick }: { localRating?: number; localIsLiked: boolean; onRateClick: (rating: number) => void; onLikeClick: () => void }) => (
+const RatingControls = memo(
+  ({ localRating, onRateClick }: { localRating?: number; onRateClick: (rating: number) => void; }) => (
     <Group style={{ marginTop: '5px' }}>
       <Text>レビュー:</Text>
       <Rating value={localRating} onChange={onRateClick} />
+    </Group>
+  ),
+  (prevProps, nextProps) => prevProps.localRating === nextProps.localRating
+);
+RatingControls.displayName = 'RatingControls';
+
+const LikeControls = memo(
+  ({ localIsLiked, onLikeClick }: { localIsLiked: boolean; onLikeClick: () => void }) => (
+    <Group style={{ marginTop: '5px' }}>
+      <Text>お気に入り:</Text>
       <ActionIcon
         variant="transparent"
         color="gray"
         style={{
-          color: localIsLiked ? 'red' : 'gray',
+          color: localIsLiked ? 'hotpink' : 'gray',
           transition: 'color 0.3s ease',
           padding: 0,
           marginLeft: '-10px',
         }}
         onClick={onLikeClick}
       >
-        <RiHeartAdd2Line />
+        <RiHeartAdd2Line/>
       </ActionIcon>
     </Group>
   ),
-  (prevProps, nextProps) => prevProps.localRating === nextProps.localRating && prevProps.localIsLiked === nextProps.localIsLiked
+  (prevProps, nextProps) => prevProps.localIsLiked === nextProps.localIsLiked
 );
-RatingAndLikeControls.displayName = 'RatingAndLikeControls';
+LikeControls.displayName = 'LikeControls';
 
 export const WorkView = memo(function WorkViewComponent({
   workData,
@@ -267,11 +277,13 @@ export const WorkView = memo(function WorkViewComponent({
               <Text>更新日:</Text>
               <Text>{formatDate(workData?.apiWork?.updatedAt)}</Text>
             </Group>
-            <RatingAndLikeControls
-              localRating={localRating}
+            <LikeControls
               localIsLiked={localIsLiked}
-              onRateClick={handleRateClick}
               onLikeClick={handleLikeClick}
+            />
+            <RatingControls
+              localRating={localRating}
+              onRateClick={handleRateClick}
             />
             <Group style={{ marginTop: '5px' }}>
               <Text>ダウンロード:</Text>

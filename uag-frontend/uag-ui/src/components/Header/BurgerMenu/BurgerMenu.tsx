@@ -21,6 +21,7 @@ import { FaAngleRight } from "react-icons/fa6";
 import { MdOutlineChevronRight } from "react-icons/md";
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { FaRegHeart, FaRegStar } from 'react-icons/fa';
+import { RiHeartAdd2Line } from "react-icons/ri";
 import { MdOutlinePalette } from "react-icons/md";
 import { BiSolidInvader } from "react-icons/bi";
 import AuthModal from '../AuthModal/AuthModal';
@@ -134,7 +135,7 @@ export const BurgerMenu: React.FC = () => {
           {isAuthenticated && (
             <>
               <Menu.Item
-                leftSection={<FaRegHeart color="pink" className={classes.icon} />}
+                leftSection={<RiHeartAdd2Line color="hotpink" className={classes.icon} />}
                 onClick={onClickLiked}
               >
                 {t("favoriteList")}
