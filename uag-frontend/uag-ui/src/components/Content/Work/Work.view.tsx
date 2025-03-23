@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card } from '@mantine/core';
 import { memo } from 'react';
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { RiHeartAdd2Line } from "react-icons/ri";
 import { GoDownload } from "react-icons/go";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
@@ -130,6 +130,7 @@ export const WorkView = memo(function WorkViewComponent({
   isAuthenticated
 }: WorkViewProps): JSX.Element {
   const t = useTranslations("work");
+  const locale = useLocale()
   const [opened, setOpened] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [isImageDisplayed, setIsImageDisplayed] = useState(false);
@@ -187,13 +188,45 @@ export const WorkView = memo(function WorkViewComponent({
     setOpened(true);
   };
 
-  const formatDate = (isoString: string | undefined) => {
+  const formatDate = (isoString: string | undefined, locale: string = 'en') => {
     if (!isoString) return '';
+  
     const date = new Date(isoString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    return `${year}/${month}/${day}`;
+  
+    // ロケールに応じて日付の表示形式を変更
+    switch (locale) {
+      case 'ja': // 日本語: YYYY/MM/DD
+        return `${year}/${month}/${day}`;
+      case 'zh-Hant': // 繁體中文: YYYY/MM/DD
+        return `${year}/${month}/${day}`;
+      case 'zh-Hans': // 简体中文: YYYY/MM/DD
+        return `${year}/${month}/${day}`;
+      case 'ko': // 한국의: YYYY.MM.DD
+        return `${year}.${month}.${day}`;
+      case 'th': // ไทย: DD/MM/YYYY
+        return `${day}/${month}/${year}`;
+      case 'de': // Deutsch: DD.MM.YYYY
+        return `${day}.${month}.${year}`;
+      case 'fr': // Français: DD/MM/YYYY
+        return `${day}/${month}/${year}`;
+      case 'vi': // Tiếng Việt: DD/MM/YYYY
+        return `${day}/${month}/${year}`;
+      case 'id': // Bahasa Indonesia: DD/MM/YYYY
+        return `${day}/${month}/${year}`;
+      case 'ms': // Melayu: DD/MM/YYYY
+        return `${day}/${month}/${year}`;
+      case 'fil': // Filipino: MM/DD/YYYY
+        return `${month}/${day}/${year}`;
+      case 'pt': // Português: DD/MM/YYYY
+        return `${day}/${month}/${year}`;
+      case 'en': // 英語 (アメリカ式): MM/DD/YYYY
+        return `${month}/${day}/${year}`;
+      default: // デフォルト: YYYY/MM/DD (ISO 8601)
+        return `${year}/${month}/${day}`;
+    }
   };
 
   return (
@@ -275,7 +308,7 @@ export const WorkView = memo(function WorkViewComponent({
             </Group>
             <Group style={{ marginTop: '5px' }}>
               <Text>{t("updated")}</Text>
-              <Text>{formatDate(workData?.apiWork?.updatedAt)}</Text>
+              <Text>{formatDate(workData?.apiWork?.updatedAt, locale)}</Text>
             </Group>
             <LikeControls
               localIsLiked={localIsLiked}
