@@ -1,7 +1,20 @@
 {
   "header": {
-    "title": "Unlimited Angel Generation",
-    "subtitle": "- Copyright Free Angels AIArts -"
+    "title": "ANGEL SANDBOX",
+    "subtitle": "- Copyright ANGEL SANDBOX -"
+  },
+  "burgerMenu": {
+    "login": "Sign In",
+    "signup": "Sign Up",
+    "userInfo": "Your Account",
+    "favoriteList": "Favorites",
+    "reviewList": "Reviews",
+    "logout": "Sign Out",
+    "family": "Zerozaki Family",
+    "freeillust": "Free Illustration",
+    "freeicon": "Free Icon",
+    "admin": "Admin",
+    "post": "Post"
   },
   "navbar": {
     "menu": {
@@ -18,7 +31,7 @@
     "legend": "New Release"
   },
   "appshell": {
-    "copyright": "© 2024 Unlimited Angel Generation"
+    "copyright": "© 2025 ANGEL SANDBOX"
   },
   "admin": {
     "title": "Admin"

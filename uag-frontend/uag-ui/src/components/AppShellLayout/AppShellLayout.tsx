@@ -77,11 +77,11 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       {/* <AppShell.Aside>
         <Sidebar />
       </AppShell.Aside> */}
-      {/* <AppShell.Footer>
-        <Text w="full" size="sm" ta="right" pr="20">
+      <AppShell.Footer>
+        <Text w="full" size="xs" ta="right" pr="20">
           {t('copyright')}
         </Text>
-      </AppShell.Footer> */}
+      </AppShell.Footer>
     </AppShell>
   );
 };

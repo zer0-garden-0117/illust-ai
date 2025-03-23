@@ -7,6 +7,8 @@ import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line, RiDeleteBin6Line} from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
 import { BsSuitDiamondFill } from "react-icons/bs";
+import { BiGame } from "react-icons/bi";
+import { BiSolidInvader } from "react-icons/bi";
 import { useNavigate } from '@/utils/navigate';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 
@@ -290,11 +292,11 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             variant="unstyled"
             legend={
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <BsSuitDiamondFill
+                <BiSolidInvader
                   style={{
                     marginRight: '8px',
                     position: 'relative',
-                    top: '-2px',
+                    // top: '-2px',
                   }}
                 />
                 <Text fw={200} size='md'>

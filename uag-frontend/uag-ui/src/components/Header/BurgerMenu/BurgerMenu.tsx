@@ -23,9 +23,11 @@ import { FaRegHeart, FaRegStar } from 'react-icons/fa';
 import AuthModal from '../AuthModal/AuthModal';
 import { IconChevronRight } from '@tabler/icons-react';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
+import { useTranslations } from 'next-intl';
 
 
 export const BurgerMenu: React.FC = () => {
+  const t = useTranslations("burgerMenu");
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
   const navigation = useNavigate();
   const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessTokenContext();
@@ -98,7 +100,7 @@ export const BurgerMenu: React.FC = () => {
                 style={{ pointerEvents: 'none' }}
               >
                 {/* <div style={{ display: 'flex', alignItems: 'center', marginTop: '3px' }}> */}
-                <div className={classes.accountlabel2}>ユーザー情報</div> {/* ユーザー情報 */}
+                <div className={classes.accountlabel2}>{t("userInfo")}</div> {/* ユーザー情報 */}
                 {/* </div> */}
               </Menu.Item>
               <div
@@ -115,7 +117,7 @@ export const BurgerMenu: React.FC = () => {
               leftSection={<MdLogin className={classes.icon} />}
               onClick={handleLoginClick}
             >
-              ログイン
+              {t("login")}
             </Menu.Item>
           )}
           {!isAuthenticated && (
@@ -123,28 +125,29 @@ export const BurgerMenu: React.FC = () => {
               leftSection={<MdLogin className={classes.icon} />}
               onClick={handleSignupClick}
             >
-              アカウントを作成
+              {t("signup")}
             </Menu.Item>
           )}
+          <Menu.Divider />
           {isAuthenticated && (
             <>
               <Menu.Item
                 leftSection={<FaRegHeart className={classes.icon} />}
                 onClick={onClickLiked}
               >
-                お気に入りリスト
+                {t("favoriteList")}
               </Menu.Item>
               <Menu.Item
                 leftSection={<FaRegStar className={classes.icon} />}
                 onClick={onClickRated}
               >
-                レビューリスト
+                {t("reviewList")}
               </Menu.Item>
               <Menu.Item
                 leftSection={<MdLogout className={classes.icon} />}
                 onClick={onClickLogout}
               >
-                ログアウト
+                {t("logout")}
               </Menu.Item>
             </>
           )}
@@ -152,24 +155,19 @@ export const BurgerMenu: React.FC = () => {
             leftSection={<MdOutlineChevronRight className={classes.icon} />}
             onClick={onClickFreeicon}
           >
-            零崎家
+            {t("family")}
           </Menu.Item>
           <Menu.Item
             leftSection={<MdOutlineChevronRight className={classes.icon} />}
             onClick={onClickFreeillustration}
           >
-            フリーイラスト
+            {t("freeillust")}
           </Menu.Item>
           <Menu.Item
             leftSection={<MdOutlineChevronRight className={classes.icon} />}
             onClick={onClickFreeicon}
           >
-            フリーアイコン
-          </Menu.Item>
-          <Menu.Item
-            leftSection={<MdOutlineChevronRight className={classes.icon} />}
-          >
-            本サイトについて
+            {t("freeicon")}
           </Menu.Item>
           {isAuthenticated && isAdmin && (
             <>
@@ -177,13 +175,13 @@ export const BurgerMenu: React.FC = () => {
                 leftSection={<MdOutlineChevronRight className={classes.icon} />}
                 onClick={onClickManage}
               >
-                管理
+                {t("admin")}
               </Menu.Item>
               <Menu.Item
                 leftSection={<MdOutlineChevronRight className={classes.icon} />}
                 onClick={onClickAdmin}
               >
-                投稿
+                {t("post")}
               </Menu.Item>
             </>
           )}

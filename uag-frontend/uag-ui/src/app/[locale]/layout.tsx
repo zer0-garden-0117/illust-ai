@@ -14,8 +14,8 @@ import '@mantine/dates/styles.css'; //if using mantine date picker features
 import 'mantine-react-table/styles.css'; //make sure MRT styles were imported in your app root (once)
 
 export const metadata: Metadata = {
-  title: 'Unlimited Angel Generation',
-  description: 'Unlimited Angel Generation',
+  title: 'ANGEL SANDBOX',
+  description: 'ANGEL SANDBOX',
 };
 
 export const viewport: Viewport = {

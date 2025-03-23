@@ -30,7 +30,7 @@ export const Logo: React.FC<LogoProps> = () => {
       <>
         <Text fw={700} size='sm'>
           {/* Angel Sandbox */}
-          UNLIMITED ANGEL GENERATION
+          ANGEL SANDBOX
         </Text>
       </>
     </Flex>

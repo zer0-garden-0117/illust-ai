@@ -1,7 +1,20 @@
 {
   "header": {
-    "title": "無限天使生成",
-    "subtitle": "- Copyright Free Angels AIArts -"
+    "title": "ANGEL SANDBOX",
+    "subtitle": "- Copyright ANGEL SANDBOX -"
+  },
+  "burgerMenu": {
+    "login": "ログイン",
+    "signup": "アカウントを作成",
+    "userInfo": "ユーザー情報",
+    "favoriteList": "お気に入り",
+    "reviewList": "レビュー",
+    "logout": "ログアウト",
+    "family": "零崎家",
+    "freeillust": "フリーイラスト",
+    "freeicon": "フリーアイコン",
+    "admin": "管理",
+    "post": "投稿"
   },
   "navbar": {
     "menu": {
@@ -18,7 +31,7 @@
     "legend": "新着"
   },
   "appshell": {
-    "copyright": "© 2024 無限天使生成"
+    "copyright": "© 2025 ANGEL SANDBOX"
   },
   "admin": {
     "title": "管理"
