@@ -1,0 +1,43 @@
+{
+    "logo": {
+      "title": "ANGEL SANDBOX"
+    },
+    "header": {
+      "search": "Cari...",
+      "searchButton": "Cari"
+    },
+    "burgerMenu": {
+      "login": "Masuk",
+      "signup": "Daftar",
+      "userInfo": "Informasi Pengguna",
+      "favoriteList": "Favorit",
+      "reviewList": "Ulasan",
+      "logout": "Keluar",
+      "family": "Keluarga Zerozaki",
+      "freeillust": "Ilustrasi Gratis",
+      "freeicon": "Ikon Gratis",
+      "admin": "Admin",
+      "post": "Posting"
+    },
+    "toppage": {
+      "new": "Baru"
+    },
+    "imageGrid": {
+      "item": "item"
+    },
+    "work": {
+      "title": "Judul:",
+      "tag": "Tag:",
+      "creator": "Pembuat:",
+      "character": "Nama Karakter:",
+      "genre": "Genre:",
+      "updated": "Diperbarui:",
+      "liked": "Favorit:",
+      "review": "Ulasan:",
+      "download": "Unduh:",
+      "downloadButton": "Unduh"
+    },
+    "appshell": {
+      "copyright": "© 2025 ANGEL SANDBOX"
+    }
+  }

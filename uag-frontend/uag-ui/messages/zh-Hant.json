@@ -1,0 +1,43 @@
+{
+    "logo": {
+      "title": "ANGEL SANDBOX"
+    },
+    "header": {
+      "search": "搜尋...",
+      "searchButton": "搜尋"
+    },
+    "burgerMenu": {
+      "login": "登入",
+      "signup": "註冊",
+      "userInfo": "用戶資訊",
+      "favoriteList": "最愛",
+      "reviewList": "評論",
+      "logout": "登出",
+      "family": "零崎家",
+      "freeillust": "免費插圖",
+      "freeicon": "免費圖標",
+      "admin": "管理",
+      "post": "投稿"
+    },
+    "toppage": {
+      "new": "新着"
+    },
+    "imageGrid": {
+      "item": "件"
+    },
+    "work": {
+      "title": "標題:",
+      "tag": "標籤:",
+      "creator": "作者:",
+      "character": "角色名:",
+      "genre": "類型:",
+      "updated": "更新日:",
+      "liked": "最愛:",
+      "review": "評論:",
+      "download": "下載:",
+      "downloadButton": "下載"
+    },
+    "appshell": {
+      "copyright": "© 2025 ANGEL SANDBOX"
+    }
+  }

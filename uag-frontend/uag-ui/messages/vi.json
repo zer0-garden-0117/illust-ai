@@ -1,0 +1,43 @@
+{
+    "logo": {
+      "title": "ANGEL SANDBOX"
+    },
+    "header": {
+      "search": "Tìm kiếm...",
+      "searchButton": "Tìm kiếm"
+    },
+    "burgerMenu": {
+      "login": "Đăng nhập",
+      "signup": "Đăng ký",
+      "userInfo": "Thông tin người dùng",
+      "favoriteList": "Yêu thích",
+      "reviewList": "Đánh giá",
+      "logout": "Đăng xuất",
+      "family": "Gia đình Zerozaki",
+      "freeillust": "Hình minh họa miễn phí",
+      "freeicon": "Biểu tượng miễn phí",
+      "admin": "Quản trị",
+      "post": "Đăng"
+    },
+    "toppage": {
+      "new": "Mới"
+    },
+    "imageGrid": {
+      "item": "mục"
+    },
+    "work": {
+      "title": "Tiêu đề:",
+      "tag": "Thẻ:",
+      "creator": "Người tạo:",
+      "character": "Tên nhân vật:",
+      "genre": "Thể loại:",
+      "updated": "Cập nhật:",
+      "liked": "Yêu thích:",
+      "review": "Đánh giá:",
+      "download": "Tải xuống:",
+      "downloadButton": "Tải xuống"
+    },
+    "appshell": {
+      "copyright": "© 2025 ANGEL SANDBOX"
+    }
+  }

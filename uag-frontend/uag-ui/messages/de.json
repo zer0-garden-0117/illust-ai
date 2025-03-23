@@ -1,0 +1,43 @@
+{
+    "logo": {
+      "title": "ANGEL SANDBOX"
+    },
+    "header": {
+      "search": "Suchen...",
+      "searchButton": "Suchen"
+    },
+    "burgerMenu": {
+      "login": "Anmelden",
+      "signup": "Registrieren",
+      "userInfo": "Benutzerinformation",
+      "favoriteList": "Favoriten",
+      "reviewList": "Bewertungen",
+      "logout": "Abmelden",
+      "family": "Zerozaki-Familie",
+      "freeillust": "Kostenlose Illustrationen",
+      "freeicon": "Kostenlose Symbole",
+      "admin": "Admin",
+      "post": "Beitrag"
+    },
+    "toppage": {
+      "new": "Neu"
+    },
+    "imageGrid": {
+      "item": "Artikel"
+    },
+    "work": {
+      "title": "Titel:",
+      "tag": "Tag:",
+      "creator": "Ersteller:",
+      "character": "Charaktername:",
+      "genre": "Genre:",
+      "updated": "Aktualisiert:",
+      "liked": "Favoriten:",
+      "review": "Bewertung:",
+      "download": "Download:",
+      "downloadButton": "Download"
+    },
+    "appshell": {
+      "copyright": "© 2025 ANGEL SANDBOX"
+    }
+  }

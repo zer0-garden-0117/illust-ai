@@ -1,0 +1,43 @@
+{
+    "logo": {
+      "title": "ANGEL SANDBOX"
+    },
+    "header": {
+      "search": "검색...",
+      "searchButton": "검색"
+    },
+    "burgerMenu": {
+      "login": "로그인",
+      "signup": "가입하기",
+      "userInfo": "사용자 정보",
+      "favoriteList": "즐겨찾기",
+      "reviewList": "리뷰",
+      "logout": "로그아웃",
+      "family": "제로자키 가문",
+      "freeillust": "무료 일러스트",
+      "freeicon": "무료 아이콘",
+      "admin": "관리",
+      "post": "게시"
+    },
+    "toppage": {
+      "new": "신규"
+    },
+    "imageGrid": {
+      "item": "건"
+    },
+    "work": {
+      "title": "제목:",
+      "tag": "태그:",
+      "creator": "작가:",
+      "character": "캐릭터명:",
+      "genre": "장르:",
+      "updated": "업데이트일:",
+      "liked": "즐겨찾기:",
+      "review": "리뷰:",
+      "download": "다운로드:",
+      "downloadButton": "다운로드"
+    },
+    "appshell": {
+      "copyright": "© 2025 ANGEL SANDBOX"
+    }
+  }

@@ -1,0 +1,43 @@
+{
+    "logo": {
+      "title": "ANGEL SANDBOX"
+    },
+    "header": {
+      "search": "ค้นหา...",
+      "searchButton": "ค้นหา"
+    },
+    "burgerMenu": {
+      "login": "เข้าสู่ระบบ",
+      "signup": "สมัครสมาชิก",
+      "userInfo": "ข้อมูลผู้ใช้",
+      "favoriteList": "รายการโปรด",
+      "reviewList": "รีวิว",
+      "logout": "ออกจากระบบ",
+      "family": "ตระกูล Zerozaki",
+      "freeillust": "ภาพประกอบฟรี",
+      "freeicon": "ไอคอนฟรี",
+      "admin": "ผู้ดูแล",
+      "post": "โพสต์"
+    },
+    "toppage": {
+      "new": "ใหม่ล่าสุด"
+    },
+    "imageGrid": {
+      "item": "รายการ"
+    },
+    "work": {
+      "title": "ชื่อ:",
+      "tag": "แท็ก:",
+      "creator": "ผู้สร้าง:",
+      "character": "ชื่อตัวละคร:",
+      "genre": "ประเภท:",
+      "updated": "อัปเดตล่าสุด:",
+      "liked": "รายการโปรด:",
+      "review": "รีวิว:",
+      "download": "ดาวน์โหลด:",
+      "downloadButton": "ดาวน์โหลด"
+    },
+    "appshell": {
+      "copyright": "© 2025 ANGEL SANDBOX"
+    }
+  }

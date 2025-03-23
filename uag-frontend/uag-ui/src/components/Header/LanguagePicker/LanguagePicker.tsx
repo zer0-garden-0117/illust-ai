@@ -15,10 +15,20 @@ interface LanguageData {
 }
 
 const data: LanguageData[] = [
-  { label: '日本語', code: 'JP', lang: 'ja' },
-  { label: 'English', code: 'USA', lang: 'en' },
+  { label: '日', code: 'JP', lang: 'ja' },
+  { label: 'EN', code: 'US', lang: 'en' },
+  { label: 'TW', code: 'TW', lang: 'zh-Hant' },
+  { label: 'CN', code: 'CN', lang: 'zh-Hans' },
+  { label: 'KR', code: 'KR', lang: 'ko' },
+  { label: 'MY', code: 'MY', lang: 'ms' },
+  { label: 'TH', code: 'TH', lang: 'th' },
+  { label: 'DE', code: 'DE', lang: 'de' },
+  { label: 'FR', code: 'FR', lang: 'fr' },
+  { label: 'VN', code: 'VN', lang: 'vi' },
+  { label: 'ID', code: 'ID', lang: 'id' },
+  { label: 'PH', code: 'PH', lang: 'fil' },
+  { label: 'PT', code: 'PT', lang: 'pt' },
 ];
-
 export interface LanguagePickerProps { }
 
 export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
@@ -39,7 +49,7 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
 
   const handleLanguageChange = (item: LanguageData) => {
     setSelected(item);
-    const newPath = pathname.replace(/^\/(en|ja)/, `/${item.lang}`);
+    const newPath = pathname.replace(/^\/(en|ja|zh-Hant|zh-Hans|ko|ms|th|de|fr|vi|id|fil|pt)/, `/${item.lang}`);
     navigation(newPath);
   };
 

@@ -1,0 +1,43 @@
+{
+    "logo": {
+      "title": "ANGEL SANDBOX"
+    },
+    "header": {
+      "search": "Rechercher...",
+      "searchButton": "Rechercher"
+    },
+    "burgerMenu": {
+      "login": "Connexion",
+      "signup": "Inscription",
+      "userInfo": "Informations utilisateur",
+      "favoriteList": "Favoris",
+      "reviewList": "Avis",
+      "logout": "Déconnexion",
+      "family": "Famille Zerozaki",
+      "freeillust": "Illustrations gratuites",
+      "freeicon": "Icônes gratuites",
+      "admin": "Admin",
+      "post": "Poster"
+    },
+    "toppage": {
+      "new": "Nouveautés"
+    },
+    "imageGrid": {
+      "item": "élément"
+    },
+    "work": {
+      "title": "Titre:",
+      "tag": "Tag:",
+      "creator": "Créateur:",
+      "character": "Nom du personnage:",
+      "genre": "Genre:",
+      "updated": "Mis à jour:",
+      "liked": "Favoris:",
+      "review": "Avis:",
+      "download": "Télécharger:",
+      "downloadButton": "Télécharger"
+    },
+    "appshell": {
+      "copyright": "© 2025 ANGEL SANDBOX"
+    }
+  }

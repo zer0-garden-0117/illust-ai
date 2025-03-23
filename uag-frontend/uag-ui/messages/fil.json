@@ -1,0 +1,43 @@
+{
+    "logo": {
+      "title": "ANGEL SANDBOX"
+    },
+    "header": {
+      "search": "Maghanap...",
+      "searchButton": "Maghanap"
+    },
+    "burgerMenu": {
+      "login": "Mag-log In",
+      "signup": "Mag-sign Up",
+      "userInfo": "Impormasyon ng User",
+      "favoriteList": "Mga Paborito",
+      "reviewList": "Mga Review",
+      "logout": "Mag-log Out",
+      "family": "Pamilya Zerozaki",
+      "freeillust": "Libreng Ilustrasyon",
+      "freeicon": "Libreng Icon",
+      "admin": "Admin",
+      "post": "Mag-post"
+    },
+    "toppage": {
+      "new": "Bago"
+    },
+    "imageGrid": {
+      "item": "item"
+    },
+    "work": {
+      "title": "Pamagat:",
+      "tag": "Tag:",
+      "creator": "Tagalikha:",
+      "character": "Pangalan ng Character:",
+      "genre": "Genre:",
+      "updated": "Na-update:",
+      "liked": "Mga Paborito:",
+      "review": "Review:",
+      "download": "I-download:",
+      "downloadButton": "I-download"
+    },
+    "appshell": {
+      "copyright": "© 2025 ANGEL SANDBOX"
+    }
+  }
