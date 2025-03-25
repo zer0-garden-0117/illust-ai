@@ -291,6 +291,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       {!loading && (
         <>
           <Fieldset
+            ml={-5}
             variant="unstyled"
             legend={
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -329,7 +330,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
         </>
       )}
 
-      <SimpleGrid ml={20} mr={20} cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
+      <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
         {cards}
       </SimpleGrid>
       {!loading && totalPages > 1 && isViewPagination && (
