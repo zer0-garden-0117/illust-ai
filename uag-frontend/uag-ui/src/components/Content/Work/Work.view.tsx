@@ -4,11 +4,15 @@ import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
-import { RiHeartAdd2Line } from "react-icons/ri";
+import { RiHashtag, RiHeartAdd2Line, RiUserLine, RiFileLine, RiStackLine } from "react-icons/ri";
+import { CiHeart } from "react-icons/ci";
 import { GoDownload } from "react-icons/go";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
 import { WorkGetByIdResult } from '@/apis/openapi/works/useWorksGetById';
 import { usePathname } from 'next/navigation';
+import { BiSolidInvader } from 'react-icons/bi';
+import { MdOutlineWatchLater } from 'react-icons/md';
+import { FaRegStar } from 'react-icons/fa';
 
 type WorkViewProps = {
   workData?: WorkGetByIdResult;
@@ -85,7 +89,17 @@ CustomImage.displayName = 'CustomImage';
 const RatingControls = memo(
   ({ localRating, onRateClick, t }: { localRating?: number; onRateClick: (rating: number) => void; t: any}) => (
     <Group style={{ marginTop: '5px' }}>
-      <Text>{t("review")}</Text>
+      <Text>
+        <FaRegStar
+          style={{
+            position: 'relative',
+            fontSize: '14px',
+            color: "hotpink",
+            marginRight: "3px"
+          }}
+        />
+        {t("review")}
+      </Text>
       <Rating value={localRating} onChange={onRateClick} />
     </Group>
   ),
@@ -96,7 +110,17 @@ RatingControls.displayName = 'RatingControls';
 const LikeControls = memo(
   ({ localIsLiked, onLikeClick, t }: { localIsLiked: boolean; onLikeClick: () => void; t:any }) => (
     <Group style={{ marginTop: '5px' }}>
-      <Text>{t("liked")}</Text>
+      <Text>
+      <CiHeart
+        style={{
+          position: 'relative',
+          fontSize: '14px',
+          color: "hotpink",
+          marginRight: "3px"
+        }}
+      />
+        {t("liked")}
+      </Text>
       <ActionIcon
         variant="transparent"
         color="gray"
@@ -263,11 +287,31 @@ export const WorkView = memo(function WorkViewComponent({
             }}
           >
             <Group style={{ marginTop: '20px' }}>
-              <Text>{t("title")}</Text>
+              <Text>
+              <RiFileLine
+                style={{
+                  position: 'relative',
+                  fontSize: '14px',
+                  color: "hotpink",
+                  marginRight: "3px"
+                }}
+              />
+                {t("title")}
+              </Text>
               <Text>{workData?.apiWork?.mainTitle}</Text>
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>{t("tag")}</Text>
+              <Text>
+              <RiHashtag
+                style={{
+                  position: 'relative',
+                  fontSize: '14px',
+                  color: "hotpink",
+                  marginRight: "3px"
+                }}
+              />
+                {t("tag")}
+              </Text>
               <Pill.Group gap={3}>
                 {workData?.apiTags?.others?.map((tagItem, index) => {
                   // GLOBALタグは非表示
@@ -283,7 +327,17 @@ export const WorkView = memo(function WorkViewComponent({
               </Pill.Group>
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>{t("creator")}</Text>
+              <Text>
+              <RiUserLine
+                style={{
+                  position: 'relative',
+                  fontSize: '14px',
+                  color: "hotpink",
+                  marginRight: "3px"
+                }}
+              />
+                {t("creator")}
+              </Text>
               {workData?.apiTags?.creators?.map((creatorItem, index) => (
                 <Pill key={index} onClick={() => onCreatorClick(creatorItem)} style={{ cursor: 'pointer' }}>
                   {creatorItem}
@@ -291,7 +345,17 @@ export const WorkView = memo(function WorkViewComponent({
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>{t("character")}</Text>
+              <Text>
+              <BiSolidInvader
+                style={{
+                  position: 'relative',
+                  fontSize: '14px',
+                  color: "hotpink",
+                  marginRight: "3px"
+                }}
+              />
+                {t("character")}
+              </Text>
               {workData?.apiTags?.characters?.map((characterItem, index) => (
                 <Pill key={index} onClick={() => onCharacterClick(characterItem)} style={{ cursor: 'pointer' }}>
                   {characterItem}
@@ -299,7 +363,17 @@ export const WorkView = memo(function WorkViewComponent({
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>{t("genre")}</Text>
+            <Text>
+              <RiStackLine
+                style={{
+                  position: 'relative',
+                  fontSize: '14px',
+                  color: "hotpink",
+                  marginRight: "3px"
+                }}
+              />
+                {t("genre")}
+              </Text>
               {workData?.apiTags?.genres?.map((genresItem, index) => (
                 <Pill key={index} onClick={() => onGenreClick(genresItem)} style={{ cursor: 'pointer' }}>
                   {genresItem}
@@ -307,7 +381,17 @@ export const WorkView = memo(function WorkViewComponent({
               ))}  
             </Group>
             <Group style={{ marginTop: '5px' }}>
-              <Text>{t("updated")}</Text>
+            <Text>
+              <MdOutlineWatchLater
+                style={{
+                  position: 'relative',
+                  fontSize: '14px',
+                  color: "hotpink",
+                  marginRight: "3px"
+                }}
+              />
+                {t("updated")}
+              </Text>
               <Text>{formatDate(workData?.apiWork?.updatedAt, locale)}</Text>
             </Group>
             <LikeControls
@@ -321,7 +405,17 @@ export const WorkView = memo(function WorkViewComponent({
               t={t}
             />
             <Group style={{ marginTop: '5px' }}>
-              <Text>{t("download")}</Text>
+              <Text>
+              <GoDownload
+                style={{
+                  position: 'relative',
+                  fontSize: '14px',
+                  color: "hotpink",
+                  marginRight: "3px"
+                }}
+              />
+                {t("download")}
+              </Text>
               <Button
                 onClick={handleDownloadClick}
                 variant="light"

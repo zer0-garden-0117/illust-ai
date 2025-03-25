@@ -28,6 +28,7 @@ import AuthModal from '../AuthModal/AuthModal';
 import { IconChevronRight } from '@tabler/icons-react';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 import { useTranslations } from 'next-intl';
+import { CiHeart } from 'react-icons/ci';
 
 
 export const BurgerMenu: React.FC = () => {
@@ -135,7 +136,7 @@ export const BurgerMenu: React.FC = () => {
           {isAuthenticated && (
             <>
               <Menu.Item
-                leftSection={<RiHeartAdd2Line color="hotpink" className={classes.icon} />}
+                leftSection={<CiHeart color="hotpink" className={classes.icon} />}
                 onClick={onClickLiked}
               >
                 {t("favoriteList")}
