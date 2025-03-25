@@ -21,11 +21,11 @@
   /* 左の余白 */
   margin-right: 0px;
   /* 右の余白 */
-  width: calc(100% - 25px);
+  width: calc(100% - 10px);
   /* 幅を余白分調整 */
 }
 
 .searchBox {
   flex-grow: 1;
-  margin-right: -0.4rem;
+  margin-right: -0.8rem;
 }
