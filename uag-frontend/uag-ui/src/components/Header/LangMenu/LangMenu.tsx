@@ -100,7 +100,11 @@ export const LangMenu: React.FC = () => {
       key={item.label}
     >
       <Group gap="xs">
-        <CircleFlag countryCode={item.code.toLowerCase()} height="18" />
+        <CircleFlag
+          countryCode={item.code.toLowerCase()}
+          height="32"
+          style={{ transform: 'scale(0.75)' }}
+        />
         {/* <Flag code={item.code} className={classes.flag} /> */}
         <span><Text size='xs'>{item.label}</Text></span>
       </Group>
@@ -119,7 +123,8 @@ export const LangMenu: React.FC = () => {
             <ActionIcon variant='transparent' mt={1.5}>
               <CircleFlag
                 countryCode={selected.code.toLowerCase()} 
-                height="18" 
+                height="32"
+                style={{ transform: 'scale(0.75)' }}
               />
             </ActionIcon>
           </div>
