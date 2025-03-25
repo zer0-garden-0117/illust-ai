@@ -15,20 +15,35 @@ interface LanguageData {
 }
 
 const data: LanguageData[] = [
-  { label: '日', code: 'JP', lang: 'ja' },
-  { label: 'EN', code: 'US', lang: 'en' },
-  { label: 'TW', code: 'TW', lang: 'zh-Hant' },
-  { label: 'CN', code: 'CN', lang: 'zh-Hans' },
-  { label: 'KR', code: 'KR', lang: 'ko' },
-  { label: 'MY', code: 'MY', lang: 'ms' },
-  { label: 'TH', code: 'TH', lang: 'th' },
-  { label: 'DE', code: 'DE', lang: 'de' },
-  { label: 'FR', code: 'FR', lang: 'fr' },
-  { label: 'VN', code: 'VN', lang: 'vi' },
-  { label: 'ID', code: 'ID', lang: 'id' },
-  { label: 'PH', code: 'PH', lang: 'fil' },
-  { label: 'PT', code: 'PT', lang: 'pt' },
+  { label: '日本語', code: 'JP', lang: 'ja' },
+  { label: 'English', code: 'US', lang: 'en' },
+  { label: '繁體中文', code: 'TW', lang: 'zh-Hant' },
+  { label: '简体中文', code: 'CN', lang: 'zh-Hans' },
+  { label: '한국의', code: 'KR', lang: 'ko' },
+  { label: 'Melayu', code: 'MY', lang: 'ms' },
+  { label: 'ไทย', code: 'TH', lang: 'th' },
+  { label: 'Deutsch', code: 'DE', lang: 'de' },
+  { label: 'Français', code: 'FR', lang: 'fr' },
+  { label: 'Tiếng Việt', code: 'VN', lang: 'vi' },
+  { label: 'Bahasa Indonesia', code: 'ID', lang: 'id' },
+  { label: 'Filipino', code: 'PH', lang: 'fil' },
+  { label: 'Português', code: 'PT', lang: 'pt' },
 ];
+// const data: LanguageData[] = [
+//   { label: '日', code: 'JP', lang: 'ja' },
+//   { label: 'EN', code: 'US', lang: 'en' },
+//   { label: 'TW', code: 'TW', lang: 'zh-Hant' },
+//   { label: 'CN', code: 'CN', lang: 'zh-Hans' },
+//   { label: 'KR', code: 'KR', lang: 'ko' },
+//   { label: 'MY', code: 'MY', lang: 'ms' },
+//   { label: 'TH', code: 'TH', lang: 'th' },
+//   { label: 'DE', code: 'DE', lang: 'de' },
+//   { label: 'FR', code: 'FR', lang: 'fr' },
+//   { label: 'VN', code: 'VN', lang: 'vi' },
+//   { label: 'ID', code: 'ID', lang: 'id' },
+//   { label: 'PH', code: 'PH', lang: 'fil' },
+//   { label: 'PT', code: 'PT', lang: 'pt' },
+// ];
 export interface LanguagePickerProps { }
 
 export const LanguagePicker: React.FC<LanguagePickerProps> = () => {

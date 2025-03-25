@@ -9,6 +9,7 @@ import { Butterfly_Kids } from 'next/font/google';
 import { useRouter } from 'next/navigation';
 import { useNavigate } from '@/utils/navigate';
 import { useTranslations } from 'next-intl';
+import { LangMenu } from './LangMenu/LangMenu';
 
 export interface HeaderProps {
   burger?: React.ReactNode;
@@ -48,6 +49,7 @@ export const Header: React.FC<HeaderProps> = (
           onSearchClick={() => onSearchClick()}
           isSearching={isSearching} /> */}
         {/* <UserMenu /> */}
+        <LangMenu />
         <BurgerMenu />
       </header>
       {isSearching && (

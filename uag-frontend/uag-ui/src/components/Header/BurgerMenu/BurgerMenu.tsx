@@ -189,7 +189,7 @@ export const BurgerMenu: React.FC = () => {
             </>
           )}
           <Menu.Divider />
-          <LanguagePicker />
+          {/* <LanguagePicker /> */}
           <ThemeSwitcher />
         </Menu.Dropdown>
       </Menu>

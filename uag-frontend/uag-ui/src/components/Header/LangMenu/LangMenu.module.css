@@ -1,0 +1,33 @@
+.menuDropdown {
+  transform: translateX(-15px);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* メニューに軽い影を追加 */
+}
+
+.clickableIcon {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clickableIcon.active .userIcon {
+  color: orange;
+  /* メニューが開かれたときのアイコン色 */
+}
+
+.userIcon {
+  margin-top: 5px;
+  /* transition: color 0.3s ease; */
+  /* 色の変更を滑らかにする */
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+}
+
+.email {
+  padding: 10px 0;
+  font-size: 0.875rem;
+  padding-left: 15px;
+}
