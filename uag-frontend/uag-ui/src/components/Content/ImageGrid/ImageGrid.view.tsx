@@ -25,6 +25,7 @@ export type ImageData = {
 };
 
 type ImageGridViewProps = {
+  topIcon: React.ReactElement;
   title: string;
   isViewCount: boolean;
   isViewPagination: boolean;
@@ -212,6 +213,7 @@ const MemoizedCard = memo(
 MemoizedCard.displayName = 'MemoizedCard';
 
 export const ImageGridView = memo(function ImageGridViewComponent({
+  topIcon,
   title,
   isViewCount,
   isViewPagination,
@@ -295,15 +297,15 @@ export const ImageGridView = memo(function ImageGridViewComponent({
             variant="unstyled"
             legend={
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <BiSolidInvader
-                  style={{
+                {React.cloneElement(topIcon, {
+                  style: {
                     marginRight: '8px',
                     position: 'relative',
                     fontSize: '20px',
                     color: "#fd7e14",
                     top: '-2px',
-                  }}
-                />
+                  }
+                })}
                 {/* <span
                   style={{
                     marginRight: '8px',

@@ -1,5 +1,6 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
+import { BiSolidInvader } from 'react-icons/bi';
 
 const GenrePage: React.FC<{ params: { id: string } }> = (
   { params }
@@ -10,6 +11,7 @@ const GenrePage: React.FC<{ params: { id: string } }> = (
   return (
     <>
       <ImageGrid
+        topIcon={<BiSolidInvader />}
         title={decodedId}
         isViewCount={true}
         isViewPagination={true}

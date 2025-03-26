@@ -1,5 +1,6 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
+import { RiHashtag } from 'react-icons/ri';
 
 const TagPage: React.FC<{ params: { id: string } }> = (
   { params }
@@ -10,6 +11,7 @@ const TagPage: React.FC<{ params: { id: string } }> = (
   return (
     <>
       <ImageGrid
+        topIcon={<RiHashtag />}
         title={decodedId}
         isViewCount={true}
         isViewPagination={true}

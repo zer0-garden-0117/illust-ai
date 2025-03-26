@@ -3,6 +3,7 @@ import { useImageGrid } from './ImageGrid.hook';
 import { ImageGridView } from './ImageGrid.view';
 
 type ImageGridProps = {
+  topIcon: React.ReactElement;
   title: string;
   isViewCount: boolean;
   isViewPagination: boolean;
@@ -12,9 +13,9 @@ type ImageGridProps = {
 };
 
 export const ImageGrid: React.FC<ImageGridProps> = (
-  { title, isViewCount, isViewPagination, imageCount, type, words }
+  { topIcon, title, isViewCount, isViewPagination, imageCount, type, words }
 ): JSX.Element => {
-  const viewProps = useImageGrid({ title, isViewCount, isViewPagination, imageCount, type, words });
+  const viewProps = useImageGrid({ topIcon, title, isViewCount, isViewPagination, imageCount, type, words });
   return <ImageGridView {...viewProps} />;
 };
 

@@ -1,5 +1,6 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
+import { RiUserLine } from 'react-icons/ri';
 
 const CreatorPage: React.FC<{ params: { id: string } }> = (
   { params }
@@ -10,6 +11,7 @@ const CreatorPage: React.FC<{ params: { id: string } }> = (
   return (
     <>
       <ImageGrid
+        topIcon={<RiUserLine />}
         title={decodedId}
         isViewCount={true}
         isViewPagination={true}

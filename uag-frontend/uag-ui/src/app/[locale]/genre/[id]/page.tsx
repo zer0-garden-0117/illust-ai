@@ -1,5 +1,6 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
+import { RiStackLine } from 'react-icons/ri';
 
 const GenrePage: React.FC<{ params: { id: string } }> = (
   { params }
@@ -10,6 +11,7 @@ const GenrePage: React.FC<{ params: { id: string } }> = (
   return (
     <>
       <ImageGrid
+        topIcon={<RiStackLine />}
         title={decodedId}
         isViewCount={true}
         isViewPagination={true}

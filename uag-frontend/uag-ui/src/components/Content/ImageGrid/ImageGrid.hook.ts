@@ -16,6 +16,7 @@ import { useAccessTokenContext } from "@/providers/auth/accessTokenProvider";
 import { useWorksDeleteById, WorkDeleteByIdHeaders } from "@/apis/openapi/works/useWorksDeleteById";
 
 type UseImageGridProps = {
+  topIcon: React.ReactElement;
   title: string;
   isViewCount: boolean;
   isViewPagination: boolean;
@@ -25,7 +26,7 @@ type UseImageGridProps = {
 };
 
 export const useImageGrid = (
-  { title, isViewCount, isViewPagination, imageCount, type, words }: UseImageGridProps
+  { topIcon, title, isViewCount, isViewPagination, imageCount, type, words }: UseImageGridProps
 ): React.ComponentPropsWithoutRef<typeof ImageGridView> => {
   const router = useRouter();  // useRouter フックを使ってルーターを取得
   const searchParams = new URLSearchParams(window.location.search);
@@ -234,6 +235,7 @@ export const useImageGrid = (
   };
 
   return {
+    topIcon,
     title,
     isViewCount,
     isViewPagination,

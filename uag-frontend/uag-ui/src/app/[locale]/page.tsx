@@ -1,10 +1,8 @@
 'use client';
-import { useUserToken } from '@/apis/auth/useUserToken';
-import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
-import { Box, Fieldset, Space, Text } from '@mantine/core';
+import { Space } from '@mantine/core';
 import { useTranslations } from "next-intl";
-import { BsSuitDiamondFill } from "react-icons/bs";
+import { BiSolidInvader } from "react-icons/bi";
 
 const TopPage: React.FC = () => {
   const t = useTranslations("toppage");
@@ -12,6 +10,7 @@ const TopPage: React.FC = () => {
   return (
     <>
     <ImageGrid
+        topIcon={<BiSolidInvader />}
         title={t("new")}
         isViewCount={false}
         isViewPagination={false}

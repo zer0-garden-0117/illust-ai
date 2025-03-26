@@ -1,10 +1,12 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
+import { BiSolidInvader } from 'react-icons/bi';
 
 const IllustrationPage: React.FC = () => {
   return (
     <>
       <ImageGrid
+        topIcon={<BiSolidInvader />}
         title={"フリーイラスト"}
         isViewCount={true}
         isViewPagination={true}
