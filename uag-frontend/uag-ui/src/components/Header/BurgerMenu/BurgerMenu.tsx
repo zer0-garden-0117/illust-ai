@@ -1,35 +1,20 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Menu, Text } from '@mantine/core';
-import { MdLogin, MdLogout } from "react-icons/md";
+import { Menu } from '@mantine/core';
+import { MdLogin, MdLogout, MdOutlineDelete } from "react-icons/md";
 import { FiUserPlus } from "react-icons/fi";
-import {
-  RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine,
-  RiUserLine
-} from "react-icons/ri";
+import { RiUserLine } from "react-icons/ri";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import classes from './BurgerMenu.module.css';
 import { useNavigate } from '@/utils/navigate';
-import { PiStarOfDavidLight } from "react-icons/pi";
-import { GiLibertyWing } from "react-icons/gi";
-import { FiChevronsRight } from "react-icons/fi";
-import { PiShootingStarThin } from "react-icons/pi";
-import { PiStarFour } from "react-icons/pi";
-import { FaAngleRight } from "react-icons/fa6";
 import { MdOutlineChevronRight } from "react-icons/md";
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
-import { FaRegHeart, FaRegStar } from 'react-icons/fa';
-import { RiHeartAdd2Line } from "react-icons/ri";
-import { MdOutlinePalette } from "react-icons/md";
+import { FaRegStar } from 'react-icons/fa';
 import { BiSolidInvader } from "react-icons/bi";
 import AuthModal from '../AuthModal/AuthModal';
-import { IconChevronRight } from '@tabler/icons-react';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 import { useTranslations } from 'next-intl';
 import { CiHeart } from 'react-icons/ci';
-
 
 export const BurgerMenu: React.FC = () => {
   const t = useTranslations("burgerMenu");
@@ -58,6 +43,10 @@ export const BurgerMenu: React.FC = () => {
 
   const onClickLogout = async () => {
     await logout()
+    window.location.href = "/"
+  };
+
+  const onClickDelete = async () => {
     window.location.href = "/"
   };
 
@@ -147,12 +136,6 @@ export const BurgerMenu: React.FC = () => {
               >
                 {t("reviewList")}
               </Menu.Item>
-              <Menu.Item
-                leftSection={<MdLogout color="gray" className={classes.icon} />}
-                onClick={onClickLogout}
-              >
-                {t("logout")}
-              </Menu.Item>
             </>
           )}
           <Menu.Item
@@ -186,6 +169,22 @@ export const BurgerMenu: React.FC = () => {
                 onClick={onClickAdmin}
               >
                 {t("post")}
+              </Menu.Item>
+            </>
+          )}
+          {isAuthenticated && (
+            <>
+              <Menu.Item
+                leftSection={<MdLogout color="gray" className={classes.icon} />}
+                onClick={onClickLogout}
+              >
+                {t("logout")}
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<MdOutlineDelete color="gray" className={classes.icon} />}
+                onClick={onClickDelete}
+              >
+                {t("deleteAccount")}
               </Menu.Item>
             </>
           )}
