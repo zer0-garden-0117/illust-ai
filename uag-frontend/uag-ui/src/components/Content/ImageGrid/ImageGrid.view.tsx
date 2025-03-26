@@ -6,10 +6,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line, RiDeleteBin6Line} from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
-import { BsSuitDiamondFill } from "react-icons/bs";
-import { BiGame } from "react-icons/bi";
-import { PiStarOfDavidThin } from "react-icons/pi";
-import { BiSolidInvader } from "react-icons/bi";
 import { useNavigate } from '@/utils/navigate';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 
@@ -176,9 +172,11 @@ const MemoizedCard = memo(
           </div>
         </AspectRatio>
         <Group>
-          <Text className={classes.title} mt={5}>
-            {imageData.mainTitle}
-          </Text>
+          <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
+            <Text className={classes.title} mt={5}>
+              {imageData.mainTitle}
+            </Text>
+          </div>
         </Group>
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
           <Rating value={localRating} onChange={handleRateClick} />
