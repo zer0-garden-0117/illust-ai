@@ -73,15 +73,20 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
           isSearching={isSearching}
         />
       </AppShell.Header>
-      <AppShell.Main>{children}</AppShell.Main>
-      {/* <AppShell.Aside>
-        <Sidebar />
-      </AppShell.Aside> */}
-      <AppShell.Footer>
+      <AppShell.Main>
+        {children}
         <Text w="full" size="xs" ta="right" pr="20">
           {t('copyright')}
         </Text>
-      </AppShell.Footer>
+      </AppShell.Main>
+      {/* <AppShell.Aside>
+        <Sidebar />
+      </AppShell.Aside> */}
+      {/* <AppShell.Footer> */}
+        {/* <Text w="full" size="xs" ta="right" pr="20">
+          {t('copyright')}
+        </Text> */}
+      {/* </AppShell.Footer> */}
     </AppShell>
   );
 };
