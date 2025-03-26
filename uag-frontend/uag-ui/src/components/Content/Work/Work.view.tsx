@@ -256,8 +256,8 @@ export const WorkView = memo(function WorkViewComponent({
   return (
     <>
       <Card
-        ml={20}
-        mr={20}
+        ml={5}
+        mr={5}
         style={{
           opacity: isImageDisplayed ? 1 : 0,
           transform: 'scale(1.01) translate(0px, 0px)', // 初期状態で少し浮き上がる
