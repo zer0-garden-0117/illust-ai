@@ -171,9 +171,27 @@ const MemoizedCard = memo(
             />
           </div>
         </AspectRatio>
-        <Group>
-          <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
-            <Text className={classes.title} mt={5}>
+        <Group style={{ width: '100%', overflow: 'hidden' }}> {/* 親要素の幅を固定 */}
+          <div
+            onClick={handleImageClick}
+            style={{
+              cursor: 'pointer',
+              overflow: 'hidden',
+              width: '100%',
+            }}
+          >
+            <Text
+              className={classes.title}
+              mt={5}
+              style={{
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: 'block',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
+            >
               {imageData.mainTitle}
             </Text>
           </div>
