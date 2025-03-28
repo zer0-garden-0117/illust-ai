@@ -6,6 +6,9 @@ import { Navbar } from '../Navbar/Navbar';
 import { Sidebar } from '../Sidebar/Sidebar'
 import { Header } from '../Header/Header';
 import { useTranslations } from "next-intl";
+import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
+import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
+import { useRouter } from 'next/navigation';
 
 export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children
@@ -15,6 +18,9 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState(true);
   const [headerHeight, setHeaderHeight] = useState(120); // 初期値を60に設定
   const [isSearching, setIsSearching] = useState(true);
+  const { isAuthenticated } = useAccessTokenContext();
+  const { userToken } = useUserTokenContext();
+  const router = useRouter();
 
   // 検索アイコンがクリックされたときに高さを切り替える関数
   const toggleHeaderHeight = () => {
@@ -27,9 +33,17 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    const preAuthRedirect = sessionStorage.getItem('preAuthRedirect');
+    if (isAuthenticated && userToken && preAuthRedirect) {
+      sessionStorage.removeItem('preAuthRedirect');
+      router.replace(preAuthRedirect);
+    }
+  }, [isAuthenticated, userToken]);
 
   if (loading) {
     return (
@@ -75,9 +89,6 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       </AppShell.Header>
       <AppShell.Main>
         {children}
-        <Text w="full" size="xs" ta="right" pr="20">
-          {t('copyright')}
-        </Text>
       </AppShell.Main>
       {/* <AppShell.Aside>
         <Sidebar />

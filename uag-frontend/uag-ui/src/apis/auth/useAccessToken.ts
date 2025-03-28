@@ -59,6 +59,7 @@ export const useAccessToken = () => {
 
   const loginWithGoogle = async () => {
     try {
+      sessionStorage.setItem('preAuthRedirect', window.location.href);
       await signInWithRedirect({
         provider: 'Google'
       });
