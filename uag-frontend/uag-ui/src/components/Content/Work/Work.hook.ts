@@ -2,7 +2,7 @@ import { useWorksGetById, WorkGetByIdResult } from "@/apis/openapi/works/useWork
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { UsersActivitySearchResult, useUsersActivitySearch } from "@/apis/openapi/users/useUsersActivitySearch";
-import { getCsrfTokenFromCookies } from "@/utils/authCookies";
+import { getCsrfTokenFromCookies, getUserTokenFromCookies } from "@/utils/authCookies";
 import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
@@ -32,20 +32,19 @@ export const useWork = (
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
   const navigate = useNavigate();
 
-  const [headers, setHeaders] = useState({
-    Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-    "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-  });
+  // const [headers, setHeaders] = useState({
+  //   Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+  //   "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+  // });
 
-  useEffect(() => {
-    if (userToken != null) {
-      setHeaders({
-        Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-        "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-      });
-    }
-  }, [userToken]);
-
+  // useEffect(() => {
+  //   if (userToken != null) {
+  //     setHeaders({
+  //       Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+  //       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+  //     });
+  //   }
+  // }, [userToken]);
 
   useEffect(() => {
     const handleFetchWork = async () => {
@@ -72,8 +71,11 @@ export const useWork = (
 
   // works データが変更されたときの処理
   useEffect(() => {
+    const headers = {
+      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    };
     console.log("worksData:", workData);
-    console.log("headers:", headers)
     if (workData) {
       console.log("workData", workData);
       console.log("isAuthenticated:", isAuthenticated)
@@ -91,7 +93,7 @@ export const useWork = (
         setActivitiesData({})
       }
     }
-  }, [workData, headers, isAuthenticated]);
+  }, [workData, isAuthenticated]);
 
   // activityDataの取得
   useEffect(() => {
@@ -128,11 +130,19 @@ export const useWork = (
   }, [workData, activitiesData]);
 
   const onRateClick = (rating: number) => {
+    const headers = {
+      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    };
     triggerRated({ headers, workId, rating: rating });
     setLocalRating(rating);
   };
 
   const onLikeClick = () => {
+    const headers = {
+      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    };
     if (localIsLiked) {
       triggerDeliked({ headers, workId });
       setLocalIsLiked(false);

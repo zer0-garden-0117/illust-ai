@@ -142,4 +142,32 @@ class LikedRepository(
             )
         }
     }
+
+    fun deleteUserIdById(userId: String) {
+        try {
+            // まず該当userIdのすべてのアイテムを取得
+            val queryConditional = QueryConditional.keyEqualTo(
+                Key.builder().partitionValue(userId).build()
+            )
+            val items = table.query(queryConditional).items().toList()
+
+            // 取得した各アイテムを削除
+            items.forEach { liked ->
+                val key = Key.builder()
+                    .partitionValue(liked.userId)
+                    .sortValue(liked.workId)
+                    .build()
+                table.deleteItem(key)
+                logger.info("Deleted liked item: userId=${liked.userId}, workId=${liked.workId}")
+            }
+
+            logger.info("Deleted ${items.size} liked items for userId=$userId")
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "Failed to delete liked items for userId=$userId",
+                e
+            )
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import com.uag.zer0.generated.endpoint.UsersApi
 import com.uag.zer0.generated.model.*
 import com.uag.zer0.mapper.UserMapper
 import com.uag.zer0.mapper.WorkMapper
+import com.uag.zer0.service.CognitoService
 import com.uag.zer0.service.TokenService
 import com.uag.zer0.service.user.UserManagerService
 import org.springframework.http.HttpStatus
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 class UsersController(
     private val tokenService: TokenService,
     private val userManagerService: UserManagerService,
+    private val cognitoService: CognitoService,
     private val userMapper: UserMapper,
     private val workMapper: WorkMapper
 ) : UsersApi {
@@ -37,6 +39,14 @@ class UsersController(
         )
         val userToken = tokenService.generateToken(userId)
         return ResponseEntity.ok(ApiUserToken(userToken = userToken))
+    }
+
+    override fun deleteUsers(): ResponseEntity<ApiUser> {
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        cognitoService.deleteAllUsersByUserIdSilently(userId)
+        userManagerService.deleteUsers(userId)
+        return ResponseEntity.ok(ApiUser(userId,null))
     }
 
     override fun postUsersActivitySearch(

@@ -6,6 +6,7 @@ import com.uag.zer0.entity.Liked
 import com.uag.zer0.entity.Rated
 import com.uag.zer0.entity.Work
 import com.uag.zer0.repository.WorkRepository
+import com.uag.zer0.service.CognitoService
 import com.uag.zer0.service.tag.TagService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,6 +17,7 @@ class UserManagerService(
     private val retedService: RatedService,
     private val workRepository: WorkRepository,
     private val tagService: TagService,
+    private val cognitoService: CognitoService
 ) {
 
     @Transactional
@@ -133,5 +135,12 @@ class UserManagerService(
         likedService.deleteWork(workId)
         // ratedテーブルから削除
         retedService.deleteWork(workId)
+    }
+
+    @Transactional
+    fun deleteUsers(userId: String) {
+        likedService.deleteUser(userId)
+        retedService.deleteUser(userId)
+        cognitoService.deleteAllUsersByUserIdSilently(userId)
     }
 }

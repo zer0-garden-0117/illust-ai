@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu } from '@mantine/core';
 import { MdLogin, MdLogout, MdOutlineDelete } from "react-icons/md";
 import { FiUserPlus } from "react-icons/fi";
@@ -15,15 +15,18 @@ import AuthModal from '../AuthModal/AuthModal';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 import { useTranslations } from 'next-intl';
 import { CiHeart } from 'react-icons/ci';
+import { UserDeleteArgs, UserDeleteHeaders, useUsersDelete } from '@/apis/openapi/users/useUsersDelete';
+import { getCsrfTokenFromCookies, getUserTokenFromCookies } from '@/utils/authCookies';
 
 export const BurgerMenu: React.FC = () => {
   const t = useTranslations("burgerMenu");
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
   const navigation = useNavigate();
-  const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessTokenContext();
+  const { accessToken, isAuthenticated, login, loginWithHosted, logout, email } = useAccessTokenContext();
   const { isAdmin, userToken } = useUserTokenContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
+  const { trigger: triggerUserDelete } = useUsersDelete();
 
   const onClickLiked = () => {
     navigation("/liked?page=1");
@@ -46,8 +49,13 @@ export const BurgerMenu: React.FC = () => {
     window.location.href = "/"
   };
 
-  const onClickDelete = async () => {
-    window.location.href = "/"
+  const onClickDeleteAccount = async () => {
+    const headers: UserDeleteHeaders = {
+      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    }
+    await triggerUserDelete({ headers });
+    await logout()
   };
 
   const onClickFreeicon = () => {
@@ -182,7 +190,7 @@ export const BurgerMenu: React.FC = () => {
               </Menu.Item>
               <Menu.Item
                 leftSection={<MdOutlineDelete color="gray" className={classes.icon} />}
-                onClick={onClickDelete}
+                onClick={onClickDeleteAccount}
               >
                 {t("deleteAccount")}
               </Menu.Item>

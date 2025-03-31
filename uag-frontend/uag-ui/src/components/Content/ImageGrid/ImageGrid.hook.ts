@@ -51,19 +51,19 @@ export const useImageGrid = (
   const itemsPerPage = imageCount;
   const navigate = useNavigate();
 
-  const [headers, setHeaders] = useState({
-    Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-    "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-  });
+  // const [headers, setHeaders] = useState({
+  //   Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+  //   "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+  // });
 
-  useEffect(() => {
-    if (userToken != null) {
-      setHeaders({
-        Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-        "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-      });
-    }
-  }, [userToken ,isAuthenticated]);
+  // useEffect(() => {
+  //   if (userToken != null) {
+  //     setHeaders({
+  //       Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+  //       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+  //     });
+  //   }
+  // }, [userToken ,isAuthenticated]);
 
   const fetchImagesWithTags = async (page: number) => {
     setLoading(true);  // ローディング開始
@@ -142,8 +142,10 @@ export const useImageGrid = (
 
   // works データが変更されたときの処理
   useEffect(() => {
-    console.log("worksData:", worksData);
-    console.log("headers:", headers)
+    const headers = {
+      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    };
     if (worksData) {
       if (isAuthenticated && userToken != null && worksData.totalCount > 0) {
         const workIds = worksData.works
@@ -155,7 +157,7 @@ export const useImageGrid = (
         setActivitiesData({})
       }
     }
-  }, [worksData, headers]);
+  }, [worksData]);
 
   // activityDataが変更されたときの処理
   useEffect(() => {
@@ -207,11 +209,19 @@ export const useImageGrid = (
   }, [searchParams.get('page')]);
 
   const onRateChange = (workId: string, value: number) => {
+    const headers = {
+      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    };
     triggerRated({ headers, workId, rating: value });
   };
 
   const onLikeChange = (workId: string) => {
     const isCurrentlyLiked = imageData.find((image) => image.workId === workId)?.isLiked;
+    const headers = {
+      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    };
 
     // 現在の状態に基づいて "いいね" または "取り消し" を実行
     if (isCurrentlyLiked) {

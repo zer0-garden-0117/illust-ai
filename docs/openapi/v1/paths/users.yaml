@@ -17,6 +17,25 @@ UsersToken:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
+Users:
+  delete:
+    operationId: deleteUsers
+    tags:
+      - users
+    summary: ユーザーを削除する
+    description: |
+      ユーザーを削除する
+    security:
+      - UserTokenAuth: []
+      - CsrfTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersDeleteResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
 UsersActivitySearch:
   post:
     operationId: postUsersActivitySearch
