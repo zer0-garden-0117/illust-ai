@@ -8,6 +8,8 @@ interface UserTokenContextProps {
   userId: number | null;
   isAdmin: boolean;
   error: Error | undefined;
+  isDeleting: boolean;
+  setIsDeleting: (isDeleting: boolean) => void;
 }
 
 const UserTokenContext = createContext<UserTokenContextProps | undefined>(undefined);
@@ -21,9 +23,9 @@ export const useUserTokenContext = () => {
 };
 
 export const UserTokenProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isSetup, userToken, userId, isAdmin, error } = useUserToken();
+  const { isSetup, userToken, userId, isAdmin, error, isDeleting, setIsDeleting } = useUserToken();
   return (
-    <UserTokenContext.Provider value={{ isSetup, userToken, userId, isAdmin, error }}>
+    <UserTokenContext.Provider value={{ isSetup, userToken, userId, isAdmin, error, isDeleting, setIsDeleting }}>
       {children}
     </UserTokenContext.Provider>
   );

@@ -19,7 +19,7 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const [headerHeight, setHeaderHeight] = useState(120); // 初期値を60に設定
   const [isSearching, setIsSearching] = useState(true);
   const { isAuthenticated } = useAccessTokenContext();
-  const { userToken } = useUserTokenContext();
+  const { userToken, isDeleting, setIsDeleting } = useUserTokenContext();
   const router = useRouter();
 
   // 検索アイコンがクリックされたときに高さを切り替える関数
@@ -45,7 +45,7 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [isAuthenticated, userToken]);
 
-  if (loading) {
+  if (loading || isDeleting) {
     return (
       <Center style={{ width: '100%', height: '100vh' }}>
         <Loader color="black" size="xs" />

@@ -18,6 +18,7 @@ export const useUserToken = () => {
   const [isSetup, setIsSetup] = useState<boolean>(false);
   const { accessToken, isAuthenticated } = useAccessToken();
   const { setError } = useError();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // `accessToken` がある場合にのみ `useUsersTokenGet` を実行
   const userTokenHeaders: UserTokenGetHeader = { "x-access-token": `${accessToken}` };
@@ -40,5 +41,5 @@ export const useUserToken = () => {
     }
   }, [data, error, setError, isAuthenticated, accessToken]);
 
-  return { isSetup, userToken, userId, isAdmin, error };
+  return { isSetup, userToken, userId, isAdmin, error, isDeleting, setIsDeleting };
 };

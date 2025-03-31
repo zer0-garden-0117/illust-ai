@@ -23,7 +23,7 @@ export const BurgerMenu: React.FC = () => {
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
   const navigation = useNavigate();
   const { accessToken, isAuthenticated, login, loginWithHosted, logout, email } = useAccessTokenContext();
-  const { isAdmin, userToken } = useUserTokenContext();
+  const { isAdmin, userToken, isDeleting, setIsDeleting } = useUserTokenContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const { trigger: triggerUserDelete } = useUsersDelete();
@@ -50,12 +50,17 @@ export const BurgerMenu: React.FC = () => {
   };
 
   const onClickDeleteAccount = async () => {
-    const headers: UserDeleteHeaders = {
-      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
-      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+    try {
+      setIsDeleting(true);
+      const headers: UserDeleteHeaders = {
+        Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
+        "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
+      };
+      await triggerUserDelete({ headers });
+      await logout();
+    } catch (error) {
+      console.error('Account deletion failed:', error);
     }
-    await triggerUserDelete({ headers });
-    await logout()
   };
 
   const onClickFreeicon = () => {
