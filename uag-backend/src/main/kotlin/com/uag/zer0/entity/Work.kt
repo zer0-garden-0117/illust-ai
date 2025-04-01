@@ -35,6 +35,15 @@ data class Work(
 
     @get:DynamoDbAttribute("likes")
     var likes: Int = 0,
+
+    @get:DynamoDbAttribute("rateSum")
+    var rateSum: Int = 0,
+
+    @get:DynamoDbAttribute("rateCount")
+    var rateCount: Int = 0,
+
+    @get:DynamoDbAttribute("rate")
+    var rate: Double = 0.0,
     
     @get:DynamoDbAttribute("createdAt")
     var createdAt: Instant = Instant.now()

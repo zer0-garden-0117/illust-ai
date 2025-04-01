@@ -9,6 +9,7 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
+import java.time.Instant
 
 @Repository
 class WorkRepository(
@@ -59,6 +60,37 @@ class WorkRepository(
                 "Failed to delete work by workId: $workId",
                 e
             )
+        }
+    }
+
+    fun addRating(workId: String, oldRate: Int?, newRate: Int): Work {
+        require(newRate in 1..5) { "Rating must be between 1 and 5" }
+
+        return try {
+            // 既存の作品を取得
+            val work = findByWorkId(workId)
+
+            if (oldRate != null) {
+                // 評価の更新ケース
+                work.rateSum = work.rateSum - oldRate + newRate
+                work.rate = work.rateSum.toDouble() / work.rateCount
+            } else {
+                // 新規評価ケース
+                work.rateSum += newRate
+                work.rateCount += 1
+                work.rate = work.rateSum.toDouble() / work.rateCount
+            }
+
+            // updatedAtを更新
+            work.updatedAt = Instant.now()
+
+            // DynamoDBに更新
+            table.updateItem(work)
+            work
+        } catch (e: DynamoDbException) {
+            throw RuntimeException("Failed to add rating to work: $workId", e)
+        } catch (e: IllegalArgumentException) {
+            throw RuntimeException("Invalid rating value: $newRate", e)
         }
     }
 }
