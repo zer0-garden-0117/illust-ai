@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ActionIcon, Avatar, Group, Menu, Text, Image } from '@mantine/core';
 import { MdLogin, MdLogout } from "react-icons/md";
 import { FiUserPlus } from "react-icons/fi";
@@ -76,22 +76,43 @@ export const LangMenu: React.FC = () => {
   const { isAdmin, userToken } = useUserTokenContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
-  const [selected, setSelected] = useState<LanguageData>(data[0]);
-  const [pathname, setPathname] = useState<string>('');
   const locale = useLocale();
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const selectedLang = data.find(item => item.lang === locale) || data[0];
-      setSelected(selectedLang);
-      setPathname(window.location.pathname);
-    }
-  }, [locale]);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [selected, setSelected] = useState<LanguageData>(() => {
+    const foundLang = data.find(item => item.lang === locale);
+    return foundLang || data[0];
+  });
 
   const handleLanguageChange = (item: LanguageData) => {
     setSelected(item);
-    const newPath = pathname.replace(/^\/(en|ja|zh-Hant|zh-Hans|ko|ms|th|de|fr|vi|id|fil|pt)/, `/${item.lang}`);
-    navigation(newPath);
+    
+    if (!pathname) return;
+    
+    // 現在のパスを言語部分で分割
+    const pathParts = pathname.split('/').filter(Boolean);
+    
+    // 現在のパスに言語コードが含まれているか確認
+    const hasLang = data.some(d => d.lang === pathParts[0]);
+    
+    // 新しいパスを構築
+    let newPath;
+    if (hasLang) {
+      // 言語部分を置き換え
+      pathParts[0] = item.lang;
+      newPath = `/${pathParts.join('/')}`;
+    } else {
+      // 言語が含まれていない場合、先頭に追加
+      newPath = `/${item.lang}${pathname}`;
+    }
+    
+    // クエリパラメータがある場合は追加
+    const queryString = searchParams.toString();
+    const fullPath = queryString ? `${newPath}?${queryString}` : newPath;
+    
+    window.location.href = fullPath
+    // router.replace(fullPath);
   };
 
   const items = data.map((item) => (
