@@ -216,8 +216,7 @@ export const useImageGrid = (
     triggerRated({ headers, workId, rating: value });
   };
 
-  const onLikeChange = (workId: string) => {
-    const isCurrentlyLiked = imageData.find((image) => image.workId === workId)?.isLiked;
+  const onLikeChange = (workId: string, isCurrentlyLiked: boolean) => {
     const headers = {
       Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''

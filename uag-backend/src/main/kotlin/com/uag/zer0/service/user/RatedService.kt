@@ -2,8 +2,11 @@ package com.uag.zer0.service.user
 
 import com.uag.zer0.dto.RatedWithSearchResult
 import com.uag.zer0.entity.Rated
+import com.uag.zer0.entity.Work
 import com.uag.zer0.repository.RatedRepository
 import org.springframework.stereotype.Service
+import software.amazon.awssdk.enhanced.dynamodb.Key
+import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
 import java.time.Instant
 
 @Service
@@ -37,6 +40,10 @@ class RatedService(
             Pair(userId, workId)
         }
         return ratedRepository.findByUserIdsAndWorkIds(userIdWorkIdPairs)
+    }
+
+    fun findByUserIdAndWorkId(userId: String, workId: String): Rated? {
+        return ratedRepository.findByUserIdAndWorkId(userId, workId)
     }
 
     fun registerRated(userId: String, workId: String, rating: Int): Rated {

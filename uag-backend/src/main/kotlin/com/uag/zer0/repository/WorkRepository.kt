@@ -7,6 +7,7 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
+import software.amazon.awssdk.enhanced.dynamodb.model.UpdateItemEnhancedRequest
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
 import java.time.Instant
@@ -63,30 +64,57 @@ class WorkRepository(
         }
     }
 
+    fun addLikes(workId: String): Work {
+        val existingWork = findByWorkId(workId)
+        existingWork.likes += 1
+        return try {
+            table.updateItem { req ->
+                req.item(existingWork)
+                req.ignoreNulls(true)
+            }
+            existingWork
+        } catch (e: DynamoDbException) {
+            throw RuntimeException("Failed to addLikes work: $workId", e)
+        }
+    }
+
+    fun deleteLikes(workId: String): Work {
+        val existingWork = findByWorkId(workId)
+        existingWork.likes -= 1
+        return try {
+            table.updateItem { req ->
+                req.item(existingWork)
+                req.ignoreNulls(true)
+            }
+            existingWork
+        } catch (e: DynamoDbException) {
+            throw RuntimeException("Failed to deleteLikes work: $workId", e)
+        }
+    }
+
     fun addRating(workId: String, oldRate: Int?, newRate: Int): Work {
         require(newRate in 1..5) { "Rating must be between 1 and 5" }
 
+        // 既存の作品を取得
+        val existingWork = findByWorkId(workId)
+
+        if (oldRate != null) {
+            // 評価の更新ケース
+            existingWork.rateSum = existingWork.rateSum - oldRate + newRate
+            existingWork.rate = existingWork.rateSum.toDouble() / existingWork.rateCount
+        } else {
+            // 新規評価ケース
+            existingWork.rateSum += newRate
+            existingWork.rateCount += 1
+            existingWork.rate = existingWork.rateSum.toDouble() / existingWork.rateCount
+        }
+
         return try {
-            // 既存の作品を取得
-            val work = findByWorkId(workId)
-
-            if (oldRate != null) {
-                // 評価の更新ケース
-                work.rateSum = work.rateSum - oldRate + newRate
-                work.rate = work.rateSum.toDouble() / work.rateCount
-            } else {
-                // 新規評価ケース
-                work.rateSum += newRate
-                work.rateCount += 1
-                work.rate = work.rateSum.toDouble() / work.rateCount
+            table.updateItem { req ->
+                req.item(existingWork)
+                req.ignoreNulls(true)
             }
-
-            // updatedAtを更新
-            work.updatedAt = Instant.now()
-
-            // DynamoDBに更新
-            table.updateItem(work)
-            work
+            existingWork
         } catch (e: DynamoDbException) {
             throw RuntimeException("Failed to add rating to work: $workId", e)
         } catch (e: IllegalArgumentException) {

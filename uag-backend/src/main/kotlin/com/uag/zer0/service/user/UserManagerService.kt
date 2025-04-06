@@ -5,17 +5,17 @@ import com.uag.zer0.dto.WorksWithSearchResult
 import com.uag.zer0.entity.Liked
 import com.uag.zer0.entity.Rated
 import com.uag.zer0.entity.Work
-import com.uag.zer0.repository.WorkRepository
 import com.uag.zer0.service.CognitoService
 import com.uag.zer0.service.tag.TagService
+import com.uag.zer0.service.work.WorkService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserManagerService(
     private val likedService: LikedService,
-    private val retedService: RatedService,
-    private val workRepository: WorkRepository,
+    private val ratedService: RatedService,
+    private val workService: WorkService,
     private val tagService: TagService,
     private val cognitoService: CognitoService
 ) {
@@ -26,7 +26,7 @@ class UserManagerService(
         workIds: MutableList<String>
     ): UsersActivity {
         val liked = likedService.findByUserIdsAndWorkIds(userId, workIds)
-        val rated = retedService.findByUserIdsAndWorkIds(userId, workIds)
+        val rated = ratedService.findByUserIdsAndWorkIds(userId, workIds)
         return UsersActivity(
             liked = liked,
             rated = rated
@@ -44,7 +44,7 @@ class UserManagerService(
 
         val works = mutableListOf<Work>()
         likedWithSearchResult.liked.forEach { liked ->
-            val work = workRepository.findByWorkId(liked.workId)
+            val work = workService.findWorkById(liked.workId)
             works.add(work)
         }
 
@@ -90,12 +90,16 @@ class UserManagerService(
 
     @Transactional
     fun registerUsersLiked(userId: String, workId: String): Liked {
-        return likedService.registerLiked(userId, workId)
+        val liked = likedService.registerLiked(userId, workId)
+        workService.addLikedToWork(workId)
+        return liked
     }
 
     @Transactional
     fun deleteUsersLiked(userId: String, workId: String): Liked {
-        return likedService.deleteLiked(userId, workId)
+        val liked =  likedService.deleteLiked(userId, workId)
+        workService.deleteLikedToWork(workId)
+        return liked
     }
 
     @Transactional
@@ -105,11 +109,11 @@ class UserManagerService(
         limit: Int
     ): WorksWithSearchResult {
         val ratedWithSearchResult =
-            retedService.findByUserIdWithOffset(userId, offset, limit)
+            ratedService.findByUserIdWithOffset(userId, offset, limit)
 
         val works = mutableListOf<Work>()
         ratedWithSearchResult.rated.forEach { rated ->
-            val work = workRepository.findByWorkId(rated.workId)
+            val work = workService.findWorkById(rated.workId)
             works.add(work)
         }
 
@@ -121,12 +125,15 @@ class UserManagerService(
 
     @Transactional
     fun registerUsersRated(userId: String, workId: String, rating: Int): Rated {
-        return retedService.registerRated(userId, workId, rating)
+        val oldRate = ratedService.findByUserIdAndWorkId(userId, workId)
+        val rated = ratedService.registerRated(userId, workId, rating)
+        workService.addRatingToWork(workId, oldRate?.rating, rating)
+        return rated
     }
 
     @Transactional
     fun deleteUsersRated(userId: String, workId: String): Rated {
-        return retedService.deleteRated(userId, workId)
+        return ratedService.deleteRated(userId, workId)
     }
 
     @Transactional
@@ -134,13 +141,13 @@ class UserManagerService(
         // likedテーブルから削除
         likedService.deleteWork(workId)
         // ratedテーブルから削除
-        retedService.deleteWork(workId)
+        ratedService.deleteWork(workId)
     }
 
     @Transactional
     fun deleteUsers(userId: String) {
         likedService.deleteUser(userId)
-        retedService.deleteUser(userId)
+        ratedService.deleteUser(userId)
         cognitoService.deleteAllUsersByUserIdSilently(userId)
     }
 }

@@ -32,7 +32,7 @@ type ImageGridViewProps = {
   loading: boolean;
   onPageChange: (page: number) => void;
   onRateChange: (workId: string, value: number) => void;
-  onLikeChange: (workId: string) => void;
+  onLikeChange: (workId: string, isCurrentlyLiked: boolean) => void;
   onDeleteClick: (workId: string) => void;
   isAuthenticated: boolean;
 };
@@ -112,7 +112,7 @@ const MemoizedCard = memo(
     imageData: ImageData; 
     index: number; 
     onRateChange: (workId: string, value: number) => void; 
-    onLikeChange: (workId: string) => void; 
+    onLikeChange: (workId: string, isCurrentlyLiked: boolean) => void; 
     onDeleteClick: (workId: string) => void; 
     isAuthenticated: boolean; 
     router: ReturnType<typeof useRouter>; 
@@ -139,7 +139,7 @@ const MemoizedCard = memo(
       }
 
       setLocalIsLiked(!localIsLiked);
-      onLikeChange(imageData.workId);
+      onLikeChange(imageData.workId, localIsLiked ?? false);
     };
 
     const handleRateClick = (rating: number) => {

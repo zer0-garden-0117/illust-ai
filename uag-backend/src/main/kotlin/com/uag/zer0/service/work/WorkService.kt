@@ -31,4 +31,16 @@ class WorkService(
     fun deleteWorkById(workId: String) {
         return workRepository.deleteWorkById(workId)
     }
+
+    fun addLikedToWork(workId: String): Work {
+        return workRepository.addLikes(workId)
+    }
+
+    fun deleteLikedToWork(workId: String): Work {
+        return workRepository.deleteLikes(workId)
+    }
+
+    fun addRatingToWork(workId: String, oldRate: Int?, newRate: Int): Work {
+        return workRepository.addRating(workId, oldRate,newRate)
+    }
 }

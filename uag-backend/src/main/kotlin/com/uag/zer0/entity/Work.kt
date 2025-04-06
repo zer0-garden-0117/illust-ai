@@ -11,7 +11,6 @@ data class Work(
     @get:DynamoDbPartitionKey
     var workId: String = "",
 
-    @get:DynamoDbSortKey
     @get:DynamoDbAttribute("updatedAt")
     var updatedAt: Instant = Instant.now(),
 

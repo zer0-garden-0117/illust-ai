@@ -1,6 +1,7 @@
 package com.uag.zer0.repository
 
 import com.uag.zer0.entity.Rated
+import com.uag.zer0.entity.Work
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
@@ -24,6 +25,24 @@ class RatedRepository(
     private val table =
         enhancedClient.table("rated", TableSchema.fromClass(Rated::class.java))
     private val logger = LoggerFactory.getLogger(RatedRepository::class.java)
+
+    fun findByUserIdAndWorkId(userId: String, workId: String): Rated? {
+        return try {
+            val key = Key.builder()
+                .partitionValue(userId)
+                .sortValue(workId)
+                .build()
+
+            val rated = table.getItem(key)
+            logger.info("Found rated item for userId=$userId and workId=$workId: $rated")
+            rated
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "Failed to find rated item for userId=$userId and workId=$workId",
+                e
+            )
+        }
+    }
 
     fun findByUserId(userId: String): List<Rated> {
         return try {
