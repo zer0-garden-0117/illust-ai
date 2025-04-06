@@ -41,7 +41,7 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
     const preAuthRedirect = sessionStorage.getItem('preAuthRedirect');
     if (isAuthenticated && userToken && preAuthRedirect) {
       sessionStorage.removeItem('preAuthRedirect');
-      router.replace(preAuthRedirect);
+      window.location.href = preAuthRedirect;
     }
   }, [isAuthenticated, userToken]);
 
