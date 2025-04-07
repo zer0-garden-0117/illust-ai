@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation';
 import { BiSolidInvader } from 'react-icons/bi';
 import { MdOutlineWatchLater } from 'react-icons/md';
 import { FaRegStar } from 'react-icons/fa';
+import { CustomPill } from '../CustomPill/CustomPill';
 
 type WorkViewProps = {
   workData?: WorkGetByIdResult;
@@ -319,9 +320,9 @@ export const WorkView = memo(function WorkViewComponent({
                     return null;
                   }
                   return (
-                    <Pill key={index} onClick={() => onTagClick(tagItem)} style={{ cursor: 'pointer' }}>
+                    <CustomPill key={index} onClick={() => onTagClick(tagItem)} style={{ cursor: 'pointer' }}>
                       {tagItem}
-                    </Pill>
+                    </CustomPill>
                   );
                 })}
               </Pill.Group>
@@ -339,9 +340,9 @@ export const WorkView = memo(function WorkViewComponent({
                 {t("creator")}
               </Text>
               {workData?.apiTags?.creators?.map((creatorItem, index) => (
-                <Pill key={index} onClick={() => onCreatorClick(creatorItem)} style={{ cursor: 'pointer' }}>
+                <CustomPill key={index} onClick={() => onCreatorClick(creatorItem)} style={{ cursor: 'pointer' }}>
                   {creatorItem}
-                </Pill>
+                </CustomPill>
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
@@ -357,9 +358,9 @@ export const WorkView = memo(function WorkViewComponent({
                 {t("character")}
               </Text>
               {workData?.apiTags?.characters?.map((characterItem, index) => (
-                <Pill key={index} onClick={() => onCharacterClick(characterItem)} style={{ cursor: 'pointer' }}>
+                <CustomPill key={index} onClick={() => onCharacterClick(characterItem)} style={{ cursor: 'pointer' }}>
                   {characterItem}
-                </Pill>
+                </CustomPill>
               ))}
             </Group>
             <Group style={{ marginTop: '5px' }}>
@@ -375,9 +376,9 @@ export const WorkView = memo(function WorkViewComponent({
                 {t("genre")}
               </Text>
               {workData?.apiTags?.genres?.map((genresItem, index) => (
-                <Pill key={index} onClick={() => onGenreClick(genresItem)} style={{ cursor: 'pointer' }}>
+                <CustomPill key={index} onClick={() => onGenreClick(genresItem)} style={{ cursor: 'pointer' }}>
                   {genresItem}
-                </Pill>
+                </CustomPill>
               ))}  
             </Group>
             <Group style={{ marginTop: '5px' }}>
