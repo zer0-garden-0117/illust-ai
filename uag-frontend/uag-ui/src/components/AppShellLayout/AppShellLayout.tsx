@@ -74,6 +74,9 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       transitionDuration={0}
       transitionTimingFunction="ease"
       styles={(theme) => ({
+        root: {
+          '--app-shell-border-color': 'transparent', // ボーダーカラーを透明に
+        },
         main: {
           maxWidth: '1200px', // コンテンツエリアの最大幅を設定
           margin: '0 auto', // 両脇に自動で隙間を入れる
