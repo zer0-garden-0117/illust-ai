@@ -51,7 +51,7 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.01 }
     );
 
     if (imgRef.current) {
@@ -85,7 +85,7 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
           height: '100%',
           opacity: shouldDisplay ? 1 : 0,
           transform: shouldDisplay ? 'translateY(0)' : 'translateY(20px)',
-          transition: `opacity 0.3s ease-in-out ${index * 0.1}s, transform 0.3s ease-in-out ${index * 0.1}s`,
+          transition: `opacity 0.2s ease-in-out ${index * 0.03}s, transform 0.2s ease-in-out ${index * 0.03}s`
         }}
       />
       {!shouldDisplay && (
@@ -203,7 +203,7 @@ const MemoizedCard = memo(
             color="gray"
             style={{
               color: localIsLiked ? 'hotpink' : 'gray',
-              transition: 'color 0.3s ease',
+              transition: 'color 0.2s ease',
               padding: 0,
               marginLeft: '8px',
             }}

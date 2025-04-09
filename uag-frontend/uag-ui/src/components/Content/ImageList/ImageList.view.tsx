@@ -54,7 +54,7 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.01 }
     );
 
     if (imgRef.current) {

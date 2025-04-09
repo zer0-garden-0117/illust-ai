@@ -43,7 +43,7 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
           if (entry.isIntersecting) setIsVisible(true);
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.01 }
     );
 
     if (currentImgRef) observer.observe(currentImgRef);
@@ -78,7 +78,7 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
           height: '100%',
           opacity: shouldDisplay ? 1 : 0,
           transform: shouldDisplay ? 'translateY(0)' : 'translateY(20px)',
-          transition: `opacity 0.3s ease-in-out ${index * 0.1}s, transform 0.3s ease-in-out ${index * 0.1}s`,
+          transition: `opacity 0.2s ease-in-out ${index * 0.03}s, transform 0.2s ease-in-out ${index * 0.03}s`,
         }}
       />
       {!shouldDisplay && <div style={{ maxWidth: '350px', width: '100%', height: '100%', backgroundColor: 'transparent', position: 'absolute', top: 0, left: 0 }} />}
@@ -127,7 +127,7 @@ const LikeControls = memo(
         color="gray"
         style={{
           color: localIsLiked ? 'hotpink' : 'gray',
-          transition: 'color 0.3s ease',
+          transition: 'color 0.2s ease',
           padding: 0,
           marginLeft: '-10px',
         }}
