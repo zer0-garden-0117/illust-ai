@@ -19,53 +19,54 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
     return btoa(unescape(encodeURIComponent(str)));
   };
 
-  const handleSubmit = async (workData: WorkData) => {
-
-    // タグ、キャラクター、クリエーターをカンマで区切って配列に変換
-    const tagsArray = workData.tags ? workData.tags.split(',') : [];
-    const charactersArray = workData.character ? workData.character.split(',') : [];
-    const creatorsArray = workData.creator ? workData.creator.split(',') : [];
-    const genre = [workData.genre]
-    const format = [workData.format]
-    const workDetails = {
-      apiWork: {
-        workId: '',
-        mainTitle: workData.mainTitle || '',
-        subTitle: workData.subTitle || '',
-        description: workData.description || '',
-        titleImgUrl: '',
-        thumbnailImgUrl: '',
-        watermaskImgUrl: '',
-        likes: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      apiTags: {
-        characters: charactersArray,
-        creators: creatorsArray,
-        genres: genre,
-        formats: format,
-        others: tagsArray
-      }
-    };
-
-    // リクエストボディの作成
-    const requestBody = {
-      titleImage: workData.titleImage,
-      images: [
-        workData.titleImage
-      ],
-      worksDetailsBase64: utf8ToBase64(JSON.stringify(workDetails))
-    };
-
+  const handleSubmit = async (workData: WorkData): Promise<void> => {
     try {
-      console.log(workData)
+      // タグ、キャラクター、クリエーターをカンマで区切って配列に変換
+      const tagsArray = workData.tags ? workData.tags.split(',') : [];
+      const charactersArray = workData.character ? workData.character.split(',') : [];
+      const creatorsArray = workData.creator ? workData.creator.split(',') : [];
+      const genre = [workData.genre]
+      const format = [workData.format]
+      const workDetails = {
+        apiWork: {
+          workId: '',
+          mainTitle: workData.mainTitle || '',
+          subTitle: workData.subTitle || '',
+          description: workData.description || '',
+          titleImgUrl: '',
+          thumbnailImgUrl: '',
+          watermaskImgUrl: '',
+          likes: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        apiTags: {
+          characters: charactersArray,
+          creators: creatorsArray,
+          genres: genre,
+          formats: format,
+          others: tagsArray
+        }
+      };
+  
+      // リクエストボディの作成
+      const requestBody = {
+        titleImage: workData.titleImage,
+        images: [
+          workData.titleImage
+        ],
+        worksDetailsBase64: utf8ToBase64(JSON.stringify(workDetails))
+      };
+  
+      console.log(workData);
+      // triggerの結果を明示的に返す
       await trigger({
         headers,
         body: requestBody
       });
     } catch (error) {
       console.error('Failed to register work:', error);
+      throw error;
     }
   };
 

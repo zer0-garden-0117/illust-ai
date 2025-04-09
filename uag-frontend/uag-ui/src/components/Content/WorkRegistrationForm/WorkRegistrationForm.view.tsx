@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Button, TextInput, Textarea, Grid, Space, Fieldset, Select, Pill } from '@mantine/core';
+import { Button, TextInput, Textarea, Grid, Space, Fieldset, Select, Pill, Loader, Group } from '@mantine/core';
 import { FileInput, PillsInput, PillGroup  } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from 'next-intl';
+import { FaCheck } from "react-icons/fa6";
+import { useRouter } from 'next/navigation';
 
 export type WorkData = {
   mainTitle: string;
@@ -17,14 +19,17 @@ export type WorkData = {
 };
 
 type WorkRegistrationFormViewProps = {
-  onSubmit: (workData: WorkData) => void;
+  onSubmit: (workData: WorkData) => Promise<void>;
   isAdmin: boolean
 };
 
 export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewComponent({
   onSubmit, isAdmin
 }: WorkRegistrationFormViewProps): JSX.Element {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const t = useTranslations('');
+  const router = useRouter();
 
   // フォームのステート
   const [workData, setWorkData] = useState<WorkData>({
@@ -45,8 +50,21 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
   };
 
   // 送信ハンドラ
-  const handleSubmit = () => {
-    onSubmit(workData);
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setIsSubmitted(false);
+    
+    try {
+      await onSubmit(workData);
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => {
+        router.push('/'); // トップページにリダイレクト
+      }, 100);
+    }
   };
 
   const [tagInput, setTagInput] = useState(''); // タグ入力用の一時状態
@@ -179,10 +197,24 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
           />
           <Space h="md" />
         </Grid.Col>
+        <Grid.Col span={12}>
+          <Group justify="flex-end">
+            <Button 
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                rightSection={
+                  isSubmitting ? (
+                    <Loader size="xs" />
+                  ) : isSubmitted ? (
+                    <FaCheck size="1rem" />
+                  ) : null
+                }
+              >
+                {t('Submit')}
+            </Button>
+          </Group>
+        </Grid.Col>
       </Grid>
-      <Button onClick={handleSubmit}>
-        {t('Submit')}
-      </Button>
     </Fieldset>
   );
 });
