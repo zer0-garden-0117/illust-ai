@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card } from '@mantine/core';
+import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card, Skeleton } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
 import { RiHashtag, RiHeartAdd2Line, RiUserLine, RiFileLine, RiStackLine } from "react-icons/ri";
@@ -81,7 +81,19 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
           transition: `opacity 0.2s ease-in-out ${index * 0.03}s, transform 0.2s ease-in-out ${index * 0.03}s`,
         }}
       />
-      {!shouldDisplay && <div style={{ maxWidth: '350px', width: '100%', height: '100%', backgroundColor: 'transparent', position: 'absolute', top: 0, left: 0 }} />}
+      {!shouldDisplay && 
+        <Skeleton 
+          width="100%" 
+          height="100%" 
+          radius="md"
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0,
+            maxWidth: '350px'
+          }}
+        />
+      }
     </div>
   );
 });
