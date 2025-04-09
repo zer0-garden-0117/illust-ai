@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.uag.zer0.config.CustomAuthenticationToken
 import com.uag.zer0.dto.WorkWithTag
 import com.uag.zer0.generated.endpoint.WorksApi
 import com.uag.zer0.generated.model.ApiWork
@@ -17,6 +18,7 @@ import com.uag.zer0.service.work.WorkManagerService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
@@ -70,6 +72,12 @@ class WorksController(
             required = true
         ) worksDetailsBase64: String
     ): ResponseEntity<ApiWorkWithTag> {
+        // roleを取得してadminじゃなければ401を返す
+        val authentication = SecurityContextHolder.getContext().authentication
+        if (authentication !is CustomAuthenticationToken || authentication.role != "admin") {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        }
+
         // 作品情報のデコード
         val decodedWorksDetails = String(
             Base64.getDecoder().decode(worksDetailsBase64),
