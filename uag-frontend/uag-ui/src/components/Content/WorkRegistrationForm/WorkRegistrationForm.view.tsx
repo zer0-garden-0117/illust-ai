@@ -97,17 +97,17 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
   const tagsArray = workData.tags ? workData.tags.split(',').filter(tag => tag.trim() !== '') : [];
 
   return (
-    <Fieldset legend={t('Work Registration Form')}>
+    <Fieldset radius="md">
       <Grid gutter="xs">
         <Grid.Col span={6}>
           <TextInput
-            label={t('Main Title')}
+            label={t('Title')}
             value={workData.mainTitle}
             onChange={(e) => handleInputChange('mainTitle', e.currentTarget.value)}
           />
           <Space h="md" />
         </Grid.Col>
-        <Grid.Col span={6}>
+        {/* <Grid.Col span={6}>
           <TextInput
             label={t('Subtitle')}
             value={workData.subTitle}
@@ -115,8 +115,8 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
             disabled={true}
           />
           <Space h="md" />
-        </Grid.Col>
-        <Grid.Col span={6}>
+        </Grid.Col> */}
+        {/* <Grid.Col span={6}>
           <TextInput
             label={t('Description')}
             value={workData.description}
@@ -124,8 +124,8 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
             disabled={true}
           />
           <Space h="md" />
-        </Grid.Col>
-        <Grid.Col span={6}>
+        </Grid.Col> */}
+        {/* <Grid.Col span={6}>
           <TextInput
             label={t('Format')}
             value={workData.format}
@@ -133,7 +133,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
             disabled={true}
           />
           <Space h="md" />
-        </Grid.Col>
+        </Grid.Col> */}
         <Grid.Col span={6}>
           <Select
             label={t('Genre')}
@@ -191,7 +191,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
         </Grid.Col>
         <Grid.Col span={6}>
           <FileInput
-            label={t('Title Image')}
+            label={t('Image')}
             placeholder="Choose file"
             onChange={(file) => handleInputChange('titleImage', file)}
           />
