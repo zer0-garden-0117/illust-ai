@@ -3,6 +3,7 @@ import { Button, TextInput, Textarea, Grid, Space, Fieldset, Select } from '@man
 import { FileInput } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from 'next-intl';
+import { notFound, useRouter } from 'next/navigation';
 
 export type WorkData = {
   mainTitle: string;
@@ -18,10 +19,11 @@ export type WorkData = {
 
 type WorkRegistrationFormViewProps = {
   onSubmit: (workData: WorkData) => void;
+  isAdmin: boolean
 };
 
 export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewComponent({
-  onSubmit
+  onSubmit, isAdmin
 }: WorkRegistrationFormViewProps): JSX.Element {
   const t = useTranslations('');
 

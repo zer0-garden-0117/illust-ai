@@ -8,7 +8,7 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
   typeof WorkRegistrationFormView
 > => {
   const { trigger } = useWorksRegister();
-  const { userToken } = useUserTokenContext();
+  const { userToken, isAdmin } = useUserTokenContext();
 
   const headers = {
     Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
@@ -69,5 +69,5 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
     }
   };
 
-  return { onSubmit: handleSubmit };
+  return { onSubmit: handleSubmit, isAdmin };
 };

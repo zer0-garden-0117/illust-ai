@@ -17,6 +17,7 @@ import { useTranslations } from 'next-intl';
 import { CiHeart } from 'react-icons/ci';
 import { UserDeleteArgs, UserDeleteHeaders, useUsersDelete } from '@/apis/openapi/users/useUsersDelete';
 import { getCsrfTokenFromCookies, getUserTokenFromCookies } from '@/utils/authCookies';
+import { LuPencil } from "react-icons/lu";
 
 export const BurgerMenu: React.FC = () => {
   const t = useTranslations("burgerMenu");
@@ -172,13 +173,7 @@ export const BurgerMenu: React.FC = () => {
           {isAuthenticated && isAdmin && (
             <>
               <Menu.Item
-                leftSection={<MdOutlineChevronRight className={classes.icon} />}
-                onClick={onClickManage}
-              >
-                {t("admin")}
-              </Menu.Item>
-              <Menu.Item
-                leftSection={<MdOutlineChevronRight className={classes.icon} />}
+                leftSection={<LuPencil color="gray" className={classes.icon} />}
                 onClick={onClickAdmin}
               >
                 {t("post")}

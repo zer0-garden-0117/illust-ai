@@ -8,7 +8,7 @@ import { Header } from '../Header/Header';
 import { useTranslations } from "next-intl";
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children
@@ -19,8 +19,9 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const [headerHeight, setHeaderHeight] = useState(120); // 初期値を60に設定
   const [isSearching, setIsSearching] = useState(true);
   const { isAuthenticated } = useAccessTokenContext();
-  const { userToken, isDeleting, setIsDeleting } = useUserTokenContext();
+  const { userToken, isDeleting, setIsDeleting, isAdmin } = useUserTokenContext();
   const router = useRouter();
+  const pathname = usePathname();
 
   // 検索アイコンがクリックされたときに高さを切り替える関数
   const toggleHeaderHeight = () => {
@@ -44,6 +45,16 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       window.location.href = preAuthRedirect;
     }
   }, [isAuthenticated, userToken]);
+
+  useEffect(() => {
+    if (!pathname) return;
+    const segments = pathname.split('/').filter(Boolean);
+    const isAdminPath = segments[1] === 'admin';
+  
+    if (isAdminPath && !isAdmin) {
+      router.replace('/404');
+    }
+  }, [isAdmin, pathname, router]);
 
   if (loading || isDeleting) {
     return (
