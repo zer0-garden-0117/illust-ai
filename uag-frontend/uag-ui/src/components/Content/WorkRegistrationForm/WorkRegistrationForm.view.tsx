@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Button, TextInput, Textarea, Grid, Space, Fieldset, Select } from '@mantine/core';
-import { FileInput } from '@mantine/core';
+import { Button, TextInput, Textarea, Grid, Space, Fieldset, Select, Pill } from '@mantine/core';
+import { FileInput, PillsInput, PillGroup  } from '@mantine/core';
 import { memo } from 'react';
 import { useTranslations } from 'next-intl';
-import { notFound, useRouter } from 'next/navigation';
 
 export type WorkData = {
   mainTitle: string;
@@ -49,6 +48,35 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
   const handleSubmit = () => {
     onSubmit(workData);
   };
+
+  const [tagInput, setTagInput] = useState(''); // タグ入力用の一時状態
+
+  // タグ入力ハンドラ（カンマで分割）
+  const handleTagsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagInput(e.currentTarget.value);
+  };
+
+  // タグ追加ハンドラ（Enterまたはカンマでタグを追加）
+  const handleTagsKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const newTag = tagInput.trim().replace(/,/g, '');
+      if (newTag) {
+        const newTags = workData.tags ? `${workData.tags},${newTag}` : newTag;
+        setWorkData({ ...workData, tags: newTags });
+        setTagInput('');
+      }
+    }
+  };
+
+  // タグ削除ハンドラ
+  const handleTagRemove = (tagToRemove: string) => {
+    const tagsArray = workData.tags.split(',').filter(tag => tag.trim() !== '');
+    const newTags = tagsArray.filter(tag => tag !== tagToRemove).join(',');
+    setWorkData({ ...workData, tags: newTags });
+  };
+
+  const tagsArray = workData.tags ? workData.tags.split(',').filter(tag => tag.trim() !== '') : [];
 
   return (
     <Fieldset legend={t('Work Registration Form')}>
@@ -122,11 +150,25 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-          <TextInput
-            label={t('Tags')}
-            value={workData.tags}
-            onChange={(e) => handleInputChange('tags', e.currentTarget.value)}
-          />
+        <PillsInput label={t('Tags')}>
+            <PillGroup>
+              {tagsArray.map((tag) => (
+                <Pill 
+                  key={tag} 
+                  withRemoveButton 
+                  onRemove={() => handleTagRemove(tag)}
+                >
+                  {tag}
+                </Pill>
+              ))}
+              <PillsInput.Field
+                value={tagInput}
+                onChange={handleTagsInput}
+                onKeyDown={handleTagsKeyDown}
+                placeholder={tagsArray.length === 0 ? 'タグを入力（カンマまたはEnterで追加）' : ''}
+              />
+            </PillGroup>
+            </PillsInput>
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
