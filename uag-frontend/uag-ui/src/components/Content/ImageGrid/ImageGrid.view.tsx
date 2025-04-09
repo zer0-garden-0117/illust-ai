@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Rating, Group, Fieldset, Image, Skeleton } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
@@ -40,7 +40,12 @@ type ImageGridViewProps = {
 const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: string; index: number; onImageLoad: () => void }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const imgRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    setShowSkeleton(true);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -48,10 +53,14 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.01 }
+      { 
+        threshold: 0.01,
+        rootMargin: '500px 0px' 
+      }
     );
 
     if (imgRef.current) {
@@ -65,11 +74,11 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
     };
   }, []);
 
-  const handleImageLoad = () => {
+  const handleImageLoad = useCallback(() => {
     setIsLoaded(true);
-    console.log(`Image loaded: ${src}`); // 画像のロード完了をログ出力
+    setShowSkeleton(false);
     onImageLoad();
-  };
+  }, [onImageLoad]);
 
   const shouldDisplay = isVisible && isLoaded;
 
@@ -79,6 +88,7 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
         src={src}
         alt={alt}
         radius="md"
+        loading="eager"
         onLoad={handleImageLoad}
         style={{
           width: '100%',
@@ -88,12 +98,17 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
           transition: `opacity 0.2s ease-in-out ${index * 0.03}s, transform 0.2s ease-in-out ${index * 0.03}s`
         }}
       />
-      {!shouldDisplay && (
+      {showSkeleton && !shouldDisplay && (
         <Skeleton 
           width="100%" 
           height="100%" 
           radius="md" 
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0,
+            animation: 'pulse 1.5s ease-in-out infinite'
+          }}
         />
       )}
     </div>

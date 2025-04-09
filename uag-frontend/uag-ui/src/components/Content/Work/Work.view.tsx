@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect, useCallback } from 'react';
 import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card, Skeleton } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
@@ -33,17 +33,29 @@ type WorkViewProps = {
 const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string; alt: string; index: number; onDisplayComplete: () => void }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(false);
   const imgRef = useRef<HTMLDivElement | null>(null);
+
+  // マウント直後にSkeletonを表示
+  useLayoutEffect(() => {
+    setShowSkeleton(true);
+  }, []);
 
   useEffect(() => {
     const currentImgRef = imgRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setIsVisible(true);
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target); // 一度表示されたら監視を停止
+          }
         });
       },
-      { threshold: 0.01 }
+      { 
+        threshold: 0.01, // 閾値を上げて早期トリガー
+        rootMargin: '500px 0px' // ビューポートの上下300px前からロード開始
+      }
     );
 
     if (currentImgRef) observer.observe(currentImgRef);
@@ -53,9 +65,10 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
     };
   }, []);
 
-  const handleImageLoad = () => {
+  const handleImageLoad = useCallback(() => {
     setIsLoaded(true);
-  };
+    setShowSkeleton(false);
+  }, []);
 
   useEffect(() => {
     if (isVisible && isLoaded) {
@@ -71,6 +84,7 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
         src={src}
         alt={alt}
         radius="md"
+        loading="eager" // 優先的にロード
         onLoad={handleImageLoad}
         style={{
           maxWidth: '350px',
@@ -81,7 +95,7 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
           transition: `opacity 0.2s ease-in-out ${index * 0.03}s, transform 0.2s ease-in-out ${index * 0.03}s`,
         }}
       />
-      {!shouldDisplay && 
+      {showSkeleton && !shouldDisplay && 
         <Skeleton 
           width="100%" 
           height="100%" 
@@ -90,7 +104,8 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
             position: 'absolute', 
             top: 0, 
             left: 0,
-            maxWidth: '350px'
+            maxWidth: '350px',
+            animation: 'pulse 1.5s ease-in-out infinite' // パルスアニメーション
           }}
         />
       }
@@ -167,14 +182,14 @@ export const WorkView = memo(function WorkViewComponent({
   isAuthenticated
 }: WorkViewProps): JSX.Element {
   const t = useTranslations("work");
-  const locale = useLocale()
+  const locale = useLocale();
   const [opened, setOpened] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [isImageDisplayed, setIsImageDisplayed] = useState(false);
+  const [isContentVisible, setIsContentVisible] = useState(false);
   const pathname = usePathname();
 
   useLayoutEffect(() => {
-    // スクロールイベントで位置をリアルタイムに保存
     const handleScroll = () => {
       if (!loading) {
         sessionStorage.setItem(`scrollPosition-${pathname}`, window.scrollY.toString());
@@ -182,12 +197,21 @@ export const WorkView = memo(function WorkViewComponent({
     };
 
     window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      // コンポーネントがアンマウントされる際にイベントリスナーを削除
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname, loading]);
+
+  const handleDisplayComplete = useCallback(() => {
+    setIsImageDisplayed(true);
+    setIsContentVisible(true);
+  }, []);
+
+  useEffect(() => {
+    if (isContentVisible) {
+      const savedPosition = sessionStorage.getItem(`scrollPosition-${pathname}`);
+      const targetPosition = savedPosition ? parseInt(savedPosition, 10) : 0;
+      window.scrollTo(0, targetPosition);
+    }
+  }, [isContentVisible, pathname]);
 
   // 画像表示が完了したときにスクロール位置を復元
   useEffect(() => {
@@ -272,31 +296,31 @@ export const WorkView = memo(function WorkViewComponent({
         ml={2}
         mr={2}
         style={{
-          opacity: isImageDisplayed ? 1 : 0,
-          transform: 'scale(1.01) translate(0px, 0px)', // 初期状態で少し浮き上がる
-          transition: 'transform 150ms ease, box-shadow 150ms ease, opacity 0.5s ease-in-out',
-          borderRadius: '8px', // 角に丸みを追加
-          boxShadow: isImageDisplayed
-          ? '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 15px -5px rgba(0, 0, 0, 0.05), 0 7px 7px -5px rgba(0, 0, 0, 0.04)'
-          : 'none', // Mantineのsm影と同様の影を設定
+          opacity: isContentVisible ? 1 : 0,
+          transform: 'scale(1.01) translate(0px, 0px)',
+          transition: 'transform 150ms ease, box-shadow 150ms ease, opacity 0.3s ease-in-out',
+          borderRadius: '8px',
+          boxShadow: isContentVisible
+            ? '0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 15px -5px rgba(0, 0, 0, 0.05), 0 7px 7px -5px rgba(0, 0, 0, 0.04)'
+            : 'none',
         }}
       >
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }} style={{ display: 'flex', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <CustomImage
-              src={isAuthenticated ? (workData?.apiWork?.titleImgUrl || '') : (workData?.apiWork?.watermaskImgUrl || '')}
-              alt={workData?.apiWork?.mainTitle || "Image without title"}
-              index={0}
-              onDisplayComplete={() => setIsImageDisplayed(true)}
-            />
-          </div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <CustomImage
+                src={isAuthenticated ? (workData?.apiWork?.titleImgUrl || '') : (workData?.apiWork?.watermaskImgUrl || '')}
+                alt={workData?.apiWork?.mainTitle || "Image without title"}
+                index={0}
+                onDisplayComplete={handleDisplayComplete}
+              />
+            </div>
           </Grid.Col>
           <Grid.Col
             span={{ base: 12, sm: 6, lg: 6 }}
             style={{
-              opacity: isImageDisplayed ? 1 : 0,
-              transition: 'opacity 0.5s ease-in-out', // 情報表示のフェードイン効果
+              opacity: isContentVisible ? 1 : 0,
+              transition: 'opacity 0.01s ease-in-out',
             }}
           >
             <Group style={{ marginTop: '20px' }}>
