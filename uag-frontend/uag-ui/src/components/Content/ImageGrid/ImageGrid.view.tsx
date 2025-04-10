@@ -103,6 +103,7 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
           width="100%" 
           height="100%" 
           radius="md" 
+          visible={false}
           style={{ 
             position: 'absolute', 
             top: 0, 
