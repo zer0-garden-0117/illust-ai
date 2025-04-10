@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Rating, Group, Fieldset, Image, Skeleton } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Rating, Group, Fieldset, Image, Skeleton, Center, Loader } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -8,6 +8,7 @@ import { RiHeartAdd2Line, RiDeleteBin6Line} from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
 import { useNavigate } from '@/utils/navigate';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
+import { init } from 'next/dist/compiled/webpack/webpack';
 
 export type ImageData = {
   workId: string;
@@ -263,6 +264,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   const searchParams = useSearchParams();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(0);
+  const [initialLoading, setInitialLoading] = useState(true);
   const fullPath = `${pathname}?${searchParams.toString()}`;
 
   useLayoutEffect(() => {
@@ -283,19 +285,15 @@ export const ImageGridView = memo(function ImageGridViewComponent({
 
   // 全画像がロードされたときの処理
   useEffect(() => {
-    console.log(`Images loaded: ${imagesLoaded} / ${imageData.length}`);
-    // if (imagesLoaded === imageData.length && imageData.length > 0) {
     if (imageData.length > 0) {
+      setInitialLoading(false)
       const savedPosition = sessionStorage.getItem(`scrollPosition-${fullPath}`);
       const targetPosition = savedPosition ? parseInt(savedPosition, 10) : 0;
       setTimeout(() => {
-        console.log(`Scrolling to position: ${targetPosition}`);
         window.scrollTo(0, targetPosition);
       }, 100);
-    } else {
-      console.log("imagesLoaded === imageData.length && imageData.length > 0", imagesLoaded, imageData.length)
     }
-  }, [imagesLoaded, pathname, imageData.length]);
+  }, [imagesLoaded, pathname, imageData.length, initialLoading]);
 
   const handleImageLoad = () => {
     setImagesLoaded((loaded) => loaded + 1);
@@ -316,24 +314,32 @@ export const ImageGridView = memo(function ImageGridViewComponent({
     />
   ));
 
+  if (initialLoading) {
+    return (
+      <Center style={{ height: '50vh', padding: '20px' }}>
+        <Loader color="black" size="xs" />
+      </Center>
+    );
+  }
+
   return (
     <>
-      {!loading && (
-        <>
-          <Fieldset
-            ml={-5}
-            variant="unstyled"
-            legend={
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                {React.cloneElement(topIcon, {
-                  style: {
-                    marginRight: '8px',
-                    position: 'relative',
-                    fontSize: '20px',
-                    color: "#fd7e14",
-                    top: '-2px',
-                  }
-                })}
+        {!loading && (
+          <>
+            <Fieldset
+              ml={-5}
+              variant="unstyled"
+              legend={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  {React.cloneElement(topIcon, {
+                    style: {
+                      marginRight: '8px',
+                      position: 'relative',
+                      fontSize: '20px',
+                      color: "#fd7e14",
+                      top: '-2px',
+                    }
+                  })}
                 {/* <span
                   style={{
                     marginRight: '8px',
@@ -346,37 +352,37 @@ export const ImageGridView = memo(function ImageGridViewComponent({
                   {/* ❄️ */}
                   {/* 🦄‍🪽 */}
                 {/* </span> */}
-                <Text
-                  variant="gradient"
-                  gradient={{ from: '#fd7e14', to: 'hotpink', deg: 90 }}
-                  fw={200}
-                  size='md'
-                >
-                  {title} {isViewCount && `( ${totalCount} ${t("item")}${totalCount >= 2 && locale == "en" ? "s" : ""} )`}
-                </Text>
-              </div>
-            }
-          />
-        </>
-      )}
+                  <Text
+                    variant="gradient"
+                    gradient={{ from: '#fd7e14', to: 'hotpink', deg: 90 }}
+                    fw={200}
+                    size='md'
+                  >
+                    {title} {isViewCount && `( ${totalCount} ${t("item")}${totalCount >= 2 && locale == "en" ? "s" : ""} )`}
+                  </Text>
+                </div>
+              }
+            />
+          </>
+        )}
 
-      <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
-        {cards}
-      </SimpleGrid>
-      {!loading && totalPages > 1 && isViewPagination && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Pagination
-            value={currentPage}
-            onChange={onPageChange}
-            total={totalPages}
-            mt="lg"
-            radius="xl"
-            withEdges
-            color="gray"
-            size="sm"
-          />
-        </div>
-      )}
+        <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
+          {cards}
+        </SimpleGrid>
+        {!loading && totalPages > 1 && isViewPagination && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Pagination
+              value={currentPage}
+              onChange={onPageChange}
+              total={totalPages}
+              mt="lg"
+              radius="xl"
+              withEdges
+              color="gray"
+              size="sm"
+            />
+          </div>
+        )}
 
       <AuthModal
         isOpen={loginModalOpen}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useLayoutEffect, useCallback } from 'react';
-import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card, Skeleton } from '@mantine/core';
+import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card, Skeleton, Center, Loader } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
 import { RiHashtag, RiHeartAdd2Line, RiUserLine, RiFileLine, RiStackLine } from "react-icons/ri";
@@ -188,6 +188,7 @@ export const WorkView = memo(function WorkViewComponent({
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [isImageDisplayed, setIsImageDisplayed] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const pathname = usePathname();
 
   useLayoutEffect(() => {
@@ -207,12 +208,14 @@ export const WorkView = memo(function WorkViewComponent({
   }, []);
 
   useEffect(() => {
-    if (isContentVisible) {
+    if (isImageDisplayed && !initialLoading) {
       const savedPosition = sessionStorage.getItem(`scrollPosition-${pathname}`);
       const targetPosition = savedPosition ? parseInt(savedPosition, 10) : 0;
-      window.scrollTo(0, targetPosition);
+      setTimeout(() => {
+        window.scrollTo(0, targetPosition);
+      }, 100);
     }
-  }, [isContentVisible, pathname]);
+  }, [isImageDisplayed, pathname, initialLoading]);
 
   // 画像表示が完了したときにスクロール位置を復元
   useEffect(() => {
@@ -290,6 +293,20 @@ export const WorkView = memo(function WorkViewComponent({
         return `${year}/${month}/${day}`;
     }
   };
+
+  useEffect(() => {
+    if (!loading && workData) {
+      setInitialLoading(false);
+    }
+  }, [loading, workData]);
+
+  if (initialLoading) {
+    return (
+      <Center style={{ height: '100vh' }}>
+        <Loader color="black" size="xs" />
+      </Center>
+    );
+  }
 
   return (
     <>
