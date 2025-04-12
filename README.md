@@ -2,24 +2,34 @@
 
 ## dev環境
 
-### フロントエンド
-- npm run devで下記を起動
-  - next.js : https://localhost:3001 で起動 (.env.pdevelopment)
+### フロントエンドの起動方法
+#### 事前準備
+ - cd uag-frontend/uag-ui
+ - npm install
+ - .env.exampleを参考に.env.develomentを作成
+#### 起動
+ - cd uag-frontend/uag-ui
+ - npm run dev
+ - https://localhost:3001 にアクセス
 
-### バックエンド
-- ローカルで起動の前にすること
-  - Docker Desktopを起動
-  - SSL証明書の自己署名証明書の設定
-    - scripts/mkcertのkeystore.p12をインポート(macの場合キーチェーンアクセスのシステムにインポート)し、常に信頼を設定
-  - uag-backend/node-scriptsのインストール
-    - uag-backend/node-scripts配下でnpm install
-  - localのdbの初期化
-    - scripts/uag_img_database/config.iniでdevを設定
-    - create.shを実行
-- ./gradlew clean bootRunDevで下記の3つを起動
-  - nginx : dockerで起動。https://localhostをhttp://localhost:8080にバイパス
-  - db : DynamoDBLocal.jarで起動
-  - spring : http://localhost:8080で起動(application-dev.yml)
+### バックエンドの起動方法
+#### 事前準備
+ - Docker Desktopを起動
+ - SSL証明書(自己署名証明書)の設定
+   - scripts/mkcertのkeystore.p12をインポート(macOSの場合、キーチェーンアクセスのシステムにインポート)し、常に信頼を設定)
+ - バックエンドのNodeの設定
+   - cd uag-backend/node-scripts
+   - npm install
+ - localのdbの初期化
+   - scripts/uag_img_database/config.iniのENVIRONMENTでdevを設定
+   - devにlocalのdbのURLを設定
+   - create.shを実行
+#### 起動
+ - cd uag-backend
+ - ./gradlew clean bootRunDevを実行すると下記の3つが起動する
+  - lb : nginxをDockerコンテナとして起動
+  - db : Amazon DynamoDBのローカル版をDockerコンテナとして起動
+  - SpringBoot : http://localhost:8080
 
 ## test環境　(AWS Staging環境)
 
