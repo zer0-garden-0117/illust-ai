@@ -8,7 +8,6 @@ import { RiHeartAdd2Line, RiDeleteBin6Line} from "react-icons/ri";
 import AuthModal from '@/components/Header/AuthModal/AuthModal';
 import { useNavigate } from '@/utils/navigate';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
-import { init } from 'next/dist/compiled/webpack/webpack';
 
 export type ImageData = {
   workId: string;
@@ -117,7 +116,6 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
   );
 };
 
-// Memoized CustomImage
 const MemoizedImage = memo(CustomImage, (prevProps, nextProps) => prevProps.src === nextProps.src);
 
 const MemoizedCard = memo(
@@ -180,11 +178,11 @@ const MemoizedCard = memo(
               src={imageData.thumbnailImage}
               alt={imageData.mainTitle || "Image without title"}
               index={index}
-              onImageLoad={onImageLoad} // ロード完了時に呼ばれる
+              onImageLoad={onImageLoad}
             />
           </div>
         </AspectRatio>
-        <Group style={{ width: '100%', overflow: 'hidden' }}> {/* 親要素の幅を固定 */}
+        <Group style={{ width: '100%', overflow: 'hidden' }}>
           <div
             onClick={handleImageClick}
             style={{
@@ -267,18 +265,15 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   const [initialLoading, setInitialLoading] = useState(true);
   const fullPath = `${pathname}?${searchParams.toString()}`;
 
+  // スクロールイベントで位置をリアルタイムに保存
   useLayoutEffect(() => {
-    // スクロールイベントで位置をリアルタイムに保存
     const handleScroll = () => {
       if (!loading) {
         sessionStorage.setItem(`scrollPosition-${fullPath}`, window.scrollY.toString());
       } 
     };
-
     window.addEventListener('scroll', handleScroll);
-
     return () => {
-      // コンポーネントがアンマウントされる際にイベントリスナーを削除
       window.removeEventListener('scroll', handleScroll);
     };
   }, [pathname, loading]);
@@ -310,7 +305,7 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       isAuthenticated={isAuthenticated}
       router={router}
       setLoginModalOpen={setLoginModalOpen}
-      onImageLoad={handleImageLoad} // 画像ロード完了をカウント
+      onImageLoad={handleImageLoad}
     />
   ));
 
@@ -340,18 +335,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
                       top: '-2px',
                     }
                   })}
-                {/* <span
-                  style={{
-                    marginRight: '8px',
-                    position: 'relative',
-                    fontSize: '24px',
-                    top: '-2px',
-                  }}
-                > */}
-                  {/* 👾 */}
-                  {/* ❄️ */}
-                  {/* 🦄‍🪽 */}
-                {/* </span> */}
                   <Text
                     variant="gradient"
                     gradient={{ from: '#fd7e14', to: 'hotpink', deg: 90 }}

@@ -1,9 +1,7 @@
 'use client';
 
-import { AppShell, Burger, Text, Loader, Center } from '@mantine/core';
+import { AppShell, Loader, Center } from '@mantine/core';
 import { useState, useEffect } from 'react';
-import { Navbar } from '../Navbar/Navbar';
-import { Sidebar } from '../Sidebar/Sidebar'
 import { Header } from '../Header/Header';
 import { useTranslations } from "next-intl";
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
@@ -14,22 +12,11 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
   const t = useTranslations("appshell");
-  const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [headerHeight, setHeaderHeight] = useState(120); // 初期値を60に設定
-  const [isSearching, setIsSearching] = useState(true);
   const { isAuthenticated } = useAccessTokenContext();
-  const { userToken, isDeleting, setIsDeleting, isAdmin } = useUserTokenContext();
+  const { userToken, isDeleting, isAdmin } = useUserTokenContext();
   const router = useRouter();
   const pathname = usePathname();
-
-  // 検索アイコンがクリックされたときに高さを切り替える関数
-  const toggleHeaderHeight = () => {
-    setIsSearching(!isSearching);
-    setHeaderHeight(isSearching ? 60 : 120); // クリック時に60か120に切り替える
-  };
-
-  const toggle = () => setOpened((o) => !o);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -66,9 +53,7 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AppShell
-      header={{ height: headerHeight }}
-      // navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
-      // aside={{ width: 200, breakpoint: 'md', collapsed: { desktop: false, mobile: true } }}
+      header={{ height: 120 }}
       footer={{ height: 20 }}
       padding="md"
       transitionDuration={0}
@@ -91,27 +76,12 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
         },
       })}
     >
-      {/* <AppShell.Navbar>
-        <Navbar setOpened={setOpened} />
-      </AppShell.Navbar> */}
       <AppShell.Header>
-        <Header
-          // burger={<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" mr="xl" />}
-          onSearchClick={toggleHeaderHeight}
-          isSearching={isSearching}
-        />
+        <Header/>
       </AppShell.Header>
       <AppShell.Main>
         {children}
       </AppShell.Main>
-      {/* <AppShell.Aside>
-        <Sidebar />
-      </AppShell.Aside> */}
-      {/* <AppShell.Footer> */}
-        {/* <Text w="full" size="xs" ta="right" pr="20">
-          {t('copyright')}
-        </Text> */}
-      {/* </AppShell.Footer> */}
     </AppShell>
   );
 };

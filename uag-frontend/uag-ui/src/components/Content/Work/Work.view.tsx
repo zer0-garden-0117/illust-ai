@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useLayoutEffect, useCallback } from 'react';
-import { Button, Text, Fieldset, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card, Skeleton, Center, Loader } from '@mantine/core';
+import { Button, Text, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card, Skeleton, Center, Loader } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
 import { RiHashtag, RiHeartAdd2Line, RiUserLine, RiFileLine, RiStackLine } from "react-icons/ri";
@@ -36,7 +36,6 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
   const [showSkeleton, setShowSkeleton] = useState(false);
   const imgRef = useRef<HTMLDivElement | null>(null);
 
-  // マウント直後にSkeletonを表示
   useLayoutEffect(() => {
     setShowSkeleton(true);
   }, []);
@@ -48,13 +47,13 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
-            observer.unobserve(entry.target); // 一度表示されたら監視を停止
+            observer.unobserve(entry.target);
           }
         });
       },
       { 
-        threshold: 0.01, // 閾値を上げて早期トリガー
-        rootMargin: '500px 0px' // ビューポートの上下300px前からロード開始
+        threshold: 0.01,
+        rootMargin: '500px 0px'
       }
     );
 
@@ -72,7 +71,7 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
 
   useEffect(() => {
     if (isVisible && isLoaded) {
-      onDisplayComplete(); // 画像の表示が完了したら通知
+      onDisplayComplete();
     }
   }, [isVisible, isLoaded, onDisplayComplete]);
 
@@ -84,7 +83,7 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
         src={src}
         alt={alt}
         radius="md"
-        loading="eager" // 優先的にロード
+        loading="eager"
         onLoad={handleImageLoad}
         style={{
           maxWidth: '350px',
@@ -106,7 +105,7 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
             top: 0, 
             left: 0,
             maxWidth: '350px',
-            animation: 'pulse 1.5s ease-in-out infinite' // パルスアニメーション
+            animation: 'pulse 1.5s ease-in-out infinite'
           }}
         />
       }

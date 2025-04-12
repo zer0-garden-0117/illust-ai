@@ -32,20 +32,6 @@ export const useWork = (
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
   const navigate = useNavigate();
 
-  // const [headers, setHeaders] = useState({
-  //   Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-  //   "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-  // });
-
-  // useEffect(() => {
-  //   if (userToken != null) {
-  //     setHeaders({
-  //       Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-  //       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-  //     });
-  //   }
-  // }, [userToken]);
-
   useEffect(() => {
     const handleFetchWork = async () => {
       try {

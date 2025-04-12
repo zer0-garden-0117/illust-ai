@@ -1,34 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ActionIcon, Avatar, Group, Menu, Text, Image } from '@mantine/core';
-import { MdLogin, MdLogout } from "react-icons/md";
-import { FiUserPlus } from "react-icons/fi";
-import {
-  RiShieldKeyholeLine, RiDeleteBin6Line, RiUserSettingsLine,
-  RiUserLine
-} from "react-icons/ri";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
-import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
+import React, { useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { ActionIcon, Group, Menu, Text } from '@mantine/core';
 import classes from './LangMenu.module.css';
-import { useNavigate } from '@/utils/navigate';
-import { PiStarOfDavidLight } from "react-icons/pi";
-import { GiLibertyWing } from "react-icons/gi";
-import { FiChevronsRight } from "react-icons/fi";
-import { PiShootingStarThin } from "react-icons/pi";
-import { PiStarFour } from "react-icons/pi";
-import { FaAngleRight } from "react-icons/fa6";
-import { MdOutlineChevronRight } from "react-icons/md";
-import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
-import { FaRegHeart, FaRegStar } from 'react-icons/fa';
-import { RiHeartAdd2Line } from "react-icons/ri";
-import { MdOutlinePalette } from "react-icons/md";
-import { BiSolidInvader } from "react-icons/bi";
 import AuthModal from '../AuthModal/AuthModal';
-import { IconChevronRight } from '@tabler/icons-react';
-import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 import { useLocale, useTranslations } from 'next-intl';
-import Flag from 'react-world-flags';
 import { CircleFlag } from 'react-circle-flags'
 
 interface LanguageData {
@@ -52,34 +27,15 @@ const data: LanguageData[] = [
   { label: 'Filipino', code: 'PH', lang: 'fil' },
   { label: 'Português', code: 'PT', lang: 'pt' },
 ];
-// const data: LanguageData[] = [
-//   { label: '日', code: 'JP', lang: 'ja' },
-//   { label: 'EN', code: 'US', lang: 'en' },
-//   { label: 'TW', code: 'TW', lang: 'zh-Hant' },
-//   { label: 'CN', code: 'CN', lang: 'zh-Hans' },
-//   { label: 'KR', code: 'KR', lang: 'ko' },
-//   { label: 'MY', code: 'MY', lang: 'ms' },
-//   { label: 'TH', code: 'TH', lang: 'th' },
-//   { label: 'DE', code: 'DE', lang: 'de' },
-//   { label: 'FR', code: 'FR', lang: 'fr' },
-//   { label: 'VN', code: 'VN', lang: 'vi' },
-//   { label: 'ID', code: 'ID', lang: 'id' },
-//   { label: 'PH', code: 'PH', lang: 'fil' },
-//   { label: 'PT', code: 'PT', lang: 'pt' },
-// ];
 
 export const LangMenu: React.FC = () => {
   const t = useTranslations("burgerMenu");
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
-  const navigation = useNavigate();
-  const { isAuthenticated, login, loginWithHosted, logout, email } = useAccessTokenContext();
-  const { isAdmin, userToken } = useUserTokenContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const locale = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const router = useRouter();
   const [selected, setSelected] = useState<LanguageData>(() => {
     const foundLang = data.find(item => item.lang === locale);
     return foundLang || data[0];

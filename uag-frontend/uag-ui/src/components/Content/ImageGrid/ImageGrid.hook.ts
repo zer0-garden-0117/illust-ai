@@ -28,14 +28,14 @@ type UseImageGridProps = {
 export const useImageGrid = (
   { topIcon, title, isViewCount, isViewPagination, imageCount, type, words }: UseImageGridProps
 ): React.ComponentPropsWithoutRef<typeof ImageGridView> => {
-  const router = useRouter();  // useRouter フックを使ってルーターを取得
+  const router = useRouter();
   const searchParams = new URLSearchParams(window.location.search);
   const initialPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
   const [currentPage, setCurrentPage] = useState<number>(initialPage);
   const [imageData, setImageData] = useState<ImageData[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(1);
-  const [loading, setLoading] = useState(true); // ローディング状態
+  const [loading, setLoading] = useState(true);
   const [worksData, setWorksData] = useState<WorkSearchByTagResult>();
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
   const { trigger: triggerSearchWithTags, data: dataByTags } = useWorksSearchByTags();
@@ -51,29 +51,14 @@ export const useImageGrid = (
   const itemsPerPage = imageCount;
   const navigate = useNavigate();
 
-  // const [headers, setHeaders] = useState({
-  //   Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-  //   "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-  // });
-
-  // useEffect(() => {
-  //   if (userToken != null) {
-  //     setHeaders({
-  //       Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
-  //       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-  //     });
-  //   }
-  // }, [userToken ,isAuthenticated]);
-
   const fetchImagesWithTags = async (page: number) => {
-    setLoading(true);  // ローディング開始
+    setLoading(true);
     const body: WorkSearchByTagRequestBody = {
       tags: words,
-      offset: (page - 1) * itemsPerPage,  // ページごとのoffsetを計算
-      limit: itemsPerPage  // 1ページに表示する件数
+      offset: (page - 1) * itemsPerPage,
+      limit: itemsPerPage
     };
     try {
-      // 作品のデータを取得
       await triggerSearchWithTags({ body });
     } catch (err) {
       console.error("Failed to fetch images:", err);
@@ -81,7 +66,7 @@ export const useImageGrid = (
   };
 
   const fetchImagesWithLiked = async (page: number) => {
-    setLoading(true);  // ローディング開始
+    setLoading(true);
     const headers: UsersLikedGetHeader = {
       Authorization: `Bearer ${userToken}` as `Bearer ${string}`
     }
@@ -97,7 +82,7 @@ export const useImageGrid = (
   };
 
   const fetchImagesWithRated = async (page: number) => {
-    setLoading(true);  // ローディング開始
+    setLoading(true);
     const headers: UsersRatedGetHeader = {
       Authorization: `Bearer ${userToken}` as `Bearer ${string}`
     }
@@ -114,7 +99,7 @@ export const useImageGrid = (
 
   // ページ変更時にデータをリセットし、データを再取得
   useEffect(() => {
-    setImageData([]);  // データをリセット
+    setImageData([]);
     if (type == "tag") {
       fetchImagesWithTags(currentPage);
     } else if (type == "free") {
@@ -125,7 +110,6 @@ export const useImageGrid = (
       fetchImagesWithRated(currentPage);
     }
   }, [currentPage]);
-  // }, [currentPage, userToken]);
 
   // dataが変更された時の処理
   useEffect(() => {
@@ -172,7 +156,6 @@ export const useImageGrid = (
       // works と activityData を結合して imageData にセット
       const fetchedImages: ImageData[] = worksData.works.map((work) => {
         const activity = activitiesData?.apiRateds?.find((a) => a.workId === work.workId);
-        // 型安全を確保しつつプロパティを処理
         return {
           workId: work.workId ?? "",
           mainTitle: work.mainTitle || "No Title",
@@ -180,14 +163,12 @@ export const useImageGrid = (
           thumbnailImage: work.thumbnailImgUrl || "",
           watermaskImage: work.watermaskImgUrl || "",
           date: work.createdAt || "",
-          isLiked: activitiesData?.apiLikeds?.some((a) => a.workId === work.workId) || false, // Liked の確認
-          rating: activity?.rating || 0, // レーティングの確認
+          isLiked: activitiesData?.apiLikeds?.some((a) => a.workId === work.workId) || false,
+          rating: activity?.rating || 0,
         };
       });
 
       setImageData(fetchedImages);
-
-      // totalCount から総ページ数を計算して更新
       setTotalPages(Math.ceil((worksData.totalCount || 0) / itemsPerPage));
       setTotalCount(worksData.totalCount || 0);
       setLoading(false);
@@ -222,11 +203,10 @@ export const useImageGrid = (
       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
     };
 
-    // 現在の状態に基づいて "いいね" または "取り消し" を実行
     if (isCurrentlyLiked) {
-      triggerDeliked({ headers, workId }); // いいねを取り消す場合
+      triggerDeliked({ headers, workId });
     } else {
-      triggerLiked({ headers, workId });   // いいねをつける場合
+      triggerLiked({ headers, workId });
     }
   };
 
@@ -236,8 +216,8 @@ export const useImageGrid = (
       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
     }
     try {
-      await triggerDelete({ headers, workId }); // 削除を同期的に実行
-      window.location.reload(); // 削除完了後にページをリロード
+      await triggerDelete({ headers, workId });
+      window.location.reload();
   } catch (err) {
       console.error("Failed to delete work:", err);
   }
