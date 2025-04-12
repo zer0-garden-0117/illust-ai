@@ -12,7 +12,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest
 class UploadService(
     private val s3Client: S3Client,
 ) {
-    @Value("\${cloud.aws.s3.bucket}")
+    @Value("\${s3.bucket}")
     private val bucketName: String? = null
 
     fun uploadToS3(image: ByteArray, fileName: String): String {
