@@ -1,6 +1,6 @@
 package com.uag.zer0.config.filter
 
-import com.uag.zer0.config.CustomAuthenticationToken
+import com.uag.zer0.config.token.CustomAuthenticationToken
 import com.uag.zer0.service.TokenService
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter

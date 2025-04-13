@@ -9,10 +9,8 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.UserNotFoun
 @Service
 class CognitoService(
     private val cognitoClient: CognitoIdentityProviderClient,
-    @Value("\${cognito.pool-id}")
-    private val cognitoPoolId: String,
-    @Value("\${security.paths.no-bearer-token}")
-    private val noBearerTokenPathAndMethodString: String
+    @Value("\${aws.cognito.pool-id}") private val cognitoPoolId: String,
+    @Value("\${security.paths.no-bearer-token}") private val noBearerTokenPathAndMethodString: String
 ) {
 
     private val logger = LoggerFactory.getLogger(this::class.java)

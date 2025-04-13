@@ -32,6 +32,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // AWS
+    implementation("io.awspring.cloud:spring-cloud-aws-starter:3.3.0")
     implementation("com.amazonaws:aws-java-sdk-dynamodb:1.12.757")
     implementation("io.github.boostchicken:spring-data-dynamodb:5.2.5")
     implementation(platform("software.amazon.awssdk:bom:2.26.18"))

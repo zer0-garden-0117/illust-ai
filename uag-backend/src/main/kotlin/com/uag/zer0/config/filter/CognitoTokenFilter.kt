@@ -1,7 +1,6 @@
 package com.uag.zer0.config.filter
 
-import com.uag.zer0.config.CustomAuthenticationToken
-import com.uag.zer0.service.TokenService
+import com.uag.zer0.config.token.CustomAuthenticationToken
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -9,8 +8,7 @@ import org.springframework.security.oauth2.jwt.JwtException
 import org.springframework.web.filter.OncePerRequestFilter
 
 class CognitoTokenFilter(
-    private val jwtDecoder: JwtDecoder,
-    private val tokenService: TokenService,
+    private val cognitoJwtDecoder: JwtDecoder,
     private val noBearerTokenPathSet: Set<String>
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
@@ -26,7 +24,7 @@ class CognitoTokenFilter(
             if (token != null) {
                 try {
                     // JWT検証
-                    val jwt = jwtDecoder.decode(token)
+                    val jwt = cognitoJwtDecoder.decode(token)
                     val username = jwt.getClaimAsString("username")
                     logger.info("JWT Username: $username")
 

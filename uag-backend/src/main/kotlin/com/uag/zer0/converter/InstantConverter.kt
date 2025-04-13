@@ -6,13 +6,13 @@ import java.time.Instant
 
 @Component
 class InstantConverter :
-    DynamoDBTypeConverter<String, Instant> { // 修正: LocalDateTimeConverter から InstantConverter に変更
+    DynamoDBTypeConverter<String, Instant> {
 
     override fun convert(instant: Instant): String {
-        return instant.toString() // ISO_INSTANT形式でフォーマットされます
+        return instant.toString()
     }
 
     override fun unconvert(isoDate: String): Instant {
-        return Instant.parse(isoDate) // ISO_INSTANT形式を解析します
+        return Instant.parse(isoDate)
     }
 }

@@ -22,25 +22,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Profile("prod", "dev", "test")
 class AuthConfig(
     private val tokenService: TokenService,
+    @Value("\${aws.cognito.region}") private val cognitoRegion: String,
+    @Value("\${aws.cognito.pool-id}") private val cognitoPoolId: String,
+    @Value("\${security.paths.no-bearer-token}") private val noBearerTokenPathAndMethodString: String,
+    @Value("\${security.paths.need-access-token}") private val needAccessTokenPathsString: String
 ) : WebMvcConfigurer {
-    @Value("\${cognito.region}")
-    private lateinit var cognitoRegion: String
-
-    @Value("\${cognito.pool-id}")
-    private lateinit var cognitoPoolId: String
-
-    @Value("\${security.paths.no-bearer-token}")
-    private lateinit var noBearerTokenPathAndMethodString: String
-
-    @Value("\${security.paths.need-access-token}")
-    private lateinit var needAccessTokenPathsString: String
-
-    @Value("\${security.paths.csrf-gen}")
-    private lateinit var csrfGenPathsString: String
-
-    @Value("\${security.csrf.same-site}")
-    private lateinit var sameSite: String
-
     @Bean
     fun cognitoJwtDecoder(): JwtDecoder {
         val issuerUrl = String.format(
@@ -80,7 +66,6 @@ class AuthConfig(
             ?.addFilterBefore(
                 CognitoTokenFilter(
                     cognitoJwtDecoder(),
-                    tokenService,
                     needAccessTokenPathsSet
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
@@ -93,19 +78,6 @@ class AuthConfig(
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             )
-            // CSRFトークンの検証の設定
-            //            ?.csrf { csrf ->
-            //                csrf
-            //                    .csrfTokenRepository(csrfTokenRepository())
-            //                    .csrfTokenRequestHandler(SpaCsrfTokenRequestHandler())
-            //            }
-            //            ?.addFilterAfter(
-            //                CsrfTokenGenFilter(
-            //                    csrfTokenRepository(),
-            //                    csrfGenPathsString, sameSite
-            //                ),
-            //                CsrfFilter::class.java
-            //            )
             ?.csrf {
                 it.disable()
             }

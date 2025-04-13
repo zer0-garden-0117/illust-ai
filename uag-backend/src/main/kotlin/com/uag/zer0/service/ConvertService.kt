@@ -6,10 +6,9 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
 
 @Service
-class ConvertService {
-    @Value("\${node.path}")
-    private lateinit var nodePath: String
-
+class ConvertService(
+    @Value("\${node.path}") private var nodePath: String
+) {
     fun toAvif(image: MultipartFile): ByteArray {
 
         var process: Process? = null

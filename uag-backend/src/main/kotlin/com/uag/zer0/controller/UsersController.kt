@@ -1,6 +1,6 @@
 package com.uag.zer0.controller
 
-import com.uag.zer0.config.CustomAuthenticationToken
+import com.uag.zer0.config.token.CustomAuthenticationToken
 import com.uag.zer0.dto.UsersActivity
 import com.uag.zer0.generated.endpoint.UsersApi
 import com.uag.zer0.generated.model.*
