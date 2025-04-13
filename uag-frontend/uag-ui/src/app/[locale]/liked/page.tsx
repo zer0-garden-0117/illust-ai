@@ -1,5 +1,6 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
+import AuthModal from '@/components/Header/AuthModal/AuthModal';
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { useState } from 'react';
 import { CiHeart } from "react-icons/ci";
@@ -24,11 +25,10 @@ const TagPage: React.FC<{ params: { id: string } }> = (
           type={"liked"}
         />
       ) : (
-        <></>
-        // <AuthModal
-        //   isOpen={true} // ログインが必要な場合モーダルを常に開く
-        //   onClose={() => setLoginModalOpen(false)}
-        // />
+        <AuthModal
+          isOpen={true}
+          onClose={() => setLoginModalOpen(false)}
+        />
       )}
     </>
   )
