@@ -1,6 +1,6 @@
 'use client';
 import ImageGrid from '@/components/Content/ImageGrid/ImageGrid';
-import AuthModal from '@/components/Header/AuthModal/AuthModal';
+import AuthModal from '@/components/Common/AuthModal/AuthModal';
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { useState } from 'react';
 import { CiHeart } from "react-icons/ci";

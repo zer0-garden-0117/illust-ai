@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import classes from './ImageGrid.module.css';
 import { RiHeartAdd2Line, RiDeleteBin6Line} from "react-icons/ri";
-import AuthModal from '@/components/Header/AuthModal/AuthModal';
+import AuthModal from '@/components/Common/AuthModal/AuthModal';
 import { useNavigate } from '@/utils/navigate';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 

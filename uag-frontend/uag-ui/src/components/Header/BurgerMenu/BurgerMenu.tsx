@@ -11,7 +11,7 @@ import { MdOutlineChevronRight } from "react-icons/md";
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { FaRegStar } from 'react-icons/fa';
 import { BiSolidInvader } from "react-icons/bi";
-import AuthModal from '../AuthModal/AuthModal';
+import AuthModal from '../../Common/AuthModal/AuthModal';
 import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 import { useTranslations } from 'next-intl';
 import { CiHeart } from 'react-icons/ci';

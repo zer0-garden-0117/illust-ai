@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { ActionIcon, Group, Menu, Text } from '@mantine/core';
 import classes from './LangMenu.module.css';
-import AuthModal from '../AuthModal/AuthModal';
+import AuthModal from '../../Common/AuthModal/AuthModal';
 import { useLocale, useTranslations } from 'next-intl';
 import { CircleFlag } from 'react-circle-flags'
 

@@ -7,13 +7,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { RiHashtag, RiHeartAdd2Line, RiUserLine, RiFileLine, RiStackLine } from "react-icons/ri";
 import { CiHeart } from "react-icons/ci";
 import { GoDownload } from "react-icons/go";
-import AuthModal from '@/components/Header/AuthModal/AuthModal';
+import AuthModal from '@/components/Common/AuthModal/AuthModal';
 import { WorkGetByIdResult } from '@/apis/openapi/works/useWorksGetById';
 import { usePathname } from 'next/navigation';
 import { BiSolidInvader } from 'react-icons/bi';
 import { MdOutlineWatchLater } from 'react-icons/md';
 import { FaRegStar } from 'react-icons/fa';
-import { CustomPill } from '../CustomPill/CustomPill';
+import { CustomPill } from '../../Common/CustomPill/CustomPill';
 
 type WorkViewProps = {
   workData?: WorkGetByIdResult;
