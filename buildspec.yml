@@ -7,8 +7,8 @@ phases:
   pre_build:
     commands:
       # タグが prod- で始まるか確認
-      - TAG=$(git describe --tags --exact-match $CODEBUILD_SOURCE_VERSION 2>/dev/null || true)
-      - echo "DEBUG: Extracted TAG=$TAG"
+      - 'echo "DEBUG: CODEBUILD_SOURCE_VERSION=$CODEBUILD_SOURCE_VERSION"'
+      - 'TAG=$(git describe --tags --exact-match $CODEBUILD_SOURCE_VERSION 2>/dev/null || true)'
       - |
         if [[ -z "$TAG" || ! "$TAG" =~ ^prod- ]]; then
           echo "Deploy skipped: Tag '$TAG' does not start with 'prod-'";
