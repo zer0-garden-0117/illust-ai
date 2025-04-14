@@ -6,6 +6,13 @@ phases:
       java: corretto17
   pre_build:
     commands:
+      # タグが prod- で始まるか確認
+      - TAG=$(git describe --tags --exact-match $CODEBUILD_SOURCE_VERSION 2>/dev/null || true)
+      - |
+        if [[ -z "$TAG" || "$TAG" != prod-* ]]; then
+          echo "Deploy skipped: Tag '$TAG' does not start with 'prod-'";
+          exit 1;
+        fi
       - echo "Navigating to the backend directory..."
       - cd uag-backend
       - echo "Installing dependencies..."

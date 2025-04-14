@@ -4,6 +4,13 @@ applications:
       phases:
         preBuild:
           commands:
+            # タグが prod- で始まるか確認（デプロイ条件）
+            - TAG=$(git describe --tags --exact-match $AWS_APP_VERSION 2>/dev/null || true)
+            - |
+              if [[ -z "$TAG" || ! "$TAG" =~ ^prod- ]]; then
+                echo "Deploy skipped: Tag '$TAG' does not start with 'prod-'";
+                exit 0;
+              fi
             - npm ci --cache .npm --prefer-offline
         build:
           commands:
