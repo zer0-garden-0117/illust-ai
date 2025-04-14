@@ -25,11 +25,4 @@ class CognitoConfig(
             .credentialsProvider(credentialsProvider)
             .build()
     }
-
-    @Bean
-    fun cognitoJwtDecoder(): JwtDecoder {
-        val jwkSetUri =
-            "https://cognito-idp.us-east-1.amazonaws.com/$poolId/.well-known/jwks.json"
-        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build()
-    }
 }
