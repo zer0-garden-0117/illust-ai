@@ -14,7 +14,7 @@ phases:
           echo "Deploy skipped: Tag '$TAG' does not start with 'prod-'";
           exit 1;
         fi
-      - echo "PROD DEPLOY: Valid tag detected ($TAG)"
+      - 'echo "PROD DEPLOY: Valid tag detected ($TAG)"'
       - echo "Navigating to the backend directory..."
       - cd uag-backend
       - echo "Installing dependencies..."
