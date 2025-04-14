@@ -8,13 +8,13 @@ phases:
     commands:
       # タグが prod- で始まるか確認
       - 'echo "DEBUG: CODEBUILD_SOURCE_VERSION=$CODEBUILD_SOURCE_VERSION"'
-      - 'TAG=$(git describe --tags --exact-match $CODEBUILD_SOURCE_VERSION 2>/dev/null || true)'
+      - TAG=$(git describe --tags)
+      - 'echo "DEBUG: TAG=$TAG"'
       - |
         if [[ -z "$TAG" || ! "$TAG" =~ ^prod- ]]; then
           echo "Deploy skipped: Tag '$TAG' does not start with 'prod-'";
           exit 1;
         fi
-      - 'echo "PROD DEPLOY: Valid tag detected ($TAG)"'
       - echo "Navigating to the backend directory..."
       - cd uag-backend
       - echo "Installing dependencies..."
