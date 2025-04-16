@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean:bundleDoc": "node -e 'require(\"fs\").rmSync(\"src/generated/services/uag-v1-full.yaml\", { force: true })'",
-    "bundleDoc": "npm run clean:bundleDoc && redocly bundle ../../docs/openapi/v1/uag-v1.yaml --output src/generated/services/uag-v1-full.yaml",
+    "bundleDoc": "npm run clean:bundleDoc && redocly bundle ../docs/openapi/v1/uag-v1.yaml --output src/generated/services/uag-v1-full.yaml",
     "clean:genCode": "node -e 'require(\"fs\").rmSync(\"src/generated/services/uag-v1.d.ts\", { force: true })'",
     "genCode": "npm run clean:genCode && openapi-typescript src/generated/services/uag-v1-full.yaml -o src/generated/services/uag-v1.d.ts && node openapi-typescript/postTransform.js",
     "openapi-docker": "docker run --rm -p 8000:8080 -e SWAGGER_JSON=/openapi/uag-v1-full.yaml -v $(pwd)/src/generated/services/uag-v1-full.yaml:/openapi/uag-v1-full.yaml swaggerapi/swagger-ui",

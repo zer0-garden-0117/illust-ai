@@ -23,4 +23,4 @@ applications:
         paths:
           - .next/cache/**/*
           - .npm/**/*
-    appRoot: uag-frontend/uag-ui
+    appRoot: uag-frontend
