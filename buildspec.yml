@@ -19,8 +19,8 @@ phases:
       - echo "Build completed, preparing artifacts..."
       - mkdir -p ../build-output
       - cp build/libs/*.war ../build-output/
-      - cp ../aws/codedeploy/appspec.yml ../build-output/
-      - cp -r ../aws/codedeploy/scripts/*.sh ../build-output/
+      - cp ../codedeploy/appspec.yml ../build-output/
+      - cp -r ../codedeploy/scripts/*.sh ../build-output/
 
 artifacts:
   files:

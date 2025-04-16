@@ -14,7 +14,7 @@ applications:
             - npm ci --cache .npm --prefer-offline
         build:
           commands:
-            - NODE_ENV=test npm run build
+            - NODE_ENV=production npm run build
       artifacts:
         baseDirectory: .next
         files:

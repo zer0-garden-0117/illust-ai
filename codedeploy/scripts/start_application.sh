@@ -25,7 +25,7 @@ sudo touch "$LOG_FILE"
 sudo chmod 666 "$LOG_FILE"
 
 # Java アプリケーションをバックグラウンドで実行し、ログを日時付きのファイルに出力
-nohup java -jar /opt/zer0/zer0-0.0.1-SNAPSHOT.war --spring.profiles.active=test >> "$LOG_FILE" 2>&1 &
+nohup java -jar /opt/zer0/zer0-0.0.1-SNAPSHOT.war --spring.profiles.active=prod >> "$LOG_FILE" 2>&1 &
 
 # 実行結果を確認
 if [ $? -eq 0 ]; then
