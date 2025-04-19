@@ -37,9 +37,7 @@ class UploadService(
             s3Client.putObject(putObjectRequest, requestBody)
 
             // アップロードされたオブジェクトのURLを生成して返す
-            return s3Client.utilities().getUrl { b ->
-                b.bucket(bucketName).key(fileName)
-            }.toString()
+            return "https://${bucketName}.s3.amazonaws.com/${fileName}"
 
         } catch (e: AwsServiceException) {
             throw RuntimeException("Failed to upload file to S3", e)
