@@ -142,12 +142,12 @@ tasks.register<org.springframework.boot.gradle.tasks.run.BootRun>("bootRunDev") 
     doFirst {
         exec {
             workingDir = file("nginx")
-            commandLine("sh", "up.sh")
+            commandLine("sh", "launch.sh")
         }
 
         exec {
             workingDir = file("db")
-            commandLine("sh", "up.sh")
+            commandLine("sh", "launch.sh")
         }
 
         systemProperty("spring.profiles.active", "dev")
