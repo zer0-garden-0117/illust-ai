@@ -10,18 +10,18 @@
  - db
    - Docker Desktopを起動
    - テーブル作成
-     - cd asb-backend/db/scripts
+     - cd asb/asb-backend/db/scripts
      - config.iniのENVIRONMENTでdevを設定、devにlocalのdbのURLを設定
      - ./create.shでテーブル生成
  - lb
    - Docker Desktopを起動
    - SSL証明書(自己署名証明書)設定
-     - cd asb-backend/nginx/certs
+     - cd asb/asb-backend/nginx/certs
      - ./keystore-gen.sh
      - 生成したkeystore.p12をインポート(macOSの場合、キーチェーンアクセスのシステムにインポート)し、常に信頼を設定)
  - SpringbootPJ
    - NodeScriptsの初期化
-     - cd asb-backend/node-scripts
+     - cd asb/asb-backend/node-scripts
      - npm install
    - 環境変数の設定
      - application-example.ymlを参考にapplication-dev.ymlを作成
