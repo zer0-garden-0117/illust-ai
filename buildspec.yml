@@ -24,7 +24,7 @@ phases:
 
 artifacts:
   files:
-    - build-output/**
+    - ../build-output/**
 
 cache:
   paths:
