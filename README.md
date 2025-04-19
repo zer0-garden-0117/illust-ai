@@ -4,11 +4,11 @@
 
 ### フロントエンドの起動方法
 #### 事前準備
- - cd uag-frontend
+ - cd asb-frontend
  - npm install
  - .env.exampleを参考に.env.develomentを作成
 #### 起動
- - cd uag-frontend
+ - cd asb-frontend
  - npm run dev
  - https://localhost:3001 にアクセス
 
