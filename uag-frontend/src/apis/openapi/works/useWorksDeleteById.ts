@@ -1,7 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import client from "../apiClient";
 import type { CsrfTokenHeader, UserTokenHeader } from '../apiClient';
-import type { operations } from "../../../generated/services/uag-v1";
+import type { operations } from "../../../generated/services/asb-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type WorkDeleteByIdResult = operations["deleteWorksById"]["responses"]["200"]["content"]["application/json"];

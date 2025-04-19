@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // ファイルパスを設定
-const filePath = path.resolve(__dirname, "../src/generated/services/uag-v1.d.ts");
+const filePath = path.resolve(__dirname, "../src/generated/services/asb-v1.d.ts");
 
 try {
   // TypeScript定義ファイルを読み込み

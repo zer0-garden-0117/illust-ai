@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import client from "../apiClient";
 import type { AccessTokenHeader, CsrfTokenHeader } from '../apiClient';
-import type { operations } from "../../../generated/services/uag-v1";
+import type { operations } from "../../../generated/services/asb-v1";
 import type { SWRConfiguration, SWRResponse } from 'swr';
 
 export type WorksTagGetResult = operations["getTags"]["responses"]["200"]["content"]["application/json"];

@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import client from "../apiClient";
 import type { UserTokenHeader } from '../apiClient';
-import type { operations } from "../../../generated/services/uag-v1";
+import type { operations } from "../../../generated/services/asb-v1";
 import type { SWRConfiguration, SWRResponse } from 'swr';
 import useSWRMutation, { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 

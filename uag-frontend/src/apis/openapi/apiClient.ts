@@ -1,5 +1,5 @@
 import createClient, { ClientOptions, type Middleware } from "openapi-fetch";
-import type { paths } from "../../generated/services/uag-v1";
+import type { paths } from "../../generated/services/asb-v1";
 
 export interface AccessTokenHeader {
   "x-access-token"?: string;

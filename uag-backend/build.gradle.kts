@@ -85,7 +85,7 @@ tasks.withType<Test> {
 // OpenAPI Generatorのタスク設定
 openApiGenerate {
     generatorName.set("kotlin-spring")
-    inputSpec.set("$rootDir/../docs/openapi/v1/uag-v1.yaml")
+    inputSpec.set("$rootDir/../docs/openapi/v1/asb-v1.yaml")
     outputDir.set("$rootDir")
     apiPackage.set("com.uag.zer0.generated.endpoint")
     modelPackage.set("com.uag.zer0.generated.model")

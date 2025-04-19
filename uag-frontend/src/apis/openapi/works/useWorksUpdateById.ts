@@ -1,7 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import client from "../apiClient";
 import type { AccessTokenHeader, CsrfTokenHeader } from '../apiClient';
-import type { operations } from "../../../generated/services/uag-v1";
+import type { operations } from "../../../generated/services/asb-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type WorkUpdateByIdResult = operations["updateWorksById"]["responses"]["200"]["content"]["application/json"];
