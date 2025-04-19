@@ -18,14 +18,14 @@
  - SSL証明書(自己署名証明書)の設定
    - scripts/mkcertのkeystore.p12をインポート(macOSの場合、キーチェーンアクセスのシステムにインポート)し、常に信頼を設定)
  - バックエンドのNodeの設定
-   - cd uag-backend/node-scripts
+   - cd asb-backend/node-scripts
    - npm install
  - localのdbの初期化
    - scripts/uag_img_database/config.iniのENVIRONMENTでdevを設定
    - devにlocalのdbのURLを設定
    - create.shを実行
 #### 起動
- - cd uag-backend
+ - cd asb-backend
  - ./gradlew clean bootRunDevを実行すると下記の3つが起動する
   - lb : nginxをDockerコンテナとして起動
   - db : Amazon DynamoDBのローカル版をDockerコンテナとして起動

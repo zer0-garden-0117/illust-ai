@@ -7,7 +7,7 @@ phases:
   pre_build:
     commands:
       - echo "Navigating to the backend directory..."
-      - cd uag-backend
+      - cd asb-backend
       - echo "Installing dependencies..."
       - ./gradlew clean
   build:
