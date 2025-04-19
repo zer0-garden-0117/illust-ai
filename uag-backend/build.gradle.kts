@@ -8,7 +8,7 @@ plugins {
     kotlin("kapt") version "2.0.20"
 }
 
-group = "com.uag"
+group = "com.asb"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -87,8 +87,8 @@ openApiGenerate {
     generatorName.set("kotlin-spring")
     inputSpec.set("$rootDir/../docs/openapi/v1/asb-v1.yaml")
     outputDir.set("$rootDir")
-    apiPackage.set("com.uag.zer0.generated.endpoint")
-    modelPackage.set("com.uag.zer0.generated.model")
+    apiPackage.set("com.asb.zer0.generated.endpoint")
+    modelPackage.set("com.asb.zer0.generated.model")
     configOptions.set(
         mapOf(
             "interfaceOnly" to "true",
@@ -105,7 +105,7 @@ openApiGenerate {
 tasks.named("openApiGenerate") {
     // 生成前にclean
     doFirst {
-        delete("$rootDir/src/main/kotlin/com/uag/zer0/generated")
+        delete("$rootDir/src/main/kotlin/com/asb/zer0/generated")
     }
     // 生成後に不要ファイル削除
     doLast {
@@ -122,7 +122,7 @@ tasks.named("openApiGenerate") {
 // clean時にOpenAPI生成物をclean
 tasks.named("clean") {
     doLast {
-        delete("$rootDir/src/main/kotlin/com/uag/zer0/generated")
+        delete("$rootDir/src/main/kotlin/com/asb/zer0/generated")
     }
 }
 
@@ -152,7 +152,7 @@ tasks.register<org.springframework.boot.gradle.tasks.run.BootRun>("bootRunDev") 
 
         systemProperty("spring.profiles.active", "dev")
     }
-    mainClass.set("com.uag.zer0.Application")
+    mainClass.set("com.asb.zer0.Application")
     classpath = sourceSets["main"].runtimeClasspath
 }
 
