@@ -1,1 +1,1 @@
-ssh -i uag-test.pem ec2-user@98.80.194.175 "nohup java -jar asb-backend.war --spring.profiles.active=test > app.log 2>&1 &"
+ssh -i asb-test.pem ec2-user@98.80.194.175 "nohup java -jar asb-backend.war --spring.profiles.active=test > app.log 2>&1 &"
