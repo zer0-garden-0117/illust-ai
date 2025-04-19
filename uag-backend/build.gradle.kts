@@ -155,3 +155,7 @@ tasks.register<org.springframework.boot.gradle.tasks.run.BootRun>("bootRunDev") 
     mainClass.set("com.uag.zer0.Application")
     classpath = sourceSets["main"].runtimeClasspath
 }
+
+tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootWar> {
+    archiveFileName.set("asb-backend.war")
+}

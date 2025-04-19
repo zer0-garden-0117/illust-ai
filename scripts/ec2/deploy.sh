@@ -1,1 +1,1 @@
-scp -i uag-test.pem ../../uag-backend/build/libs/zer0-0.0.1-SNAPSHOT.war ec2-user@98.80.194.175:/home/ec2-user/
+scp -i uag-test.pem ../../uag-backend/build/libs/asb-backend.war ec2-user@98.80.194.175:/home/ec2-user/

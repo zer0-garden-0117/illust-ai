@@ -1,6 +1,6 @@
 #!/bin/bash
 # プロセスIDを取得し、実行中のアプリケーションを停止
-APP_PID=$(pgrep -f 'java -jar /opt/zer0/zer0-0.0.1-SNAPSHOT.war')
+APP_PID=$(pgrep -f 'java -jar /opt/zer0/asb-backend.war')
 if [ -n "$APP_PID" ]; then
   echo "Stopping application with PID $APP_PID"
   kill -9 "$APP_PID"
