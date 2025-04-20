@@ -14,13 +14,6 @@ phases:
     commands:
       - echo "Building the backend..."
       - ./gradlew build -x test
-  # post_build:
-  #   commands:
-  #     - echo "Build completed, preparing artifacts..."
-  #     - mkdir -p ../../build-output
-  #     - cp build/libs/*.war ../../build-output/
-  #     - cp ../../codedeploy/appspec.yml ../../build-output/
-  #     - cp -r ../../codedeploy/scripts/*.sh ../../build-output/
   post_build:
     commands:
       - echo "Build completed, preparing artifacts..."
@@ -29,7 +22,7 @@ phases:
       - echo "Checking build/libs/ contents..."
       - ls -la build/libs/
       
-      # デバッグ: ../../codedeploy/ の中身を確認
+      # デバッグ: codedeploy/ の中身を確認
       - echo "Checking ../../codedeploy/ contents..."
       - ls -la ../../codedeploy/
       - echo "Checking ../../codedeploy/scripts/ contents..."
@@ -38,29 +31,14 @@ phases:
       # ディレクトリ作成
       - mkdir -p ../../build-output
       
-      # WAR ファイルをコピー（存在する場合のみ）
-      - if [ -f build/libs/*.war ]; then
-          cp build/libs/*.war ../../build-output/;
-          echo "WAR file copied successfully.";
-        else
-          echo "Error: No WAR file found in build/libs/";
-        fi
+      # WAR ファイルをコピー（if 文を1行で記述）
+      - if [ -f build/libs/*.war ]; then cp build/libs/*.war ../../build-output/; echo "WAR file copied successfully."; else echo "Error: No WAR file found in build/libs/"; fi
       
-      # appspec.yml をコピー（存在する場合のみ）
-      - if [ -f ../../codedeploy/appspec.yml ]; then
-          cp ../../codedeploy/appspec.yml ../../build-output/;
-          echo "appspec.yml copied successfully.";
-        else
-          echo "Error: appspec.yml not found in ../../codedeploy/";
-        fi
+      # appspec.yml をコピー（if 文を1行で記述）
+      - if [ -f ../../codedeploy/appspec.yml ]; then cp ../../codedeploy/appspec.yml ../../build-output/; echo "appspec.yml copied successfully."; else echo "Error: appspec.yml not found in ../../codedeploy/"; fi
       
-      # scripts/*.sh をコピー（存在する場合のみ）
-      - if ls ../../codedeploy/scripts/*.sh 1> /dev/null 2>&1; then
-          cp -r ../../codedeploy/scripts/*.sh ../../build-output/;
-          echo "Scripts copied successfully.";
-        else
-          echo "Error: No .sh files found in ../../codedeploy/scripts/";
-        fi
+      # scripts/*.sh をコピー（if 文を1行で記述）
+      - if ls ../../codedeploy/scripts/*.sh 1> /dev/null 2>&1; then cp -r ../../codedeploy/scripts/*.sh ../../build-output/; echo "Scripts copied successfully."; else echo "Error: No .sh files found in ../../codedeploy/scripts/"; fi
 
 artifacts:
   files:
