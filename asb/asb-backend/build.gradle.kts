@@ -103,6 +103,7 @@ openApiGenerate {
 
 // OpenAPI Generatorの追加設定
 tasks.named("openApiGenerate") {
+    doNotTrackState("OpenAPI生成は常に実行する必要があるため")
     // 生成前にclean
     doFirst {
         delete("$rootDir/src/main/kotlin/com/asb/zer0/generated")
