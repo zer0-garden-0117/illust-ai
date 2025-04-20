@@ -1,1 +1,0 @@
-curl -vk https://localhost
