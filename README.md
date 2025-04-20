@@ -2,20 +2,20 @@
 
 ## asb-backendの起動
  - 下記の3つを起動します
-   - db (Docker)
-   - lb (Docker)
+   - db (dynamodb Docker)
+   - lb (nginx Docker)
    - OpenApiを提供するSpringBootPJ
 
 ### 事前準備
  - db (dynamodb Docker)
    - テーブル作成
      - cd asb/asb-backend/db/scripts
-     - config.iniで変数を設定し./create.sh
+     - config.iniを設定し./create.shを実行
  - lb (nginx Docker)
    - SSL証明書(自己署名証明書)設定
-     - cd asb/asb-backend/nginx/certs
-     - ./keystore-gen.shで自己署名署名書を生成
-     - 生成したkeystore.p12をインポート(macOSの場合、キーチェーンアクセスのシステムにインポートし常に信頼を設定)
+     - cd asb-backend/nginx/certs
+     - config.iniを設定してkeystore-gen.shを実行しasb.pem、asb-key.pem、asb-keystore.p12を生成
+     - 生成したasb-keystgore.p12をインポート(macOSの場合、キーチェーンアクセスのシステムにインポート)
  - SpringbootPJ
    - Node.js パッケージインストール
      - cd asb/asb-backend/node-scripts

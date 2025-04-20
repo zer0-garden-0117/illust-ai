@@ -62,3 +62,7 @@ Temporary Items
 ### scripts
 asb-scripts
 asb-scripts/*
+
+### certs
+*.pem
+*.p12
