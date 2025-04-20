@@ -17,23 +17,10 @@ phases:
   post_build:
     commands:
       - echo "Build completed, preparing artifacts..."
-      
-      # デバッグ: ファイルの存在確認
-      - echo "Checking build/libs/ contents..."
-      - ls -la build/libs/
-      
-      - echo "Checking ../../codedeploy/ contents..."
-      - ls -la ../../codedeploy/
-      - echo "Checking ../../codedeploy/scripts/ contents..."
-      - ls -la ../../codedeploy/scripts/
-      
-      # ディレクトリ作成
       - mkdir -p ../../build-output
-      
-      # 単純にコピーを試みる（失敗してもビルドは続行）
-      - cp build/libs/*.war ../../build-output/ || echo "WARファイルのコピーに失敗しました"
-      - cp ../../codedeploy/appspec.yml ../../build-output/ || echo "appspec.ymlのコピーに失敗しました"
-      - cp -r ../../codedeploy/scripts/*.sh ../../build-output/ || echo "スクリプトのコピーに失敗しました"
+      - cp build/libs/*.war ../../build-output/
+      - cp ../../codedeploy/appspec.yml ../../build-output/
+      - cp -r ../../codedeploy/scripts/*.sh ../../build-output/
 
 artifacts:
   files:
