@@ -1,7 +1,7 @@
 openapi: 3.0.0
 
 info:
-  title: UAG REST API
+  title: angel-sandbox OpenApi
   description: ""
   version: 1.0.0
   contact: {}
