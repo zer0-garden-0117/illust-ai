@@ -1,1 +1,0 @@
-scp -i asb-test.pem ../../asb-backend/build/libs/asb-backend.war ec2-user@98.80.194.175:/home/ec2-user/
