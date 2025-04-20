@@ -23,4 +23,4 @@ applications:
         paths:
           - .next/cache/**/*
           - .npm/**/*
-    appRoot: asb/asb-frontend
+    appRoot: asb-frontend

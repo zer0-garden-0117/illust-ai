@@ -7,7 +7,7 @@ phases:
   pre_build:
     commands:
       - echo "Navigating to the backend directory..."
-      - cd asb/asb-backend
+      - cd asb-backend
       - echo "Installing dependencies..."
       - ./gradlew clean
   build:
@@ -17,10 +17,10 @@ phases:
   post_build:
     commands:
       - echo "Build completed, preparing artifacts..."
-      - mkdir -p ../../build-output
-      - cp build/libs/*.war ../../build-output/
-      - cp ../../codedeploy/appspec.yml ../../build-output/
-      - cp -r ../../codedeploy/scripts/*.sh ../../build-output/
+      - mkdir -p ../build-output
+      - cp build/libs/*.war ../build-output/
+      - cp ../codedeploy/appspec.yml ../build-output/
+      - cp -r ../codedeploy/scripts/*.sh ../build-output/
 
 artifacts:
   files:
