@@ -17,14 +17,14 @@ phases:
   post_build:
     commands:
       - echo "Build completed, preparing artifacts..."
-      - mkdir -p ../build-output
-      - cp build/libs/*.war ../build-output/
-      - cp ../../codedeploy/appspec.yml ../build-output/
-      - cp -r ../../codedeploy/scripts/*.sh ../build-output/
+      - mkdir -p ../../build-output
+      - cp build/libs/*.war ../../build-output/
+      - cp ../../codedeploy/appspec.yml ../../build-output/
+      - cp -r ../../codedeploy/scripts/*.sh ../../build-output/
 
 artifacts:
   files:
-    - ../build-output/**
+    - ../../build-output/**
 
 cache:
   paths:
