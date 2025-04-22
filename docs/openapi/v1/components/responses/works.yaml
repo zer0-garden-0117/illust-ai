@@ -1,0 +1,53 @@
+WorksRegisterResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
+
+WorksSearchResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiWorksWithSearchResult"
+
+WorksIdGetResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
+
+WorksIdResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
+
+WorksTagsResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiTag"
+
+WorksTagsGetResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiTag"

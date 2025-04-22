@@ -1,0 +1,130 @@
+ApiWork:
+  description: 作品情報
+  type: object
+  properties:
+    workId:
+      type: string
+      description: "作品の一意の識別子"
+      example: 1
+    mainTitle:
+      type: string
+      description: "作品のメインタイトル"
+      example: "New Work"
+    subTitle:
+      type: string
+      description: "作品のサブタイトル"
+      example: "New Subject"
+    description:
+      type: string
+      description: "作品の説明"
+      example: "New Subject"
+    titleImgUrl:
+      type: string
+      description: "タイトル画像のURL"
+      example: "http://example.com/new_title_image.avif"
+    thumbnailImgUrl:
+      type: string
+      description: "サムネイル画像のURL"
+      example: "http://example.com/new_thumbnail_image.avif"
+    watermaskImgUrl:
+      type: string
+      description: "ウォーターマスク画像のURL"
+      example: "http://example.com/new_watermask_image.avif"
+    likes:
+      type: integer
+      description: "作品のいいね数"
+      example: 0
+    createdAt:
+      type: string
+      format: date-time
+      description: "作品の作成日時"
+      example: "2024-07-08T00:00:00+09:00"
+    updatedAt:
+      type: string
+      format: date-time
+      description: "作品の最終更新日時"
+      example: "2024-07-08T00:00:00+09:00"
+
+ApiTag:
+  description: タグ
+  type: object
+  properties:
+    characters:
+      type: array
+      items:
+        type: string
+        description: キャラクター
+        example: "真白"
+    creators:
+      type: array
+      items:
+        type: string
+        description: 作者
+        example: "作者A"
+    genres:
+      type: array
+      items:
+        type: string
+        description: 題材ジャンル
+        example: "オリジナル(or二次創作orパロディ)"
+    formats:
+      type: array
+      items:
+        type: string
+        description: 作品形式
+        example: "CG(orコミックorゲーム"
+    others:
+      type: array
+      items:
+        type: string
+        description: タグ
+        example: "夜景"
+
+ApiWorkWithTag:
+  description: "作品情報とそれに付与されたタグ情報"
+  type: object
+  properties:
+    apiWork:
+        $ref: './works.yaml#/ApiWork'
+    apiTags:
+        $ref: './works.yaml#/ApiTag'
+
+ApiWorkSearchByTags:
+  type: object
+  properties:
+    tags:
+      description: "タグ検索リスト"
+      type: array
+      items:
+        type: string
+      example:
+        - "CG"
+        - "真白"
+    offset:
+      description: "取得するデータの開始位置"
+      type: integer
+      example: 0
+    limit:
+      description: "取得するデータの最大件数"
+      type: integer
+      example: 10
+  required:
+    - offset
+    - limit
+
+ApiWorksWithSearchResult:
+  description: 検索結果
+  type: object
+  properties:
+    works:
+      type: array
+      description: "検索結果の作品リスト"
+      items:
+        $ref: "../schemas/works.yaml#/ApiWork"
+    totalCount:
+      type: integer
+      description: "検索結果の総件数"
+      example: 100
+  required:
+    - works
+    - totalCount
