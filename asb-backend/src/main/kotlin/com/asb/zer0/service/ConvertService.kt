@@ -1,20 +1,27 @@
 package com.asb.zer0.service
 
-import org.springframework.beans.factory.annotation.Value
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
+import java.nio.file.Paths
 
 @Service
-class ConvertService(
-    @Value("\${node.path}") private var nodePath: String
-) {
+class ConvertService() {
+    val logger: org.slf4j.Logger? = LoggerFactory.getLogger(ConvertService::class.java)
+    val baseDir = System.getProperty("user.dir").also {
+        logger?.info("baseDir (user.dir): $it")
+    }
+    val nodePath = Paths.get(baseDir, "node-scripts").toString().also{
+        logger?.info("nodePath: $it")
+    }
+
+
     fun toAvif(image: MultipartFile): ByteArray {
 
         var process: Process? = null
         try {
-            val nodeScriptPath =
-                nodePath + "service/convert/avif/toAvif.js"
+            val nodeScriptPath = "$nodePath/service/convert/avif/toAvif.js"
             val processBuilder = ProcessBuilder("node", nodeScriptPath)
             process = processBuilder.start()
 
@@ -47,8 +54,7 @@ class ConvertService(
 
     fun toThumbnail(image: MultipartFile): ByteArray {
         try {
-            val nodeScriptPath =
-                nodePath + "service/convert/thumbnail/toThumbnail.js"
+            val nodeScriptPath = "$nodePath/service/convert/thumbnail/toThumbnail.js"
             val processBuilder = ProcessBuilder("node", nodeScriptPath)
             val process = processBuilder.start()
 
@@ -78,10 +84,8 @@ class ConvertService(
 
     fun toWatermask(image: MultipartFile): ByteArray {
         try {
-            val nodeScriptPath =
-                nodePath + "service/convert/watermask/toWatermask.js"
-            val watermaskPath =
-                nodePath + "service/convert/common/watermask.png"
+            val nodeScriptPath = "$nodePath/service/convert/watermask/toWatermask.js"
+            val watermaskPath = "$nodePath/service/convert/common/watermask.png"
             val processBuilder =
                 ProcessBuilder("node", nodeScriptPath, watermaskPath)
             val process = processBuilder.start()
