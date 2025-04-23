@@ -1,0 +1,18 @@
+security:
+  paths:
+    need-access-token: /users/token
+    no-bearer-token: /users/token:GET,/works/search:POST,/works/searchByTags:POST,/works/*:GET,/health:GET
+    csrf-gen: /users/token
+  csrf:
+    same-site: Strict
+
+server:
+  port: 8080
+  tomcat:
+    max-http-form-post-size: -1
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
