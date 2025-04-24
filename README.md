@@ -8,9 +8,8 @@
 
 ### 事前準備
  - db (dynamodb Docker)
-   - テーブル作成
-     - cd asb/asb-backend/db/scripts
-     - config.iniを設定し./create.shを実行
+   - テーブル生成スクリプトの設定
+     - config.iniでENVIRONMENTとURLを設定
  - lb (nginx Docker)
    - SSL証明書(自己署名証明書)設定
      - cd asb-backend/nginx/certs

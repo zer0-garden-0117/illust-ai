@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# config.sh を読み込む
-source ./config.sh
-
+SCRIPT_DIR=$(cd -- "$(dirname "$0")" && pwd)
+source "${SCRIPT_DIR}/config.sh"
 export AWS_PAGER=""
 
 # UUID生成関数
@@ -10,14 +9,36 @@ generate_uuid() {
     cat /proc/sys/kernel/random/uuid
 }
 
+# テーブル存在確認関数
+table_exists() {
+    local table_name=$1
+    aws dynamodb describe-table \
+        --table-name "$table_name" \
+        --endpoint-url "$ENDPOINT_URL" \
+        >/dev/null 2>&1
+    return $?
+}
+
 # テーブルの作成関数（オンデマンド）
 create_table() {
     local table_name=$1
     shift
+    
+    if table_exists "$table_name"; then
+        echo "テーブル $table_name は既に存在します。スキップします。"
+        return 0
+    fi
+    
+    echo "テーブル $table_name を作成します..."
     aws dynamodb create-table \
         --table-name "$table_name" \
         "$@" \
         --billing-mode PAY_PER_REQUEST \
+        --endpoint-url "$ENDPOINT_URL"
+    
+    # テーブルが作成されるのを待つ
+    aws dynamodb wait table-exists \
+        --table-name "$table_name" \
         --endpoint-url "$ENDPOINT_URL"
 }
 
@@ -97,4 +118,4 @@ create_table rated \
             }
         ]"
 
-echo "すべてのテーブルがオンデマンド（PAY_PER_REQUEST）で作成されました。"
+echo "テーブル作成処理が完了しました。"

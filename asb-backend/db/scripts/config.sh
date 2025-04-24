@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # 設定ファイルのパス
-CONFIG_FILE="./config.ini"
+SCRIPT_DIR=$(cd -- "$(dirname "$0")" && pwd)
+CONFIG_FILE="${SCRIPT_DIR}/config.ini"
 
 # 設定ファイルの存在確認
 if [ ! -f "$CONFIG_FILE" ]; then
