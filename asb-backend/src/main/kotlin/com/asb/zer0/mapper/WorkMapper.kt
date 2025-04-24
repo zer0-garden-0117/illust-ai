@@ -17,6 +17,9 @@ interface WorkMapper {
         target = "updatedAt",
         qualifiedByName = ["offsetDateTimeToInstant"]
     )
+    @Mapping(target = "rateSum", ignore = true)
+    @Mapping(target = "rateCount", ignore = true)
+    @Mapping(target = "rate", ignore = true)
     fun toWork(apiWork: ApiWork): Work
 
     @Mapping(
