@@ -151,6 +151,11 @@ tasks.register<org.springframework.boot.gradle.tasks.run.BootRun>("bootRunDev") 
             commandLine("sh", "launch.sh")
         }
 
+        exec {
+            workingDir = file("node-scripts")
+            commandLine("npm", "install")
+        }
+
         systemProperty("spring.profiles.active", "dev")
     }
     mainClass.set("com.asb.zer0.Application")
