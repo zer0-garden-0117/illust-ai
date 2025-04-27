@@ -6,6 +6,7 @@ import classes from './Header.module.css';
 import { useNavigate } from '@/utils/navigate';
 import { useTranslations } from 'next-intl';
 import { LangMenu } from './LangMenu/LangMenu';
+import { GithubLink } from './GithubLink/GithubLink';
 
 export interface HeaderProps {}
 
@@ -32,6 +33,7 @@ export const Header: React.FC<HeaderProps> = () => {
       <header className={classes.header}>
         <Logo />
         <Box className={classes.flexGrow} />
+        <GithubLink />
         <LangMenu />
         <BurgerMenu />
       </header>
