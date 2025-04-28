@@ -9,7 +9,7 @@ export const GithubLink: React.FC = () => {
   const isDark = colorScheme === 'dark';
   
   const onIconClick = async () => {
-    router.push('https://github.com/zer0-garden-0117/angel-sandbox');
+    window.location.href = 'https://github.com/zer0-garden-0117/angel-sandbox'
   };
 
   return (
