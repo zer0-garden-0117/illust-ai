@@ -9,12 +9,13 @@ export const GithubLink: React.FC = () => {
   const isDark = colorScheme === 'dark';
   
   const onIconClick = async () => {
-    router.push('/');
+    router.push('https://github.com/zer0-garden-0117/angel-sandbox');
   };
 
   return (
     <Box mt={2}>
       <ActionIcon
+        onClick={onIconClick}
         variant="outline"
         color={isDark ? "var(--mantine-color-gray-5)" : "var(--mantine-color-gray-8)"} 
         radius='md'
@@ -33,7 +34,6 @@ export const GithubLink: React.FC = () => {
             cursor: 'pointer',
             transition: 'opacity 0.2s',
           }}
-        onClick={onIconClick}
       />
       </ActionIcon>
     </Box>
