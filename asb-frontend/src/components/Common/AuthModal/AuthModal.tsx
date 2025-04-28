@@ -93,7 +93,7 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           >
             Googleで続ける
           </Button>
-          <Button
+          {/* <Button
             color="gray"
             variant="outline"
             radius="xl"
@@ -106,7 +106,7 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             }}
           >
             Lineで続ける
-          </Button>
+          </Button> */}
           <Space h="md" />
         </>
       )}
@@ -165,7 +165,7 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           >
             Googleで続ける
           </Button>
-          <Button
+          {/* <Button
             color="gray"
             variant="outline"
             radius="xl"
@@ -178,7 +178,7 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             }}
           >
             Lineで続ける
-          </Button>
+          </Button> */}
           <Space h="md" />
         </>
       )}
