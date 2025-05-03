@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { ActionIcon, Group, Menu, Text } from '@mantine/core';
+import { ActionIcon, Group, Menu, Text, useMantineColorScheme } from '@mantine/core';
 import classes from './LangMenu.module.css';
 import AuthModal from '../../Common/AuthModal/AuthModal';
 import { useLocale, useTranslations } from 'next-intl';
@@ -40,6 +40,8 @@ export const LangMenu: React.FC = () => {
     const foundLang = data.find(item => item.lang === locale);
     return foundLang || data[0];
   });
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === 'dark';
 
   const handleLanguageChange = (item: LanguageData) => {
     setSelected(item);
@@ -90,21 +92,38 @@ export const LangMenu: React.FC = () => {
 
   return (
     <>
-      <Menu
-        opened={menuOpened} // メニューが開かれているかどうかを制御
-        onOpen={() => setMenuOpened(true)} // メニューが開かれたときの処理
-        onClose={() => setMenuOpened(false)} // メニューが閉じられたときの処理
-      >
+        <Menu
+          opened={menuOpened}
+          onClose={() => setMenuOpened(false)}
+          closeOnClickOutside={true}
+          closeOnEscape={true}
+          closeOnItemClick={true}
+          withinPortal={true}
+        >
         <Menu.Target>
-          <div className={`${classes.clickableIcon} ${menuOpened ? classes.active : ''}`}>
-            <ActionIcon variant='transparent' mt={1.5}>
-              <CircleFlag
-                countryCode={selected.code.toLowerCase()} 
-                height="32"
-                style={{ transform: 'scale(0.75)' }}
-              />
-            </ActionIcon>
-          </div>
+          <ActionIcon
+          onClick={() => setMenuOpened((o) => !o)} 
+          variant="outline"
+          color={isDark ? "var(--mantine-color-gray-5)" : "var(--mantine-color-gray-8)"} 
+          radius='md'
+          styles={{
+            root: {
+              borderColor: isDark 
+                ? "var(--mantine-color-gray-8)"
+                : "var(--mantine-color-gray-5)",
+            }
+          }}
+          >
+            <div className={`${classes.clickableIcon} ${menuOpened ? classes.active : ''}`}>
+              <ActionIcon variant='transparent'>
+                <CircleFlag
+                  countryCode={selected.code.toLowerCase()} 
+                  height="20"
+                  style={{ transform: 'scale(0.75)' }}
+                />
+              </ActionIcon>
+            </div>
+          </ActionIcon>
         </Menu.Target>
         <Menu.Dropdown className={classes.menuDropdown}>
           {items}

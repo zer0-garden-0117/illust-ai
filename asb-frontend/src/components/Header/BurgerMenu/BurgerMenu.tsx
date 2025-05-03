@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Menu } from '@mantine/core';
+import { ActionIcon, Menu, useMantineColorScheme } from '@mantine/core';
 import { MdLogin, MdLogout, MdOutlineDelete } from "react-icons/md";
 import { FiUserPlus } from "react-icons/fi";
 import { RiUserLine } from "react-icons/ri";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher';
 import classes from './BurgerMenu.module.css';
 import { useNavigate } from '@/utils/navigate';
 import { MdOutlineChevronRight } from "react-icons/md";
@@ -28,6 +27,8 @@ export const BurgerMenu: React.FC = () => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const { trigger: triggerUserDelete } = useUsersDelete();
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === 'dark';
 
   const onClickLiked = () => {
     navigation("/liked?page=1");
@@ -86,19 +87,42 @@ export const BurgerMenu: React.FC = () => {
 
   return (
     <>
-      <Menu
-        opened={menuOpened} // メニューが開かれているかどうかを制御
-        onOpen={() => setMenuOpened(true)} // メニューが開かれたときの処理
-        onClose={() => setMenuOpened(false)} // メニューが閉じられたときの処理
-      >
+        <Menu
+          opened={menuOpened}
+          onClose={() => setMenuOpened(false)}
+          closeOnClickOutside={true}
+          closeOnEscape={true}
+          closeOnItemClick={true}
+          withinPortal={true}
+        >
         <Menu.Target>
-          <div className={`${classes.clickableIcon} ${menuOpened ? classes.active : ''}`}>
-            <RxHamburgerMenu
-              size="1.3rem"
-              className={classes.userIcon}
-              aria-label="Open menu"
-            />
-          </div>
+          <ActionIcon
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              setMenuOpened((o) => !o);
+            }}
+            variant="outline"
+            color={isDark ? "var(--mantine-color-gray-5)" : "var(--mantine-color-gray-8)"} 
+            radius='md'
+            styles={{
+              root: {
+                borderColor: isDark 
+                  ? "var(--mantine-color-gray-8)"
+                  : "var(--mantine-color-gray-5)",
+              }
+            }}
+          >
+            <div
+              className={`${classes.clickableIcon} ${menuOpened ? classes.active : ''}`}
+              onClick={(e) => e.preventDefault()}>
+              <RxHamburgerMenu
+                size="1.1rem"
+                className={classes.userIcon}
+                aria-label="Open menu"
+              />
+            </div>
+          </ActionIcon>
         </Menu.Target>
         <Menu.Dropdown className={classes.menuDropdown}>
           {isAuthenticated && (
@@ -106,6 +130,7 @@ export const BurgerMenu: React.FC = () => {
               <Menu.Item
                 leftSection={<RiUserLine className={classes.icon} />}
                 style={{ pointerEvents: 'none' }}
+                closeMenuOnClick={false}
               >
                 {/* <div style={{ display: 'flex', alignItems: 'center', marginTop: '3px' }}> */}
                 <div className={classes.accountlabel2}>{t("userInfo")}</div> {/* ユーザー情報 */}
@@ -196,8 +221,6 @@ export const BurgerMenu: React.FC = () => {
               </Menu.Item>
             </>
           )}
-          <Menu.Divider />
-          <ThemeSwitcher />
         </Menu.Dropdown>
       </Menu>
       <AuthModal

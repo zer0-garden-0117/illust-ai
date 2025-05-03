@@ -1,15 +1,15 @@
 import React from 'react';
 import { Box, ActionIcon, useMantineColorScheme } from '@mantine/core';
-import { BsGithub } from "react-icons/bs";
 import { useRouter } from "next/navigation";
+import { MdDarkMode } from 'react-icons/md';
 
-export const GithubLink: React.FC = () => {
+export const DarkMode: React.FC = () => {
   const router = useRouter();
-  const { colorScheme } = useMantineColorScheme();
+  const { colorScheme, setColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
-  
-  const onIconClick = async () => {
-    window.location.href = 'https://github.com/zer0-garden-0117/angel-sandbox'
+
+  const onIconClick = () => {
+    setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
   };
 
   return (
@@ -27,14 +27,7 @@ export const GithubLink: React.FC = () => {
           }
         }}
       >
-      <BsGithub
-        size="1.1rem"
-        height="32"
-        style={{ 
-            cursor: 'pointer',
-            transition: 'opacity 0.2s',
-          }}
-      />
+      <MdDarkMode color="gray"/>
       </ActionIcon>
     </Box>
   );

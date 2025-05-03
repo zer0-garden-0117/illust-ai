@@ -15,12 +15,6 @@
   /* メニューが開かれたときのアイコン色 */
 }
 
-.userIcon {
-  margin-top: 5px;
-  /* transition: color 0.3s ease; */
-  /* 色の変更を滑らかにする */
-}
-
 .icon {
   width: 14px;
   height: 14px;
