@@ -1,0 +1,42 @@
+# DB、ストレージ系
+dynamodb:
+  region: <Your AWS Region ex:us-east-1>
+  url: <Your DynamoDB Local URL ex:http://localhost:10000>
+s3:
+  region: <Your AWS Region ex:us-east-1>
+  bucket: <Your S3 Bucket Name ex:your-backend-dev>
+
+# 認証系
+cognito:
+  region: <Your AWS Region ex:us-east-1>
+  pool-id: <Your Cognito User Pool ID ex:us-east-1_xxxxxxxxx>
+userToken:
+  secret: <Your JWT Secret Key ex:yourRandomSecretKeyBase64Encoded=>
+  admin-user-id: <Your Admin User ID ex:auth_provider_123456789>
+
+# フロントエンド連携
+cors:
+  origins: <Your Frontend Origin ex:https://localhost:3000>
+cdn:
+  active: <CDN Active Flag ex:false>
+  url: <Your CDN URL ex:https://dev.yourcdn.net>
+
+# NodeJS設定
+nodeJs:
+  path: <Your Node Scripts Path ex:/path/to/your/node-scripts>
+
+# ログ
+logging:
+  level:
+    root: <Logging Level ex:INFO>
+    org.springframework.web: <Logging Level ex:INFO>
+  pattern:
+    dateformat: <Date Format ex:yyyy-MM-dd HH:mm:ss.SSS,Asia/Tokyo>
+
+# AWS認証
+spring:
+  cloud:
+    aws:
+      credentials:
+        profile:
+          name: <Your AWS Profile Name ex:your_dev_profile>
