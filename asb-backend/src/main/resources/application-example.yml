@@ -16,14 +16,14 @@ userToken:
 
 # フロントエンド連携
 cors:
-  origins: <Your Frontend Origin ex:https://localhost:3000>
+  origins: <Your Frontend Origin ex:https://localhost:3001>
 cdn:
   active: <CDN Active Flag ex:false>
   url: <Your CDN URL ex:https://dev.yourcdn.net>
 
 # NodeJS設定
 nodeJs:
-  path: <Your Node Scripts Path ex:/path/to/your/node-scripts>
+  path: <Your Node Scripts Absoluet Path ex:/Users/{username}/angel-sandbox/node-scripts>
 
 # ログ
 logging:
