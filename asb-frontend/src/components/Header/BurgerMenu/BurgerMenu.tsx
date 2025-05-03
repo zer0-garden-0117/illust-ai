@@ -72,8 +72,8 @@ export const BurgerMenu: React.FC = () => {
     navigation("/illustration?page=1");
   };
 
-  const onClickUtinoko = () => {
-    navigation("/utinoko?page=1");
+  const onClickFamily = () => {
+    navigation("/family?page=1");
   };
 
   const onClickAdmin = () => {
@@ -154,7 +154,7 @@ export const BurgerMenu: React.FC = () => {
           )}
           <Menu.Item
             leftSection={<BiSolidInvader color="purple" className={classes.icon} />}
-            onClick={onClickFreeicon}
+            onClick={onClickFamily}
           >
             {t("family")}
           </Menu.Item>
