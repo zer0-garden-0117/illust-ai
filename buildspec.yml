@@ -10,6 +10,7 @@ phases:
       - cd asb-backend
       - echo "Installing dependencies..."
       - ./gradlew clean
+      - aws s3 cp s3://asb-backend-ci/application-prod.yml src/main/resources/application-prod.yml
   build:
     commands:
       - echo "Building the backend..."
