@@ -7,10 +7,8 @@ export const useNavigate = () => {
   const locale = useLocale();
   const navigate = (path: string) => {
     if (path === '/') {
-      console.log('removing scrollPosition', `scrollPosition-/${locale}`);
       sessionStorage.removeItem(`scrollPosition-/${locale}`);
     } else {
-      console.log('removing scrollPosition', `scrollPosition-/${locale}${path}`);
       sessionStorage.removeItem(`scrollPosition-/${locale}${path}`);
     }
     router.push(path);

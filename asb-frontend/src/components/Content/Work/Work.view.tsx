@@ -222,7 +222,6 @@ export const WorkView = memo(function WorkViewComponent({
       const savedPosition = sessionStorage.getItem(`scrollPosition-${pathname}`);
       const targetPosition = savedPosition ? parseInt(savedPosition, 10) : 0;
       setTimeout(() => {
-        console.log(`Scrolling to position: ${targetPosition}`);
         window.scrollTo(0, targetPosition);
       }, 100);
     }

@@ -86,17 +86,14 @@ export const useAccessToken = () => {
       };
 
       const user = await signIn(signInInput);
-      console.log(user);
 
       if (user.nextStep.signInStep === "CONFIRM_SIGN_UP") {
-        console.log("CONFIRM_SIGN_UP")
         return { success: false, message: "CONFIRM_SIGN_UP" };
       } else if (user) {
         checkAuth();
         return { success: true, user };
       }
     } catch (error) {
-      console.log("Failed to login")
       console.error('Failed to login:', error);
       return { success: false, message: error || 'Failed to login' };
     }

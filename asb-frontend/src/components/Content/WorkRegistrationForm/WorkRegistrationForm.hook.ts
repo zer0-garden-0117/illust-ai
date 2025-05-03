@@ -58,7 +58,6 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
         worksDetailsBase64: utf8ToBase64(JSON.stringify(workDetails))
       };
   
-      console.log(workData);
       // triggerの結果を明示的に返す
       await trigger({
         headers,

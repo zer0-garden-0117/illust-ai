@@ -55,14 +55,6 @@ export const useWorksRegister = (
             if (body.worksDetailsBase64) {
               fd.append('worksDetailsBase64', body.worksDetailsBase64);
             }
-            for (const [key, value] of fd.entries()) {
-              if (value instanceof File) {
-                console.log(`${key}: File name = ${value.name}, size = ${value.size}`);
-              } else {
-                console.log(`${key}: ${value}`);
-              }
-            }
-
             return fd;
           }
         }

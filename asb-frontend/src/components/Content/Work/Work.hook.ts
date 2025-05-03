@@ -46,7 +46,6 @@ export const useWork = (
 
   // workの取得
   useEffect(() => {
-    console.log(isAuthenticated)
     if (data) {
       setWorkData(data);
     }
@@ -61,21 +60,14 @@ export const useWork = (
       Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
       "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
     };
-    console.log("worksData:", workData);
     if (workData) {
-      console.log("workData", workData);
-      console.log("isAuthenticated:", isAuthenticated)
-      console.log("userToken:", userToken)
       if (isAuthenticated && userToken != null) {
-        console.log("isAuthenticated is true and userToken isnot null");
         if (workData.apiWork?.workId) {
-          console.log("workData.apiWork?.workId isnot null");
           const workIds = [workData.apiWork?.workId]
           // アクティビティ情報を取得
           triggerActivity({ headers, body: { workIds } });
         }
       } else {
-        console.log("setActivitiesData:0");
         setActivitiesData({})
       }
     }
@@ -91,15 +83,11 @@ export const useWork = (
   // activityData が変更されたときの処理
   useEffect(() => {
     if (workData && activitiesData) {
-      console.log("workData", workData)
-      console.log("activitiesData", activitiesData)
       if (activitiesData.apiLikeds != undefined &&
         activitiesData.apiLikeds.length > 0 &&
         activitiesData.apiLikeds[0].workId != undefined) {
-        console.log("setLocalIsLiked true")
         setLocalIsLiked(true)
       } else {
-        console.log("setLocalIsLiked false")
         setLocalIsLiked(false)
       }
       if (activitiesData?.apiRateds != undefined &&
@@ -109,8 +97,6 @@ export const useWork = (
       } else {
         setLocalRating(0)
       }
-      console.log("workData:", workData)
-      console.log("activitiesData:", activitiesData)
       setLoading(false);
     }
   }, [workData, activitiesData]);

@@ -23,8 +23,6 @@ try {
   // 修正後のファイルを再度書き込み
   fs.writeFileSync(filePath, fileContent, "utf8");
 
-  console.log("Post-transform completed successfully!");
-
 } catch (error) {
   console.error("Error during post-transform:", error);
 }
