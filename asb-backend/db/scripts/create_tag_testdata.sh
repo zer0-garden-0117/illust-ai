@@ -63,7 +63,7 @@ put_item tag '{
 # xERd9FNW のタグデータ
 put_item tag '{
   "workId": {"S": "xERd9FNW"},
-  "tag": {"S": "character_零崎真白"},
+  "tag": {"S": "character_零崎鈴"},
   "updatedAt": {"S": "2025-05-03T15:17:12.143934005Z"}
 }'
 
