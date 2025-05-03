@@ -66,3 +66,9 @@ asb-scripts/*
 ### certs
 *.pem
 *.p12
+
+### env
+application-prod.yml
+application-dev.yml
+.env.production
+.env.development
