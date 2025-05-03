@@ -1,28 +1,36 @@
 package com.asb.zer0.service
 
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
-import java.nio.file.Paths
 
 @Service
-class ConvertService() {
-    val logger: org.slf4j.Logger? = LoggerFactory.getLogger(ConvertService::class.java)
-    val baseDir = System.getProperty("user.dir").also {
-        logger?.info("baseDir (user.dir): $it")
-    }
-    val nodePath = Paths.get(baseDir, "node-scripts").toString().also{
-        logger?.info("nodePath: $it")
-    }
-
+class ConvertService(
+    private val nodeJsPath: String
+) {
 
     fun toAvif(image: MultipartFile): ByteArray {
+        val nodeScriptPath = "$nodeJsPath/service/convert/avif/toAvif.js"
+        return executeNodeScript(image, nodeScriptPath)
+    }
 
+    fun toThumbnail(image: MultipartFile): ByteArray {
+        val nodeScriptPath = "$nodeJsPath/service/convert/thumbnail/toThumbnail.js"
+        return executeNodeScript(image, nodeScriptPath)
+    }
+
+    fun toWatermask(image: MultipartFile): ByteArray {
+        val nodeScriptPath = "$nodeJsPath/service/convert/watermask/toWatermask.js"
+        val watermaskPath = "$nodeJsPath/service/convert/common/watermask.png"
+        return executeNodeScript(image, nodeScriptPath, watermaskPath)
+    }
+
+    private fun executeNodeScript(image: MultipartFile, scriptPath: String, vararg args: String): ByteArray {
         var process: Process? = null
         try {
-            val nodeScriptPath = "$nodePath/service/convert/avif/toAvif.js"
-            val processBuilder = ProcessBuilder("node", nodeScriptPath)
+            val command = mutableListOf("node", scriptPath)
+            command.addAll(args)
+            val processBuilder = ProcessBuilder(command)
             process = processBuilder.start()
 
             // 画像データを標準入力に送信
@@ -31,8 +39,8 @@ class ConvertService() {
                 outputStream.flush()
             }
 
-            // AVIF画像を標準出力から受信
-            val avifImage = process.inputStream.readBytes()
+            // 変換された画像を標準出力から受信
+            val convertedImage = process.inputStream.readBytes()
 
             // プロセスが正常に終了したか確認
             val exitCode = process.waitFor()
@@ -40,77 +48,15 @@ class ConvertService() {
                 throw RuntimeException("Node.js script failed with exit code $exitCode")
             }
 
-            return avifImage
+            return convertedImage
         } catch (e: IOException) {
             throw RuntimeException(
-                "Failed to convert image to AVIF: ${e.message}",
+                "Failed to convert image: ${e.message}",
                 e
             )
         } finally {
             // プロセスがまだ動いている場合は終了させる
             process?.destroy()
-        }
-    }
-
-    fun toThumbnail(image: MultipartFile): ByteArray {
-        try {
-            val nodeScriptPath = "$nodePath/service/convert/thumbnail/toThumbnail.js"
-            val processBuilder = ProcessBuilder("node", nodeScriptPath)
-            val process = processBuilder.start()
-
-            // 画像データを標準入力に送信
-            process.outputStream.use { outputStream ->
-                outputStream.write(image.bytes)
-                outputStream.flush()
-            }
-
-            // AVIF画像を標準出力から受信
-            val avifImage = process.inputStream.readBytes()
-
-            // プロセスが正常に終了したか確認
-            val exitCode = process.waitFor()
-            if (exitCode != 0) {
-                throw RuntimeException("Node.js script failed with exit code $exitCode")
-            }
-
-            return avifImage
-        } catch (e: IOException) {
-            throw RuntimeException(
-                "Failed to convert image to AVIF: ${e.message}",
-                e
-            )
-        }
-    }
-
-    fun toWatermask(image: MultipartFile): ByteArray {
-        try {
-            val nodeScriptPath = "$nodePath/service/convert/watermask/toWatermask.js"
-            val watermaskPath = "$nodePath/service/convert/common/watermask.png"
-            val processBuilder =
-                ProcessBuilder("node", nodeScriptPath, watermaskPath)
-            val process = processBuilder.start()
-
-            // 画像データを標準入力に送信
-            process.outputStream.use { outputStream ->
-                outputStream.write(image.bytes)
-                outputStream.flush()
-            }
-
-            // AVIF画像を標準出力から受信
-            val avifImage = process.inputStream.readBytes()
-
-            // プロセスが正常に終了したか確認
-            val exitCode = process.waitFor()
-            if (exitCode != 0) {
-                throw RuntimeException("Node.js script failed with exit code $exitCode")
-            }
-
-            return avifImage
-        } catch (e: IOException) {
-            throw RuntimeException(
-                "Failed to convert image to AVIF: ${e.message}",
-                e
-            )
         }
     }
 }

@@ -7,7 +7,7 @@ import com.asb.zer0.generated.model.*
 import com.asb.zer0.mapper.UserMapper
 import com.asb.zer0.mapper.WorkMapper
 import com.asb.zer0.service.CognitoService
-import com.asb.zer0.service.TokenService
+import com.asb.zer0.service.UserTokenService
 import com.asb.zer0.service.user.UserManagerService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UsersController(
-    private val tokenService: TokenService,
+    private val userTokenService: UserTokenService,
     private val userManagerService: UserManagerService,
     private val cognitoService: CognitoService,
     private val userMapper: UserMapper,
@@ -37,7 +37,7 @@ class UsersController(
         val userId = getUserId() ?: return ResponseEntity.ok(
             ApiUserToken(userToken = "unregistered")
         )
-        val userToken = tokenService.generateToken(userId)
+        val userToken = userTokenService.generateToken(userId)
         return ResponseEntity.ok(ApiUserToken(userToken = userToken))
     }
 

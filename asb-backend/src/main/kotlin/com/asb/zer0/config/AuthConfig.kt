@@ -2,7 +2,7 @@ package com.asb.zer0.config
 
 import com.asb.zer0.config.filter.CognitoTokenFilter
 import com.asb.zer0.config.filter.UserTokenFilter
-import com.asb.zer0.service.TokenService
+import com.asb.zer0.service.UserTokenService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,9 +21,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @EnableWebSecurity
 @Profile("prod", "dev", "test")
 class AuthConfig(
-    private val tokenService: TokenService,
-    @Value("\${aws.cognito.region}") private val cognitoRegion: String,
-    @Value("\${aws.cognito.pool-id}") private val cognitoPoolId: String,
+    private val userTokenService: UserTokenService,
+    @Value("\${cognito.region}") private val cognitoRegion: String,
+    @Value("\${cognito.pool-id}") private val cognitoPoolId: String,
     @Value("\${security.paths.no-bearer-token}") private val noBearerTokenPathAndMethodString: String,
     @Value("\${security.paths.need-access-token}") private val needAccessTokenPathsString: String
 ) : WebMvcConfigurer {
@@ -73,7 +73,7 @@ class AuthConfig(
             // カスタムトークンの検証の設定
             ?.addFilterBefore(
                 UserTokenFilter(
-                    tokenService,
+                    userTokenService,
                     noBearerTokenPathSet
                 ),
                 UsernamePasswordAuthenticationFilter::class.java

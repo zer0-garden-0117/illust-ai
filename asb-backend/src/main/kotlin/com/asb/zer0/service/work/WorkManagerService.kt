@@ -6,10 +6,9 @@ import com.asb.zer0.entity.Tag
 import com.asb.zer0.entity.Work
 import com.asb.zer0.repository.TagRepository
 import com.asb.zer0.repository.WorkRepository
-import com.asb.zer0.service.CdnUrlService
+import com.asb.zer0.service.CdnService
 import com.asb.zer0.service.ConvertService
-import com.asb.zer0.service.UploadService
-import com.asb.zer0.service.UuidService
+import com.asb.zer0.service.S3Service
 import com.asb.zer0.service.tag.TagService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -26,8 +25,8 @@ class WorkManagerService(
     private val tagRepository: TagRepository,
     private val tagService: TagService,
     private val convertService: ConvertService,
-    private val uploadService: UploadService,
-    private val cdnUrlService: CdnUrlService,
+    private val s3Service: S3Service,
+    private val cdnService: CdnService,
     private val uuidService: com.asb.zer0.service.UuidService
 ) {
 
@@ -114,11 +113,11 @@ class WorkManagerService(
             logger.error("Failed to convert title image to AVIF: ${e.message}")
             throw RuntimeException("Error during title image conversion")
         }
-        val titleImageUrl = uploadService.uploadToS3(
+        val titleImageUrl = s3Service.uploadToS3(
             titleImageAvif,
             "titleImage_$titleTimestamp.avif"
         )
-        val titleCdnUrl = cdnUrlService.convertToCdnUrl(titleImageUrl)
+        val titleCdnUrl = cdnService.convertToCdnUrl(titleImageUrl)
 
         // サムネイル画像の生成、アップロード、URL生成
         val thumbnailImageAvif = try {
@@ -127,12 +126,12 @@ class WorkManagerService(
             logger.error("Failed to generate thumbnail: ${e.message}")
             throw RuntimeException("Error during thumbnail generation")
         }
-        val thumbnailImageUrl = uploadService.uploadToS3(
+        val thumbnailImageUrl = s3Service.uploadToS3(
             thumbnailImageAvif,
             "thumbnailImage_$titleTimestamp.avif"
         )
         logger.info("thumbnailImageAvif: $thumbnailImageAvif thumbnailImageUrl: $thumbnailImageUrl")
-        val thumbnailCdnUrl = cdnUrlService.convertToCdnUrl(thumbnailImageUrl)
+        val thumbnailCdnUrl = cdnService.convertToCdnUrl(thumbnailImageUrl)
 
         // ウォーターマスクの生成、アップロード、URL生成
         val watermaskImageAvif = try {
@@ -141,12 +140,12 @@ class WorkManagerService(
             logger.error("Failed to generate watermask: ${e.message}")
             throw RuntimeException("Error during watermask generation")
         }
-        val watermaskImageUrl = uploadService.uploadToS3(
+        val watermaskImageUrl = s3Service.uploadToS3(
             watermaskImageAvif,
             "watermaskImage_$titleTimestamp.avif"
         )
         logger.info("watermaskImageAvif: $watermaskImageUrl watermaskImageUrl: $watermaskImageUrl")
-        val watermaskCdnUrl = cdnUrlService.convertToCdnUrl(watermaskImageUrl)
+        val watermaskCdnUrl = cdnService.convertToCdnUrl(watermaskImageUrl)
 
         // 作品の登録
         work.titleImgUrl = titleCdnUrl

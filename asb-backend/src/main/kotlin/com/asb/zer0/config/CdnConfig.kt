@@ -1,0 +1,22 @@
+package com.asb.zer0.config
+
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.beans.factory.annotation.Value
+
+@Configuration
+class CdnConfig(
+    @Value("\${cdn.active}") private val cdnActive: Boolean,
+    @Value("\${cdn.url}") private val cdnUrl: String,
+) {
+
+    @Bean
+    fun cdnActive(): Boolean {
+        return cdnActive
+    }
+
+    @Bean
+    fun cdnUrl(): String {
+        return cdnUrl
+    }
+}

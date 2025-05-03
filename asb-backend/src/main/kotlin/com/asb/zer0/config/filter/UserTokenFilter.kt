@@ -1,12 +1,12 @@
 package com.asb.zer0.config.filter
 
 import com.asb.zer0.config.token.CustomAuthenticationToken
-import com.asb.zer0.service.TokenService
+import com.asb.zer0.service.UserTokenService
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 
 class UserTokenFilter(
-    private val tokenService: TokenService,
+    private val userTokenService: UserTokenService,
     private val noBearerTokenPathSet: Set<String>
 ) : OncePerRequestFilter() {
 
@@ -24,8 +24,8 @@ class UserTokenFilter(
         val token = resolveToken(request)
         if (token != null) {
             try {
-                val userId = tokenService.validateAndGetMemberId(token)
-                val role = tokenService.getRoleFromToken(token)
+                val userId = userTokenService.validateAndGetMemberId(token)
+                val role = userTokenService.getRoleFromToken(token)
                 val customAuthentication = CustomAuthenticationToken(
                     userId = userId,
                     role = role,
