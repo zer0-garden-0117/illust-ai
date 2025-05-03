@@ -22,13 +22,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Profile("prod", "dev", "test")
 class AuthConfig(
     private val userTokenService: UserTokenService,
-    @Value("\${cognito.region}") private val cognitoRegion: String,
-    @Value("\${cognito.pool-id}") private val cognitoPoolId: String,
+    @Value("\${cognito.region:us-east-1}") private val cognitoRegion: String,
+    @Value("\${cognito.pool-id:us-east-1_xxxxxxxxx}") private val cognitoPoolId: String,
     @Value("\${security.paths.no-bearer-token}") private val noBearerTokenPathAndMethodString: String,
     @Value("\${security.paths.need-access-token}") private val needAccessTokenPathsString: String
 ) : WebMvcConfigurer {
     @Bean
-    fun cognitoJwtDecoder(): JwtDecoder {
+    fun cognitoJwtDecoder(): JwtDecoder? {
+        // デフォルト値の場合はnullを返す
+        if (cognitoPoolId == "us-east-1_xxxxxxxxx") {
+            return null
+        }
+
         val issuerUrl = String.format(
             "https://cognito-idp.%s.amazonaws.com/%s",
             cognitoRegion, cognitoPoolId

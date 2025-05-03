@@ -14,8 +14,8 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 @Configuration
 @EnableDynamoDBRepositories(basePackages = ["com.asb.zer0.repository"])
 class DynamoDBConfig(
-    @Value("\${dynamodb.region}") private val region: String,
-    @Value("\${dynamodb.url}") private val url: String,
+    @Value("\${dynamodb.region:us-east-1}") private val region: String,
+    @Value("\${dynamodb.url:http://localhost:10000}") private val url: String,
 ) {
     @Autowired
     private lateinit var credentialsProvider: AwsCredentialsProvider

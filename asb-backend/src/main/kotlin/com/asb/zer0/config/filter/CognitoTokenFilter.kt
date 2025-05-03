@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.jwt.JwtException
 import org.springframework.web.filter.OncePerRequestFilter
 
 class CognitoTokenFilter(
-    private val cognitoJwtDecoder: JwtDecoder,
+    private val cognitoJwtDecoder: JwtDecoder?,
     private val noBearerTokenPathSet: Set<String>
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
@@ -24,8 +24,8 @@ class CognitoTokenFilter(
             if (token != null) {
                 try {
                     // JWT検証
-                    val jwt = cognitoJwtDecoder.decode(token)
-                    val username = jwt.getClaimAsString("username")
+                    val jwt = cognitoJwtDecoder?.decode(token)
+                    val username = jwt?.getClaimAsString("username")
                     logger.info("JWT Username: $username")
 
                     val customAuthentication = CustomAuthenticationToken(

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value
 
 @Configuration
 class CdnConfig(
-    @Value("\${cdn.active}") private val cdnActive: Boolean,
-    @Value("\${cdn.url}") private val cdnUrl: String,
+    @Value("\${cdn.active:false}") private val cdnActive: Boolean,
+    @Value("\${cdn.url:https://dev.yourcdn.ne}") private val cdnUrl: String,
 ) {
 
     @Bean

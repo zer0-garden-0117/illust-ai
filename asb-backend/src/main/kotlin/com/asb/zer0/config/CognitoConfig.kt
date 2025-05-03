@@ -10,8 +10,8 @@ import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityPr
 
 @Configuration
 class CognitoConfig(
-    @Value("\${cognito.region}") private val region: String,
-    @Value("\${cognito.pool-id:}") private val poolId: String,
+    @Value("\${cognito.region:us-east-1}") private val region: String,
+    @Value("\${cognito.pool-id:us-east-1_xxxxxxxxx}") private val poolId: String,
 ) {
     @Autowired
     private lateinit var credentialsProvider: AwsCredentialsProvider

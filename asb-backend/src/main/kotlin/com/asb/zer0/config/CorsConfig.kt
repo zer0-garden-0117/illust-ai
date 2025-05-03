@@ -10,10 +10,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 @EnableWebSecurity
 @Profile("prod", "dev", "test")
-class CorsConfig : WebMvcConfigurer {
+class CorsConfig(
+    @Value("\${cors.origins:https://localhost:3001}") private val corsOriginsString: String,
+) : WebMvcConfigurer {
 
-    @Value("\${cors.origins}")
-    private lateinit var corsOriginsString: String
     private val corsOrigins: Array<String>
         get() = corsOriginsString.split(",").toTypedArray()
 

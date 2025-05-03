@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Value
 
 @Configuration
 class S3Config(
-    @Value("\${s3.region}") private val region: String,
-    @Value("\${s3.bucket}") private val bucket: String,
+    @Value("\${s3.region:us-east-1}") private val region: String,
+    @Value("\${s3.bucket:your-backend-dev}") private val bucket: String,
 ) {
     @Autowired
     private lateinit var credentialsProvider: AwsCredentialsProvider

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value
 
 @Configuration
 class NodeJsConfig(
-    @Value("\${nodeJs.path}") private val nodeJsPath: String,
+    @Value("\${nodeJs.path:/Users/{username}/angel-sandbox/node-scripts}") private val nodeJsPath: String,
 ) {
 
     @Bean
