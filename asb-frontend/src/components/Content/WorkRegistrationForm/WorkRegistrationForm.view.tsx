@@ -154,7 +154,9 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
             data={[
               { value: '零崎真白', label: '零崎真白' },
               { value: '零崎くるみ', label: '零崎くるみ' },
-              { value: '零崎鈴', label: '零崎鈴' }
+              { value: '零崎鈴', label: '零崎鈴' },
+              { value: '零崎蒼', label: '零崎蒼' },
+              { value: 'その他', label: 'その他' }
             ]}
           />
           <Space h="md" />
