@@ -138,6 +138,7 @@ export const useImageGrid = (
         // アクティビティ情報を取得
         triggerActivity({ headers, body: { workIds } });
       } else {
+        setLoading(false);
         setActivitiesData({})
       }
     }
