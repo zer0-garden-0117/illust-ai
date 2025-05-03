@@ -12,15 +12,33 @@
 ## 構成
  - バックエンド
    - Spring Boot (Kotlin)
-   - nginx (HTTPS用)
    - dynamodb
    - S3
    - NodeJS (sharpでavifに変換)
-   - AWS Secrets Manager
+   - nginx (HTTP to HTTPS)
+
  - フロントエンド
    - Next.js (Typescript)
    - Mantine UI
    - Cognito
+
+## 開発環境構築手順
+ - バックエンド
+   - Docker Desktop
+     - docker-composeが使えるようにしておく
+   - AWS CLI
+     - aws configure
+   - SSL証明書(HTTP to HTTPS)の設定
+     - mkcertのインストール
+     - cd asb-backend/nginx/certs
+     - config.iniを編集し、keystore-gen.shを実行し、asb-keysotre.p12をOSインポート
+   - 起動
+     - cd asb-backend
+     - ./gradlew clean bootRunDev
+ - フロントエンド
+   - cd asb-frontend
+   - npm install
+   - npm run dev
 
 ## コントリビュート
  - バグ報告・機能提案はIssueへ、コード変更はPRでお願いします。 
