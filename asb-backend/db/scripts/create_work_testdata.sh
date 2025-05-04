@@ -33,12 +33,12 @@ check_items_exist() {
 
 # workテーブルにデータが既に存在するか確認
 if check_items_exist work; then
-    echo "workテーブルに既にテストデータが存在するのでスクリプトを終了します。"
+    echo "Test data already exists in work table. Exiting script."
     exit 0
 fi
 
 # workテーブルにテストデータを追加
-echo "workテーブルにテストデータを追加します..."
+echo "Adding test data to work table..."
 
 put_item work '{
   "workId": {"S": "jahMEp6J"},
@@ -120,4 +120,4 @@ put_item work '{
   "description": {"NULL": true}
 }'
 
-echo "テストデータの追加が完了しました。"
+echo "Test data insertion completed."

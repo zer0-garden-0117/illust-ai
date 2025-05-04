@@ -26,11 +26,11 @@ create_table() {
     shift
     
     if table_exists "$table_name"; then
-        echo "テーブル $table_name は既に存在します。スキップします。"
+        echo "Table $table_name already exists. Skipping."
         return 0
     fi
     
-    echo "テーブル $table_name を作成します..."
+    echo "Creating table $table_name..."
     aws dynamodb create-table \
         --profile "$PROFILE" \
         --table-name "$table_name" \
@@ -122,4 +122,4 @@ create_table rated \
             }
         ]"
 
-echo "テーブル作成処理が完了しました。"
+echo "Table creation process completed."

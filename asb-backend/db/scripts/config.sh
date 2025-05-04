@@ -6,7 +6,7 @@ CONFIG_FILE="${SCRIPT_DIR}/config.ini"
 
 # 設定ファイルの存在確認
 if [ ! -f "$CONFIG_FILE" ]; then
-    echo "設定ファイルが見つかりません: $CONFIG_FILE"
+    echo "Config file not found: $CONFIG_FILE"
     exit 1
 fi
 
@@ -26,7 +26,7 @@ TEST_ENDPOINT_URL=$(get_config_value "Endpoints" "TEST_ENDPOINT_URL")
 
 # 必須変数の確認
 if [ -z "$ENVIRONMENT" ] || [ -z "$PROFILE" ] || [ -z "$PROD_ENDPOINT_URL" ] || [ -z "$DEV_ENDPOINT_URL" ] || [ -z "$TEST_ENDPOINT_URL" ]; then
-    echo "ENVIRONMENT、PROFILE、PROD_ENDPOINT_URL、DEV_ENDPOINT_URL、TEST_ENDPOINT_URLを設定ファイルに定義してください。"
+    echo "Please define ENVIRONMENT, PROFILE, PROD_ENDPOINT_URL, DEV_ENDPOINT_URL, and TEST_ENDPOINT_URL in the config file."
     exit 1
 fi
 
@@ -38,6 +38,6 @@ elif [ "$ENVIRONMENT" == "dev" ]; then
 elif [ "$ENVIRONMENT" == "test" ]; then
     ENDPOINT_URL="$TEST_ENDPOINT_URL"
 else
-    echo "ENVIRONMENTが不正です。'prod', 'dev' または 'test' を設定してください。"
+    cho "Invalid ENVIRONMENT. Please set to either 'prod', 'dev', or 'test'."
     exit 1
 fi

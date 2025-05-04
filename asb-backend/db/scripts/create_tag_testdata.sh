@@ -33,12 +33,12 @@ check_items_exist() {
 
 # tagテーブルにデータが既に存在するか確認
 if check_items_exist tag; then
-    echo "tagテーブルに既にテストデータが存在するのでスクリプトを終了します。"
+    echo "Test data already exists in tag table. Exiting script."
     exit 0
 fi
 
 # tagテーブルにテストデータを追加
-echo "tagテーブルにテストデータを追加します..."
+echo "Adding test data to tag table..."
 
 # jahMEp6J のタグデータ
 put_item tag '{
@@ -243,4 +243,4 @@ put_item tag '{
   "updatedAt": {"S": "2025-05-03T15:59:01.225319455Z"}
 }'
 
-echo "tagテーブルのテストデータ追加が完了しました。"
+echo "Tag table test data insertion completed."
