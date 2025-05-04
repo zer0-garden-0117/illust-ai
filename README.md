@@ -32,6 +32,9 @@
      - mkcertのインストール
      - cd asb-backend/nginx/certs
      - config.iniを編集し、keystore-gen.shを実行し、asb-keysotre.p12をOSインポート
+   - NodeJS for sharp(avif変換ライブラリ)
+     - cd asb/backend/node-scripts
+     - npm install
    - 起動
      - cd asb-backend
      - ./gradlew clean bootRunDev
