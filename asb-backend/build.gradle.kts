@@ -39,6 +39,8 @@ dependencies {
     implementation("software.amazon.awssdk:dynamodb-enhanced")
     implementation("software.amazon.awssdk:cognitoidentityprovider:2.20.126")
     implementation("software.amazon.awssdk:s3")
+    implementation("software.amazon.awssdk:sso:2.31.35")
+    implementation("software.amazon.awssdk:ssooidc:2.31.35")
 
     // UUID
     implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
