@@ -15,6 +15,28 @@ put_item() {
         --endpoint-url "$ENDPOINT_URL"
 }
 
+check_items_exist() {
+    local table_name=$1
+    local count=$(aws dynamodb scan \
+        --profile "$PROFILE" \
+        --table-name "$table_name" \
+        --select "COUNT" \
+        --endpoint-url "$ENDPOINT_URL" \
+        --query "Count" \
+        --output text)
+    if [ "$count" -gt 0 ]; then
+        return 0  # アイテムが存在する
+    else
+        return 1  # アイテムが存在しない
+    fi
+}
+
+# workテーブルにデータが既に存在するか確認
+if check_items_exist work; then
+    echo "workテーブルに既にテストデータが存在するのでスクリプトを終了します。"
+    exit 0
+fi
+
 # workテーブルにテストデータを追加
 echo "workテーブルにテストデータを追加します..."
 
