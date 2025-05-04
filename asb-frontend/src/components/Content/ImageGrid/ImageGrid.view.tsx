@@ -280,12 +280,14 @@ export const ImageGridView = memo(function ImageGridViewComponent({
 
   // 全画像がロードされたときの処理
   useEffect(() => {
-    setInitialLoading(false)
-    const savedPosition = sessionStorage.getItem(`scrollPosition-${fullPath}`);
-    const targetPosition = savedPosition ? parseInt(savedPosition, 10) : 0;
-    setTimeout(() => {
-      window.scrollTo(0, targetPosition);
-    }, 100);
+    if ((imageData.length > 0) || (loading == false)) {
+      setInitialLoading(false)
+      const savedPosition = sessionStorage.getItem(`scrollPosition-${fullPath}`);
+      const targetPosition = savedPosition ? parseInt(savedPosition, 10) : 0;
+      setTimeout(() => {
+        window.scrollTo(0, targetPosition);
+      }, 100);
+    }
   }, [imagesLoaded, pathname, imageData.length, initialLoading, loading]);
 
   const handleImageLoad = () => {
