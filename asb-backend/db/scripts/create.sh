@@ -13,6 +13,7 @@ generate_uuid() {
 table_exists() {
     local table_name=$1
     aws dynamodb describe-table \
+        --profile "$PROFILE" \
         --table-name "$table_name" \
         --endpoint-url "$ENDPOINT_URL" \
         >/dev/null 2>&1
@@ -31,6 +32,7 @@ create_table() {
     
     echo "テーブル $table_name を作成します..."
     aws dynamodb create-table \
+        --profile "$PROFILE" \
         --table-name "$table_name" \
         "$@" \
         --billing-mode PAY_PER_REQUEST \
@@ -38,6 +40,7 @@ create_table() {
     
     # テーブルが作成されるのを待つ
     aws dynamodb wait table-exists \
+        --profile "$PROFILE" \
         --table-name "$table_name" \
         --endpoint-url "$ENDPOINT_URL"
 }
@@ -47,6 +50,7 @@ put_item() {
     local table_name=$1
     local item_json=$2
     aws dynamodb put-item \
+        --profile "$PROFILE" \
         --table-name "$table_name" \
         --item "$item_json" \
         --endpoint-url "$ENDPOINT_URL"

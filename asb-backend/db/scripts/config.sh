@@ -19,13 +19,14 @@ get_config_value() {
 
 # `config.ini` から設定を取得
 ENVIRONMENT=$(get_config_value "General" "ENVIRONMENT")
+PROFILE=$(get_config_value "General" "PROFILE")
 PROD_ENDPOINT_URL=$(get_config_value "Endpoints" "PROD_ENDPOINT_URL")
 DEV_ENDPOINT_URL=$(get_config_value "Endpoints" "DEV_ENDPOINT_URL")
 TEST_ENDPOINT_URL=$(get_config_value "Endpoints" "TEST_ENDPOINT_URL")
 
 # 必須変数の確認
-if [ -z "$ENVIRONMENT" ] || [ -z "$PROD_ENDPOINT_URL" ] || [ -z "$DEV_ENDPOINT_URL" ] || [ -z "$TEST_ENDPOINT_URL" ]; then
-    echo "ENVIRONMENT、PROD_ENDPOINT_URL、DEV_ENDPOINT_URL、TEST_ENDPOINT_URLを設定ファイルに定義してください。"
+if [ -z "$ENVIRONMENT" ] || [ -z "$PROFILE" ] || [ -z "$PROD_ENDPOINT_URL" ] || [ -z "$DEV_ENDPOINT_URL" ] || [ -z "$TEST_ENDPOINT_URL" ]; then
+    echo "ENVIRONMENT、PROFILE、PROD_ENDPOINT_URL、DEV_ENDPOINT_URL、TEST_ENDPOINT_URLを設定ファイルに定義してください。"
     exit 1
 fi
 

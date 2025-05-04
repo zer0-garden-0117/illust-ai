@@ -9,6 +9,7 @@ put_item() {
     local table_name=$1
     local item_json=$2
     aws dynamodb put-item \
+        --profile "$PROFILE" \
         --table-name "$table_name" \
         --item "$item_json" \
         --endpoint-url "$ENDPOINT_URL"
