@@ -6,7 +6,8 @@
       "search": "Suchen...",
       "searchButton": "Suchen"
     },
-    "burgerMenu": {
+    "page": {
+      "new": "Neu",
       "login": "Anmelden",
       "signup": "Registrieren",
       "userInfo": "Benutzerinformation",
@@ -19,9 +20,6 @@
       "freeicon": "Kostenlose Symbole",
       "admin": "Admin",
       "post": "Beitrag"
-    },
-    "toppage": {
-      "new": "Neu"
     },
     "imageGrid": {
       "item": "Artikel"

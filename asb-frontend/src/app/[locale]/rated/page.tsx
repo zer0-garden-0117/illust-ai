@@ -4,11 +4,12 @@ import AuthModal from '@/components/Common/AuthModal/AuthModal';
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
 import { useState } from 'react';
 import { FaRegStar } from 'react-icons/fa';
+import { useTranslations } from 'next-intl';
 
 const TagPage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
-  const decodedId = decodeURIComponent(params.id);
+  const t = useTranslations("page");
   const { isAuthenticated } = useAccessTokenContext();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
 
@@ -17,7 +18,7 @@ const TagPage: React.FC<{ params: { id: string } }> = (
       {isAuthenticated ? (
       <ImageGrid
         topIcon={<FaRegStar />}
-        title={"レビュー"}
+        title={t("reviewList")}
         isViewCount={true}
         isViewPagination={true}
         imageCount={12}

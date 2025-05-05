@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { BiSolidInvader } from "react-icons/bi";
 
 const TopPage: React.FC = () => {
-  const t = useTranslations("toppage");
+  const t = useTranslations("page");
 
   return (
     <>
@@ -19,14 +19,6 @@ const TopPage: React.FC = () => {
         type={"tag"}
       />
     <Space h='xl'/> 
-    {/* <ImageGrid
-        title={"新着 フリーアイコン"}
-        isViewCount={false}
-        isViewPagination={false}
-        imageCount={4}
-        words={["icon"]}
-        type={"free"}
-      /> */}
   </>
   );
 };

@@ -29,7 +29,7 @@ const data: LanguageData[] = [
 ];
 
 export const LangMenu: React.FC = () => {
-  const t = useTranslations("burgerMenu");
+  const t = useTranslations("page");
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);

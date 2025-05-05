@@ -6,7 +6,8 @@
     "search": "Tag Search...",
     "searchButton": "検索"
   },
-  "burgerMenu": {
+  "page": {
+    "new": "新着",
     "login": "ログイン",
     "signup": "アカウントを作成",
     "userInfo": "ユーザー情報",
@@ -19,9 +20,6 @@
     "freeicon": "フリーアイコン",
     "admin": "管理",
     "post": "投稿"
-  },
-  "toppage": {
-    "new": "新着"
   },
   "imageGrid": {
     "item": "件"

@@ -6,7 +6,8 @@
       "search": "搜尋...",
       "searchButton": "搜尋"
     },
-    "burgerMenu": {
+    "page": {
+      "new": "新着",
       "login": "登入",
       "signup": "註冊",
       "userInfo": "用戶資訊",
@@ -19,9 +20,6 @@
       "freeicon": "免費圖標",
       "admin": "管理",
       "post": "投稿"
-    },
-    "toppage": {
-      "new": "新着"
     },
     "imageGrid": {
       "item": "件"

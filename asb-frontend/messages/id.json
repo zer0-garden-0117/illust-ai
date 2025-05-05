@@ -6,7 +6,8 @@
       "search": "Cari...",
       "searchButton": "Cari"
     },
-    "burgerMenu": {
+    "page": {
+      "new": "Baru",
       "login": "Masuk",
       "signup": "Daftar",
       "userInfo": "Informasi Pengguna",
@@ -19,9 +20,6 @@
       "freeicon": "Ikon Gratis",
       "admin": "Admin",
       "post": "Posting"
-    },
-    "toppage": {
-      "new": "Baru"
     },
     "imageGrid": {
       "item": "item"

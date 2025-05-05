@@ -6,7 +6,8 @@
       "search": "검색...",
       "searchButton": "검색"
     },
-    "burgerMenu": {
+    "page": {
+      "new": "신규",
       "login": "로그인",
       "signup": "가입하기",
       "userInfo": "사용자 정보",
@@ -19,9 +20,6 @@
       "freeicon": "무료 아이콘",
       "admin": "관리",
       "post": "게시"
-    },
-    "toppage": {
-      "new": "신규"
     },
     "imageGrid": {
       "item": "건"

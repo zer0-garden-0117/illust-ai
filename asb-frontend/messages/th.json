@@ -6,7 +6,8 @@
       "search": "ค้นหา...",
       "searchButton": "ค้นหา"
     },
-    "burgerMenu": {
+    "page": {
+      "new": "ใหม่ล่าสุด",
       "login": "เข้าสู่ระบบ",
       "signup": "สมัครสมาชิก",
       "userInfo": "ข้อมูลผู้ใช้",
@@ -19,9 +20,6 @@
       "freeicon": "ไอคอนฟรี",
       "admin": "ผู้ดูแล",
       "post": "โพสต์"
-    },
-    "toppage": {
-      "new": "ใหม่ล่าสุด"
     },
     "imageGrid": {
       "item": "รายการ"

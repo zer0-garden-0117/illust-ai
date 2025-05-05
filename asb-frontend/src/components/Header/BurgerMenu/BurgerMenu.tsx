@@ -19,7 +19,7 @@ import { getCsrfTokenFromCookies, getUserTokenFromCookies } from '@/utils/authCo
 import { LuPencil } from "react-icons/lu";
 
 export const BurgerMenu: React.FC = () => {
-  const t = useTranslations("burgerMenu");
+  const t = useTranslations("page");
   const [menuOpened, setMenuOpened] = useState(false); // メニュー開閉状態を管理
   const navigation = useNavigate();
   const { accessToken, isAuthenticated, login, loginWithHosted, logout, email } = useAccessTokenContext();

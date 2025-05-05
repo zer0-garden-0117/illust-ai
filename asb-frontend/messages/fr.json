@@ -6,7 +6,8 @@
       "search": "Rechercher...",
       "searchButton": "Rechercher"
     },
-    "burgerMenu": {
+    "page": {
+      "new": "Nouveautés",
       "login": "Connexion",
       "signup": "Inscription",
       "userInfo": "Informations utilisateur",
@@ -19,9 +20,6 @@
       "freeicon": "Icônes gratuites",
       "admin": "Admin",
       "post": "Poster"
-    },
-    "toppage": {
-      "new": "Nouveautés"
     },
     "imageGrid": {
       "item": "élément"

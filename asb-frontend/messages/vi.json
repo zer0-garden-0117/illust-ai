@@ -6,7 +6,8 @@
       "search": "Tìm kiếm...",
       "searchButton": "Tìm kiếm"
     },
-    "burgerMenu": {
+    "page": {
+      "new": "Mới",
       "login": "Đăng nhập",
       "signup": "Đăng ký",
       "userInfo": "Thông tin người dùng",
@@ -19,9 +20,6 @@
       "freeicon": "Biểu tượng miễn phí",
       "admin": "Quản trị",
       "post": "Đăng"
-    },
-    "toppage": {
-      "new": "Mới"
     },
     "imageGrid": {
       "item": "mục"

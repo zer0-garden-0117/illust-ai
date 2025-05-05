@@ -6,7 +6,8 @@
     "search": "Tag Search...",
     "searchButton": "Search"
   },
-  "burgerMenu": {
+  "page": {
+    "new": "Recently Added",
     "login": "Sign In",
     "signup": "Sign Up",
     "userInfo": "Your Account",
@@ -19,9 +20,6 @@
     "freeicon": "Free Icon",
     "admin": "Admin",
     "post": "Post"
-  },
-  "toppage": {
-    "new": "Recently Added"
   },
   "imageGrid": {
     "item": "item"
