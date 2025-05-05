@@ -8,28 +8,31 @@ export async function generateMetadata({
 }: {
   params: { id: string; locale: string };
 }): Promise<Metadata> {
+  const ogpTitle = "ANGEL SANDBOX"
+  const ogpUrl = process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL + '/' + params.id + '_ogpImage.jpeg'
+
   return {
-    title: 'ANGEL SANDBOX',
-    description: 'ANGEL SANDBOX',
+    title: ogpTitle,
+    description: ogpTitle,
     openGraph: {
-      title: 'ANGEL SANDBOX',
-      description: 'ANGEL SANDBOX',
+      title: ogpTitle,
+      description: ogpTitle,
       images: [
         {
-          url: 'https://d95u4oj4jbbsz.cloudfront.net/' + params.id + '.jpeg',
+          url: ogpUrl,
           width: 1200,
           height: 630,
-          alt: 'ANGEL SANDBOX',
+          alt: ogpTitle,
         },
       ],
       type: 'website',
-      url: 'https://d95u4oj4jbbsz.cloudfront.net/' + params.id + '.jpeg',
+      url: ogpUrl,
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'ANGEL SANDBOX',
-      description: 'ANGEL SANDBOX',
-      images: ['https://d95u4oj4jbbsz.cloudfront.net/' + params.id + '.jpeg'],
+      title: ogpTitle,
+      description: ogpTitle,
+      images: [ogpUrl],
     },
   };
 }
