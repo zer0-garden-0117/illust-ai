@@ -115,7 +115,7 @@ class WorkManagerService(
         }
         val titleImageUrl = s3Service.uploadToS3(
             titleImageAvif,
-            "titleImage_$titleTimestamp.avif"
+            nextWorkId + "_titleImage.avif"
         )
         val titleCdnUrl = cdnService.convertToCdnUrl(titleImageUrl)
 
@@ -128,7 +128,7 @@ class WorkManagerService(
         }
         val thumbnailImageUrl = s3Service.uploadToS3(
             thumbnailImageAvif,
-            "thumbnailImage_$titleTimestamp.avif"
+            nextWorkId + "_thumbnailImage.avif"
         )
         logger.info("thumbnailImageAvif: $thumbnailImageAvif thumbnailImageUrl: $thumbnailImageUrl")
         val thumbnailCdnUrl = cdnService.convertToCdnUrl(thumbnailImageUrl)
@@ -142,10 +142,23 @@ class WorkManagerService(
         }
         val watermaskImageUrl = s3Service.uploadToS3(
             watermaskImageAvif,
-            "watermaskImage_$titleTimestamp.avif"
+            nextWorkId + "_watermaskImage.avif"
         )
-        logger.info("watermaskImageAvif: $watermaskImageUrl watermaskImageUrl: $watermaskImageUrl")
+        logger.info("watermaskImageAvif: $watermaskImageAvif watermaskImageUrl: $watermaskImageUrl")
         val watermaskCdnUrl = cdnService.convertToCdnUrl(watermaskImageUrl)
+
+        // OGP用のJPEG生成、アップロード
+        val ogpImageJpeg = try {
+            convertService.toJpeg(titleImage)
+        } catch (e: Exception) {
+            logger.error("Failed to generate jpeg: ${e.message}")
+            throw RuntimeException("Error during jpeg generation")
+        }
+        val ogpImageUrl = s3Service.uploadToS3(
+            ogpImageJpeg,
+            nextWorkId + "_ogpImage.jpeg"
+        )
+        logger.info("ogpImageJpeg: $ogpImageJpeg ogpImageUrl: $ogpImageUrl")
 
         // 作品の登録
         work.titleImgUrl = titleCdnUrl

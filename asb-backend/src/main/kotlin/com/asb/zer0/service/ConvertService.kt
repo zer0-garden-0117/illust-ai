@@ -25,6 +25,11 @@ class ConvertService(
         return executeNodeScript(image, nodeScriptPath, watermaskPath)
     }
 
+    fun toJpeg(image: MultipartFile): ByteArray {
+        val nodeScriptPath = "$nodeJsPath/service/convert/jpeg/toJpeg.js"
+        return executeNodeScript(image, nodeScriptPath)
+    }
+
     private fun executeNodeScript(image: MultipartFile, scriptPath: String, vararg args: String): ByteArray {
         var process: Process? = null
         try {
