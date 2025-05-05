@@ -18,20 +18,20 @@ export async function generateMetadata({
       description: 'デフォルトOG説明文',
       images: [
         {
-          url: 'https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.avif',
+          url: 'https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.jpeg',
           width: 1200,
           height: 630,
           alt: 'デフォルトALT',
         },
       ],
       type: 'website',
-      url: `https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.avif`,
+      url: `https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.jpeg`,
     },
     twitter: {
       card: 'summary_large_image',
       title: 'デフォルトTwitterタイトル',
       description: 'デフォルトTwitter説明文',
-      images: ['https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.avif'],
+      images: ['https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.jpeg'],
     },
   };
 }
