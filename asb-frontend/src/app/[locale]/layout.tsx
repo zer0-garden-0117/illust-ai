@@ -14,12 +14,37 @@ import '@mantine/dates/styles.css'; //if using mantine date picker features
 import 'mantine-react-table/styles.css'; //make sure MRT styles were imported in your app root (once)
 import ClientGoogleAnalytics from '@/utils/googleAnalytics';
 
+const APP_NAME = 'ANGEL SANDBOX';
+const APP_DESCRIPTION = 'ANGEL SANDBOX';
+const APP_IMAGE_URL = '/toppage_ogpImage.jpeg';
+const APP_IMAGE_ALT = 'ANGEL SANDBOX';
+
 export const metadata: Metadata = {
   icons: {
     icon: 'favicon.ico',
   },
-  title: 'ANGEL SANDBOX',
-  description: 'ANGEL SANDBOX',
+  title: APP_NAME,
+  description: APP_DESCRIPTION,
+  openGraph: {
+    title: APP_NAME,
+    description: APP_DESCRIPTION,
+    images: [
+      {
+        url: APP_IMAGE_URL,
+        width: 1200,
+        height: 630,
+        alt: APP_IMAGE_ALT,
+      },
+    ],
+    type: 'website',
+    url: APP_IMAGE_URL,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: APP_NAME,
+    description: APP_DESCRIPTION,
+    images: [APP_IMAGE_URL],
+  },
 };
 
 export const viewport: Viewport = {
