@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useWork } from './Work.hook';
 import { WorkView } from './Work.view';

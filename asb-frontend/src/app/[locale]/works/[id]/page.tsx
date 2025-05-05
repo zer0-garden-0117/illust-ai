@@ -1,5 +1,3 @@
-'use client';
-
 import Work from '@/components/Content/Work/Work';
 
 const PostPage: React.FC<{ params: { id: string } }> = (
