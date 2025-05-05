@@ -8,30 +8,28 @@ export async function generateMetadata({
 }: {
   params: { id: string; locale: string };
 }): Promise<Metadata> {
-  // APIから作品データを取
-
   return {
-    title: 'デフォルトタイトル',
-    description: 'デフォルト説明文',
+    title: 'ANGEL SANDBOX',
+    description: 'ANGEL SANDBOX',
     openGraph: {
-      title: 'デフォルトOGタイトル',
-      description: 'デフォルトOG説明文',
+      title: 'ANGEL SANDBOX',
+      description: 'ANGEL SANDBOX',
       images: [
         {
-          url: 'https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.jpeg',
+          url: 'https://d95u4oj4jbbsz.cloudfront.net/' + params.id + '.jpeg',
           width: 1200,
           height: 630,
-          alt: 'デフォルトALT',
+          alt: 'ANGEL SANDBOX',
         },
       ],
       type: 'website',
-      url: `https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.jpeg`,
+      url: 'https://d95u4oj4jbbsz.cloudfront.net/' + params.id + '.jpeg',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'デフォルトTwitterタイトル',
-      description: 'デフォルトTwitter説明文',
-      images: ['https://d95u4oj4jbbsz.cloudfront.net/titleImage_20250503_160040.jpeg'],
+      title: 'ANGEL SANDBOX',
+      description: 'ANGEL SANDBOX',
+      images: ['https://d95u4oj4jbbsz.cloudfront.net/' + params.id + '.jpeg'],
     },
   };
 }
