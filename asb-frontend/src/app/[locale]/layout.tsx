@@ -12,6 +12,7 @@ import { AccessTokenProvider } from '@/providers/auth/accessTokenProvider';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css'; //if using mantine date picker features
 import 'mantine-react-table/styles.css'; //make sure MRT styles were imported in your app root (once)
+import { GoogleAnalytics } from 'nextjs-google-analytics';
 
 export const metadata: Metadata = {
   icons: {
@@ -57,6 +58,7 @@ const LocaleLayout = async ({
             </ErrorProvider>
           </NextIntlClientProvider>
         </CustomMantineProvider>
+        <GoogleAnalytics trackPageViews />
       </body>
     </html>
   );
