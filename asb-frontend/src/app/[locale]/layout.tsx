@@ -16,7 +16,7 @@ import ClientGoogleAnalytics from '@/utils/googleAnalytics';
 
 const APP_NAME = 'ANGEL SANDBOX';
 const APP_DESCRIPTION = 'ANGEL SANDBOX';
-const APP_IMAGE_URL = '/toppage_ogpImage.jpeg';
+const APP_IMAGE_URL = process.env.NEXT_PUBLIC_CDN_URL + '/toppage_ogpImage.jpeg'
 const APP_IMAGE_ALT = 'ANGEL SANDBOX';
 
 export const metadata: Metadata = {
