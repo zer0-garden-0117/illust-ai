@@ -6,6 +6,12 @@
       "search": "Rechercher...",
       "searchButton": "Rechercher"
     },
+    "auth": {
+      "login": "Connexion",
+      "newRegistration": "Inscription",
+      "googleLogin": "Se connecter avec Google",
+      "googleNewRegistraton": "S'inscrire avec Google"
+    },
     "page": {
       "new": "Nouveautés",
       "login": "Connexion",

@@ -6,6 +6,12 @@
     "search": "Tag Search...",
     "searchButton": "検索"
   },
+  "auth": {
+    "login": "ログイン",
+    "newRegistration": "新規登録",
+    "googleLogin": "Googleアカウントでログイン",
+    "googleNewRegistraton": "Googleアカウントで新規登録"
+  },
   "page": {
     "new": "新着",
     "login": "ログイン",

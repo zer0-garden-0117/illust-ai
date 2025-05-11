@@ -6,6 +6,12 @@
       "search": "Tìm kiếm...",
       "searchButton": "Tìm kiếm"
     },
+    "auth": {
+      "login": "Đăng nhập",
+      "newRegistration": "Đăng ký",
+      "googleLogin": "Đăng nhập bằng Google",
+      "googleNewRegistraton": "Đăng ký bằng Google"
+    },
     "page": {
       "new": "Mới",
       "login": "Đăng nhập",

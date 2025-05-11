@@ -6,6 +6,12 @@
       "search": "ค้นหา...",
       "searchButton": "ค้นหา"
     },
+    "auth": {
+      "login": "เข้าสู่ระบบ",
+      "newRegistration": "สมัครสมาชิก",
+      "googleLogin": "เข้าสู่ระบบด้วย Google",
+      "googleNewRegistraton": "สมัครสมาชิกด้วย Google"
+    },
     "page": {
       "new": "ใหม่ล่าสุด",
       "login": "เข้าสู่ระบบ",

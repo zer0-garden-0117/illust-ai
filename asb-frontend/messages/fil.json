@@ -6,6 +6,12 @@
       "search": "Maghanap...",
       "searchButton": "Maghanap"
     },
+    "auth": {
+      "login": "Mag-log In",
+      "newRegistration": "Mag-sign Up",
+      "googleLogin": "Mag-log In gamit ang Google",
+      "googleNewRegistraton": "Mag-sign Up gamit ang Google"
+    },
     "page": {
       "new": "Bago",
       "login": "Mag-log In",

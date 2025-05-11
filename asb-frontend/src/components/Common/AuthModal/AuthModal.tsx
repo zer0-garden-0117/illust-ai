@@ -3,6 +3,7 @@ import { Modal, Button, Text, Space, Tabs } from '@mantine/core';
 import { FcGoogle } from "react-icons/fc";
 import { FaLine } from "react-icons/fa";
 import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
+import { useTranslations } from 'next-intl';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface AuthModalProps {
 const AuthModal: React.FC<AuthModalProps> = (
   { isOpen, onClose, isLogin = true }
 ) => {
+  const t = useTranslations("auth");
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>(isLogin ? 'login' : 'signup');
 
   useEffect(() => {
@@ -26,8 +28,8 @@ const AuthModal: React.FC<AuthModalProps> = (
     <Modal opened={isOpen} onClose={onClose} withCloseButton={false}>
       <Tabs value={activeTab} onChange={(tab) => setActiveTab(tab as 'login' | 'signup')} autoFocus={false}>
         <Tabs.List>
-          <Tabs.Tab value="login" style={{ fontSize: '12px', outline: 'none'}} tabIndex={-1}>ログイン</Tabs.Tab>
-          <Tabs.Tab value="signup" style={{ fontSize: '12px',  outline: 'none'}} tabIndex={-1}>新規登録</Tabs.Tab>
+          <Tabs.Tab value="login" style={{ fontSize: '12px', outline: 'none'}} tabIndex={-1}>{t("login")}</Tabs.Tab>
+          <Tabs.Tab value="signup" style={{ fontSize: '12px',  outline: 'none'}} tabIndex={-1}>{t("newRegistration")}</Tabs.Tab>
         </Tabs.List>
         <Space h="md" />
 
@@ -44,6 +46,7 @@ const AuthModal: React.FC<AuthModalProps> = (
 };
 
 const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const t = useTranslations("auth");
   const { loginWithGoogle, loginWithLine } = useAccessTokenContext();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [step, setStep] = useState<'login' | 'reset' | 'confirmReset'>('login');
@@ -78,7 +81,6 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     <>
       {step === 'login' && (
         <>
-          <Text size='xs'>他アカウントでログイン</Text>
           <Button
             color="gray"
             variant="outline"
@@ -91,7 +93,7 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               paddingLeft: '12px',
             }}
           >
-            Googleで続ける
+            {t("googleLogin")}
           </Button>
           {/* <Button
             color="gray"
@@ -116,6 +118,7 @@ const LoginContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 };
 
 const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const t = useTranslations("auth");
   const { loginWithGoogle, loginWithLine } = useAccessTokenContext();
   const [registerError, setRegisterError] = useState<string | null>(null);
   const [step, setStep] = useState<'signup' | 'confirmation'>('signup');
@@ -150,7 +153,6 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     <>
       {step === 'signup' && (
         <>
-          <Text size='xs'>他アカウントで登録</Text>
           <Button
             color="gray"
             variant="outline"
@@ -163,7 +165,7 @@ const SignupContent: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               paddingLeft: '12px',
             }}
           >
-            Googleで続ける
+            {t("googleNewRegistraton")}
           </Button>
           {/* <Button
             color="gray"

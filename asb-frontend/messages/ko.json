@@ -6,6 +6,12 @@
       "search": "검색...",
       "searchButton": "검색"
     },
+    "auth": {
+      "login": "로그인",
+      "newRegistration": "가입하기", 
+      "googleLogin": "Google로 로그인",
+      "googleNewRegistraton": "Google로 가입"
+    },
     "page": {
       "new": "신규",
       "login": "로그인",

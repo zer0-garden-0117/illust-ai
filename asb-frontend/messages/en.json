@@ -6,6 +6,12 @@
     "search": "Tag Search...",
     "searchButton": "Search"
   },
+  "auth": {
+    "login": "Sign In",
+    "newRegistration": "Sign Up",
+    "googleLogin": "Sign in with Google",
+    "googleNewRegistraton": "Sign up with Google"
+  },
   "page": {
     "new": "Recently Added",
     "login": "Sign In",

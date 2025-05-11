@@ -6,6 +6,12 @@
       "search": "Cari...",
       "searchButton": "Cari"
     },
+    "auth": {
+      "login": "Log Masuk",
+      "newRegistration": "Daftar",
+      "googleLogin": "Log Masuk dengan Google",
+      "googleNewRegistraton": "Daftar dengan Google"
+    },
     "page": {
       "new": "Baru Ditambah",
       "login": "Log Masuk",

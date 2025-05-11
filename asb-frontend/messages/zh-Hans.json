@@ -6,6 +6,12 @@
       "search": "搜索...",
       "searchButton": "搜索"
     },
+    "auth": {
+      "login": "登录",
+      "newRegistration": "注册", 
+      "googleLogin": "通过Google登录",
+      "googleNewRegistraton": "通过Google注册"
+    },
     "page": {
       "new": "新着",
       "login": "登录",

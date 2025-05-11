@@ -6,6 +6,12 @@
       "search": "搜尋...",
       "searchButton": "搜尋"
     },
+    "auth": {
+      "login": "登入",
+      "newRegistration": "註冊",
+      "googleLogin": "透過Google登入",
+      "googleNewRegistraton": "透過Google註冊"
+    },
     "page": {
       "new": "新着",
       "login": "登入",
