@@ -4,13 +4,14 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class UserTokenService(
     private val userTokenSecret: String,
-    private val adminUserIds: List<String>
+    @Qualifier("adminUserIds") private val adminUserIds: List<String>  // Qualifierで指定
 ) {
     private val logger = LoggerFactory.getLogger(UserTokenService::class.java)
 
@@ -18,9 +19,7 @@ class UserTokenService(
 
     fun generateToken(userId: String): String {
         logger.info(userId)
-        adminUserIds.forEach {
-            logger.info(it)
-        }
+        logger.info("Admin user IDs: $adminUserIds")  // デバッグレベルに変更
         val userRole = if (adminUserIds.contains(userId))
             "admin" else "user"
         val token = JWT.create()
