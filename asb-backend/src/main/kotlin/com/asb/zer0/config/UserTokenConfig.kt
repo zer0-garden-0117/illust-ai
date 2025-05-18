@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Value
 @Configuration
 class UserTokenConfig(
     @Value("\${userToken.secret:yourRandomSecretKeyBase64Encoded=}") private val userTokenSecret: String,
-    @Value("\${userToken.admin-user-ids:auth_provider_123456789}") private val adminUserIds: List<String>,
+    @Value("\${userToken.admin-user-id:auth_provider_123456789}") private val adminUserIdString: String,
 ) {
-
     @Bean
     fun userTokenSecret(): String {
         return userTokenSecret
@@ -17,6 +16,7 @@ class UserTokenConfig(
 
     @Bean
     fun adminUserIds(): List<String> {
+        val adminUserIds = adminUserIdString.split(",").map { it.trim() }
         return adminUserIds
     }
 }
