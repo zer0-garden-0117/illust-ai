@@ -17,6 +17,10 @@ class UserTokenService(
     private val algorithm = Algorithm.HMAC256(userTokenSecret)
 
     fun generateToken(userId: String): String {
+        logger.info(userId)
+        adminUserIds.forEach {
+            logger.info(it)
+        }
         val userRole = if (adminUserIds.contains(userId))
             "admin" else "user"
         val token = JWT.create()
@@ -24,6 +28,7 @@ class UserTokenService(
             .withClaim("userId", userId)
             .withExpiresAt(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
             .sign(algorithm)
+        logger.info(token)
         return token
     }
 
