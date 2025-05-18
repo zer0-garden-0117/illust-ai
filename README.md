@@ -27,7 +27,6 @@
    - Docker Desktop
      - docker-composeが使えるようにしておく
    - AWS CLI
-     - aws configure
    - SSL証明書(HTTP to HTTPS)の設定
      - mkcertのインストール
      - cd asb-backend/nginx/certs
