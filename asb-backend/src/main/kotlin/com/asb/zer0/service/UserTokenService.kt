@@ -10,14 +10,14 @@ import java.util.*
 @Service
 class UserTokenService(
     private val userTokenSecret: String,
-    private val adminUserId: String
+    private val adminUserIds: List<String>
 ) {
     private val logger = LoggerFactory.getLogger(UserTokenService::class.java)
 
     private val algorithm = Algorithm.HMAC256(userTokenSecret)
 
     fun generateToken(userId: String): String {
-        val userRole = if (userId == adminUserId)
+        val userRole = if (adminUserIds.contains(userId))
             "admin" else "user"
         val token = JWT.create()
             .withClaim("role", userRole)

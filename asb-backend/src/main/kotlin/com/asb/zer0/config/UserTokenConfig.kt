@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 @Configuration
 class UserTokenConfig(
     @Value("\${userToken.secret:yourRandomSecretKeyBase64Encoded=}") private val userTokenSecret: String,
-    @Value("\${userToken.admin-user-id:auth_provider_123456789}") private val adminUserId: String,
+    @Value("\${userToken.admin-user-ids:auth_provider_123456789}") private val adminUserIds: List<String>,
 ) {
 
     @Bean
@@ -16,7 +16,7 @@ class UserTokenConfig(
     }
 
     @Bean
-    fun adminUserId(): String {
-        return adminUserId
+    fun adminUserIds(): List<String> {
+        return adminUserIds
     }
 }
