@@ -1,6 +1,7 @@
-# Angel Sandbox
+# Colorful AI
 
-## 主な機能
+## 主な機能（予定）
+ - 画像の生成
  - 画像の投稿 (S3保存)
  - 画像のタグ管理 (dynamodb)
  - 画像のグリッド表示、詳細表示
@@ -9,9 +10,10 @@
    - 画像にいいね、レーティング付与
    - 画像のダウンロード
 
-## 構成
+## 構成（予定）
  - バックエンド
    - Spring Boot (Kotlin)
+   - Bedrock
    - dynamodb
    - S3
    - NodeJS (sharpでavifに変換)
@@ -20,7 +22,7 @@
  - フロントエンド
    - Next.js (Typescript)
    - Mantine UI
-   - Cognito
+   - Firebase
 
 ## 開発環境構築手順
  - バックエンド
@@ -46,4 +48,4 @@
  - バグ報告・機能提案はIssueへ、コード変更はPRでお願いします。 
 
 ## ライセンス
- -  [MIT License](https://github.com/zer0-garden-0117/angel-sandbox/blob/main/LICENSE) 
+ -  [MIT License](https://github.com/zer0-garden-0117/colorful-ai/blob/main/LICENSE) 
