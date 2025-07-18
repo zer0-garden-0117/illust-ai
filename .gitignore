@@ -56,8 +56,8 @@ Temporary Items
 **/shared-local-instance.db
 
 ### scripts
-asb-scripts
-asb-scripts/*
+cfa-scripts
+cfa-scripts/*
 
 ### certs
 *.pem

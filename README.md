@@ -31,16 +31,16 @@
    - AWS CLI
    - SSL証明書(HTTP to HTTPS)の設定
      - mkcertのインストール
-     - cd asb-backend/nginx/certs
-     - config.iniを編集し、keystore-gen.shを実行し、asb-keysotre.p12をOSインポート
+     - cd cfa-backend/nginx/certs
+     - config.iniを編集し、keystore-gen.shを実行し、cfa-keysotre.p12をOSインポート
    - NodeJS for sharp(avif変換ライブラリ)
-     - cd asb/backend/node-scripts
+     - cd cfa/backend/node-scripts
      - npm install
    - 起動
-     - cd asb-backend
+     - cd cfa-backend
      - ./gradlew clean bootRunDev
  - フロントエンド
-   - cd asb-frontend
+   - cd cfa-frontend
    - npm install
    - npm run dev
 

@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: asb-backend.war
+  - source: cfa-backend.war
     destination: /opt/zer0
 
 hooks:
