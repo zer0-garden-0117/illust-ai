@@ -2,6 +2,10 @@
   "name": "cfa-frontend",
   "version": "0.1.0",
   "private": true,
+  "volta": {
+    "node": "20.19.4",
+    "yarn": "1.22.22"
+  },
   "scripts": {
     "dev": "npm run bundleDoc && npm run genCode && next dev -p 3001 --experimental-https",
     "clean": "rm -rf build dist node_modules/.cache && node -e 'require(\"fs\").rmSync(\"src/generated\", { recursive: true, force: true })'",
