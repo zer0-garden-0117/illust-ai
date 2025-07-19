@@ -41,6 +41,7 @@ dependencies {
     implementation("software.amazon.awssdk:s3")
     implementation("software.amazon.awssdk:sso:2.31.35")
     implementation("software.amazon.awssdk:ssooidc:2.31.35")
+    implementation("software.amazon.awssdk:bedrockruntime:2.32.3")
 
     // UUID
     implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
