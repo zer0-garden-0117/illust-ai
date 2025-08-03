@@ -23,6 +23,9 @@ data class Work(
     @get:DynamoDbAttribute("description")
     var description: String = "",
 
+    @get:DynamoDbAttribute("prompt")
+    var prompt: String = "",
+
     @get:DynamoDbAttribute("titleImgUrl")
     var titleImgUrl: String = "",
 

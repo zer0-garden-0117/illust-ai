@@ -76,6 +76,31 @@ Works:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
+WorksCreate:
+  post:
+    operationId: createWorks
+    tags:
+      - works
+    summary: 作品を作成する
+    description: |
+      作成を作成する
+    security:
+      - UserTokenAuth: []
+      - CsrfTokenAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/works.yaml#/ApiWork"
+    responses:
+      "200":
+        $ref: "../components/responses/works.yaml#/WorksIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
 WorksSearchByTags:
   post:
     operationId: searchWorksByTags

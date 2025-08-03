@@ -53,6 +53,9 @@ paths:
   /works:
     $ref: "./paths/works.yaml#/Works"
 
+  /works/create:
+    $ref: "./paths/works.yaml#/WorksCreate"
+
   /works/searchByTags:
     $ref: "./paths/works.yaml#/WorksSearchByTags"
 

@@ -18,6 +18,10 @@ ApiWork:
       type: string
       description: "作品の説明"
       example: "New Subject"
+    prompt:
+      type: string
+      description: "作品のプロンプト"
+      example: "scenery"
     titleImgUrl:
       type: string
       description: "タイトル画像のURL"
