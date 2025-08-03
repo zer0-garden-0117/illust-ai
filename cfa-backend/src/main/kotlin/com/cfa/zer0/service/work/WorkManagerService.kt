@@ -115,7 +115,8 @@ class WorkManagerService(
         }
         val titleImageUrl = s3Service.uploadToS3(
             titleImageAvif,
-            nextWorkId + "_titleImage.avif"
+            fileName = nextWorkId + "_titleImage.avif",
+            contentType = "image/avif"
         )
         val titleCdnUrl = cdnService.convertToCdnUrl(titleImageUrl)
 
@@ -128,7 +129,8 @@ class WorkManagerService(
         }
         val thumbnailImageUrl = s3Service.uploadToS3(
             thumbnailImageAvif,
-            nextWorkId + "_thumbnailImage.avif"
+            fileName = nextWorkId + "_thumbnailImage.avif",
+            contentType = "image/avif"
         )
         logger.info("thumbnailImageAvif: $thumbnailImageAvif thumbnailImageUrl: $thumbnailImageUrl")
         val thumbnailCdnUrl = cdnService.convertToCdnUrl(thumbnailImageUrl)
@@ -142,7 +144,8 @@ class WorkManagerService(
         }
         val watermaskImageUrl = s3Service.uploadToS3(
             watermaskImageAvif,
-            nextWorkId + "_watermaskImage.avif"
+            fileName = nextWorkId + "_watermaskImage.avif",
+            contentType = "image/avif"
         )
         logger.info("watermaskImageAvif: $watermaskImageAvif watermaskImageUrl: $watermaskImageUrl")
         val watermaskCdnUrl = cdnService.convertToCdnUrl(watermaskImageUrl)
@@ -156,7 +159,8 @@ class WorkManagerService(
         }
         val ogpImageUrl = s3Service.uploadToS3(
             ogpImageJpeg,
-            nextWorkId + "_ogpImage.jpeg"
+            fileName = nextWorkId + "_ogpImage.jpeg",
+            contentType = "image/avif"
         )
         logger.info("ogpImageJpeg: $ogpImageJpeg ogpImageUrl: $ogpImageUrl")
 

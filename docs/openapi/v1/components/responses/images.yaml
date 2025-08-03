@@ -1,0 +1,8 @@
+ImagesCreateResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/images.yaml#/ApiImages"

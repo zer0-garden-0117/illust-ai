@@ -12,14 +12,14 @@ class S3Service(
     private val s3Client: S3Client,
     private val bucketName: String
 ) {
-    fun uploadToS3(image: ByteArray, fileName: String): String {
+    fun uploadToS3(image: ByteArray, fileName: String, contentType: String): String {
         val requestBody = RequestBody.fromBytes(image)
 
         // PutObjectRequestのビルド
         val putObjectRequest = PutObjectRequest.builder()
             .bucket(bucketName)
             .key(fileName)
-            .contentType("image/avif")
+            .contentType(contentType)
             .build()
 
         try {
