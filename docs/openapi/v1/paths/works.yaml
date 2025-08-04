@@ -92,7 +92,7 @@ WorksCreate:
       content:
         application/json:
           schema:
-            $ref: "../components/schemas/works.yaml#/ApiWork"
+            $ref: "../components/schemas/works.yaml#/ApiWorkWithTag"
     responses:
       "200":
         $ref: "../components/responses/works.yaml#/WorksIdResponse"

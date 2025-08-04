@@ -5,7 +5,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.cfa.zer0.config.token.CustomAuthenticationToken
-import com.cfa.zer0.dto.WorkWithTag
+import com.cfa.zer0.entity.Tag
+import com.cfa.zer0.entity.Work
 import com.cfa.zer0.generated.endpoint.WorksApi
 import com.cfa.zer0.generated.model.ApiWork
 import com.cfa.zer0.generated.model.ApiWorkSearchByTags
@@ -31,6 +32,15 @@ class WorksController(
     private val userManagerService: UserManagerService
 ) : WorksApi {
 
+    override fun createWorks(
+        @RequestBody apiWorkWithTag: ApiWorkWithTag
+    ): ResponseEntity<ApiWorkWithTag> {
+        val work: Work = workMapper.toWork(apiWorkWithTag.apiWork!!)
+        val tags: List<Tag> = tagMapper.toTag(apiWorkWithTag.apiTags!!)
+        val workWithTag = workManagerService.createWork(work, tags)
+        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
+    }
+
     override fun searchWorksByTags(
         @RequestBody(required = false) apiWorkSearchByTags: ApiWorkSearchByTags
     ): ResponseEntity<ApiWorksWithSearchResult> {
@@ -44,10 +54,7 @@ class WorksController(
             val apiWork = workMapper.toApiWork(work)
             apiWorks.add(apiWork)
         }
-        val apiWorkWithDetails = ApiWorksWithSearchResult(
-            works = apiWorks,
-            totalCount = workResult?.totalCount ?: 0
-        )
+        val apiWorkWithDetails = ApiWorksWithSearchResult(apiWorks, workResult?.totalCount ?: 0)
         return ResponseEntity.ok(apiWorkWithDetails)
     }
 
@@ -97,16 +104,9 @@ class WorksController(
         val tags = tagMapper.toTag(apiWorkWithTag.apiTags!!)
 
         // 作品の登録
-        val workWithDetails = workManagerService.registerWork(
-            work = work,
-            tags = tags,
-            titleImage = titleImage,
-            images = images
-        )
+        val workWithTag = workManagerService.registerWork(work, tags, titleImage, images)
 
-        // DomainのモデルをApiのモデルに変換
-        val response = toApiWorkWithTag(workWithDetails)
-        return ResponseEntity.ok(response)
+        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
     }
 
     override fun updateWorksById(

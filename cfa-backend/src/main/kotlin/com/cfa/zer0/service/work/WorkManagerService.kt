@@ -35,11 +35,8 @@ class WorkManagerService(
     @Transactional
     fun findWorkById(workId: String): com.cfa.zer0.dto.WorkWithTag {
         val work = workService.findWorkById(workId)
-        val tag = tagService.findByWorkIds(workId)
-        return com.cfa.zer0.dto.WorkWithTag(
-            work = work,
-            tags = tag
-        )
+        val tags = tagService.findByWorkIds(workId)
+        return WorkWithTag(work, tags)
     }
 
     @Transactional
@@ -51,22 +48,16 @@ class WorkManagerService(
     }
 
     @Transactional
-    fun findWorksByTags(
-        words: List<String>?,
-        offset: Int,
-        limit: Int
-    ): WorksWithSearchResult? {
+    fun findWorksByTags(words: List<String>?, offset: Int, limit: Int): WorksWithSearchResult? {
         // 空のリストやnullチェック
         if (words.isNullOrEmpty()) {
             logger.info("入力されたタグが空、もしくはnullです。")
             return null
         }
-        logger.info("入力されたタグ: $words")
 
         // 各単語でタグ検索
         val workIds = mutableListOf<String>()
         val tagResult = tagService.findByTagsWithOffset(words, offset, limit)
-        logger.info("タグ検索結果: ${tagResult.tags.map { it.workId }}")
         tagResult.tags.forEach { tag ->
             workIds.add(tag.workId)
         }
@@ -75,15 +66,32 @@ class WorkManagerService(
         val works = mutableListOf<Work>()
         workIds.forEach { workId ->
             val work = workRepository.findByWorkId(workId)
-            logger.info("タグ検索での取得した作品: $work")
             works.add(work)
         }
 
-        logger.info("最終的にタグ検索で取得した作品リスト: $works")
-        return WorksWithSearchResult(
-            works = works,
-            totalCount = tagResult.totalCount
-        )
+        return WorksWithSearchResult(works, tagResult.totalCount)
+    }
+
+    @Transactional
+    fun createWork(work: Work, tags: List<Tag>): WorkWithTag {
+        // 作品の登録
+        val nowDate = Instant.now()
+        val nextWorkId = uuidService.generateUuid()
+        work.workId = nextWorkId
+        work.updatedAt = nowDate
+        work.createdAt = nowDate
+        workService.registerWork(work)
+
+        // タグの登録
+        val filteredTags = tags.filter { it.tag.isNotBlank() }
+        val globalTag = Tag().apply { tag = "other_GLOBAL" }
+        val allTags = filteredTags + globalTag
+        allTags.forEach { tag ->  tag.workId = nextWorkId; tag.updatedAt = nowDate }
+        tagRepository.registerTags(allTags)
+
+        // ToDo: 画像生成SQS通知
+
+        return WorkWithTag(work, tags)
     }
 
     @Transactional
@@ -92,7 +100,7 @@ class WorkManagerService(
         tags: List<Tag>,
         titleImage: MultipartFile,
         images: List<MultipartFile>
-    ): com.cfa.zer0.dto.WorkWithTag {
+    ): WorkWithTag {
         // 初期化
         val nowDate = Instant.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
