@@ -9,6 +9,7 @@ import com.cfa.zer0.repository.WorkRepository
 import com.cfa.zer0.service.CdnService
 import com.cfa.zer0.service.ConvertService
 import com.cfa.zer0.service.S3Service
+import com.cfa.zer0.service.SqsService
 import com.cfa.zer0.service.tag.TagService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -26,6 +27,7 @@ class WorkManagerService(
     private val tagService: TagService,
     private val convertService: ConvertService,
     private val s3Service: S3Service,
+    private val sqsService: SqsService,
     private val cdnService: CdnService,
     private val uuidService: com.cfa.zer0.service.UuidService
 ) {
@@ -76,8 +78,8 @@ class WorkManagerService(
     fun createWork(work: Work, tags: List<Tag>): WorkWithTag {
         // 作品の登録
         val nowDate = Instant.now()
-        val nextWorkId = uuidService.generateUuid()
-        work.workId = nextWorkId
+        val workId = uuidService.generateUuid()
+        work.workId = workId
         work.updatedAt = nowDate
         work.createdAt = nowDate
         workService.registerWork(work)
@@ -86,10 +88,11 @@ class WorkManagerService(
         val filteredTags = tags.filter { it.tag.isNotBlank() }
         val globalTag = Tag().apply { tag = "other_GLOBAL" }
         val allTags = filteredTags + globalTag
-        allTags.forEach { tag ->  tag.workId = nextWorkId; tag.updatedAt = nowDate }
+        allTags.forEach { tag ->  tag.workId = workId; tag.updatedAt = nowDate }
         tagRepository.registerTags(allTags)
 
-        // ToDo: 画像生成SQS通知
+        // 画像生成SQS通知
+        sqsService.sendCreateImageMessage(work.workId, "create", work.prompt, work.createdAt)
 
         return WorkWithTag(work, tags)
     }

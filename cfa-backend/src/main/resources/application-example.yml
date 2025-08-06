@@ -6,6 +6,11 @@ s3:
   region: <Your AWS Region ex:us-east-1>
   bucket: <Your S3 Bucket Name ex:your-backend-dev>
 
+# 通知
+sqs:
+  region: <Your AWS Region ex:us-east-1>
+  create-image-queue-url: <Your SQS Create Image Queue URL ex:https://sqs.us-east-1.amazonaws.com/xxx/xxx>
+
 # 認証系
 cognito:
   region: <Your AWS Region ex:us-east-1>
