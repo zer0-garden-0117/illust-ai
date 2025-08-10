@@ -16,11 +16,12 @@ class SqsService(
         val message = mapOf(
             "workId" to workId,
             "action" to action,
+            "workflow" to "workflow1.json",
+            "prompt" to prompt,
             "timestamp" to nowDate.toString()
         )
         val messageJson = ObjectMapper().writeValueAsString(message)
 
-        // ToDo: グラフィックのインスタンスを増やす際にMessageGroupId検討
         val request = SendMessageRequest.builder()
             .queueUrl(createImageQueueUrl)
             .messageBody(messageJson)
