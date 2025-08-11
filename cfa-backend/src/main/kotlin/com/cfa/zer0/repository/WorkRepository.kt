@@ -49,6 +49,15 @@ class WorkRepository(
         }
     }
 
+    fun updateWork(work: Work): Work {
+        return try {
+            table.updateItem(work)
+            work
+        } catch (e: DynamoDbException) {
+            throw RuntimeException("Failed to register work: ${work.workId}", e)
+        }
+    }
+
     fun deleteWorkById(workId: String) {
         try {
             table.deleteItem { r ->

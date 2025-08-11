@@ -1,28 +1,18 @@
 package com.cfa.zer0.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.cfa.zer0.config.token.CustomAuthenticationToken
 import com.cfa.zer0.entity.Tag
 import com.cfa.zer0.entity.Work
 import com.cfa.zer0.generated.endpoint.WorksApi
-import com.cfa.zer0.generated.model.ApiWork
-import com.cfa.zer0.generated.model.ApiWorkSearchByTags
-import com.cfa.zer0.generated.model.ApiWorkWithTag
-import com.cfa.zer0.generated.model.ApiWorksWithSearchResult
+import com.cfa.zer0.generated.model.*
 import com.cfa.zer0.mapper.TagMapper
 import com.cfa.zer0.mapper.WorkMapper
 import com.cfa.zer0.service.user.UserManagerService
 import com.cfa.zer0.service.work.WorkManagerService
+import io.swagger.v3.oas.annotations.Parameter
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
-import java.util.*
 
 @RestController
 class WorksController(
@@ -35,28 +25,51 @@ class WorksController(
     override fun createWorks(
         @RequestBody apiWorkWithTag: ApiWorkWithTag
     ): ResponseEntity<ApiWorkWithTag> {
+        // ドメインモデルに変換
         val work: Work = workMapper.toWork(apiWorkWithTag.apiWork!!)
         val tags: List<Tag> = tagMapper.toTag(apiWorkWithTag.apiTags!!)
+
+        // 作品作成
         val workWithTag = workManagerService.createWork(work, tags)
+
+        // APIモデルに変換して返却
         return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
     }
 
-    override fun searchWorksByTags(
-        @RequestBody(required = false) apiWorkSearchByTags: ApiWorkSearchByTags
-    ): ResponseEntity<ApiWorksWithSearchResult> {
-        val workResult = workManagerService.findWorksByTags(
-            apiWorkSearchByTags.tags,
-            apiWorkSearchByTags.offset,
-            apiWorkSearchByTags.limit
-        )
-        val apiWorks = mutableListOf<ApiWork>()
-        workResult?.works?.forEach { work ->
-            val apiWork = workMapper.toApiWork(work)
-            apiWorks.add(apiWork)
-        }
-        val apiWorkWithDetails = ApiWorksWithSearchResult(apiWorks, workResult?.totalCount ?: 0)
-        return ResponseEntity.ok(apiWorkWithDetails)
+    override fun patchWorksImagesById(
+        @PathVariable("workId") workId: kotlin.String,
+        @Valid @RequestBody apiWorkImage: ApiWorkImage
+    ): ResponseEntity<ApiWorkWithTag> {
+        // workを取得してURLを更新
+        val workWithTag = workManagerService.findWorkById(workId = workId)
+        workWithTag.work.titleImgUrl = apiWorkImage.titleImgUrl!!
+        workWithTag.work.thumbnailImgUrl = apiWorkImage.thumbnailImgUrl!!
+
+        // 作品更新
+        workManagerService.updateWork(workWithTag.work)
+
+        // APIモデルに変換して返却
+        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
     }
+
+    override fun patchWorksMetaDatasById(
+        @PathVariable("workId") workId: String,
+        @Valid @RequestBody apiWorkMetaData: ApiWorkMetaData
+    ): ResponseEntity<ApiWorkWithTag> {
+        // workを取得してメタデータを更新
+        val workWithTag = workManagerService.findWorkById(workId = workId)
+        workWithTag.work.mainTitle = apiWorkMetaData.mainTitle!!
+        workWithTag.work.subTitle = apiWorkMetaData.subTitle!!
+        workWithTag.work.description = apiWorkMetaData.description!!
+        workWithTag.work.status = apiWorkMetaData.status!!
+
+        // 作品更新
+        workManagerService.updateWork(workWithTag.work)
+
+        // APIモデルに変換して返却
+        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
+    }
+
 
     override fun getWorksById(
         @PathVariable("workId") workId: String
@@ -64,56 +77,6 @@ class WorksController(
         val workWithTag = workManagerService.findWorkById(workId = workId)
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
-    }
-
-    @PostMapping(
-        "/works",
-        consumes = ["multipart/form-data"],
-        produces = ["application/json"]
-    )
-    override fun registerWorks(
-        @RequestPart("titleImage", required = true) titleImage: MultipartFile,
-        @RequestPart("images", required = true) images: List<MultipartFile>,
-        @RequestParam(
-            value = "worksDetailsBase64",
-            required = true
-        ) worksDetailsBase64: String
-    ): ResponseEntity<ApiWorkWithTag> {
-        // roleを取得してadminじゃなければ401を返す
-        val authentication = SecurityContextHolder.getContext().authentication
-        if (authentication !is CustomAuthenticationToken || authentication.role != "admin") {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
-        }
-
-        // 作品情報のデコード
-        val decodedWorksDetails = String(
-            Base64.getDecoder().decode(worksDetailsBase64),
-            Charsets.UTF_8
-        )
-        val objectMapper: ObjectMapper = jacksonObjectMapper().apply {
-            registerModule(JavaTimeModule())
-        }
-        val apiWorkWithTag: ApiWorkWithTag =
-            objectMapper.readValue(decodedWorksDetails)
-        if (apiWorkWithTag.apiWork == null) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        // ApiのモデルをDomainのモデルに変換
-        val work = workMapper.toWork(apiWorkWithTag.apiWork!!)
-        val tags = tagMapper.toTag(apiWorkWithTag.apiTags!!)
-
-        // 作品の登録
-        val workWithTag = workManagerService.registerWork(work, tags, titleImage, images)
-
-        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
-    }
-
-    override fun updateWorksById(
-        @PathVariable("workId") workId: String,
-        @Valid @RequestBody apiWorkWithTag: ApiWorkWithTag
-    ): ResponseEntity<ApiWorkWithTag> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     override fun deleteWorksById(
@@ -128,6 +91,27 @@ class WorksController(
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
     }
+
+    override fun searchWorksByTags(
+        @RequestBody(required = false) apiWorkSearchByTags: ApiWorkSearchByTags
+    ): ResponseEntity<ApiWorksWithSearchResult> {
+        // 作品検索
+        val workResult = workManagerService.findWorksByTags(
+            apiWorkSearchByTags.tags,
+            apiWorkSearchByTags.offset,
+            apiWorkSearchByTags.limit
+        )
+
+        // APIモデルに変換
+        val apiWorks = mutableListOf<ApiWork>()
+        workResult?.works?.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            apiWorks.add(apiWork)
+        }
+        val apiWorkWithDetails = ApiWorksWithSearchResult(apiWorks, workResult?.totalCount ?: 0)
+        return ResponseEntity.ok(apiWorkWithDetails)
+    }
+
 
     private fun toApiWorkWithTag(
         workWithTag: com.cfa.zer0.dto.WorkWithTag

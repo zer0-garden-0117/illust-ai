@@ -22,6 +22,10 @@ ApiWork:
       type: string
       description: "作品のプロンプト"
       example: "scenery"
+    status:
+      type: string
+      description: "作品の状態"
+      example: "open"
     titleImgUrl:
       type: string
       description: "タイトル画像のURL"
@@ -48,6 +52,40 @@ ApiWork:
       format: date-time
       description: "作品の最終更新日時"
       example: "2024-07-08T00:00:00+09:00"
+
+ApiWorkImage:
+  description: 作品の画像情報
+  type: object
+  properties:
+    titleImgUrl:
+      type: string
+      description: "タイトル画像のURL"
+      example: "http://example.com/new_title_image.avif"
+    thumbnailImgUrl:
+      type: string
+      description: "サムネイル画像のURL"
+      example: "http://example.com/new_thumbnail_image.avif"
+
+ApiWorkMetaData:
+  description: 作品のメタデータ
+  type: object
+  properties:
+    mainTitle:
+      type: string
+      description: "作品のメインタイトル"
+      example: "New Work"
+    subTitle:
+      type: string
+      description: "作品のサブタイトル"
+      example: "New Subject"
+    description:
+      type: string
+      description: "作品の説明"
+      example: "New Subject"
+    status:
+      type: string
+      description: "作品の状態"
+      example: "open"
 
 ApiTag:
   description: タグ

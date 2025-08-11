@@ -50,17 +50,20 @@ paths:
     $ref: "./paths/users.yaml#/UsersRatedByWorkId"
 
   # works
-  /works:
-    $ref: "./paths/works.yaml#/Works"
-
   /works/create:
     $ref: "./paths/works.yaml#/WorksCreate"
 
-  /works/searchByTags:
-    $ref: "./paths/works.yaml#/WorksSearchByTags"
-
   /works/{workId}:
     $ref: "./paths/works.yaml#/WorksById"
+
+  /works/{workId}/images:
+    $ref: "./paths/works.yaml#/WorksImagesById"
+
+  /works/{workId}/metaDatas:
+    $ref: "./paths/works.yaml#/WorksMetaDatasById"
+
+  /works/searchByTags:
+    $ref: "./paths/works.yaml#/WorksSearchByTags"
 
   /works/tags:
     $ref: "./paths/works.yaml#/WorksTags"

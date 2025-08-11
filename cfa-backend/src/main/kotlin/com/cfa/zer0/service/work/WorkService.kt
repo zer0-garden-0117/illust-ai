@@ -28,6 +28,10 @@ class WorkService(
         return workRepository.registerWork(work)
     }
 
+    fun updateWork(work: Work): Work {
+        return workRepository.updateWork(work)
+    }
+
     fun deleteWorkById(workId: String) {
         return workRepository.deleteWorkById(workId)
     }

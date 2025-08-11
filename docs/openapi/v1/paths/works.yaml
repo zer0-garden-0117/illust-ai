@@ -1,81 +1,3 @@
-Works:
-  post:
-    operationId: registerWorks
-    tags:
-      - works
-    summary: 作品を新規登録する
-    description: |
-      作品を新規登録する
-      タイトルの画像、中身の画像(最大30枚)を添付できる
-    security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
-    requestBody:
-      description: |-
-        作品の詳細情報を含むbase64形式のデータと、オプションで画像ファイルを含むマルチパートフォームデータ。
-      required: true
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              titleImage:
-                type: string
-                format: binary
-                description: アップロードするタイトルの画像ファイル
-              images:
-                type: array
-                items:
-                  type: string
-                  format: binary
-                description: アップロードする画像ファイル（最大30枚）
-              worksDetailsBase64:
-                type: string
-                description: >
-                  作品の詳細情報(ApiWorkWithTag)をbase64エンコードされた形式で送信するフィールド。  
-                  例えば、以下のJSON形式の詳細情報がエンコードされます:
-                  ```json
-                  {
-                    "apiWorks": {
-                      "workId": 1,
-                      "mainTitle": "New Work",
-                      "subTitle": "New Subject",
-                      "description": "New Subject",
-                      "pages": "30",
-                      "workSize": "30MB",
-                      "likes": 0,
-                      "downloads": 0,
-                      "titleImageUrl": "http://example.com/new_title_image.jpg",
-                      "createdAt": "2024-07-08T00:00:00+09:00",
-                      "updatedAt": "2024-07-08T00:00:00+09:00",
-                      "format": ["CG", "コミック", "ゲーム"],
-                      "genre": ["オリジナル", "二次創作", "パロディ"],
-                      "character": ["真白"],
-                      "creator": ["New Creator"]
-                    },
-                    "apiTags": {
-                      "tags": ["夜景"]
-                    }
-                  }
-                  ```
-                example: "eyJhcGlXb3JrIjogeyJ3b3JrSWQiOiAxLCAiZ2VucmUiOiAi44Kq44Oq44K444OK44OrIiwgImZvcm1hdCI6ICJDRyIsICJ3b3JrU2l6ZSI6IDMwLCAiZGVzY3JpcHRpb24iOiAiTmV3IFN1YmplY3QiLCAiY3JlYXRlZEF0IjogIjIwMjQtMDctMDhUMDA6MDA6MDArMDk6MDAiLCAicGFnZXMiOiAzMCwgInN1YlRpdGxlIjogIk5ldyBTdWJqZWN0IiwgImRvd25sb2FkcyI6IDAsICJtYWluVGl0bGUiOiAiTmV3IFdvcmsiLCAidGl0bGVJbWdVcmwiOiAiaHR0cDovL2V4YW1wbGUuY29tL25ld190aXRsZV9pbWFnZS5qcGciLCAibGlrZXMiOiAwLCAidXBkYXRlZEF0IjogIjIwMjQtMDctMDhUMDA6MDA6MDArMDk6MDAifSwgImFwaUltZ3MiOiBbeyJ3b3JrSWQiOiAxLCAiaW1nVXJsIjogImh0dHBzOi8vZXhhbXBsZS5jb20vaW1hZ2UxLmpwZyIsICJpbWdQYWdlTnVtIjogMX0sIHsid29ya0lkIjogMSwgImltZ1VybCI6ICJodHRwczovL2V4YW1wbGUuY29tL2ltYWdlMi5qcGciLCAiaW1nUGFnZU51bSI6IDJ9XSwgImFwaVRhZ3MiOiBbeyJ3b3JrSWQiOiAxLCAidGFnIjogIuWknOaZryJ9XSwgImFwaUNoYXJhY3RlcnMiOiBbeyJ3b3JrSWQiOiAxLCAiY2hhcmFjdGVyIjogIuecn+eZvSJ9XSwgImFwaUNyZWF0b3JzIjogW3sid29ya0lkIjogMSwgImNyZWF0b3IiOiAi5L2c6ICFQSJ9XX0="
-            required:
-              - titleImage
-              - images
-              - worksDetailsBase64
-            encoding:
-              titleImage:
-                contentType: image/png, image/jpeg
-              images:
-                contentType: image/png, image/jpeg
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksRegisterResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
 WorksCreate:
   post:
     operationId: createWorks
@@ -143,34 +65,6 @@ WorksById:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
-  put:
-    operationId: updateWorksById
-    tags:
-      - works
-    summary: IDを指定して作品情報を更新する
-    description: |
-      IDを指定して作品情報を更新する
-    security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
-    requestBody:
-      description: |-
-        ### User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/works.yaml#/ApiWorkWithTag"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
   delete:
     operationId: deleteWorksById
     tags:
@@ -183,6 +77,58 @@ WorksById:
       - CsrfTokenAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/works.yaml#/WorksIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+WorksImagesById:
+  patch:
+    operationId: patchWorksImagesById
+    tags:
+      - works
+    summary: IDを指定して作品の画像のURLを追加する
+    description: |
+      IDを指定して作品の画像を追加する。
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
+    requestBody:
+      description: |-
+        ### User
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/works.yaml#/ApiWorkImage"
+    responses:
+      "200":
+        $ref: "../components/responses/works.yaml#/WorksIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+WorksMetaDatasById:
+  patch:
+    operationId: patchWorksMetaDatasById
+    tags:
+      - works
+    summary: IDを指定して作品のメタデータを追加する
+    description: |
+      IDを指定して作品のメタデータを追加する。
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
+    requestBody:
+      description: |-
+        ### User
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/works.yaml#/ApiWorkMetaData"
     responses:
       "200":
         $ref: "../components/responses/works.yaml#/WorksIdResponse"
