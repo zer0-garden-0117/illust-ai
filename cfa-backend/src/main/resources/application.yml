@@ -2,6 +2,7 @@ security:
   paths:
     need-access-token: /users/token
     no-bearer-token: /users/token:GET,/works/search:POST,/works/searchByTags:POST,/works/*:GET,/health:GET
+    admin-api: /admins/works/images
     csrf-gen: /users/token
   csrf:
     same-site: Strict

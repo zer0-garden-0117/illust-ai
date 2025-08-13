@@ -85,32 +85,6 @@ WorksById:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
-WorksImagesById:
-  patch:
-    operationId: patchWorksImagesById
-    tags:
-      - works
-    summary: IDを指定して作品の画像のURLを追加する
-    description: |
-      IDを指定して作品の画像を追加する。
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
-    requestBody:
-      description: |-
-        ### User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/works.yaml#/ApiWorkImage"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
 WorksMetaDatasById:
   patch:
     operationId: patchWorksMetaDatasById

@@ -18,6 +18,8 @@ cognito:
 userToken:
   secret: <Your JWT Secret Key ex:yourRandomSecretKeyBase64Encoded=>
   admin-user-id: <Your Admin User ID ex:auth_provider_123456789>
+admin:
+  key: <Your Admin Key ex:yourRandomSecretKey>
 
 # フロントエンド連携
 cors:

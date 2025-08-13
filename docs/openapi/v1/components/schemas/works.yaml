@@ -57,6 +57,10 @@ ApiWorkImage:
   description: 作品の画像情報
   type: object
   properties:
+    workId:
+      type: string
+      description: "作品の一意の識別子"
+      example: 1
     titleImgUrl:
       type: string
       description: "タイトル画像のURL"

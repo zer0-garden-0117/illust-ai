@@ -1,7 +1,9 @@
 package com.cfa.zer0.config
 
+import com.cfa.zer0.config.filter.AdminAPIFilter
 import com.cfa.zer0.config.filter.CognitoTokenFilter
 import com.cfa.zer0.config.filter.UserTokenFilter
+import com.cfa.zer0.service.AdminAuthService
 import com.cfa.zer0.service.UserTokenService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -22,10 +24,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Profile("prod", "dev", "test")
 class AuthConfig(
     private val userTokenService: UserTokenService,
+    private val adminAuthService: AdminAuthService,
     @Value("\${cognito.region:us-east-1}") private val cognitoRegion: String,
     @Value("\${cognito.pool-id:us-east-1_xxxxxxxxx}") private val cognitoPoolId: String,
     @Value("\${security.paths.no-bearer-token}") private val noBearerTokenPathAndMethodString: String,
-    @Value("\${security.paths.need-access-token}") private val needAccessTokenPathsString: String
+    @Value("\${security.paths.need-access-token}") private val needAccessTokenPathsString: String,
+    @Value("\${security.paths.admin-api}") private val adminApiPathString: String,
 ) : WebMvcConfigurer {
     @Bean
     fun cognitoJwtDecoder(): JwtDecoder? {
@@ -52,6 +56,8 @@ class AuthConfig(
         val noBearerTokenPathSet = noBearerTokenPathAndMethodString.split(",")
             .map { it.trim() }.toSet()
         val needAccessTokenPathsSet = needAccessTokenPathsString.split(",")
+            .map { it.trim() }.toSet()
+        val adminApiPathSet = adminApiPathString.split(",")
             .map { it.trim() }.toSet()
         http
             ?.authorizeHttpRequests { authorize ->
@@ -80,6 +86,14 @@ class AuthConfig(
                 UserTokenFilter(
                     userTokenService,
                     noBearerTokenPathSet
+                ),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
+            // 管理用APIの検証の設定
+            ?.addFilterBefore(
+                AdminAPIFilter(
+                    adminAuthService,
+                    adminApiPathSet
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             )

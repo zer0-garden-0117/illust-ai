@@ -36,22 +36,6 @@ class WorksController(
         return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
     }
 
-    override fun patchWorksImagesById(
-        @PathVariable("workId") workId: kotlin.String,
-        @Valid @RequestBody apiWorkImage: ApiWorkImage
-    ): ResponseEntity<ApiWorkWithTag> {
-        // workを取得してURLを更新
-        val workWithTag = workManagerService.findWorkById(workId = workId)
-        workWithTag.work.titleImgUrl = apiWorkImage.titleImgUrl!!
-        workWithTag.work.thumbnailImgUrl = apiWorkImage.thumbnailImgUrl!!
-
-        // 作品更新
-        workManagerService.updateWork(workWithTag.work)
-
-        // APIモデルに変換して返却
-        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
-    }
-
     override fun patchWorksMetaDatasById(
         @PathVariable("workId") workId: String,
         @Valid @RequestBody apiWorkMetaData: ApiWorkMetaData
