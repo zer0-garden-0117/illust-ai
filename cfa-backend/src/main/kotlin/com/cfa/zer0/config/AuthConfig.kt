@@ -62,44 +62,36 @@ class AuthConfig(
         http
             ?.authorizeHttpRequests { authorize ->
                 // 認証を免除するパス+メソッドの設定
-                noBearerTokenPathAndMethodString.split(",")
-                    .forEach { pathWithMethod ->
-                        val (path, method) = pathWithMethod.split(":")
-                        authorize.requestMatchers(
-                            HttpMethod.valueOf(method),
-                            path
-                        ).permitAll()
-                    }
-                // それ以外は認証を必要とする設定
-                authorize.anyRequest().authenticated()
+                authorize.anyRequest().permitAll() // すべて許可
             }
-            // アクセストークンの検証の設定
-            ?.addFilterBefore(
-                CognitoTokenFilter(
-                    cognitoJwtDecoder(),
-                    needAccessTokenPathsSet
-                ),
-                UsernamePasswordAuthenticationFilter::class.java
-            )
-            // カスタムトークンの検証の設定
-            ?.addFilterBefore(
-                UserTokenFilter(
-                    userTokenService,
-                    noBearerTokenPathSet
-                ),
-                UsernamePasswordAuthenticationFilter::class.java
-            )
-            // 管理用APIの検証の設定
-            ?.addFilterBefore(
-                AdminAPIFilter(
-                    adminAuthService,
-                    adminApiPathSet
-                ),
-                UsernamePasswordAuthenticationFilter::class.java
-            )
+//            // アクセストークンの検証の設定
+//            ?.addFilterBefore(
+//                CognitoTokenFilter(
+//                    cognitoJwtDecoder(),
+//                    needAccessTokenPathsSet
+//                ),
+//                UsernamePasswordAuthenticationFilter::class.java
+//            )
+//            // カスタムトークンの検証の設定
+//            ?.addFilterBefore(
+//                UserTokenFilter(
+//                    userTokenService,
+//                    noBearerTokenPathSet
+//                ),
+//                UsernamePasswordAuthenticationFilter::class.java
+//            )
+//            // 管理用APIの検証の設定
+//            ?.addFilterBefore(
+//                AdminAPIFilter(
+//                    adminAuthService,
+//                    adminApiPathSet
+//                ),
+//                UsernamePasswordAuthenticationFilter::class.java
+//            )
             ?.csrf {
                 it.disable()
             }
+            ?.cors { it.disable() }
         return http?.build()
     }
 }

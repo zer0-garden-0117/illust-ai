@@ -33,15 +33,15 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [isAuthenticated, userToken]);
 
-  useEffect(() => {
-    if (!pathname) return;
-    const segments = pathname.split('/').filter(Boolean);
-    const isAdminPath = segments[1] === 'admin';
+  // useEffect(() => {
+  //   if (!pathname) return;
+  //   const segments = pathname.split('/').filter(Boolean);
+  //   const isAdminPath = segments[1] === 'admin';
   
-    if (isAdminPath && !isAdmin) {
-      router.replace('/404');
-    }
-  }, [isAdmin, pathname, router]);
+  //   if (isAdminPath && !isAdmin) {
+  //     router.replace('/404');
+  //   }
+  // }, [isAdmin, pathname, router]);
 
   if (loading || isDeleting) {
     return (

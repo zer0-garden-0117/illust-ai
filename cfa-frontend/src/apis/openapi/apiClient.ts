@@ -42,7 +42,7 @@ const customFetch: ClientOptions["fetch"] = (request) => {
 
 const client = createClient<paths>({
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL,
-  fetch: customFetch
+  // fetch: customFetch
 });
 
 client.use(throwOnError);
