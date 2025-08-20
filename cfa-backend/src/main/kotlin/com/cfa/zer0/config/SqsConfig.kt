@@ -12,6 +12,7 @@ import software.amazon.awssdk.services.sqs.SqsClient
 class SqsConfig(
     @Value("\${sqs.region:us-east-1}") private val region: String,
     @Value("\${sqs.create-image-queue-url:your-create-image-queue-url}") private val createImageQueueUrl: String,
+    @Value("\${sqs.process-image-queue-url:your-process-image-queue-url}") private val processImageQueueUrl: String,
 ) {
     @Autowired
     private lateinit var credentialsProvider: AwsCredentialsProvider

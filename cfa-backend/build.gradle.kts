@@ -33,12 +33,13 @@ dependencies {
 
     // AWS
     implementation("io.awspring.cloud:spring-cloud-aws-starter:3.3.0")
+    implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs:3.3.0")
     implementation("com.amazonaws:aws-java-sdk-dynamodb:1.12.757")
     implementation("io.github.boostchicken:spring-data-dynamodb:5.2.5")
     implementation(platform("software.amazon.awssdk:bom:2.26.18"))
     implementation("software.amazon.awssdk:dynamodb-enhanced")
     implementation("software.amazon.awssdk:cognitoidentityprovider:2.20.126")
-    implementation("software.amazon.awssdk:s3")
+    implementation("software.amazon.awssdk:s3:2.32.24")
     implementation("software.amazon.awssdk:sqs:2.32.15")
     implementation("software.amazon.awssdk:sso:2.31.35")
     implementation("software.amazon.awssdk:ssooidc:2.31.35")

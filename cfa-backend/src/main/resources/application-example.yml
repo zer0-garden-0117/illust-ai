@@ -10,6 +10,7 @@ s3:
 sqs:
   region: <Your AWS Region ex:us-east-1>
   create-image-queue-url: <Your SQS Create Image Queue URL ex:https://sqs.us-east-1.amazonaws.com/xxx/xxx>
+  process-image-queue-url: <Your SQS Process Image Queue URL ex:https://sqs.us-east-1.amazonaws.com/xxx/xxx>
 
 # 認証系
 cognito:
