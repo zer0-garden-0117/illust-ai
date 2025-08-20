@@ -61,9 +61,9 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
       console.error('Submission error:', error);
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => {
-        router.push('/'); // トップページにリダイレクト
-      }, 100);
+      // setTimeout(() => {
+      //   router.push('/'); // トップページにリダイレクト
+      // }, 100);
     }
   };
 
@@ -101,7 +101,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
       <Grid gutter="xs">
         <Grid.Col span={6}>
           <TextInput
-            label={t('Title')}
+            label='Title'
             value={workData.mainTitle}
             onChange={(e) => handleInputChange('mainTitle', e.currentTarget.value)}
           />
@@ -136,7 +136,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
         </Grid.Col> */}
         <Grid.Col span={6}>
           <Select
-            label={t('Genre')}
+            label='Genre'
             value={workData.genre}
             onChange={(value) => handleInputChange('genre', value)}
             data={[
@@ -148,7 +148,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
         </Grid.Col>
         <Grid.Col span={6}>
           <Select
-            label={t('Character')}
+            label='Character'
             value={workData.character}
             onChange={(value) => handleInputChange('character', value)}
             data={[
@@ -163,14 +163,14 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
         </Grid.Col>
         <Grid.Col span={6}>
           <TextInput
-            label={t('Creator')}
+            label='Creator'
             value={workData.creator}
             onChange={(e) => handleInputChange('creator', e.currentTarget.value)}
           />
           <Space h="md" />
         </Grid.Col>
         <Grid.Col span={6}>
-        <PillsInput label={t('Tags')}>
+        <PillsInput label='Tags'>
             <PillGroup>
               {tagsArray.map((tag) => (
                 <Pill 
@@ -193,7 +193,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
         </Grid.Col>
         <Grid.Col span={6}>
           <FileInput
-            label={t('Image')}
+            label='Image'
             placeholder="Choose file"
             onChange={(file) => handleInputChange('titleImage', file)}
           />
@@ -212,7 +212,7 @@ export const WorkRegistrationFormView = memo(function WorkRegistrationFormViewCo
                   ) : null
                 }
               >
-                {t('Submit')}
+                Submit
             </Button>
           </Group>
         </Grid.Col>

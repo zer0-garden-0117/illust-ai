@@ -1,13 +1,14 @@
 import { WorkRegistrationFormView } from "./WorkRegistrationForm.view";
-import { useWorksRegister } from "@/apis/openapi/works/useWorksRegister";
+import { CreateWorkRequestBody } from "@/apis/openapi/works/useWorksCreate";
 import { WorkData } from "./WorkRegistrationForm.view"
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
 import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
+import { useWorksCreate } from "@/apis/openapi/works/useWorksCreate";
 
 export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
   typeof WorkRegistrationFormView
 > => {
-  const { trigger } = useWorksRegister();
+  const { trigger } = useWorksCreate();
   const { userToken, isAdmin } = useUserTokenContext();
 
   const headers = {
@@ -27,12 +28,14 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
       const creatorsArray = workData.creator ? workData.creator.split(',') : [];
       const genre = [workData.genre]
       const format = [workData.format]
-      const workDetails = {
+      const requestBody: CreateWorkRequestBody = {
         apiWork: {
           workId: '',
           mainTitle: workData.mainTitle || '',
           subTitle: workData.subTitle || '',
           description: workData.description || '',
+          prompt: "testprompot",
+          status: "init",
           titleImgUrl: '',
           thumbnailImgUrl: '',
           watermaskImgUrl: '',
@@ -49,18 +52,9 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
         }
       };
   
-      // リクエストボディの作成
-      const requestBody = {
-        titleImage: workData.titleImage,
-        images: [
-          workData.titleImage
-        ],
-        worksDetailsBase64: utf8ToBase64(JSON.stringify(workDetails))
-      };
-  
       // triggerの結果を明示的に返す
       await trigger({
-        headers,
+        // headers,
         body: requestBody
       });
     } catch (error) {
