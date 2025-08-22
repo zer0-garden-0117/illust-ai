@@ -38,7 +38,7 @@ export const Logo: React.FC<LogoProps> = () => {
     >
       <Text
         fw={700}
-        c={"var(--mantine-color-blue-7)"}
+        c={"var(--mantine-color-blue-5)"}
         size='23px'
         ml={-15}
         fs="italic"
@@ -47,9 +47,9 @@ export const Logo: React.FC<LogoProps> = () => {
         イラスト
       </Text>
       <Text
-        fw={550}
+        fw={510}
         ml={-4}
-        c={"var(--mantine-color-cyan-4)"}
+        c={"var(--mantine-color-cyan-3)"}
         // c={"#00BCD4"}
         size='29px'
         fs="italic"

@@ -35,36 +35,9 @@ export const Header: React.FC<HeaderProps> = () => {
         <Logo />
         <Group gap="8">
           <Box className={classes.flexGrow} />
-          <DarkMode />
-          <GithubLink />
-          <LangMenu />
           <BurgerMenu />
         </Group>
       </header>
-      <Box className={classes.flexGrow} />
-      <Space w="md" />
-      <Box className={classes.searchBoxWrapper}>
-        <TextInput
-          placeholder={t("search")}
-          className={classes.searchBox}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.currentTarget.value)}
-          size="xs"
-          styles={{ input: { fontSize: '16px' } }}
-          radius="md"
-          onKeyDown={onKeyDown}
-        />
-        <Button
-          className={classes.searchButton}
-          size="xs"
-          color="orange"
-          variant="light"
-          radius="xl"
-          onClick={onSearchButtonClick}
-        >
-          {t("searchButton")}
-        </Button>
-      </Box>
       <Space w="md" />
     </>
   );
