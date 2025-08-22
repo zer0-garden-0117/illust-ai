@@ -37,15 +37,10 @@ export const Logo: React.FC<LogoProps> = () => {
       onMouseLeave={() => setIsActive(false)}
     >
       <Text
-        fw={900}
-        variant="gradient"
-        gradient={{ from: '#fd7e14', to: 'hotpink', deg: 90 }}
+        fw={700}
+        c={"var(--mantine-color-blue-8)"}
         size='lg'
         ml={-15}
-        style={{
-          transition: 'filter 0.2s ease',
-          filter: isActive ? 'brightness(0.9)' : 'brightness(1)',
-        }}
       >
         {t("title")}
       </Text>

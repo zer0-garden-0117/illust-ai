@@ -8,7 +8,7 @@ export async function generateMetadata({
 }: {
   params: { id: string; locale: string };
 }): Promise<Metadata> {
-  const ogpTitle = "ANGEL SANDBOX"
+  const ogpTitle = "Illust AI"
   const ogpUrl = process.env.NEXT_PUBLIC_CDN_URL + '/' + params.id + '_ogpImage.jpeg'
 
   return {

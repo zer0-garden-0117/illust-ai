@@ -14,10 +14,10 @@ import '@mantine/dates/styles.css'; //if using mantine date picker features
 import 'mantine-react-table/styles.css'; //make sure MRT styles were imported in your app root (once)
 import ClientGoogleAnalytics from '@/utils/googleAnalytics';
 
-const APP_NAME = 'ANGEL SANDBOX';
-const APP_DESCRIPTION = 'ANGEL SANDBOX';
+const APP_NAME = 'Illust AI';
+const APP_DESCRIPTION = 'Illust AI';
 const APP_IMAGE_URL = process.env.NEXT_PUBLIC_CDN_URL + '/toppage_ogpImage.jpeg'
-const APP_IMAGE_ALT = 'ANGEL SANDBOX';
+const APP_IMAGE_ALT = 'Illust AI';
 
 export const metadata: Metadata = {
   icons: {
