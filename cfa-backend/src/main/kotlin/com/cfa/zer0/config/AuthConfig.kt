@@ -2,9 +2,14 @@ package com.cfa.zer0.config
 
 import com.cfa.zer0.config.filter.AdminAPIFilter
 import com.cfa.zer0.config.filter.CognitoTokenFilter
+import com.cfa.zer0.config.filter.FirebaseAuthFilter
 import com.cfa.zer0.config.filter.UserTokenFilter
 import com.cfa.zer0.service.AdminAuthService
 import com.cfa.zer0.service.UserTokenService
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.auth.FirebaseAuth
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -25,6 +30,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class AuthConfig(
     private val userTokenService: UserTokenService,
     private val adminAuthService: AdminAuthService,
+    private val firebaseAuth: FirebaseAuth,
     @Value("\${cognito.region:us-east-1}") private val cognitoRegion: String,
     @Value("\${cognito.pool-id:us-east-1_xxxxxxxxx}") private val cognitoPoolId: String,
     @Value("\${security.paths.no-bearer-token}") private val noBearerTokenPathAndMethodString: String,
@@ -64,14 +70,14 @@ class AuthConfig(
                 // 認証を免除するパス+メソッドの設定
                 authorize.anyRequest().permitAll() // すべて許可
             }
-//            // アクセストークンの検証の設定
-//            ?.addFilterBefore(
-//                CognitoTokenFilter(
-//                    cognitoJwtDecoder(),
-//                    needAccessTokenPathsSet
-//                ),
-//                UsernamePasswordAuthenticationFilter::class.java
-//            )
+            // Firebaseのidトークンの検証の設定
+            ?.addFilterBefore(
+                FirebaseAuthFilter(
+                    firebaseAuth,
+                    needAccessTokenPathsSet
+                ),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
 //            // カスタムトークンの検証の設定
 //            ?.addFilterBefore(
 //                UserTokenFilter(

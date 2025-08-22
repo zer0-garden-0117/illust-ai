@@ -4,15 +4,17 @@ import { WorkData } from "./WorkRegistrationForm.view"
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
 import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
 import { useWorksCreate } from "@/apis/openapi/works/useWorksCreate";
+import { useAuth } from "@/apis/auth/useAuth";
 
 export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
   typeof WorkRegistrationFormView
 > => {
   const { trigger } = useWorksCreate();
   const { userToken, isAdmin } = useUserTokenContext();
+  const { idToken } = useAuth();
 
   const headers = {
-    Authorization: `Bearer ${userToken}` as `Bearer ${string}`,
+    Authorization: `Bearer ${idToken}` as `Bearer ${string}`,
     "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
   };
 
@@ -54,7 +56,7 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
   
       // triggerの結果を明示的に返す
       await trigger({
-        // headers,
+        headers,
         body: requestBody
       });
     } catch (error) {

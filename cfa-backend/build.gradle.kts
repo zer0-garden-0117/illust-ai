@@ -45,6 +45,9 @@ dependencies {
     implementation("software.amazon.awssdk:ssooidc:2.31.35")
     implementation("software.amazon.awssdk:bedrockruntime:2.32.3")
 
+    // Firebase
+    implementation("com.google.firebase:firebase-admin:9.2.0")
+
     // UUID
     implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
 
