@@ -34,7 +34,7 @@ export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
           mainTitle: workData.mainTitle || '',
           subTitle: workData.subTitle || '',
           description: workData.description || '',
-          prompt: "testprompot",
+          prompt: "1girl, twintails, blue eyes",
           status: "init",
           titleImgUrl: '',
           thumbnailImgUrl: '',
