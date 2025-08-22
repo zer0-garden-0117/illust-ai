@@ -38,11 +38,24 @@ export const Logo: React.FC<LogoProps> = () => {
     >
       <Text
         fw={700}
-        c={"var(--mantine-color-blue-8)"}
-        size='lg'
+        c={"var(--mantine-color-blue-7)"}
+        size='23px'
         ml={-15}
+        fs="italic"
+        lts="-0.15em"
       >
-        {t("title")}
+        イラスト
+      </Text>
+      <Text
+        fw={550}
+        ml={-4}
+        c={"var(--mantine-color-cyan-4)"}
+        // c={"#00BCD4"}
+        size='29px'
+        fs="italic"
+        lts="-0.02em"
+      >
+        AI
       </Text>
     </Flex>
   );

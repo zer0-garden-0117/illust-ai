@@ -1,14 +1,9 @@
 import '@mantine/core/styles.css';
 import { type ReactNode } from "react";
 import { MantineProvider } from '@mantine/core';
-import { Montserrat, Noto_Sans_JP } from 'next/font/google';
+import { Noto_Sans_JP } from 'next/font/google';
 
-// Montserrat と Noto Sans JP をインポート
-const montserrat = Montserrat({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-});
+// Noto Sans JP をインポート
 
 const notoSansJP = Noto_Sans_JP({
   weight: ['400', '700'],
@@ -24,8 +19,8 @@ export const CustomMantineProvider: React.FC<CustomMantineProviderProps> = ({ ch
   return (
     <MantineProvider
       theme={{
-        fontFamily: `${montserrat.style.fontFamily}, ${notoSansJP.style.fontFamily}, sans-serif`,
-        headings: { fontFamily: `${montserrat.style.fontFamily}, ${notoSansJP.style.fontFamily}, sans-serif` },
+        fontFamily: `${notoSansJP.style.fontFamily}, sans-serif`,
+        headings: { fontFamily: `${notoSansJP.style.fontFamily}, sans-serif` },
         components: {
           Icon: {
             defaultProps: {
