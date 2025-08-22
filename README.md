@@ -1,4 +1,4 @@
-# Colorful AI
+# Illust AI
 
 ## 主な機能（予定）
  - 画像の生成
@@ -31,16 +31,16 @@
    - AWS CLI
    - SSL証明書(HTTP to HTTPS)の設定
      - mkcertのインストール
-     - cd cfa-backend/nginx/certs
-     - config.iniを編集し、keystore-gen.shを実行し、cfa-keysotre.p12をOSインポート
+     - cd ila-backend/nginx/certs
+     - config.iniを編集し、keystore-gen.shを実行し、ila-keysotre.p12をOSインポート
    - NodeJS for sharp(avif変換ライブラリ)
-     - cd cfa/backend/node-scripts
+     - cd ila-backend/node-scripts
      - npm install
    - 起動
-     - cd cfa-backend
+     - cd ila-backend
      - ./gradlew clean bootRunDev
  - フロントエンド
-   - cd cfa-frontend
+   - cd ila-frontend
    - npm install
    - npm run dev
 
@@ -48,4 +48,4 @@
  - バグ報告・機能提案はIssueへ、コード変更はPRでお願いします。 
 
 ## ライセンス
- -  [MIT License](https://github.com/zer0-garden-0117/colorful-ai/blob/main/LICENSE) 
+ -  [MIT License](https://github.com/zer0-garden-0117/illust-ai/blob/main/LICENSE) 

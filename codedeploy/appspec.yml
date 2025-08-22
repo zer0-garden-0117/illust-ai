@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: cfa-backend.war
+  - source: ila-backend.war
     destination: /opt/zer0
 
 hooks:
