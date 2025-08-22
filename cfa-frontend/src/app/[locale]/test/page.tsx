@@ -5,7 +5,7 @@ import AuthButton from '../../../components/Common/AuthBottan/AuthButton';
 import { useAuth } from '../../../apis/auth/useAuth';
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, idToken } = useAuth();
 
   return (
     <div>
@@ -23,6 +23,7 @@ export default function Home() {
             <p>Name: {user.displayName}</p>
             <p>Email: {user.email}</p>
             <p>UID: {user.uid}</p>
+            <p>id token: {idToken}</p>
           </div>
         )}
       </main>
