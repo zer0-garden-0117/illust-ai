@@ -1,8 +1,9 @@
-import { Flex, Text } from '@mantine/core';
+import { Box, Flex, Text } from '@mantine/core';
 import { useTranslations } from "next-intl";
 import { useNavigate } from '@/utils/navigate';
 import { useState } from 'react';
 import classes from './Logo.module.css';
+import { IconPencilCode } from '@tabler/icons-react';
 
 export interface LogoProps {
   width?: string;
@@ -36,10 +37,18 @@ export const Logo: React.FC<LogoProps> = () => {
       onMouseUp={() => setIsActive(false)}
       onMouseLeave={() => setIsActive(false)}
     >
+      <Box
+        ml={-15}
+        mr={15}>
+          <IconPencilCode
+            size={30}
+            color='var(--mantine-color-cyan-3)'/>
+      </Box>
       <Text
         fw={700}
-        c={"var(--mantine-color-blue-5)"}
-        size='23px'
+        c={"var(--mantine-color-gray-7)"}
+        // c={"var(--mantine-color-blue-5)"}
+        size='20px'
         ml={-15}
         fs="italic"
         lts="-0.15em"
@@ -49,6 +58,7 @@ export const Logo: React.FC<LogoProps> = () => {
       <Text
         fw={510}
         ml={-4}
+        // c={"var(--mantine-color-pink-3)"}
         c={"var(--mantine-color-cyan-3)"}
         // c={"#00BCD4"}
         size='29px'
