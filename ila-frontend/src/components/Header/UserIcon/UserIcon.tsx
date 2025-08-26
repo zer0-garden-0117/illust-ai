@@ -1,17 +1,27 @@
-import React from 'react';
-import { Box, ActionIcon, useMantineColorScheme, Avatar } from '@mantine/core';
+import React, { useState } from 'react';
+import { Box, ActionIcon, useMantineColorScheme, Avatar, Modal } from '@mantine/core';
 import { useRouter } from "next/navigation";
 import { IconUser } from '@tabler/icons-react';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
+import AuthButton from '@/components/Common/AuthBottan/AuthButton';
 
 export const UserIcon: React.FC = () => {
   const { user, idToken } = useFirebaseAuthContext();
   const router = useRouter();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
+  const [opened, setOpened] = useState(false);
 
   const onIconClick = () => {
-    setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
+    if (user?.uid) {
+      router.push(`/user/${user?.uid}`);
+    } else {
+      setOpened(true);
+    }
+  };
+
+  const closeModal = () => {
+    setOpened(false);
   };
 
   const avatarSize = 36;
@@ -66,6 +76,16 @@ export const UserIcon: React.FC = () => {
           )}
         </Avatar>
       </ActionIcon>
+
+      <Modal
+        opened={opened}
+        onClose={closeModal}
+        title="ログインまたはサインアップ"
+        centered
+        size="sm"
+      >
+        <AuthButton onSuccess={closeModal} />
+      </Modal>
     </Box>
   );
 };

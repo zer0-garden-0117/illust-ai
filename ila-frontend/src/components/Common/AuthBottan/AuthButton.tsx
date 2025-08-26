@@ -3,14 +3,31 @@
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { Button, Group, Avatar, Text, Loader } from '@mantine/core';
 
-export default function AuthButton() {
+interface AuthButtonProps {
+  onSuccess?: () => void;
+}
+
+export default function AuthButton({ onSuccess }: AuthButtonProps) {
   const { user, loading, twitterSignIn, signOut } = useFirebaseAuthContext();
+  
   const handleTwitterLogin = async () => {
     try {
       const result = await twitterSignIn();
       console.log('Twitter username:', result.additionalUserInfo);
+      
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
       console.error('Login failed:', error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
   };
 
@@ -37,7 +54,7 @@ export default function AuthButton() {
             </Text>
           </div>
           <Button 
-            onClick={signOut} 
+            onClick={handleSignOut} 
             variant="outline" 
             color="red"
             size="sm"
