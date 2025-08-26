@@ -6,6 +6,7 @@ import { useAuth } from '../../../apis/auth/useAuth';
 
 export default function Home() {
   const { user, idToken } = useAuth();
+  console.log(user)
 
   return (
     <div>
@@ -24,6 +25,7 @@ export default function Home() {
             <p>Email: {user.email}</p>
             <p>UID: {user.uid}</p>
             <p>id token: {idToken}</p>
+            <p>id: {user.providerId}</p>
           </div>
         )}
       </main>

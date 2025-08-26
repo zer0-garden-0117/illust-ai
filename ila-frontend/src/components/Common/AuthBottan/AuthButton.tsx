@@ -5,6 +5,14 @@ import { useAuth } from '../../../apis/auth/useAuth';
 
 export default function AuthButton() {
   const { user, loading, twitterSignIn, signOut } = useAuth();
+  const handleTwitterLogin = async () => {
+    try {
+      const result = await twitterSignIn();
+      console.log('Twitter username:', result.additionalUserInfo);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
 
   if (loading) {
     return <Loader size="sm" />;
@@ -39,7 +47,7 @@ export default function AuthButton() {
         </Group>
       ) : (
         <Button 
-          onClick={twitterSignIn} 
+          onClick={handleTwitterLogin} 
           leftSection={
             <svg 
               width="16" 

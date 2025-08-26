@@ -7,13 +7,16 @@ import {
   TwitterAuthProvider,
   onAuthStateChanged,
   User as FirebaseUser,
-  UserCredential
+  UserCredential,
+  AdditionalUserInfo,
+  User
 } from 'firebase/auth';
 import { auth } from '../../configs/auth/config2'
 
 interface AuthResult {
   user: FirebaseUser;
   idToken: string;
+  additionalUserInfo: string | null;
 }
 
 export function useAuth() {
@@ -48,7 +51,8 @@ export function useAuth() {
 
       return {
         user: result.user,
-        idToken
+        idToken,
+        additionalUserInfo: result.providerId
       };
     } catch (error) {
       console.error('Twitter sign in error:', error);

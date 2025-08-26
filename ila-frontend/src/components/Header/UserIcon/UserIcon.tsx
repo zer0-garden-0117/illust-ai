@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, ActionIcon, useMantineColorScheme } from '@mantine/core';
 import { useRouter } from "next/navigation";
-import { MdDarkMode } from 'react-icons/md';
+import { IconUser } from '@tabler/icons-react';
 
-export const DarkMode: React.FC = () => {
+export const UserIcon: React.FC = () => {
   const router = useRouter();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
@@ -13,12 +13,13 @@ export const DarkMode: React.FC = () => {
   };
 
   return (
-    <Box mt={2}>
+    <Box>
       <ActionIcon
+        size={"lg"}
         onClick={onIconClick}
         variant="outline"
         color={isDark ? "var(--mantine-color-gray-5)" : "var(--mantine-color-gray-8)"} 
-        radius='md'
+        radius='xl'
         styles={{
           root: {
             borderColor: isDark 
@@ -27,7 +28,7 @@ export const DarkMode: React.FC = () => {
           }
         }}
       >
-      <MdDarkMode color="gray"/>
+      <IconUser color="var(--mantine-color-cyan-4)"/>
       </ActionIcon>
     </Box>
   );

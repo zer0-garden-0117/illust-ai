@@ -45,10 +45,6 @@ export const useAccessToken = () => {
     checkAuth();
   }, [checkAuth]);
 
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
-
   const loginWithHosted = async () => {
     try {
       await signInWithRedirect();
