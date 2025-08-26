@@ -4,14 +4,14 @@ import { WorkData } from "./WorkRegistrationForm.view"
 import { getCsrfTokenFromCookies } from "@/utils/authCookies";
 import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
 import { useWorksCreate } from "@/apis/openapi/works/useWorksCreate";
-import { useAuth } from "@/apis/auth/useAuth";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
 export const useWorkRegistrationForm = (): React.ComponentPropsWithoutRef<
   typeof WorkRegistrationFormView
 > => {
   const { trigger } = useWorksCreate();
   const { userToken, isAdmin } = useUserTokenContext();
-  const { idToken } = useAuth();
+  const { idToken } = useFirebaseAuthContext();
 
   const headers = {
     Authorization: `Bearer ${idToken}` as `Bearer ${string}`,

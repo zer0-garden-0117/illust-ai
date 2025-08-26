@@ -1,10 +1,10 @@
 'use client';
 
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { Button, Group, Avatar, Text, Loader } from '@mantine/core';
-import { useAuth } from '../../../apis/auth/useAuth';
 
 export default function AuthButton() {
-  const { user, loading, twitterSignIn, signOut } = useAuth();
+  const { user, loading, twitterSignIn, signOut } = useFirebaseAuthContext();
   const handleTwitterLogin = async () => {
     try {
       const result = await twitterSignIn();

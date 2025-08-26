@@ -2,10 +2,10 @@
 
 import Head from 'next/head';
 import AuthButton from '../../../components/Common/AuthBottan/AuthButton';
-import { useAuth } from '../../../apis/auth/useAuth';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 export default function Home() {
-  const { user, idToken } = useAuth();
+  const { user, idToken } = useFirebaseAuthContext();
   console.log(user)
 
   return (

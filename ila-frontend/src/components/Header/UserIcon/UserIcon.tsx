@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, ActionIcon, useMantineColorScheme } from '@mantine/core';
+import { Box, ActionIcon, useMantineColorScheme, Avatar } from '@mantine/core';
 import { useRouter } from "next/navigation";
 import { IconUser } from '@tabler/icons-react';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 export const UserIcon: React.FC = () => {
+  const { user, idToken } = useFirebaseAuthContext();
   const router = useRouter();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
@@ -12,23 +14,57 @@ export const UserIcon: React.FC = () => {
     setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
   };
 
+  const avatarSize = 36;
+  const actionIconSize = 36;
+
   return (
     <Box>
       <ActionIcon
-        size={"lg"}
+        size={actionIconSize}
         onClick={onIconClick}
-        variant="outline"
+        variant="transparent"
         color={isDark ? "var(--mantine-color-gray-5)" : "var(--mantine-color-gray-8)"} 
-        radius='xl'
+        radius="xl"
         styles={{
           root: {
+            width: actionIconSize,
+            height: actionIconSize,
             borderColor: isDark 
               ? "var(--mantine-color-gray-8)"
               : "var(--mantine-color-gray-5)",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }
         }}
       >
-      <IconUser color="var(--mantine-color-cyan-4)"/>
+        <Avatar 
+          variant="transparent"
+          src={user?.photoURL} 
+          radius="xl"
+          size={avatarSize}
+          styles={{
+            root: {
+              width: avatarSize,
+              height: avatarSize,
+              minWidth: avatarSize,
+              minHeight: avatarSize,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+            image: {
+              objectFit: 'cover'
+            }
+          }}
+        >
+          {!user && (
+            <IconUser
+              size={20}
+              style={{ display: 'block' }}
+            />
+          )}
+        </Avatar>
       </ActionIcon>
     </Box>
   );
