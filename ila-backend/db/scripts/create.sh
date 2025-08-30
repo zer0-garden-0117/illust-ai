@@ -118,4 +118,24 @@ create_table user \
     --key-schema \
         AttributeName=userId,KeyType=HASH
 
+
+# follow テーブルの作成
+create_table follow \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=followUserId,AttributeType=S \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH \
+        AttributeName=followUserId,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"FollowUserIdIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"followUserId\",\"KeyType\":\"HASH\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"}
+            }
+        ]"
+
 echo "Table creation process completed."

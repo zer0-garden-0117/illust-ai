@@ -19,17 +19,8 @@ data class User(
     @get:DynamoDbAttribute("userProfile")
     var userProfile: String = "",
 
-    @get:DynamoDbAttribute("follow")
-    var follow: Int = 0,
-
-    @get:DynamoDbAttribute("follower")
-    var follower: Int = 0,
-
     @get:DynamoDbAttribute("profileImageUrl")
     var profileImageUrl: String = "",
-
-    @get:DynamoDbAttribute("likes")
-    var likes: Int = 0,
 
     @get:DynamoDbAttribute("createdAt")
     var createdAt: Instant = Instant.now()
