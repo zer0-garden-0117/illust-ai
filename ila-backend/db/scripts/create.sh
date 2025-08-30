@@ -45,17 +45,6 @@ create_table() {
         --endpoint-url "$ENDPOINT_URL"
 }
 
-# テーブルへのテストデータ挿入関数
-put_item() {
-    local table_name=$1
-    local item_json=$2
-    aws dynamodb put-item \
-        --profile "$PROFILE" \
-        --table-name "$table_name" \
-        --item "$item_json" \
-        --endpoint-url "$ENDPOINT_URL"
-}
-
 # work テーブルの作成
 create_table work \
     --attribute-definitions \
@@ -121,5 +110,12 @@ create_table rated \
                 \"Projection\": {\"ProjectionType\":\"ALL\"}
             }
         ]"
+
+# user テーブルの作成
+create_table user \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH
 
 echo "Table creation process completed."
