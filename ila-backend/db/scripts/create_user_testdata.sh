@@ -45,10 +45,7 @@ put_item user '{
   "customUserId": {"S": "xxx"},
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
   "userProfile": {"S": "test"},
-  "follow": {"N": "150"},
-  "follower": {"N": "230"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
-  "likes": {"N": "45"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 
@@ -57,10 +54,7 @@ put_item user '{
   "customUserId": {"S": "yyy"},
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
   "userProfile": {"S": "test"},
-  "follow": {"N": "150"},
-  "follower": {"N": "230"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
-  "likes": {"N": "45"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 
@@ -69,10 +63,7 @@ put_item user '{
   "customUserId": {"S": "zzz"},
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
   "userProfile": {"S": "test"},
-  "follow": {"N": "150"},
-  "follower": {"N": "230"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
-  "likes": {"N": "45"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 
