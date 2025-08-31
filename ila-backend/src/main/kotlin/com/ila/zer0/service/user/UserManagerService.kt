@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class UserManagerService(
     private val userService: UserService,
+    private val followService: FollowService,
     private val likedService: LikedService,
     private val workService: WorkService,
     private val tagService: TagService,
@@ -31,7 +32,12 @@ class UserManagerService(
     fun getUser(
         userId: String
     ): User {
-        return userService.findUserById(userId)
+        val user = userService.findUserById(userId)
+        val followCount = followService.getFollowerCount(userId)
+        val followerCount = followService.getFollowerCount(userId)
+        user.follow = followCount
+        user.follower = followerCount
+        return user
     }
 
     @Transactional

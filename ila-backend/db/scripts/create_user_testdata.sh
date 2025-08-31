@@ -44,7 +44,8 @@ put_item user '{
   "userId": {"S": "user001"},
   "customUserId": {"S": "xxx"},
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
-  "userProfile": {"S": "test"},
+  "userName": {"S": "testUserName"},
+  "userProfile": {"S": "testUserProfile"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
@@ -53,7 +54,8 @@ put_item user '{
   "userId": {"S": "user002"},
   "customUserId": {"S": "yyy"},
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
-  "userProfile": {"S": "test"},
+  "userName": {"S": "testUserName"},
+  "userProfile": {"S": "testUserProfile"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
@@ -62,7 +64,8 @@ put_item user '{
   "userId": {"S": "user003"},
   "customUserId": {"S": "zzz"},
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
-  "userProfile": {"S": "test"},
+  "userName": {"S": "testUserName"},
+  "userProfile": {"S": "testUserProfile"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'

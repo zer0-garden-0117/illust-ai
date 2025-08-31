@@ -10,6 +10,18 @@ ApiUser:
       type: string
       description: カスタムのuserId
       example: xxxxx
+    userName:
+      type: string
+      description: ユーザー名
+      example: xxxxx
+    follow:
+      type: integer
+      description: フォロー数
+      example: 0
+    follower:
+      type: integer
+      description: フォロワー数
+      example: 0
     userProfile:
       type: string
       description: ユーザーのプロフィール

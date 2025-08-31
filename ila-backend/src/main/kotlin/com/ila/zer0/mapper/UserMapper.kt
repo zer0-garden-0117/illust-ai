@@ -33,6 +33,8 @@ interface UserMapper {
         target = "updatedAt",
         qualifiedByName = ["offsetDateTimeToInstant"]
     )
+    @Mapping(target = "follow", ignore = true)
+    @Mapping(target = "follower", ignore = true)
     fun toUser(apiUser: ApiUser): User
 
     @Mapping(

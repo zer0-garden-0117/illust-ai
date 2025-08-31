@@ -32,6 +32,11 @@ class FollowService(
         return followRepository.findByUserId(userId)
     }
 
+    fun getFollowCount(userId: String): Int {
+        val follows =  followRepository.findByUserId(userId)
+        return follows.size
+    }
+
     // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
     // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
     fun findByFollowUserIdWithOffset(
@@ -52,6 +57,11 @@ class FollowService(
 
     fun findByFollowUserId(userId: String): List<Follow> {
         return followRepository.findByFollowUserId(userId)
+    }
+
+    fun getFollowerCount(userId: String): Int {
+        val followers =  followRepository.findByFollowUserId(userId)
+        return followers.size
     }
 
     fun registerFollow(userId: String, followUserId: String): Follow {

@@ -13,8 +13,17 @@ data class User(
     @get:DynamoDbAttribute("customUserId")
     var customUserId: String = "",
 
+    @get:DynamoDbAttribute("userName")
+    var userName: String = "",
+
     @get:DynamoDbAttribute("updatedAt")
     var updatedAt: Instant = Instant.now(),
+
+    @get:DynamoDbAttribute("follow")
+    var follow: Int = 0,
+
+    @get:DynamoDbAttribute("follower")
+    var follower: Int = 0,
 
     @get:DynamoDbAttribute("userProfile")
     var userProfile: String = "",

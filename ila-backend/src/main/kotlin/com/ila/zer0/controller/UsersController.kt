@@ -51,6 +51,7 @@ class UsersController(
         val user = userManagerService.getUser(userId)
         user.userProfile = newUser.userProfile
         user.customUserId = newUser.customUserId
+        user.userName = newUser.userName
         val updatedUser = userManagerService.updateUser(user)
         val updatedApiUser = userMapper.toApiUser(updatedUser)
         return ResponseEntity.ok(updatedApiUser)
