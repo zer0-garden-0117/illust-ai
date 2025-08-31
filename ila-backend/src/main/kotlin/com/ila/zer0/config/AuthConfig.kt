@@ -1,9 +1,6 @@
 package com.ila.zer0.config
 
-import com.ila.zer0.config.filter.AdminAPIFilter
-import com.ila.zer0.config.filter.CognitoTokenFilter
 import com.ila.zer0.config.filter.FirebaseAuthFilter
-import com.ila.zer0.config.filter.UserTokenFilter
 import com.ila.zer0.service.AdminAuthService
 import com.ila.zer0.service.UserTokenService
 import com.google.auth.oauth2.GoogleCredentials
@@ -37,8 +34,6 @@ class AuthConfig(
     @Value("\${cognito.region:us-east-1}") private val cognitoRegion: String,
     @Value("\${cognito.pool-id:us-east-1_xxxxxxxxx}") private val cognitoPoolId: String,
     @Value("\${security.paths.no-bearer-token}") private val noBearerTokenPathAndMethodString: String,
-    @Value("\${security.paths.need-access-token}") private val needAccessTokenPathsString: String,
-    @Value("\${security.paths.admin-api}") private val adminApiPathString: String,
     @Value("\${cors.origins:https://localhost:3001}") private val corsOriginsString: String,
 ) : WebMvcConfigurer {
     @Bean
@@ -65,10 +60,6 @@ class AuthConfig(
     fun filterChain(http: HttpSecurity?): SecurityFilterChain? {
         val noBearerTokenPathSet = noBearerTokenPathAndMethodString.split(",")
             .map { it.trim() }.toSet()
-        val needAccessTokenPathsSet = needAccessTokenPathsString.split(",")
-            .map { it.trim() }.toSet()
-        val adminApiPathSet = adminApiPathString.split(",")
-            .map { it.trim() }.toSet()
         http
             ?.csrf { it.disable() }
             ?.authorizeHttpRequests { authorize ->
@@ -83,22 +74,6 @@ class AuthConfig(
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             )
-//            // カスタムトークンの検証の設定
-//            ?.addFilterBefore(
-//                UserTokenFilter(
-//                    userTokenService,
-//                    noBearerTokenPathSet
-//                ),
-//                UsernamePasswordAuthenticationFilter::class.java
-//            )
-//            // 管理用APIの検証の設定
-//            ?.addFilterBefore(
-//                AdminAPIFilter(
-//                    adminAuthService,
-//                    adminApiPathSet
-//                ),
-//                UsernamePasswordAuthenticationFilter::class.java
-//            )
 //            ?.csrf {
 //                it.disable()
 //            }

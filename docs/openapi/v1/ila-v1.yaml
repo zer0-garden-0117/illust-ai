@@ -13,8 +13,6 @@ tags:
     description: 作品に関する事項
   - name: images
     description: 画像に関する事項
-  - name: admins
-    description: 管理に関する事項
 
 servers:
   - url: https://localhost:8080
@@ -67,10 +65,6 @@ paths:
   # images
   /images/create:
     $ref: "./paths/images.yaml#/ImagesCreate"
-  
-  # admins
-  /admins/works/images:
-    $ref: "./paths/admins.yaml#/AdminsWorksImagesById"
 
 components:
   securitySchemes:
