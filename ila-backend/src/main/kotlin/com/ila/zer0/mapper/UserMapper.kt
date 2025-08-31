@@ -1,7 +1,9 @@
 package com.ila.zer0.mapper
 
 import com.ila.zer0.entity.Liked
+import com.ila.zer0.entity.User
 import com.ila.zer0.generated.model.ApiLiked
+import com.ila.zer0.generated.model.ApiUser
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 
@@ -20,4 +22,28 @@ interface UserMapper {
         qualifiedByName = ["instantToOffsetDateTime"]
     )
     fun toApiLiked(liked: Liked): ApiLiked
+
+    @Mapping(
+        source = "createdAt",
+        target = "createdAt",
+        qualifiedByName = ["offsetDateTimeToInstant"]
+    )
+    @Mapping(
+        source = "updatedAt",
+        target = "updatedAt",
+        qualifiedByName = ["offsetDateTimeToInstant"]
+    )
+    fun toUser(apiUser: ApiUser): User
+
+    @Mapping(
+        source = "createdAt",
+        target = "createdAt",
+        qualifiedByName = ["instantToOffsetDateTime"]
+    )
+    @Mapping(
+        source = "updatedAt",
+        target = "updatedAt",
+        qualifiedByName = ["instantToOffsetDateTime"]
+    )
+    fun toApiUser(user: User): ApiUser
 }

@@ -7,36 +7,53 @@ import com.ila.zer0.generated.model.*
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.CognitoService
-import com.ila.zer0.service.UserTokenService
 import com.ila.zer0.service.user.UserManagerService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UsersController(
-    private val userTokenService: UserTokenService,
     private val userManagerService: UserManagerService,
     private val cognitoService: CognitoService,
     private val userMapper: UserMapper,
     private val workMapper: WorkMapper
 ) : UsersApi {
-
-    private fun getUserId(): String? {
-        val authentication: Authentication? =
-            SecurityContextHolder.getContext().authentication
-        val customAuth = authentication as? CustomAuthenticationToken
-        return customAuth?.userId
+    override fun registerUsers(
+        @RequestBody apiUser: ApiUser
+    ): ResponseEntity<ApiUser> {
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val newUser = userMapper.toUser(apiUser)
+        newUser.userId = userId
+        val registeredUser = userManagerService.registerUser(newUser)
+        val registeredApiUser = userMapper.toApiUser(registeredUser)
+        return ResponseEntity.ok(registeredApiUser)
     }
 
-    override fun getUsersToken(): ResponseEntity<ApiUserToken> {
-        val userId = getUserId() ?: return ResponseEntity.ok(
-            ApiUserToken(userToken = "unregistered")
-        )
-        val userToken = userTokenService.generateToken(userId)
-        return ResponseEntity.ok(ApiUserToken(userToken = userToken))
+    override fun getUsers(): ResponseEntity<ApiUser> {
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val user = userManagerService.getUser(userId)
+        val apiUser = userMapper.toApiUser(user)
+        return ResponseEntity.ok(apiUser)
+    }
+
+    override fun patchUsers(
+        @RequestBody apiUser: ApiUser
+    ): ResponseEntity<ApiUser> {
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val newUser = userMapper.toUser(apiUser)
+        val user = userManagerService.getUser(userId)
+        user.userProfile = newUser.userProfile
+        user.customUserId = newUser.customUserId
+        val updatedUser = userManagerService.updateUser(user)
+        val updatedApiUser = userMapper.toApiUser(updatedUser)
+        return ResponseEntity.ok(updatedApiUser)
     }
 
     override fun deleteUsers(): ResponseEntity<ApiUser> {
@@ -109,5 +126,12 @@ class UsersController(
         return ApiUsersActivity(
             apiLikeds = apiLiked
         )
+    }
+
+    private fun getUserId(): String? {
+        val authentication: Authentication? =
+            SecurityContextHolder.getContext().authentication
+        val customAuth = authentication as? CustomAuthenticationToken
+        return customAuth?.userId
     }
 }

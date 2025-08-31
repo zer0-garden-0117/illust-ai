@@ -1,5 +1,6 @@
 package com.ila.zer0.repository
 
+import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
@@ -21,53 +22,53 @@ class UserRepository(
             .dynamoDbClient(dynamoDbClient)
             .build()
     private val table =
-        enhancedClient.table("work", TableSchema.fromClass(Work::class.java))
+        enhancedClient.table("user", TableSchema.fromClass(User::class.java))
     private val logger = LoggerFactory.getLogger(UserRepository::class.java)
 
-    fun findByWorkId(workId: String): Work {
+    fun findByUserId(userId: String): User {
         return try {
             val work = table.getItem { r ->
                 r.key(
-                    Key.builder().partitionValue(workId).build()
+                    Key.builder().partitionValue(userId).build()
                 )
             }
             work
         } catch (e: DynamoDbException) {
             throw RuntimeException(
-                "Failed to retrieve work by workId: $workId",
+                "Failed to retrieve work by workId: $userId",
                 e
             )
         }
     }
     
-    fun registerWork(work: Work): Work {
+    fun registerUser(user: User): User {
         return try {
-            table.putItem(work)
-            work
+            table.putItem(user)
+            user
         } catch (e: DynamoDbException) {
-            throw RuntimeException("Failed to register work: ${work.workId}", e)
+            throw RuntimeException("Failed to register work: ${user.userId}", e)
         }
     }
 
-    fun updateWork(work: Work): Work {
+    fun updateUser(user: User): User {
         return try {
-            table.updateItem(work)
-            work
+            table.updateItem(user)
+            user
         } catch (e: DynamoDbException) {
-            throw RuntimeException("Failed to register work: ${work.workId}", e)
+            throw RuntimeException("Failed to register work: ${user.userId}", e)
         }
     }
 
-    fun deleteWorkById(workId: String) {
-        try {
+    fun deleteUserById(userId: String): User {
+        return try {
             table.deleteItem { r ->
                 r.key(
-                    Key.builder().partitionValue(workId).build()
+                    Key.builder().partitionValue(userId).build()
                 )
             }
         } catch (e: DynamoDbException) {
             throw RuntimeException(
-                "Failed to delete work by workId: $workId",
+                "Failed to delete work by workId: $userId",
                 e
             )
         }

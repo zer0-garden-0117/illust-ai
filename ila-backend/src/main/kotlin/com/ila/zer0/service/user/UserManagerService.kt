@@ -3,6 +3,7 @@ package com.ila.zer0.service.user
 import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Liked
+import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import com.ila.zer0.service.CognitoService
 import com.ila.zer0.service.tag.TagService
@@ -12,11 +13,40 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserManagerService(
+    private val userService: UserService,
     private val likedService: LikedService,
     private val workService: WorkService,
     private val tagService: TagService,
     private val cognitoService: CognitoService
 ) {
+
+    @Transactional
+    fun registerUser(
+        user: User
+    ): User {
+        return userService.registerUser(user)
+    }
+
+    @Transactional
+    fun getUser(
+        userId: String
+    ): User {
+        return userService.findUserById(userId)
+    }
+
+    @Transactional
+    fun updateUser(
+        user: User
+    ): User {
+        return userService.updateUser(user)
+    }
+
+    @Transactional
+    fun deleteUser(
+        userId: String
+    ): User {
+        return userService.deleteUserById(userId)
+    }
 
     @Transactional
     fun searchUsersActivity(

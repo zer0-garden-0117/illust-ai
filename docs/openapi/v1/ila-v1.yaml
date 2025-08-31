@@ -22,9 +22,6 @@ servers:
 
 paths:
   # users
-  /users/token:
-    $ref: "./paths/users.yaml#/UsersToken"
-
   /users:
     $ref: "./paths/users.yaml#/Users"
 
@@ -84,10 +81,7 @@ components:
       description: CSRF保護のJWT
 
   schemas:
-    # users
-    ApiUserToken:
-      $ref: "./components/schemas/users.yaml#/ApiUserToken"
-  
+    # users  
     ApiUser:
       $ref: "./components/schemas/users.yaml#/ApiUser"
 

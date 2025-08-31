@@ -1,11 +1,33 @@
-ApiUserToken:
-  description: ユーザートークン
+ApiUser:
+  description: ユーザー
   type: object
   properties:
-    userToken:
+    userId:
       type: string
-      description: ユーザートークン（JWT）
-      example: abcdef12345
+      description: 認証のuserId
+      example: xxxxx
+    customUserId:
+      type: string
+      description: カスタムのuserId
+      example: xxxxx
+    userProfile:
+      type: string
+      description: ユーザーのプロフィール
+      example: xxxxx
+    profileImageUrl:
+      type: string
+      description: ユーザーアイコン画像
+      example: xxxxx
+    createdAt:
+      type: string
+      format: date-time
+      description: "作品の作成日時"
+      example: "2024-07-08T00:00:00+09:00"
+    updatedAt:
+      type: string
+      format: date-time
+      description: "作品の最終更新日時"
+      example: "2024-07-08T00:00:00+09:00"
 
 ApiUsersActivitySearch:
   type: object
@@ -20,19 +42,6 @@ ApiUsersActivitySearch:
         - 2
   required:
     - workIds
-
-ApiUser:
-  description: ユーザー
-  type: object
-  properties:
-    userId:
-      type: string
-      description: メールアドレス
-      example: test@gmail.com
-    userRole:
-      type: string
-      description: ユーザーロール
-      example: user(or admin)
 
 ApiUsersActivity:
   description: 検索結果

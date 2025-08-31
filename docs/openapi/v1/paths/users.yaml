@@ -1,23 +1,67 @@
-UsersToken:
-  get:
-    operationId: getUsersToken
+Users:
+  post:
+    operationId: registerUsers
     tags:
       - users
-    summary: ユーザートークンを取得する
+    summary: ユーザーを登録する
     description: |
-      ユーザートークンを取得する
-      CSRFトークンがクッキーに設定される
+      ユーザーを登録する
     security:
-      - AccessTokenAuth: []
+      - UserTokenAuth: []
+      - CsrfTokenAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/users.yaml#/ApiUser"
     responses:
       "200":
-        $ref: "../components/responses/users.yaml#/UsersTokenGetResponse"
+        $ref: "../components/responses/users.yaml#/UsersResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-Users:
+  get:
+    operationId: getUsers
+    tags:
+      - users
+    summary: ユーザーを取得する
+    description: |
+      ユーザーを取得する
+    security:
+      - UserTokenAuth: []
+      - CsrfTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+  patch:
+    operationId: patchUsers
+    tags:
+      - users
+    summary: ユーザー情報を更新する
+    description: |
+      ユーザー情報を更新する
+    security:
+      - UserTokenAuth: []
+      - CsrfTokenAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/users.yaml#/ApiUser"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
   delete:
     operationId: deleteUsers
     tags:
@@ -30,7 +74,7 @@ Users:
       - CsrfTokenAuth: []
     responses:
       "200":
-        $ref: "../components/responses/users.yaml#/UsersDeleteResponse"
+        $ref: "../components/responses/users.yaml#/UsersResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
