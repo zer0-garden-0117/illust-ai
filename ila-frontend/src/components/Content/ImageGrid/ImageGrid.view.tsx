@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Rating, Group, Fieldset, Image, Skeleton, Center, Loader } from '@mantine/core';
+import { AspectRatio, Card, SimpleGrid, Text, Pagination, ActionIcon, Group, Fieldset, Image, Skeleton, Center, Loader } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -17,7 +17,6 @@ export type ImageData = {
   watermaskImage: string;
   date: string;
   isLiked: boolean | undefined;
-  rating: number | undefined;
 };
 
 type ImageGridViewProps = {
@@ -31,7 +30,6 @@ type ImageGridViewProps = {
   totalCount: number;
   loading: boolean;
   onPageChange: (page: number) => void;
-  onRateChange: (workId: string, value: number) => void;
   onLikeChange: (workId: string, isCurrentlyLiked: boolean) => void;
   onDeleteClick: (workId: string) => void;
   isAuthenticated: boolean;
@@ -119,10 +117,9 @@ const CustomImage = ({ src, alt, index, onImageLoad }: { src: string; alt: strin
 const MemoizedImage = memo(CustomImage, (prevProps, nextProps) => prevProps.src === nextProps.src);
 
 const MemoizedCard = memo(
-  ({ imageData, index, onRateChange, onLikeChange, onDeleteClick, isAuthenticated, router, setLoginModalOpen, onImageLoad }: { 
+  ({ imageData, index, onLikeChange, onDeleteClick, isAuthenticated, router, setLoginModalOpen, onImageLoad }: { 
     imageData: ImageData; 
     index: number; 
-    onRateChange: (workId: string, value: number) => void; 
     onLikeChange: (workId: string, isCurrentlyLiked: boolean) => void; 
     onDeleteClick: (workId: string) => void; 
     isAuthenticated: boolean; 
@@ -131,13 +128,8 @@ const MemoizedCard = memo(
     onImageLoad: () => void;
   }) => {
     const [localIsLiked, setLocalIsLiked] = useState(imageData.isLiked);
-    const [localRating, setLocalRating] = useState(imageData.rating);
     const navigate = useNavigate();
     const { isAdmin } = useUserTokenContext();
-
-    useEffect(() => {
-      setLocalRating(imageData.rating);
-    }, [imageData.rating]);
 
     useEffect(() => {
       setLocalIsLiked(imageData.isLiked);
@@ -151,15 +143,6 @@ const MemoizedCard = memo(
 
       setLocalIsLiked(!localIsLiked);
       onLikeChange(imageData.workId, localIsLiked ?? false);
-    };
-
-    const handleRateClick = (rating: number) => {
-      if (!isAuthenticated) {
-        setLoginModalOpen(true);
-        return;
-      }
-      setLocalRating(rating);
-      onRateChange(imageData.workId, rating);
     };
 
     const handleDeleteClick = () => {
@@ -208,7 +191,6 @@ const MemoizedCard = memo(
           </div>
         </Group>
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
-          <Rating value={localRating} onChange={handleRateClick} />
           <ActionIcon
             variant="transparent"
             color="gray"
@@ -235,7 +217,7 @@ const MemoizedCard = memo(
       </Card>
     );
   },
-  (prevProps, nextProps) => prevProps.imageData.rating === nextProps.imageData.rating && prevProps.imageData.isLiked === nextProps.imageData.isLiked
+  (prevProps, nextProps) => prevProps.imageData.isLiked === nextProps.imageData.isLiked
 );
 MemoizedCard.displayName = 'MemoizedCard';
 
@@ -251,7 +233,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
   loading,
   onPageChange,
   onLikeChange,
-  onRateChange,
   onDeleteClick,
   isAuthenticated
 }: ImageGridViewProps): JSX.Element {
@@ -299,7 +280,6 @@ export const ImageGridView = memo(function ImageGridViewComponent({
       key={data.workId}
       imageData={data}
       index={index}
-      onRateChange={onRateChange}
       onLikeChange={onLikeChange}
       onDeleteClick={onDeleteClick}
       isAuthenticated={isAuthenticated}

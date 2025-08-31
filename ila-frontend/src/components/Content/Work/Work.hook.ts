@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { UsersActivitySearchResult, useUsersActivitySearch } from "@/apis/openapi/users/useUsersActivitySearch";
 import { getCsrfTokenFromCookies, getUserTokenFromCookies } from "@/utils/authCookies";
-import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
 import { useNavigate } from "@/utils/navigate";
@@ -24,7 +23,6 @@ export const useWork = (
   const [loading, setLoading] = useState(true); // ローディング状態
   const { trigger: triggerWorksGetById, data, error } = useWorksGetById();
   const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
-  const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
   const { trigger: triggerDeliked } = useUsersLikedDelete();
   const { isAuthenticated } = useAccessTokenContext();
@@ -90,25 +88,9 @@ export const useWork = (
       } else {
         setLocalIsLiked(false)
       }
-      if (activitiesData?.apiRateds != undefined &&
-        activitiesData.apiRateds.length > 0 &&
-        activitiesData.apiRateds[0].rating != undefined) {
-        setLocalRating(activitiesData.apiRateds[0].rating)
-      } else {
-        setLocalRating(0)
-      }
       setLoading(false);
     }
   }, [workData, activitiesData]);
-
-  const onRateClick = (rating: number) => {
-    const headers = {
-      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
-      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-    };
-    triggerRated({ headers, workId, rating: rating });
-    setLocalRating(rating);
-  };
 
   const onLikeClick = () => {
     const headers = {
@@ -153,7 +135,6 @@ export const useWork = (
     loading: loading,
     localIsLiked,
     localRating,
-    onRateClick,
     onLikeClick,
     onTagClick,
     onCreatorClick,

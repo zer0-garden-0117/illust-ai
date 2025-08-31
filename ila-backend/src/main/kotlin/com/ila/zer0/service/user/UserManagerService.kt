@@ -3,7 +3,6 @@ package com.ila.zer0.service.user
 import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Liked
-import com.ila.zer0.entity.Rated
 import com.ila.zer0.entity.Work
 import com.ila.zer0.service.CognitoService
 import com.ila.zer0.service.tag.TagService
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class UserManagerService(
     private val likedService: LikedService,
-    private val ratedService: RatedService,
     private val workService: WorkService,
     private val tagService: TagService,
     private val cognitoService: CognitoService
@@ -26,10 +24,8 @@ class UserManagerService(
         workIds: MutableList<String>
     ): UsersActivity {
         val liked = likedService.findByUserIdsAndWorkIds(userId, workIds)
-        val rated = ratedService.findByUserIdsAndWorkIds(userId, workIds)
         return UsersActivity(
-            liked = liked,
-            rated = rated
+            liked = liked
         )
     }
 
@@ -103,51 +99,14 @@ class UserManagerService(
     }
 
     @Transactional
-    fun getUsersRated(
-        userId: String,
-        offset: Int,
-        limit: Int
-    ): WorksWithSearchResult {
-        val ratedWithSearchResult =
-            ratedService.findByUserIdWithOffset(userId, offset, limit)
-
-        val works = mutableListOf<Work>()
-        ratedWithSearchResult.rated.forEach { rated ->
-            val work = workService.findWorkById(rated.workId)
-            works.add(work)
-        }
-
-        return WorksWithSearchResult(
-            works = works,
-            totalCount = ratedWithSearchResult.totalCount
-        )
-    }
-
-    @Transactional
-    fun registerUsersRated(userId: String, workId: String, rating: Int): Rated {
-        val oldRate = ratedService.findByUserIdAndWorkId(userId, workId)
-        val rated = ratedService.registerRated(userId, workId, rating)
-        workService.addRatingToWork(workId, oldRate?.rating, rating)
-        return rated
-    }
-
-    @Transactional
-    fun deleteUsersRated(userId: String, workId: String): Rated {
-        return ratedService.deleteRated(userId, workId)
-    }
-
-    @Transactional
     fun deleteWorkId(workId: String) {
         // likedテーブルから削除
         likedService.deleteWork(workId)
-        // ratedテーブルから削除
-        ratedService.deleteWork(workId)
     }
 
     @Transactional
     fun deleteUsers(userId: String) {
         likedService.deleteUser(userId)
-        ratedService.deleteUser(userId)
         cognitoService.deleteAllUsersByUserIdSilently(userId)
     }
 }

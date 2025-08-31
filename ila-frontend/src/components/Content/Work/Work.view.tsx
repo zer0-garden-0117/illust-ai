@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useLayoutEffect, useCallback } from 'react';
-import { Button, Text, Grid, Pill, Group, Rating, ActionIcon, Modal, Transition, Image, Card, Skeleton, Center, Loader } from '@mantine/core';
+import { Button, Text, Grid, Pill, Group, ActionIcon, Modal, Transition, Image, Card, Skeleton, Center, Loader } from '@mantine/core';
 import { memo } from 'react';
 import { useLocale, useTranslations } from "next-intl";
 import { RiHashtag, RiHeartAdd2Line, RiUserLine, RiFileLine, RiStackLine } from "react-icons/ri";
@@ -12,15 +12,12 @@ import { WorkGetByIdResult } from '@/apis/openapi/works/useWorksGetById';
 import { usePathname } from 'next/navigation';
 import { BiSolidInvader } from 'react-icons/bi';
 import { MdOutlineWatchLater } from 'react-icons/md';
-import { FaRegStar } from 'react-icons/fa';
 import { CustomPill } from '../../Common/CustomPill/CustomPill';
 
 type WorkViewProps = {
   workData?: WorkGetByIdResult;
   loading: boolean;
   localIsLiked: boolean;
-  localRating?: number;
-  onRateClick: (rating: number) => void;
   onLikeClick: () => void;
   onTagClick: (tag: string | undefined) => void;
   onCreatorClick: (creator: string | undefined) => void;
@@ -114,27 +111,6 @@ const CustomImage = memo(({ src, alt, index, onDisplayComplete }: { src: string;
 });
 CustomImage.displayName = 'CustomImage';
 
-const RatingControls = memo(
-  ({ localRating, onRateClick, t }: { localRating?: number; onRateClick: (rating: number) => void; t: any}) => (
-    <Group style={{ marginTop: '5px' }}>
-      <Text>
-        <FaRegStar
-          style={{
-            position: 'relative',
-            fontSize: '14px',
-            color: "hotpink",
-            marginRight: "3px"
-          }}
-        />
-        {t("review")}
-      </Text>
-      <Rating value={localRating} onChange={onRateClick} />
-    </Group>
-  ),
-  (prevProps, nextProps) => prevProps.localRating === nextProps.localRating
-);
-RatingControls.displayName = 'RatingControls';
-
 const LikeControls = memo(
   ({ localIsLiked, onLikeClick, t }: { localIsLiked: boolean; onLikeClick: () => void; t:any }) => (
     <Group style={{ marginTop: '5px' }}>
@@ -172,8 +148,6 @@ export const WorkView = memo(function WorkViewComponent({
   workData,
   loading,
   localIsLiked,
-  localRating,
-  onRateClick,
   onLikeClick,
   onTagClick,
   onCreatorClick,
@@ -233,14 +207,6 @@ export const WorkView = memo(function WorkViewComponent({
       return;
     }
     onLikeClick();
-  };
-
-  const handleRateClick = (rating: number) => {
-    if (!isAuthenticated) {
-      setLoginModalOpen(true);
-      return;
-    }
-    onRateClick(rating);
   };
 
   const handleDownloadClick = () => {
@@ -450,11 +416,6 @@ export const WorkView = memo(function WorkViewComponent({
             <LikeControls
               localIsLiked={localIsLiked}
               onLikeClick={handleLikeClick}
-              t={t}
-            />
-            <RatingControls
-              localRating={localRating}
-              onRateClick={handleRateClick}
               t={t}
             />
             <Group style={{ marginTop: '5px' }}>

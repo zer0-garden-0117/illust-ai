@@ -45,12 +45,6 @@ paths:
   /users/viewed/{workId}:
     $ref: "./paths/users.yaml#/UsersViewedByWorkId"
 
-  /users/rated:
-    $ref: "./paths/users.yaml#/UsersRated"
-
-  /users/rated/{workId}:
-    $ref: "./paths/users.yaml#/UsersRatedByWorkId"
-
   # works
   /works/create:
     $ref: "./paths/works.yaml#/WorksCreate"
@@ -108,9 +102,6 @@ components:
 
     ApiViewed:
       $ref: "./components/schemas/users.yaml#/ApiViewed"
-
-    ApiRated:
-      $ref: "./components/schemas/users.yaml#/ApiRated"
 
     ApiUsersActivity:
       $ref: "./components/schemas/users.yaml#/ApiUsersActivity"

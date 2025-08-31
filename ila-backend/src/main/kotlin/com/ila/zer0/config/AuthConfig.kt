@@ -79,7 +79,7 @@ class AuthConfig(
             ?.addFilterBefore(
                 FirebaseAuthFilter(
                     firebaseAuth,
-                    needAccessTokenPathsSet
+                    noBearerTokenPathSet
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             )

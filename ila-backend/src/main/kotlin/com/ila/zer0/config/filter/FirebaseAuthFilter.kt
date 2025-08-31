@@ -29,6 +29,11 @@ class FirebaseAuthFilter(
         // デバッグ用: リクエストヘッダー情報をログ出力
         val authHeader = request.getHeader("Authorization")
 
+        if (isPathExempted(request)) {
+            filterChain.doFilter(request, response)
+            return
+        }
+
         if (requestURI !in noBearerTokenPathSet) {
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 val idToken = authHeader.substring(7)
@@ -57,5 +62,25 @@ class FirebaseAuthFilter(
             logger.info("URI $requestURI does not require authentication, skipping filter")
         }
         filterChain.doFilter(request, response)
+    }
+
+    private fun isPathExempted(request: jakarta.servlet.http.HttpServletRequest): Boolean {
+        val requestURI = request.requestURI
+        val requestMethod = request.method
+        val pathWithMethod = "$requestURI:$requestMethod"
+
+        logger.info("Request: $pathWithMethod")
+
+        // 完全一致のパスの場合
+        if (pathWithMethod in noBearerTokenPathSet) {
+            return true
+        }
+
+        // ワイルドカードを含むパスの場合
+        return noBearerTokenPathSet.any { exemptedPath ->
+            val (exemptedUri, exemptedMethod) = exemptedPath.split(":")
+            val pathPattern = exemptedUri.replace("*", ".*") // ワイルドカードを正規表現に変換
+            pathWithMethod.matches(Regex("$pathPattern:$exemptedMethod"))
+        }
     }
 }

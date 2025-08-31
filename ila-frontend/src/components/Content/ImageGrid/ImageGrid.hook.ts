@@ -4,11 +4,9 @@ import { ImageData } from "./ImageGrid.view";
 import { useWorksSearchByTags, WorkSearchByTagRequestBody, WorkSearchByTagResult } from "@/apis/openapi/works/useWorksSearchByTags";
 import { getCsrfTokenFromCookies, getUserTokenFromCookies } from "@/utils/authCookies";
 import { useUsersLikedRegister } from "@/apis/openapi/users/useUsersLikedRegister";
-import { useUsersRatedRegister } from "@/apis/openapi/users/useUsersRatedRegister";
 import { useUsersActivitySearch, UsersActivitySearchResult } from "@/apis/openapi/users/useUsersActivitySearch";
 import { useUsersLikedDelete } from "@/apis/openapi/users/useUsersLikedDelete";
 import { UsersLikedGetHeader, UsersLikedGetQuery, useUsersLikedGet } from "@/apis/openapi/users/useUsersLikedGet";
-import { UsersRatedGetHeader, UsersRatedGetQuery, useUsersRatedGet } from "@/apis/openapi/users/useUsersRatedGet";
 import { useRouter } from "next/navigation";
 import { useNavigate } from "@/utils/navigate";
 import { useUserTokenContext } from "@/providers/auth/userTokenProvider";
@@ -40,9 +38,7 @@ export const useImageGrid = (
   const [activitiesData, setActivitiesData] = useState<UsersActivitySearchResult>();
   const { trigger: triggerSearchWithTags, data: dataByTags } = useWorksSearchByTags();
   const { trigger: triggerSearchWithLiked, data: dataByLiked } = useUsersLikedGet();
-  const { trigger: triggerSearchWithRated, data: dataByRated } = useUsersRatedGet();
   const { trigger: triggerActivity, data: activityData } = useUsersActivitySearch();
-  const { trigger: triggerRated } = useUsersRatedRegister();
   const { trigger: triggerLiked } = useUsersLikedRegister();
   const { trigger: triggerDeliked } = useUsersLikedDelete();
   const { trigger: triggerDelete } = useWorksDeleteById();
@@ -81,22 +77,6 @@ export const useImageGrid = (
     }
   };
 
-  const fetchImagesWithRated = async (page: number) => {
-    setLoading(true);
-    const headers: UsersRatedGetHeader = {
-      Authorization: `Bearer ${userToken}` as `Bearer ${string}`
-    }
-    const query: UsersRatedGetQuery = {
-      offset: (currentPage - 1) * itemsPerPage,
-      limit: itemsPerPage
-    }
-    try {
-      await triggerSearchWithRated({ headers, query });
-    } catch (err) {
-      console.error("Failed to fetch images:", err);
-    }
-  };
-
   // ページ変更時にデータをリセットし、データを再取得
   useEffect(() => {
     setImageData([]);
@@ -106,8 +86,6 @@ export const useImageGrid = (
       fetchImagesWithTags(currentPage);
     } else if (type == "liked") {
       fetchImagesWithLiked(currentPage);
-    } else if (type === "rated") {
-      fetchImagesWithRated(currentPage);
     }
   }, [currentPage]);
 
@@ -119,10 +97,8 @@ export const useImageGrid = (
       setWorksData(dataByTags);
     } else if (type == "liked" && dataByLiked) {
       setWorksData(dataByLiked)
-    } else if (type == "rated" && dataByRated) {
-      setWorksData(dataByRated)
     }
-  }, [dataByTags, dataByLiked, dataByRated, type]);
+  }, [dataByTags, dataByLiked, type]);
 
   // works データが変更されたときの処理
   useEffect(() => {
@@ -156,7 +132,6 @@ export const useImageGrid = (
     if (worksData && activitiesData) {
       // works と activityData を結合して imageData にセット
       const fetchedImages: ImageData[] = worksData.works.map((work) => {
-        const activity = activitiesData?.apiRateds?.find((a) => a.workId === work.workId);
         return {
           workId: work.workId ?? "",
           mainTitle: work.mainTitle || "No Title",
@@ -165,7 +140,6 @@ export const useImageGrid = (
           watermaskImage: work.watermaskImgUrl || "",
           date: work.createdAt || "",
           isLiked: activitiesData?.apiLikeds?.some((a) => a.workId === work.workId) || false,
-          rating: activity?.rating || 0,
         };
       });
 
@@ -189,14 +163,6 @@ export const useImageGrid = (
     const page = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
     setCurrentPage(page);
   }, [searchParams.get('page')]);
-
-  const onRateChange = (workId: string, value: number) => {
-    const headers = {
-      Authorization: `Bearer ` + getUserTokenFromCookies() as `Bearer ${string}`,
-      "x-xsrf-token": getCsrfTokenFromCookies() ?? ''
-    };
-    triggerRated({ headers, workId, rating: value });
-  };
 
   const onLikeChange = (workId: string, isCurrentlyLiked: boolean) => {
     const headers = {
@@ -236,7 +202,6 @@ export const useImageGrid = (
     loading,
     onPageChange,
     onLikeChange,
-    onRateChange,
     onDeleteClick,
     isAuthenticated
   };

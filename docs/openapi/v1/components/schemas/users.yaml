@@ -42,10 +42,6 @@ ApiUsersActivity:
       type: array
       items:
         $ref: "../schemas/users.yaml#/ApiLiked"
-    apiRateds:
-      type: array
-      items:
-        $ref: "../schemas/users.yaml#/ApiRated"
 
 ApiLiked:
   description: いいね
@@ -77,28 +73,6 @@ ApiViewed:
       type: string
       description: 作品ID
       example: 1
-    updatedAt:
-      type: string
-      format: date-time
-      description: "最終更新日時"
-      example: "2024-07-08T00:00:00+09:00"
-
-ApiRated:
-  description: レーティング
-  type: object
-  properties:
-    userId:
-      type: string
-      description: メールアドレス
-      example: test@gmail.com
-    workId:
-      type: string
-      description: 作品ID
-      example: 1
-    rating:
-      type: integer
-      description: レーティング
-      example: 5
     updatedAt:
       type: string
       format: date-time

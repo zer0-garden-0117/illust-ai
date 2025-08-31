@@ -71,21 +71,3 @@ UsersViewedByWorkIdResponse:
     application/json:
       schema:
         $ref: "../schemas/users.yaml#/ApiViewed"
-
-UsersRatedResponse:
-  description: |-
-    200 OK
-    - 正常終了
-  content:
-    application/json:
-      schema:
-        $ref: "../schemas/works.yaml#/ApiWorksWithSearchResult"
-
-UsersRatedByWorkIdResponse:
-  description: |-
-    200 OK
-    - 正常終了
-  content:
-    application/json:
-      schema:
-        $ref: "../schemas/users.yaml#/ApiRated"
