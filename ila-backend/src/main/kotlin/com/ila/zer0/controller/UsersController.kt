@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
@@ -34,10 +35,11 @@ class UsersController(
         return ResponseEntity.ok(registeredApiUser)
     }
 
-    override fun getUsers(): ResponseEntity<ApiUser> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val user = userManagerService.getUser(userId)
+    override fun getUsers(
+        @PathVariable("customUserId") customUserId: kotlin.String
+    ): ResponseEntity<ApiUser> {
+        val user = userManagerService.getUserByCustomUserId(customUserId) ?:
+            return ResponseEntity.notFound().build()
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
     }
@@ -48,7 +50,7 @@ class UsersController(
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val newUser = userMapper.toUser(apiUser)
-        val user = userManagerService.getUser(userId)
+        val user = userManagerService.getUserById(userId)
         user.userProfile = newUser.userProfile
         user.customUserId = newUser.customUserId
         user.userName = newUser.userName

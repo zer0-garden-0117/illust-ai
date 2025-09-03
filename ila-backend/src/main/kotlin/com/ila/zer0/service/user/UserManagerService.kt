@@ -29,12 +29,24 @@ class UserManagerService(
     }
 
     @Transactional
-    fun getUser(
+    fun getUserById(
         userId: String
     ): User {
         val user = userService.findUserById(userId)
         val followCount = followService.getFollowerCount(userId)
         val followerCount = followService.getFollowerCount(userId)
+        user.follow = followCount
+        user.follower = followerCount
+        return user
+    }
+
+    @Transactional
+    fun getUserByCustomUserId(
+        customUserId: String
+    ): User? {
+        val user = userService.findUserByCustomUserId(customUserId) ?: return null
+        val followCount = followService.getFollowerCount(user.userId)
+        val followerCount = followService.getFollowerCount(user.userId)
         user.follow = followCount
         user.follower = followerCount
         return user

@@ -1,5 +1,6 @@
 package com.ila.zer0.repository
 
+import com.ila.zer0.entity.Tag
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import org.slf4j.LoggerFactory
@@ -40,7 +41,28 @@ class UserRepository(
             )
         }
     }
-    
+
+    fun findByCustomUserId(customUserId: String): User? {
+        val index = table.index("CustomUserIdIndex")
+        val queryConditional = QueryConditional.keyEqualTo(
+            Key.builder().partitionValue(customUserId).build()
+        )
+
+        val results = index.query { r ->
+            r.queryConditional(queryConditional)
+                .limit(1)
+        }
+
+        for (page in results) {
+            return page.items().firstOrNull()
+        }
+        return null
+    }
+
+    fun existsByCustomUserId(customUserId: String): Boolean {
+        return findByCustomUserId(customUserId) != null
+    }
+
     fun registerUser(user: User): User {
         return try {
             table.putItem(user)

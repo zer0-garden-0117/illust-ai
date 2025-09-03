@@ -15,6 +15,10 @@ class UserService(
         return userRepository.findByUserId(userId)
     }
 
+    fun findUserByCustomUserId(customUserId: String): User? {
+        return userRepository.findByCustomUserId(customUserId)
+    }
+
     fun registerUser(user: User): User {
         return userRepository.registerUser(user)
     }

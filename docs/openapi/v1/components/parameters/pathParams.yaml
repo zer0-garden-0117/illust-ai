@@ -17,3 +17,13 @@ TagsPathParam:
   required: true
   schema:
     type: string
+
+CustomUsersIdPathParam:
+  name: customUserId
+  in: path
+  description: |-
+    ### CustomUserId
+    ユーザーのCustomUserId
+  required: true
+  schema:
+    type: string

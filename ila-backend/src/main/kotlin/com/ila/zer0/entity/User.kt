@@ -3,6 +3,7 @@ package com.ila.zer0.entity
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey
 import java.time.Instant
 
 @DynamoDbBean
@@ -10,7 +11,7 @@ data class User(
     @get:DynamoDbPartitionKey
     var userId: String = "",
 
-    @get:DynamoDbAttribute("customUserId")
+    @get:DynamoDbSecondaryPartitionKey(indexNames = ["CustomUserIdIndex"])
     var customUserId: String = "",
 
     @get:DynamoDbAttribute("userName")

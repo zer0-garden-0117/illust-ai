@@ -32,6 +32,8 @@ Users:
     security:
       - UserTokenAuth: []
       - CsrfTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"

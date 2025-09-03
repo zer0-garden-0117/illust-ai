@@ -115,8 +115,19 @@ create_table rated \
 create_table user \
     --attribute-definitions \
         AttributeName=userId,AttributeType=S \
+        AttributeName=customUserId,AttributeType=S \
     --key-schema \
-        AttributeName=userId,KeyType=HASH
+        AttributeName=userId,KeyType=HASH \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"CustomUserIdIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"customUserId\",\"KeyType\":\"HASH\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"}
+            }
+        ]"
 
 
 # follow テーブルの作成
