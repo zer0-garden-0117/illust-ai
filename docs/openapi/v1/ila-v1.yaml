@@ -23,6 +23,9 @@ paths:
   /users:
     $ref: "./paths/users.yaml#/Users"
 
+  /users/{customUserId}:
+    $ref: "./paths/users.yaml#/UsersById"
+
   /users/activity/search:
     $ref: "./paths/users.yaml#/UsersActivitySearch"
 

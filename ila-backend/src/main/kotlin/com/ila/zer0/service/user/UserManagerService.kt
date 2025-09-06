@@ -1,5 +1,6 @@
 package com.ila.zer0.service.user
 
+import com.ila.zer0.controller.UsersController
 import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Liked
@@ -7,6 +8,7 @@ import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import com.ila.zer0.service.tag.TagService
 import com.ila.zer0.service.work.WorkService
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,6 +20,7 @@ class UserManagerService(
     private val workService: WorkService,
     private val tagService: TagService,
 ) {
+    val logger = LoggerFactory.getLogger(UserManagerService::class.java)
 
     @Transactional
     fun registerUser(
@@ -42,7 +45,11 @@ class UserManagerService(
     fun getUserByCustomUserId(
         customUserId: String
     ): User? {
-        val user = userService.findUserByCustomUserId(customUserId) ?: return null
+        val user = userService.findUserByCustomUserId(customUserId)
+        if (user == null) {
+            logger.info("user is null $customUserId")
+            return null
+        }
         val followCount = followService.getFollowerCount(user.userId)
         val followerCount = followService.getFollowerCount(user.userId)
         user.follow = followCount

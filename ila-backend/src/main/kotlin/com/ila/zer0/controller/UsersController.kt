@@ -1,5 +1,6 @@
 package com.ila.zer0.controller
 
+import com.ila.zer0.config.filter.FirebaseAuthFilter
 import com.ila.zer0.config.token.CustomAuthenticationToken
 import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.generated.endpoint.UsersApi
@@ -7,6 +8,7 @@ import com.ila.zer0.generated.model.*
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UserManagerService
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -21,6 +23,8 @@ class UsersController(
     private val userMapper: UserMapper,
     private val workMapper: WorkMapper
 ) : UsersApi {
+    val logger = LoggerFactory.getLogger(UsersController::class.java)
+
     override fun registerUsers(
         @RequestBody apiUser: ApiUser
     ): ResponseEntity<ApiUser> {
@@ -36,6 +40,7 @@ class UsersController(
     override fun getUsers(
         @PathVariable("customUserId") customUserId: kotlin.String
     ): ResponseEntity<ApiUser> {
+        logger.info("getUsers")
         val user = userManagerService.getUserByCustomUserId(customUserId) ?:
             return ResponseEntity.notFound().build()
         val apiUser = userMapper.toApiUser(user)

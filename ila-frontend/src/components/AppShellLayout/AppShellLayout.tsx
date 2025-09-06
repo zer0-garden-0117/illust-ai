@@ -31,7 +31,7 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AppShell
-      header={{ height: 120 }}
+      header={{ height: 60 }}
       footer={{ height: 20 }}
       padding="md"
       transitionDuration={0}

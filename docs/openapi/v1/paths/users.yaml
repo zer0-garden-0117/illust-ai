@@ -22,25 +22,6 @@ Users:
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-  get:
-    operationId: getUsers
-    tags:
-      - users
-    summary: ユーザーを取得する
-    description: |
-      ユーザーを取得する
-    security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
-    responses:
-      "200":
-        $ref: "../components/responses/users.yaml#/UsersResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
   patch:
     operationId: patchUsers
     tags:
@@ -74,6 +55,27 @@ Users:
     security:
       - UserTokenAuth: []
       - CsrfTokenAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+UsersById:
+  get:
+    operationId: getUsers
+    tags:
+      - users
+    summary: ユーザーを取得する
+    description: |
+      ユーザーを取得する
+    security:
+      - UserTokenAuth: []
+      - CsrfTokenAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"

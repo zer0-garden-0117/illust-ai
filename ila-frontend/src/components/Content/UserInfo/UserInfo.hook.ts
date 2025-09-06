@@ -1,3 +1,5 @@
+import { UsersGetResult, useUsersGet } from "@/apis/openapi/users/useUsersGet";
+
 type UseUserInfoProps = {
   userId: string;
 };
@@ -5,8 +7,12 @@ type UseUserInfoProps = {
 export const useUserInfo = (
   { userId }: UseUserInfoProps
 ) => {
+  const { data: userData, error, isLoading } = useUsersGet(
+    { customUserId: userId },
+    { revalidateOnFocus: false }
+  );
 
   return {
-    userId
+    userData
   };
 };

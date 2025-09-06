@@ -8,11 +8,11 @@ type UserInfoProps = {
   userId: string;
 };
 
-export const Work: React.FC<UserInfoProps> = (
+export const UserInfo: React.FC<UserInfoProps> = (
   { userId }
 ): JSX.Element => {
   const viewProps = useUserInfo({ userId });
   return <UserInfoView {...viewProps} />;
 };
 
-export default Work;
+export default UserInfo;

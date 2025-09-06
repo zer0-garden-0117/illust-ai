@@ -73,6 +73,7 @@ class FirebaseAuthFilter(
 
         // 完全一致のパスの場合
         if (pathWithMethod in noBearerTokenPathSet) {
+            logger.info("skipp: $pathWithMethod")
             return true
         }
 

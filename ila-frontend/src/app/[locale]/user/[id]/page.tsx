@@ -1,18 +1,21 @@
 'use client';
 
 import LoginButton from "@/components/Common/LoginButton/LoginButton";
+import UserInfo from "@/components/Content/UserInfo/UserInfo";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
 const UserPage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
   const userId = decodeURIComponent(params.id);
-  const { user, idToken } = useFirebaseAuthContext();
+  // const { user, idToken } = useFirebaseAuthContext();
 
   return (
     <>
-      <LoginButton />
-      {user && (
+      <UserInfo
+        userId={userId}
+      />
+      {/* {user && (
         <div style={{ marginTop: '20px' }}>
           <h2>User Info:</h2>
           <p>Name: {user.displayName}</p>
@@ -21,7 +24,7 @@ const UserPage: React.FC<{ params: { id: string } }> = (
           <p>id token: {idToken}</p>
           <p>id: {user.providerId}</p>
         </div>
-      )}
+      )} */}
     </>
   )
 };
