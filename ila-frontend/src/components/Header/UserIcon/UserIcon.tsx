@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, ActionIcon, useMantineColorScheme, Avatar, Modal } from '@mantine/core';
 import { useRouter } from "next/navigation";
 import { IconUser } from '@tabler/icons-react';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
-import AuthButton from '@/components/Common/AuthBottan/AuthButton';
+import LoginButton from '@/components/Common/LoginButton/LoginButton';
 
 export const UserIcon: React.FC = () => {
   const { user, idToken } = useFirebaseAuthContext();
@@ -84,7 +84,7 @@ export const UserIcon: React.FC = () => {
         centered
         size="sm"
       >
-        <AuthButton onSuccess={closeModal} />
+        <LoginButton onSuccess={closeModal} />
       </Modal>
     </Box>
   );
