@@ -1,7 +1,6 @@
 security:
   paths:
     no-bearer-token: /users/token:GET,/works/search:POST,/works/searchByTags:POST,/works/*:GET,/health:GET
-    csrf-gen: /users/token
   csrf:
     same-site: Strict
 

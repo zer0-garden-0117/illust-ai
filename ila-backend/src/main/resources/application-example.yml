@@ -12,16 +12,6 @@ sqs:
   create-image-queue-url: <Your SQS Create Image Queue URL ex:https://sqs.us-east-1.amazonaws.com/xxx/xxx>
   process-image-queue-url: <Your SQS Process Image Queue URL ex:https://sqs.us-east-1.amazonaws.com/xxx/xxx>
 
-# 認証系
-cognito:
-  region: <Your AWS Region ex:us-east-1>
-  pool-id: <Your Cognito User Pool ID ex:us-east-1_xxxxxxxxx>
-userToken:
-  secret: <Your JWT Secret Key ex:yourRandomSecretKeyBase64Encoded=>
-  admin-user-id: <Your Admin User ID ex:auth_provider_123456789>
-admin:
-  key: <Your Admin Key ex:yourRandomSecretKey>
-
 # フロントエンド連携
 cors:
   origins: <Your Frontend Origin ex:https://localhost:3001>

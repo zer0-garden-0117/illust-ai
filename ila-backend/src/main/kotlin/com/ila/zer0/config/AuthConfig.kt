@@ -1,60 +1,24 @@
 package com.ila.zer0.config
 
 import com.ila.zer0.config.filter.FirebaseAuthFilter
-import com.ila.zer0.service.AdminAuthService
-import com.ila.zer0.service.UserTokenService
-import com.google.auth.oauth2.GoogleCredentials
-import com.google.firebase.FirebaseApp
-import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.oauth2.jwt.JwtDecoder
-import org.springframework.security.oauth2.jwt.JwtDecoders
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableWebSecurity
 @Profile("prod", "dev", "test")
 class AuthConfig(
-    private val userTokenService: UserTokenService,
-    private val adminAuthService: AdminAuthService,
     private val firebaseAuth: FirebaseAuth,
-    @Value("\${cognito.region:us-east-1}") private val cognitoRegion: String,
-    @Value("\${cognito.pool-id:us-east-1_xxxxxxxxx}") private val cognitoPoolId: String,
     @Value("\${security.paths.no-bearer-token}") private val noBearerTokenPathAndMethodString: String,
-    @Value("\${cors.origins:https://localhost:3001}") private val corsOriginsString: String,
 ) : WebMvcConfigurer {
-    @Bean
-    fun cognitoJwtDecoder(): JwtDecoder? {
-        // デフォルト値の場合はnullを返す
-        if (cognitoPoolId == "us-east-1_xxxxxxxxx") {
-            return null
-        }
-
-        val issuerUrl = String.format(
-            "https://cognito-idp.%s.amazonaws.com/%s",
-            cognitoRegion, cognitoPoolId
-        )
-        return JwtDecoders.fromIssuerLocation(issuerUrl)
-    }
-
-    @Bean
-    fun csrfTokenRepository(): CookieCsrfTokenRepository {
-        return CookieCsrfTokenRepository.withHttpOnlyFalse()
-    }
-
     @Bean
     @kotlin.Throws(Exception::class)
     fun filterChain(http: HttpSecurity?): SecurityFilterChain? {
@@ -66,7 +30,6 @@ class AuthConfig(
                 authorize
                     .anyRequest().permitAll()
             }
-            // Firebaseのidトークンの検証の設定
             ?.addFilterBefore(
                 FirebaseAuthFilter(
                     firebaseAuth,
@@ -74,10 +37,6 @@ class AuthConfig(
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             )
-//            ?.csrf {
-//                it.disable()
-//            }
-//            ?.cors { it.disable() }
         return http?.build()
     }
 }

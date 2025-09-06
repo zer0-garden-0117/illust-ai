@@ -11,8 +11,6 @@ tags:
     description: ユーザーに関する事項
   - name: works
     description: 作品に関する事項
-  - name: images
-    description: 画像に関する事項
 
 servers:
   - url: https://localhost:8080
@@ -59,21 +57,13 @@ paths:
   /works/tags/{tagId}:
     $ref: "./paths/works.yaml#/WorksTagsById"
 
-  # images
-  /images/create:
-    $ref: "./paths/images.yaml#/ImagesCreate"
-
 components:
   securitySchemes:
-    AccessTokenAuth:
+    FirebaseAuth:
       type: apiKey
       name: x-access-token
       in: header
       description: Cognitoで発行したJWT
-    UserTokenAuth:
-      type: http
-      scheme: bearer
-      description: UserID等のユーザ情報を含むJWT
     CsrfTokenAuth:
       type: apiKey
       name: XSRF-TOKEN

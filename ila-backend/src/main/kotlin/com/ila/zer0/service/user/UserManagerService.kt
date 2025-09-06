@@ -5,7 +5,6 @@ import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Liked
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
-import com.ila.zer0.service.CognitoService
 import com.ila.zer0.service.tag.TagService
 import com.ila.zer0.service.work.WorkService
 import org.springframework.stereotype.Service
@@ -18,7 +17,6 @@ class UserManagerService(
     private val likedService: LikedService,
     private val workService: WorkService,
     private val tagService: TagService,
-    private val cognitoService: CognitoService
 ) {
 
     @Transactional
@@ -155,6 +153,5 @@ class UserManagerService(
     @Transactional
     fun deleteUsers(userId: String) {
         likedService.deleteUser(userId)
-        cognitoService.deleteAllUsersByUserIdSilently(userId)
     }
 }

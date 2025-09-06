@@ -4,8 +4,6 @@ import { AppShell, Loader, Center } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import { Header } from '../Header/Header';
 import { useTranslations } from "next-intl";
-import { useAccessTokenContext } from '@/providers/auth/accessTokenProvider';
-import { useUserTokenContext } from '@/providers/auth/userTokenProvider';
 import { usePathname, useRouter } from 'next/navigation';
 
 export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
@@ -13,8 +11,6 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const t = useTranslations("appshell");
   const [loading, setLoading] = useState(true);
-  const { isAuthenticated } = useAccessTokenContext();
-  const { userToken, isDeleting, isAdmin } = useUserTokenContext();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -25,25 +21,7 @@ export const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    const preAuthRedirect = sessionStorage.getItem('preAuthRedirect');
-    if (isAuthenticated && userToken && preAuthRedirect) {
-      sessionStorage.removeItem('preAuthRedirect');
-      window.location.href = preAuthRedirect;
-    }
-  }, [isAuthenticated, userToken]);
-
-  // useEffect(() => {
-  //   if (!pathname) return;
-  //   const segments = pathname.split('/').filter(Boolean);
-  //   const isAdminPath = segments[1] === 'admin';
-  
-  //   if (isAdminPath && !isAdmin) {
-  //     router.replace('/404');
-  //   }
-  // }, [isAdmin, pathname, router]);
-
-  if (loading || isDeleting) {
+  if (loading) {
     return (
       <Center style={{ width: '100%', height: '100vh' }}>
         <Loader color="black" size="xs" />
