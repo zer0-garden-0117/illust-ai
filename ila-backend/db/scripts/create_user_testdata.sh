@@ -46,8 +46,8 @@ put_item user '{
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
   "userName": {"S": "testUserName"},
   "userProfile": {"S": "testUserProfile"},
-  "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
-  "coverImageUrl": {"S": "https://example.com/images/user001.jpg"},
+  "profileImageUrl": {"S": ""},
+  "coverImageUrl": {"S": ""},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 
@@ -57,8 +57,8 @@ put_item user '{
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
   "userName": {"S": "testUserName"},
   "userProfile": {"S": "testUserProfile"},
-  "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
-  "coverImageUrl": {"S": "https://example.com/images/user001.jpg"},
+  "profileImageUrl": {"S": ""},
+  "coverImageUrl": {"S": ""},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 
@@ -68,8 +68,8 @@ put_item user '{
   "updatedAt": {"S": "2024-01-15T10:30:00Z"},
   "userName": {"S": "testUserName"},
   "userProfile": {"S": "testUserProfile"},
-  "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
-  "coverImageUrl": {"S": "https://example.com/images/user001.jpg"},
+  "profileImageUrl": {"S": ""},
+  "coverImageUrl": {"S": ""},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 
