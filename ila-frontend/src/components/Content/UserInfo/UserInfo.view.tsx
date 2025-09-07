@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { memo } from 'react';
-import { Button, Group, Avatar, Text, Loader, Card, Tabs, Space } from '@mantine/core';
+import { Group, Avatar, Text, Card, Tabs, Space } from '@mantine/core';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import LoginButton from '@/components/Common/LoginButton/LoginButton';
 
@@ -19,12 +19,13 @@ export const UserInfoView = memo(function WorkViewComponent({
       <Card.Section
         h={140}
         style={{
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80)',
+          backgroundImage: userData?.profileImageUrl,
+          // backgroundImage: 'url(https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80)',
         }}
       />
       <Avatar
-        src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-9.png"
+        src={userData?.profileImageUrl}
+        // src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-9.png"
         size={80}
         radius={80}
         mx="auto"
