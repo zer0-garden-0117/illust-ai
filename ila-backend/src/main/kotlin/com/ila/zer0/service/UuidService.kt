@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service
 class UuidService {
     /**
      * NanoIDを使用して8文字のユニークIDを生成する
-     * 文字セット: 英大小文字、数字、`-`, `_`
+     * 文字セット: 英大小文字、数字
      */
     fun generateUuid(): String {
         val customAlphabet =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return NanoIdUtils.randomNanoId(
             NanoIdUtils.DEFAULT_NUMBER_GENERATOR,
             customAlphabet.toCharArray(),

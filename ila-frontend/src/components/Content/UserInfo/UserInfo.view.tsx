@@ -31,7 +31,7 @@ export const UserInfoView = memo(function WorkViewComponent({
         mt={-30}
       />
       <Text ta="center" fz="lg" fw={500} mt="sm">
-        {userData?.userName}
+        {userData?.customUserId}
       </Text>
       <Text ta="center" fz="sm" c="dimmed">
         {userData?.userProfile}

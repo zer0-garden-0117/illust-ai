@@ -7,7 +7,7 @@ type UseUserInfoProps = {
 export const useUserInfo = (
   { userId }: UseUserInfoProps
 ) => {
-  const { data: userData, error, isLoading } = useUsersGet(
+  const { data: userData } = useUsersGet(
     { customUserId: userId },
     { revalidateOnFocus: false }
   );

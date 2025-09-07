@@ -13,8 +13,8 @@ export const UserIcon: React.FC = () => {
   const [opened, setOpened] = useState(false);
 
   const onIconClick = () => {
-    if (user?.uid) {
-      router.push(`/user/${user?.uid}`);
+    if (user?.customUserId) {
+      router.push(`/user/${user?.customUserId}`);
     } else {
       setOpened(true);
     }
@@ -50,7 +50,7 @@ export const UserIcon: React.FC = () => {
       >
         <Avatar 
           variant="transparent"
-          src={user?.photoURL} 
+          src={user?.profileImageUrl} 
           radius="xl"
           size={avatarSize}
           styles={{

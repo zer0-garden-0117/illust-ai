@@ -6,6 +6,7 @@ import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Liked
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
+import com.ila.zer0.service.UuidService
 import com.ila.zer0.service.tag.TagService
 import com.ila.zer0.service.work.WorkService
 import org.slf4j.LoggerFactory
@@ -20,6 +21,7 @@ class UserManagerService(
     private val likedService: LikedService,
     private val workService: WorkService,
     private val tagService: TagService,
+    private val uuidService: UuidService
 ) {
     val logger = LoggerFactory.getLogger(UserManagerService::class.java)
 
@@ -29,7 +31,7 @@ class UserManagerService(
     ): User {
         val newUser = User()
         newUser.userId = userId
-        newUser.customUserId = ""
+        newUser.customUserId = uuidService.generateUuid()
         newUser.userName = userId
         newUser.userProfile = ""
         newUser.createdAt = Instant.now()

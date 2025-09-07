@@ -14,7 +14,7 @@ export const useUsersGet = (
   options?: SWRConfiguration<UsersGetResult, Error>
 ): SWRResponse<UsersGetResult, Error> => {
   return useSWR<UsersGetResult, Error>(
-    `/users/{customUserId}`,
+    args.customUserId ? `/users/${args.customUserId}` : null,
     async (): Promise<UsersGetResult> => {
       const { data, error } = await client.GET(
         `/users/{customUserId}`,

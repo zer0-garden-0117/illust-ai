@@ -8,22 +8,29 @@ import {
   User as FirebaseUser
 } from 'firebase/auth';
 import { auth } from '../../configs/auth/config2'
+import { useMyUserGet, MyUserGetResult } from '../openapi/users/useMyUserGet';
 
 interface AuthResult {
-  user: FirebaseUser;
+  user: MyUserGetResult;
   idToken: string;
   additionalUserInfo: string | null;
 }
 
 export function useFirebaseAuth() {
+  const { trigger: fetchUser, data: user, error, isMutating } = useMyUserGet();
   const twitterSignIn = async (): Promise<AuthResult> => {
     const provider = new TwitterAuthProvider();
     try {
       const result: UserCredential = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
-      
+      const userData = await fetchUser({
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        }
+      });
+
       return {
-        user: result.user,
+        user: userData,
         idToken,
         additionalUserInfo: result.providerId
       };
