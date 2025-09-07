@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, ActionIcon, useMantineColorScheme, Avatar, Modal } from '@mantine/core';
+import { Box, ActionIcon, useMantineColorScheme, Avatar, Modal, Button, Text } from '@mantine/core';
 import { useRouter } from "next/navigation";
 import { IconUser } from '@tabler/icons-react';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
@@ -29,53 +29,66 @@ export const UserIcon: React.FC = () => {
 
   return (
     <Box>
-      <ActionIcon
-        size={actionIconSize}
-        onClick={onIconClick}
-        variant="transparent"
-        color={isDark ? "var(--mantine-color-gray-5)" : "var(--mantine-color-gray-8)"} 
-        radius="xl"
-        styles={{
-          root: {
-            width: actionIconSize,
-            height: actionIconSize,
-            borderColor: isDark 
-              ? "var(--mantine-color-gray-8)"
-              : "var(--mantine-color-gray-5)",
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }
-        }}
-      >
-        <Avatar 
+      {user && (
+        <ActionIcon
+          size={actionIconSize}
+          onClick={onIconClick}
           variant="transparent"
-          src={user?.profileImageUrl} 
+          color={isDark ? "var(--mantine-color-gray-5)" : "var(--mantine-color-gray-8)"} 
           radius="xl"
-          size={avatarSize}
           styles={{
             root: {
-              width: avatarSize,
-              height: avatarSize,
-              minWidth: avatarSize,
-              minHeight: avatarSize,
+              width: actionIconSize,
+              height: actionIconSize,
+              borderColor: isDark 
+                ? "var(--mantine-color-gray-8)"
+                : "var(--mantine-color-gray-5)",
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-            },
-            image: {
-              objectFit: 'cover'
             }
           }}
         >
-          {!user && (
+          <Avatar 
+            variant="transparent"
+            src={user?.profileImageUrl} 
+            radius="xl"
+            size={avatarSize}
+            styles={{
+              root: {
+                width: avatarSize,
+                height: avatarSize,
+                minWidth: avatarSize,
+                minHeight: avatarSize,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
+              image: {
+                objectFit: 'cover'
+              }
+            }}
+          >
+          </Avatar>
+        </ActionIcon>
+      )}
+      {!user && (
+        <Button
+          onClick={onIconClick}
+          color={isDark ? "var(--mantine-color-gray-8)" : "var(--mantine-color-gray-5)"} 
+          variant="outline"
+          radius={"xl"}
+          leftSection={
             <IconUser
+              color="var(--mantine-color-gray-8)"
               size={20}
               style={{ display: 'block' }}
             />
-          )}
-        </Avatar>
-      </ActionIcon>
+          }
+        >
+          <Text c="var(--mantine-color-gray-8)">ログイン</Text>
+        </Button>
+      )}
 
       <Modal
         opened={opened}
