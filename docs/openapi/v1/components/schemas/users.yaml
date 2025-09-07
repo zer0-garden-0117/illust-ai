@@ -30,6 +30,10 @@ ApiUser:
       type: string
       description: ユーザーアイコン画像
       example: xxxxx
+    coverImageUrl:
+      type: string
+      description: カバー画像
+      example: xxxxx
     createdAt:
       type: string
       format: date-time

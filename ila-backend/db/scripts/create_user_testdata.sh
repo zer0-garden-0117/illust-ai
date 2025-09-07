@@ -47,6 +47,7 @@ put_item user '{
   "userName": {"S": "testUserName"},
   "userProfile": {"S": "testUserProfile"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
+  "coverImageUrl": {"S": "https://example.com/images/user001.jpg"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 
@@ -57,6 +58,7 @@ put_item user '{
   "userName": {"S": "testUserName"},
   "userProfile": {"S": "testUserProfile"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
+  "coverImageUrl": {"S": "https://example.com/images/user001.jpg"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 
@@ -67,6 +69,7 @@ put_item user '{
   "userName": {"S": "testUserName"},
   "userProfile": {"S": "testUserProfile"},
   "profileImageUrl": {"S": "https://example.com/images/user001.jpg"},
+  "coverImageUrl": {"S": "https://example.com/images/user001.jpg"},
   "createdAt": {"S": "2023-05-10T14:20:00Z"}
 }'
 

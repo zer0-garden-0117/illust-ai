@@ -32,6 +32,9 @@ data class User(
     @get:DynamoDbAttribute("profileImageUrl")
     var profileImageUrl: String = "",
 
+    @get:DynamoDbAttribute("coverImageUrl")
+    var coverImageUrl: String = "",
+
     @get:DynamoDbAttribute("createdAt")
     var createdAt: Instant = Instant.now()
 )
