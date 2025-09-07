@@ -20,8 +20,8 @@ servers:
 
 paths:
   # users
-  /users:
-    $ref: "./paths/users.yaml#/Users"
+  /me:
+    $ref: "./paths/users.yaml#/UsersMe"
 
   /users/{customUserId}:
     $ref: "./paths/users.yaml#/UsersById"
@@ -67,11 +67,6 @@ components:
       name: x-access-token
       in: header
       description: Cognitoで発行したJWT
-    CsrfTokenAuth:
-      type: apiKey
-      name: XSRF-TOKEN
-      in: cookie
-      description: CSRF保護のJWT
 
   schemas:
     # users  

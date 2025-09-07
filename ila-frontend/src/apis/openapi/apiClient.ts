@@ -1,16 +1,8 @@
 import createClient, { ClientOptions, type Middleware } from "openapi-fetch";
 import type { paths } from "../../generated/services/ila-v1";
 
-export interface AccessTokenHeader {
-  "x-access-token"?: string;
-}
-
-export interface UserTokenHeader {
+export interface AuthHeader {
   Authorization: `Bearer ${string}`;
-}
-
-export interface CsrfTokenHeader {
-  "x-xsrf-token"?: string;
 }
 
 const throwOnError: Middleware = {

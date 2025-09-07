@@ -1,12 +1,12 @@
 import useSWRMutation from 'swr/mutation';
 import client from "../apiClient";
-import type { UserTokenHeader, CsrfTokenHeader } from '../apiClient';
+import type { AuthHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type UsersActivitySearchResult = operations["postUsersActivitySearch"]["responses"]["200"]["content"]["application/json"];
 export type UsersActivitySearchRequestBody = operations["postUsersActivitySearch"]["requestBody"]["content"]["application/json"];
-export type UsersActivitySearchHeaders = UserTokenHeader & CsrfTokenHeader;
+export type UsersActivitySearchHeaders = AuthHeader;
 export type UsersActivitySearchArgs = {
   headers?: UsersActivitySearchHeaders;
   body: UsersActivitySearchRequestBody;
@@ -27,8 +27,7 @@ export const useUsersActivitySearch = (
         `/users/activity/search`,
         {
           headers: {
-            Authorization: `${headers?.Authorization}`,
-            "x-xsrf-token": headers?.["x-xsrf-token"] || '',
+            Authorization: `${headers?.Authorization}`
           },
           body: body
         }

@@ -11,7 +11,7 @@ class UserService(
 ) {
     private val logger = LoggerFactory.getLogger(UserService::class.java)
 
-    fun findUserById(userId: String): User {
+    fun findUserById(userId: String): User? {
         return userRepository.findByUserId(userId)
     }
 

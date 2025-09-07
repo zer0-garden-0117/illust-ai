@@ -26,17 +26,17 @@ class UserRepository(
         enhancedClient.table("user", TableSchema.fromClass(User::class.java))
     private val logger = LoggerFactory.getLogger(UserRepository::class.java)
 
-    fun findByUserId(userId: String): User {
+    fun findByUserId(userId: String): User? {
         return try {
-            val work = table.getItem { r ->
+            val user = table.getItem { r ->
                 r.key(
                     Key.builder().partitionValue(userId).build()
                 )
             }
-            work
+            user
         } catch (e: DynamoDbException) {
             throw RuntimeException(
-                "Failed to retrieve work by workId: $userId",
+                "Failed to retrieve user by userId: $userId",
                 e
             )
         }
@@ -68,7 +68,7 @@ class UserRepository(
             table.putItem(user)
             user
         } catch (e: DynamoDbException) {
-            throw RuntimeException("Failed to register work: ${user.userId}", e)
+            throw RuntimeException("Failed to register user: ${user.userId}", e)
         }
     }
 
@@ -77,7 +77,7 @@ class UserRepository(
             table.updateItem(user)
             user
         } catch (e: DynamoDbException) {
-            throw RuntimeException("Failed to register work: ${user.userId}", e)
+            throw RuntimeException("Failed to register user: ${user.userId}", e)
         }
     }
 
@@ -90,7 +90,7 @@ class UserRepository(
             }
         } catch (e: DynamoDbException) {
             throw RuntimeException(
-                "Failed to delete work by workId: $userId",
+                "Failed to delete user by userId: $userId",
                 e
             )
         }

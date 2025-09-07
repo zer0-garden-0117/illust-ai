@@ -1,11 +1,11 @@
 import useSWR from 'swr';
 import client from "../apiClient";
-import type { AccessTokenHeader, CsrfTokenHeader } from '../apiClient';
+import type { AuthHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRConfiguration, SWRResponse } from 'swr';
 
 export type WorksTagGetResult = operations["getTags"]["responses"]["200"]["content"]["application/json"];
-export type WorksTagGetHeaders = AccessTokenHeader & CsrfTokenHeader;
+export type WorksTagGetHeaders = AuthHeader;
 
 export const useWorksTagsGet = (
   headers?: WorksTagGetHeaders,
@@ -18,8 +18,7 @@ export const useWorksTagsGet = (
         `/works/tags`,
         {
           headers: {
-            "x-access-token": headers?.["x-access-token"] || '',
-            "x-xsrf-token": headers?.["x-xsrf-token"] || '',
+            Authorization: `${headers?.Authorization}`
           },
         }
       );

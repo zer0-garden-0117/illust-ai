@@ -1,6 +1,5 @@
 import useSWRMutation from 'swr/mutation';
 import client from "../apiClient";
-import type { UserTokenHeader, CsrfTokenHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 

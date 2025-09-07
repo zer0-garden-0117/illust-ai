@@ -1,12 +1,12 @@
 import useSWRMutation from 'swr/mutation';
 import client from "../apiClient";
-import type { AccessTokenHeader, CsrfTokenHeader } from '../apiClient';
+import type { AuthHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type WorksTagsDeleteResult = operations["deleteTagsById"]["responses"]["200"]["content"]["application/json"];
 export type WorksTagsDeletePath = operations["deleteTagsById"]["parameters"]["path"];
-export type WorksTagsDeleteHeaders = AccessTokenHeader & CsrfTokenHeader;
+export type WorksTagsDeleteHeaders = AuthHeader;
 
 export type WorksTagsDeleteArgs = {
   headers?: WorksTagsDeleteHeaders;
@@ -28,8 +28,7 @@ export const useWorksTagsDelete = (
         `/works/tags/{tagId}`,
         {
           headers: {
-            "x-access-token": headers?.["x-access-token"] || '',
-            "x-xsrf-token": headers?.["x-xsrf-token"] || '',
+            Authorization: `${headers?.Authorization}`
           },
           params: {
             path: {

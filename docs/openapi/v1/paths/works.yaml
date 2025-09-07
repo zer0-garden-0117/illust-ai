@@ -7,8 +7,7 @@ WorksCreate:
     description: |
       作成を作成する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     requestBody:
       required: true
       content:
@@ -73,8 +72,7 @@ WorksById:
     description: |
       作品を削除する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -120,7 +118,7 @@ WorksTags:
     description: |
       タグを取得する
     security:
-      - UserTokenAuth: []
+      - FirebaseAuth: []
     responses:
       "200":
         $ref: "../components/responses/works.yaml#/WorksTagsGetResponse"
@@ -137,8 +135,7 @@ WorksTags:
     description: |
       タグを追加する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     requestBody:
       description: |-
         ### User
@@ -164,8 +161,7 @@ WorksTagsById:
     description: |
       タグを削除する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/TagsPathParam"
     responses:

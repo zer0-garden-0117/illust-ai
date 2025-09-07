@@ -1,11 +1,11 @@
 import useSWRMutation from 'swr/mutation';
 import client from "../apiClient";
-import type { UserTokenHeader, CsrfTokenHeader } from '../apiClient';
+import type { AuthHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type RegisterLikedResult = operations["postUsersLikedByWorkdId"]["responses"]["200"]["content"]["application/json"];
-export type RegisterLikedHeaders = UserTokenHeader & CsrfTokenHeader;
+export type RegisterLikedHeaders = AuthHeader;
 
 export type RegisterLikedArgs = {
   headers?: RegisterLikedHeaders;
@@ -27,8 +27,7 @@ export const useUsersLikedRegister = (
         `/users/liked/{workId}`,
         {
           headers: {
-            Authorization: `${headers?.Authorization}`,
-            "x-xsrf-token": headers?.["x-xsrf-token"] || '',
+            Authorization: `${headers?.Authorization}`
           },
           params: {
             path: {

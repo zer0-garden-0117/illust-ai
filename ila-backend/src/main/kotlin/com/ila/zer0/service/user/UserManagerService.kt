@@ -11,6 +11,7 @@ import com.ila.zer0.service.work.WorkService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 @Service
 class UserManagerService(
@@ -24,16 +25,23 @@ class UserManagerService(
 
     @Transactional
     fun registerUser(
-        user: User
+        userId: String
     ): User {
-        return userService.registerUser(user)
+        val newUser = User()
+        newUser.userId = userId
+        newUser.customUserId = ""
+        newUser.userName = userId
+        newUser.userProfile = ""
+        newUser.createdAt = Instant.now()
+        newUser.updatedAt = Instant.now()
+        return userService.registerUser(newUser)
     }
 
     @Transactional
     fun getUserById(
         userId: String
-    ): User {
-        val user = userService.findUserById(userId)
+    ): User? {
+        val user = userService.findUserById(userId) ?: return null
         val followCount = followService.getFollowerCount(userId)
         val followerCount = followService.getFollowerCount(userId)
         user.follow = followCount

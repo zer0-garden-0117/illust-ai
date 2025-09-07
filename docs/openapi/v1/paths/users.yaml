@@ -1,20 +1,13 @@
-Users:
-  post:
-    operationId: registerUsers
+UsersMe:
+  get:
+    operationId: getMyUser
     tags:
       - users
-    summary: ユーザーを登録する
+    summary: 認証済のユーザーを取得する
     description: |
-      ユーザーを登録する
+      認証済のユーザーを取得する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/users.yaml#/ApiUser"
+      - FirebaseAuth: []
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"
@@ -23,15 +16,14 @@ Users:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
   patch:
-    operationId: patchUsers
+    operationId: patchMyUser
     tags:
       - users
-    summary: ユーザー情報を更新する
+    summary: 認証済のユーザー情報を更新する
     description: |
-      ユーザー情報を更新する
+      認証済のユーザー情報を更新する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     requestBody:
       required: true
       content:
@@ -46,15 +38,14 @@ Users:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
   delete:
-    operationId: deleteUsers
+    operationId: deleteMyUser
     tags:
       - users
-    summary: ユーザーを削除する
+    summary: 認証済のユーザーを削除する
     description: |
-      ユーザーを削除する
+      認証済のユーザーを削除する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"
@@ -68,12 +59,9 @@ UsersById:
     operationId: getUsers
     tags:
       - users
-    summary: ユーザーを取得する
+    summary: 指定したユーザーを取得する
     description: |
-      ユーザーを取得する
-    security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      指定したユーザーを取得する
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
     responses:
@@ -93,8 +81,7 @@ UsersActivitySearch:
     description: |
       ユーザーのアクション情報を取得
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     requestBody:
       required: true
       content:
@@ -118,7 +105,7 @@ UsersLiked:
     description: |
       いいねを取得する
     security:
-      - UserTokenAuth: []
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
       - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
@@ -139,8 +126,7 @@ UsersLikedByWorkId:
     description: |
       指定した作品にいいねを付与する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -159,8 +145,7 @@ UsersLikedByWorkId:
     description: |
       指定した作品のいいねを削除する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -180,7 +165,7 @@ UsersViewed:
     description: |
       いいねを取得する
     security:
-      - UserTokenAuth: []
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
       - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
@@ -201,8 +186,7 @@ UsersViewedByWorkId:
     description: |
       指定した作品に閲覧済を付与する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -221,8 +205,7 @@ UsersViewedByWorkId:
     description: |
       指定した作品の閲覧済を付削除する
     security:
-      - UserTokenAuth: []
-      - CsrfTokenAuth: []
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:

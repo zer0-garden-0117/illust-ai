@@ -1,12 +1,10 @@
-import useSWR from 'swr';
 import client from "../apiClient";
-import type { UserTokenHeader } from '../apiClient';
+import type { AuthHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/ila-v1";
-import type { SWRConfiguration, SWRResponse } from 'swr';
 import useSWRMutation, { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
 export type UsersLikedGetResult = operations["getUsersLiked"]["responses"]["200"]["content"]["application/json"];
-export type UsersLikedGetHeader = UserTokenHeader;
+export type UsersLikedGetHeader = AuthHeader;
 export type UsersLikedGetQuery = operations["getUsersLiked"]["parameters"]["query"];
 
 export type UsersLikedGetArgs = {
