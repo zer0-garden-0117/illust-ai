@@ -34,6 +34,8 @@ class UserManagerService(
         newUser.customUserId = uuidService.generateUuid()
         newUser.userName = userId
         newUser.userProfile = ""
+        newUser.profileImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/icon.png"
+        newUser.coverImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/cover.png"
         newUser.createdAt = Instant.now()
         newUser.updatedAt = Instant.now()
         return userService.registerUser(newUser)
