@@ -2,9 +2,11 @@
 
 import React from 'react';
 import { memo } from 'react';
-import { Group, Avatar, Text, Card, Tabs, Space } from '@mantine/core';
+import { Button, Group, Avatar, Text, Card, Tabs, Space } from '@mantine/core';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import LoginButton from '@/components/Common/LoginButton/LoginButton';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
+import FollowButton from '@/components/Common/FollowButton/FollowButton';
 
 type UserInfoViewProps = {
   userData: UsersGetResult | undefined
@@ -13,6 +15,9 @@ type UserInfoViewProps = {
 export const UserInfoView = memo(function WorkViewComponent({
   userData
 }: UserInfoViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
+  const isLoginUser = user && userData?.customUserId === user.customUserId;
+
   return (
     <>
     <Card withBorder padding="xl" radius="md">
@@ -54,16 +59,15 @@ export const UserInfoView = memo(function WorkViewComponent({
             Follower
           </Text>
         </div>
-        <div key="Button">
-          {/* <Button
-            mt={10}
-            radius="md"
-            size="md"
-            variant="default"
-          >
-            Follow
-          </Button> */}
-          <LoginButton />
+        <div key="LoginButton">
+          {isLoginUser &&
+            // 自分のページはログインボタンを表示
+            <LoginButton />
+          }
+          {!isLoginUser &&
+            // 自分以外のページはフォローボタンを表示
+            <FollowButton customUserId={userData?.customUserId} />
+          }
         </div>
       </Group>
     <Space h={15}/>
