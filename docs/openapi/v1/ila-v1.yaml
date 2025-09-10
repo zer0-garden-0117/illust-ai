@@ -23,8 +23,14 @@ paths:
   /me:
     $ref: "./paths/users.yaml#/UsersMe"
 
+  /public/users/{customUserId}:
+    $ref: "./paths/users.yaml#/PublicUsersById"
+
   /users/{customUserId}:
     $ref: "./paths/users.yaml#/UsersById"
+
+  /users/follow/{customUserId}:
+    $ref: "./paths/users.yaml#/UsersFollow"
 
   /users/activity/search:
     $ref: "./paths/users.yaml#/UsersActivitySearch"

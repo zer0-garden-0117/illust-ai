@@ -36,5 +36,11 @@ data class User(
     var coverImageUrl: String = "",
 
     @get:DynamoDbAttribute("createdAt")
-    var createdAt: Instant = Instant.now()
+    var createdAt: Instant = Instant.now(),
+
+    @get:DynamoDbAttribute("isFollowing")
+    var isFollowing: Boolean = false,
+
+    @get:DynamoDbAttribute("isFollowed")
+    var isFollowed: Boolean = false,
 )

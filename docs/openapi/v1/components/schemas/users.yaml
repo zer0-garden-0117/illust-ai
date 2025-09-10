@@ -44,6 +44,14 @@ ApiUser:
       format: date-time
       description: "作品の最終更新日時"
       example: "2024-07-08T00:00:00+09:00"
+    isFollowing:
+      type: boolean
+      description: 認証ユーザーがこのユーザーをフォローしているかどうか
+      example: true
+    isFollowed:
+      type: boolean
+      description: このユーザーが認証ユーザーをフォローしているかどうか
+      example: true
 
 ApiUsersActivitySearch:
   type: object
