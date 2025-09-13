@@ -7,6 +7,7 @@ import com.ila.zer0.generated.model.*
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UserManagerService
+import io.swagger.v3.oas.annotations.Parameter
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -61,11 +62,35 @@ class UsersController(
     }
 
     override fun getUsers(
-        @PathVariable("customUserId") customUserId: kotlin.String
+        @PathVariable("customUserId") customUserId: String
     ): ResponseEntity<ApiUser> {
         logger.info("getUsers")
         val user = userManagerService.getUserByCustomUserId(customUserId) ?:
             return ResponseEntity.notFound().build()
+        val apiUser = userMapper.toApiUser(user)
+        return ResponseEntity.ok(apiUser)
+    }
+
+    override fun followUsers(
+        @PathVariable("customUserId") customUserId: String
+    ): ResponseEntity<ApiUser> {
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val followUser = userManagerService.getUserByCustomUserId(customUserId)
+            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+        val user = userManagerService.followUser(userId, followUser.userId)
+        val apiUser = userMapper.toApiUser(user)
+        return ResponseEntity.ok(apiUser)
+    }
+
+    override fun unfollowUsers(
+        @PathVariable("customUserId") customUserId: String
+    ): ResponseEntity<ApiUser> {
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val unfollowUser = userManagerService.getUserByCustomUserId(customUserId)
+            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+        val user = userManagerService.unfollowUser(userId, unfollowUser.userId)
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
     }

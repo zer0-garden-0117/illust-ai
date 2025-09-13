@@ -3,6 +3,7 @@ package com.ila.zer0.service.user
 import com.ila.zer0.controller.UsersController
 import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.dto.WorksWithSearchResult
+import com.ila.zer0.entity.Follow
 import com.ila.zer0.entity.Liked
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
@@ -81,6 +82,32 @@ class UserManagerService(
         userId: String
     ): User {
         return userService.deleteUserById(userId)
+    }
+
+    @Transactional
+    fun followUser(
+        userId: String,
+        followUserId: String
+    ): User {
+        followService.registerFollow(userId, followUserId)
+        val user = User(
+            userId = userId,
+            isFollowing = true
+        )
+        return user
+    }
+
+    @Transactional
+    fun unfollowUser(
+        userId: String,
+        followUserId: String
+    ): User {
+        followService.deleteFollow(userId, followUserId)
+        val user = User(
+            userId = userId,
+            isFollowing = true
+        )
+        return user
     }
 
     @Transactional
