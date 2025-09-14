@@ -25,6 +25,7 @@
     "@mantine/core": "^7.12.1",
     "@mantine/dates": "^7.12.1",
     "@mantine/dropzone": "^7.12.1",
+    "@mantine/form": "^8.3.1",
     "@mantine/hooks": "^7.10.2",
     "@tabler/icons-react": "^3.7.0",
     "aws-amplify": "^6.3.8",
