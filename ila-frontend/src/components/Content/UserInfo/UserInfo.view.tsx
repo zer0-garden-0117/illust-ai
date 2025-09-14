@@ -2,12 +2,12 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { memo } from 'react';
-import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea } from '@mantine/core';
+import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center } from '@mantine/core';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import LoginButton from '@/components/Common/LoginButton/LoginButton';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
-import { IconSettings, IconUpload, IconPhoto } from '@tabler/icons-react';
+import { IconSettings, IconPencil } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
@@ -193,11 +193,19 @@ export const UserInfoView = memo(function WorkViewComponent({
             mb="md"
             style={{ 
               height: 140, 
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               backgroundImage: form.values.coverImageUrl ? `url(${form.values.coverImageUrl})` : 'none',
               backgroundColor: form.values.coverImageUrl ? 'transparent' : 'var(--mantine-color-gray-1)',
               cursor: 'pointer'
             }}
+          >
+          <IconPencil
+            size={30}
+            color={"var(--mantine-color-gray-5)"} 
           />
+          </Dropzone>
           </Card.Section>
           <Group gap={0} style={{ position: 'relative', width: 'fit-content' }}>
           {/* プロフィール画像のドロップゾーン */}
@@ -205,7 +213,13 @@ export const UserInfoView = memo(function WorkViewComponent({
               onDrop={handleProfileImageDrop}
               accept={IMAGE_MIME_TYPE}
               maxSize={5 * 1024 ** 2}
-              style={{ cursor: 'pointer' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                position: 'relative'
+              }}
             >
               <Avatar
                 src={form.values.profileImageUrl}
@@ -214,8 +228,25 @@ export const UserInfoView = memo(function WorkViewComponent({
                 mx="auto"
                 mt={-50}
               >
-                <IconUpload size={20} />
               </Avatar>
+              <Center
+                mt={-20}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  transition: 'opacity 0.2s',
+                  '&:hover': {
+                    opacity: 1
+                  }
+                }}
+              >
+              <IconPencil
+                size={30}
+                color={"var(--mantine-color-gray-5)"} 
+              />
+            </Center>
             </Dropzone>
           </Group>
           <TextInput
