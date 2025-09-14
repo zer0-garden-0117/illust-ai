@@ -7,6 +7,7 @@ import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import LoginButton from '@/components/Common/LoginButton/LoginButton';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
+import { IconSettings } from '@tabler/icons-react';
 
 type UserInfoViewProps = {
   userData: UsersGetResult | undefined
@@ -28,21 +29,42 @@ export const UserInfoView = memo(function WorkViewComponent({
           // backgroundImage: 'url(https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80)',
         }}
       />
-      <Avatar
-        src={userData?.profileImageUrl}
-        // src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-9.png"
-        size={80}
-        radius={80}
-        mx="auto"
-        mt={-30}
-      />
-      <Text ta="center" fz="lg" fw={500} mt="sm">
-        {userData?.customUserId}
-      </Text>
+      <Group gap={0} style={{ position: 'relative', width: 'fit-content' }}>
+        <Avatar
+          src={userData?.profileImageUrl}
+          // src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-9.png"
+          size={80}
+          radius={80}
+          mx="auto"
+          mt={-30}
+        />
+      </Group>
+      <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
+        <Text ta="center" fz="lg" fw={500}>
+          @{userData?.customUserId}
+        </Text>
+        <Button
+          color={"var(--mantine-color-gray-5)"} 
+          variant="outline"
+          radius={"xl"}
+          leftSection={
+            <IconSettings
+              color="var(--mantine-color-gray-8)"
+              size={20}
+              style={{ display: 'block' }}
+            />
+          }
+        >
+          <Text c="var(--mantine-color-gray-8)">変更</Text>
+        </Button>
+      </Group>
+      <Group gap={0} style={{ position: 'relative', width: 'fit-content' }}>
       <Text ta="center" fz="sm" c="dimmed">
         {userData?.userProfile}
       </Text>
-      <Group mt="md" justify="center" gap={30}>
+      <Space h={40}/>
+      </Group>
+      <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
         <div key="Follow">
           <Text ta="center" fz="lg" fw={500}>
             {userData?.follow}

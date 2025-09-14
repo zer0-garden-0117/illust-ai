@@ -29,6 +29,7 @@ export const UserIcon: React.FC = () => {
 
   return (
     <Box>
+      {/* ログイン済の場合 */}
       {user && (
         <ActionIcon
           size={actionIconSize}
@@ -72,6 +73,7 @@ export const UserIcon: React.FC = () => {
           </Avatar>
         </ActionIcon>
       )}
+      {/* ログイン前 */}
       {!user && (
         <Button
           onClick={onIconClick}
