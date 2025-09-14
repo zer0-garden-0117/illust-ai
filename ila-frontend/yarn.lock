@@ -1390,7 +1390,7 @@
   dependencies:
     clsx "^2.1.1"
 
-"@mantine/dropzone@^7.12.1":
+"@mantine/dropzone@^7.17.8":
   version "7.17.8"
   resolved "https://registry.npmjs.org/@mantine/dropzone/-/dropzone-7.17.8.tgz"
   integrity sha512-c9WEArpP23E9tbRWqoznEY3bGPVntMuBKr3F2LQijgdpdALIzt6DYmwXu7gUajGX9Qg9NrCHenhvWLTYqKnRlA==
