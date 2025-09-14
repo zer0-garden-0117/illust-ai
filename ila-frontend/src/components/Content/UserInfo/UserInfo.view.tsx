@@ -190,7 +190,8 @@ export const UserInfoView = memo(function WorkViewComponent({
             style={{ 
               height: 140, 
               backgroundImage: form.values.coverImageUrl ? `url(${form.values.coverImageUrl})` : 'none',
-              backgroundColor: form.values.coverImageUrl ? 'transparent' : 'var(--mantine-color-gray-1)'
+              backgroundColor: form.values.coverImageUrl ? 'transparent' : 'var(--mantine-color-gray-1)',
+              cursor: 'pointer'
             }}
           />
           </Card.Section>
@@ -200,6 +201,7 @@ export const UserInfoView = memo(function WorkViewComponent({
               onDrop={handleProfileImageDrop}
               accept={IMAGE_MIME_TYPE}
               maxSize={5 * 1024 ** 2}
+              style={{ cursor: 'pointer' }}
             >
               <Avatar
                 src={form.values.profileImageUrl}
