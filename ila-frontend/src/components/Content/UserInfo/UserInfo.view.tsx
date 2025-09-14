@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { memo } from 'react';
 import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea } from '@mantine/core';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
@@ -19,10 +19,14 @@ export const UserInfoView = memo(function WorkViewComponent({
   userData
 }: UserInfoViewProps): JSX.Element {
   const { user } = useFirebaseAuthContext();
-  const isLoginUser = user && userData?.customUserId === user.customUserId;
+  const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    setIsLoginUser(!!(user && userData?.customUserId === user.customUserId));
+  }, [user, userData]);
 
   const form = useForm({
     initialValues: {
