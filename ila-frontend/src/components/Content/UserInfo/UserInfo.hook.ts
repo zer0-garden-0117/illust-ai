@@ -1,4 +1,5 @@
-import { UsersGetResult, useUsersGet } from "@/apis/openapi/users/useUsersGet";
+import { useUsersGet } from "@/apis/openapi/users/useUsersGet";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
 type UseUserInfoProps = {
   userId: string;
@@ -7,8 +8,14 @@ type UseUserInfoProps = {
 export const useUserInfo = (
   { userId }: UseUserInfoProps
 ) => {
+  const { idToken } = useFirebaseAuthContext();
+  console.log(idToken)
+
   const { data: userData } = useUsersGet(
-    { customUserId: userId },
+    { headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+      customUserId: userId },
     { revalidateOnFocus: false }
   );
 
