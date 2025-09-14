@@ -72,25 +72,21 @@ class UsersController(
     }
 
     override fun followUsers(
-        @PathVariable("customUserId") customUserId: String
+        @PathVariable("userId") userId: String
     ): ResponseEntity<ApiUser> {
-        val userId =
+        val myUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val followUser = userManagerService.getUserByCustomUserId(customUserId)
-            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
-        val user = userManagerService.followUser(userId, followUser.userId)
+        val user = userManagerService.followUser(myUserId, userId)
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
     }
 
     override fun unfollowUsers(
-        @PathVariable("customUserId") customUserId: String
+        @PathVariable("userId") userId: String
     ): ResponseEntity<ApiUser> {
-        val userId =
+        val myUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val unfollowUser = userManagerService.getUserByCustomUserId(customUserId)
-            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
-        val user = userManagerService.unfollowUser(userId, unfollowUser.userId)
+        val user = userManagerService.unfollowUser(myUserId, userId)
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
     }

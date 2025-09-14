@@ -18,12 +18,12 @@ TagsPathParam:
   schema:
     type: string
 
-CustomUsersIdPathParam:
-  name: customUserId
+UsersIdPathParam:
+  name: userId
   in: path
   description: |-
-    ### CustomUserId
-    ユーザーのCustomUserId
+    ### userId
+    ユーザーのuserId
   required: true
   schema:
     type: string

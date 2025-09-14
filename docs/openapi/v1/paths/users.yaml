@@ -63,7 +63,7 @@ PublicUsersById:
     description: |
       指定したユーザーを取得する
     parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
+      - $ref: "../components/parameters/pathParams.yaml#/UsersIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"
@@ -83,7 +83,7 @@ UsersById:
     security:
       - FirebaseAuth: []
     parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
+      - $ref: "../components/parameters/pathParams.yaml#/UsersIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"
@@ -103,7 +103,7 @@ UsersFollow:
     security:
       - FirebaseAuth: []
     parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
+      - $ref: "../components/parameters/pathParams.yaml#/UsersIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"
@@ -122,7 +122,7 @@ UsersFollow:
     security:
       - FirebaseAuth: []
     parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
+      - $ref: "../components/parameters/pathParams.yaml#/UsersIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"

@@ -29,7 +29,7 @@ paths:
   /users/{customUserId}:
     $ref: "./paths/users.yaml#/UsersById"
 
-  /users/follow/{customUserId}:
+  /users/follow/{userId}:
     $ref: "./paths/users.yaml#/UsersFollow"
 
   /users/activity/search:
