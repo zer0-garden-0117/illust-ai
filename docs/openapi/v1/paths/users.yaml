@@ -25,11 +25,40 @@ UsersMe:
     security:
       - FirebaseAuth: []
     requestBody:
+      description: |-
+        ユーザー情報
       required: true
       content:
-        application/json:
+        multipart/form-data:
           schema:
-            $ref: "../components/schemas/users.yaml#/ApiUser"
+            type: object
+            properties:
+              coverImage:
+                type: string
+                format: binary
+                description: カバー画像
+              profileImage:
+                type: string
+                format: binary
+                description: ユーザーアイコン画像
+              customUserId:
+                type: string
+                description: カスタムのuserId
+                example: xxxxx
+              userProfile:
+                type: string
+                description: ユーザーのプロフィール
+                example: xxxxx
+            required:
+              - coverImage
+              - profileImage
+              - customUserId
+              - userProfile
+            encoding:
+              coverImage:
+                contentType: image/png, image/jpeg
+              profileImage:
+                contentType: image/png, image/jpeg
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"
@@ -63,7 +92,7 @@ PublicUsersById:
     description: |
       指定したユーザーを取得する
     parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/UsersIdPathParam"
+      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"
@@ -83,7 +112,7 @@ UsersById:
     security:
       - FirebaseAuth: []
     parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/UsersIdPathParam"
+      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersResponse"

@@ -27,3 +27,13 @@ UsersIdPathParam:
   required: true
   schema:
     type: string
+
+CustomUsersIdPathParam:
+  name: customUserId
+  in: path
+  description: |-
+    ### customUserId
+    ユーザーのcustomUserId
+  required: true
+  schema:
+    type: string

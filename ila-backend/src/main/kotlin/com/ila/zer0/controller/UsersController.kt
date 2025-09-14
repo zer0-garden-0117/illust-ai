@@ -7,15 +7,13 @@ import com.ila.zer0.generated.model.*
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UserManagerService
-import io.swagger.v3.oas.annotations.Parameter
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 class UsersController(
@@ -39,17 +37,16 @@ class UsersController(
     }
 
     override fun patchMyUser(
-        @RequestBody apiUser: ApiUser
+        @RequestPart("coverImage", required = true) coverImage: MultipartFile,
+        @RequestPart("profileImage", required = true) profileImage: MultipartFile,
+        @RequestParam(value = "customUserId", required = true) customUserId: String,
+        @RequestParam(value = "userProfile", required = true) userProfile: String
     ): ResponseEntity<ApiUser> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val newUser = userMapper.toUser(apiUser)
         val user =
             userManagerService.getUserById(userId) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
-        user.userProfile = newUser.userProfile
-        user.customUserId = newUser.customUserId
-        user.userName = newUser.userName
-        val updatedUser = userManagerService.updateUser(user)
+        val updatedUser = userManagerService.updateUser(user, coverImage, profileImage, customUserId, userProfile)
         val updatedApiUser = userMapper.toApiUser(updatedUser)
         return ResponseEntity.ok(updatedApiUser)
     }
@@ -140,7 +137,7 @@ class UsersController(
         }
         val apiWorkWithDetails = ApiWorksWithSearchResult(
             works = apiWorks,
-            totalCount = likedResult.totalCount ?: 0
+            totalCount = likedResult.totalCount
         )
         return ResponseEntity.ok(apiWorkWithDetails)
     }

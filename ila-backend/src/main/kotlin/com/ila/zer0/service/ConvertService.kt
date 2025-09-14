@@ -2,6 +2,7 @@ package com.ila.zer0.service
 
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import java.io.IOException
@@ -13,6 +14,11 @@ class ConvertService(
     private val s3Client: S3Client
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
+
+    fun toPng(image: MultipartFile): ByteArray {
+        val nodeScriptPath = "$nodeJsPath/service/convert/resize/resize.js"
+        return executeNodeScript(image, nodeScriptPath)
+    }
 
     fun resize(s3Url: String): ByteArray {
         logger.info("Starting image resize for URL: $s3Url")
@@ -127,4 +133,40 @@ class ConvertService(
             }
         }
     }
+
+    private fun executeNodeScript(image: MultipartFile, scriptPath: String, vararg args: String): ByteArray {
+        var process: Process? = null
+        try {
+            val command = mutableListOf("node", scriptPath)
+            command.addAll(args)
+            val processBuilder = ProcessBuilder(command)
+            process = processBuilder.start()
+
+            // 画像データを標準入力に送信
+            process.outputStream.use { outputStream ->
+                outputStream.write(image.bytes)
+                outputStream.flush()
+            }
+
+            // 変換された画像を標準出力から受信
+            val convertedImage = process.inputStream.readBytes()
+
+            // プロセスが正常に終了したか確認
+            val exitCode = process.waitFor()
+            if (exitCode != 0) {
+                throw RuntimeException("Node.js script failed with exit code $exitCode")
+            }
+
+            return convertedImage
+        } catch (e: IOException) {
+            throw RuntimeException(
+                "Failed to convert image: ${e.message}",
+                e
+            )
+        } finally {
+            // プロセスがまだ動いている場合は終了させる
+            process?.destroy()
+        }
+    }
+
 }
