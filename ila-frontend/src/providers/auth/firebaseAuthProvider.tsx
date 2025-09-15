@@ -2,7 +2,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { 
   onAuthStateChanged,
-  User as FirebaseUser
+  User as FirebaseUser,
+  onIdTokenChanged
 } from 'firebase/auth';
 import { auth } from '../../configs/auth/config2';
 import { useFirebaseAuth } from '../../apis/auth/useFirebaseAuth';
@@ -72,6 +73,16 @@ export const FirebaseAuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setLoading(false);
     });
 
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onIdTokenChanged(auth, async (user) => {
+      if (user) {
+        const freshToken = await user.getIdToken();
+        setIdToken(freshToken);
+      }
+    });
     return unsubscribe;
   }, []);
 
