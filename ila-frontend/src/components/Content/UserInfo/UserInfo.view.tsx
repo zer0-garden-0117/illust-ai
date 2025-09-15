@@ -221,6 +221,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             accept={IMAGE_MIME_TYPE}
             maxSize={5 * 1024 ** 2}
             mb="md"
+            disabled={isLoading || !isUserIdAvailable}
             style={{ 
               height: 140, 
               display: 'flex',
@@ -243,6 +244,7 @@ export const UserInfoView = memo(function WorkViewComponent({
               onDrop={handleProfileImageDrop}
               accept={IMAGE_MIME_TYPE}
               maxSize={5 * 1024 ** 2}
+              disabled={isLoading || !isUserIdAvailable}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -296,7 +298,7 @@ export const UserInfoView = memo(function WorkViewComponent({
           {/* Loader表示 */}
           {isLoading && (
             <Group gap={3} style={{ position: 'relative', width: 'fit-content' }}>
-              <Loader size="10" mt={-20}/>
+              <Loader size="10" mt={-22}/>
               <Text size="xs" c="blue" mt={-15} mb={10} ml={2}>
                 使用可能かチェック中
               </Text>
