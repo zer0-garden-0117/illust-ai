@@ -7,6 +7,7 @@ import com.ila.zer0.generated.model.*
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UserManagerService
+import io.swagger.v3.oas.annotations.Parameter
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -66,6 +67,24 @@ class UsersController(
             return ResponseEntity.notFound().build()
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
+    }
+
+    @CrossOrigin(exposedHeaders = ["X-User-Available"])
+    override fun checkUserAvailability(
+        @PathVariable("customUserId") customUserId: String
+    ): ResponseEntity<Unit> {
+        logger.info("checkUserAvailability")
+        return if (userManagerService.getUserByCustomUserId(customUserId) == null) {
+            // 存在しない場合
+            ResponseEntity.ok()
+                .header("X-User-Available", "true")
+                .build()
+        } else {
+            // 存在する場合
+            ResponseEntity.ok()
+                .header("X-User-Available", "false")
+                .build()
+        }
     }
 
     override fun followUsers(

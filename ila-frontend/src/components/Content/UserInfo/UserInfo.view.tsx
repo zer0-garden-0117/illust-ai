@@ -10,6 +10,7 @@ import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import { IconSettings, IconPencil } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { useUserCheckAvailability } from '@/apis/openapi/users/useUserCheckAvailability';
 
 type UserInfoViewProps = {
   userData: UsersGetResult | undefined
@@ -18,11 +19,12 @@ type UserInfoViewProps = {
 export const UserInfoView = memo(function WorkViewComponent({
   userData
 }: UserInfoViewProps): JSX.Element {
-  const { user } = useFirebaseAuthContext();
+  const { user, idToken } = useFirebaseAuthContext();
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const { trigger: checkAvailability, isMutating: isChecking } = useUserCheckAvailability();
 
   useEffect(() => {
     setIsLoginUser(!!(user && userData?.customUserId === user.customUserId));
@@ -36,6 +38,23 @@ export const UserInfoView = memo(function WorkViewComponent({
       userProfile: userData?.userProfile || '',
     },
   });
+
+  const validateCustomUserId = async (value: string) => {
+    if (!value || value === userData?.customUserId) {
+      return null;
+    }
+    
+    try {
+      const isAvailable = await checkAvailability({ 
+        customUserId: value,
+        headers: { Authorization: `Bearer ${await idToken}` }
+      });
+      return isAvailable ? null : 'このユーザーIDは既に使用されています';
+    } catch (error) {
+      console.error('ユーザーIDチェックエラー:', error);
+      return 'ユーザーIDの確認中にエラーが発生しました';
+    }
+  }
 
   const handleCoverImageDrop = useCallback((files: File[]) => {
     if (files.length > 0) {
@@ -254,6 +273,14 @@ export const UserInfoView = memo(function WorkViewComponent({
             placeholder="ユーザーIDを入力"
             {...form.getInputProps('customUserId')}
             mb="md"
+            error={form.errors.customUserId}
+            onBlur={async () => {
+              const error = await validateCustomUserId(form.values.customUserId);
+              if (error) {
+                form.setFieldError('customUserId', error);
+              }
+            }}
+            disabled={isChecking}
           />
           
           <Textarea
