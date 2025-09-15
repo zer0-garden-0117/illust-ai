@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { memo } from 'react';
-import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center } from '@mantine/core';
+import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader } from '@mantine/core';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import LoginButton from '@/components/Common/LoginButton/LoginButton';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
@@ -25,6 +25,8 @@ export const UserInfoView = memo(function WorkViewComponent({
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const { trigger: checkAvailability, isMutating: isChecking } = useUserCheckAvailability();
+  const [isUserIdAvailable, setIsUserIdAvailable] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoginUser(!!(user && userData?.customUserId === user.customUserId));
@@ -40,7 +42,12 @@ export const UserInfoView = memo(function WorkViewComponent({
   });
 
   const validateCustomUserId = async (value: string) => {
+    setIsLoading(true)
+    // ここで0.5秒遅延
+    await new Promise(resolve => setTimeout(resolve, 500));
     if (!value || value === userData?.customUserId) {
+      setIsUserIdAvailable(null);
+      setIsLoading(false);
       return null;
     }
     
@@ -49,9 +56,13 @@ export const UserInfoView = memo(function WorkViewComponent({
         customUserId: value,
         headers: { Authorization: `Bearer ${await idToken}` }
       });
+      setIsUserIdAvailable(isAvailable);
+      setIsLoading(false);
       return isAvailable ? null : 'このユーザーIDは既に使用されています';
     } catch (error) {
       console.error('ユーザーIDチェックエラー:', error);
+      setIsUserIdAvailable(null);
+      setIsLoading(false);
       return 'ユーザーIDの確認中にエラーが発生しました';
     }
   }
@@ -282,6 +293,21 @@ export const UserInfoView = memo(function WorkViewComponent({
             }}
             disabled={isChecking}
           />
+          {/* Loader表示 */}
+          {isLoading && (
+            <Group gap={3} style={{ position: 'relative', width: 'fit-content' }}>
+              <Loader size="10" mt={-20}/>
+              <Text size="xs" c="blue" mt={-15} mb={10} ml={2}>
+                使用可能かチェック中
+              </Text>
+            </Group>
+          )}
+          {/* 使用可能メッセージを表示 */}
+          {!isLoading && isUserIdAvailable === true && !form.errors.customUserId && (
+            <Text size="xs" c="blue" mt={-15} mb={10} ml={2}>
+              使用可能です
+            </Text>
+          )}
           
           <Textarea
             label="自己紹介"
@@ -290,13 +316,21 @@ export const UserInfoView = memo(function WorkViewComponent({
             mb="md"
             autosize
             minRows={3}
+            disabled={isLoading || !isUserIdAvailable}
           />
           
           <Group justify="flex-end" mt="xl">
-            <Button variant="outline" onClick={() => setOpened(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setOpened(false)}
+              disabled={isLoading || !isUserIdAvailable}
+            >
               キャンセル
             </Button>
-            <Button type="submit">
+            <Button
+              type="submit"
+              disabled={isLoading || !isUserIdAvailable}
+            >
               保存
             </Button>
           </Group>
