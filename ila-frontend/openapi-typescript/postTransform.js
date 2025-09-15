@@ -15,10 +15,10 @@ try {
 
   // 型定義の修正
   // titleImage: string; -> titleImage: File;
-  fileContent = fileContent.replace(/titleImage: string;/g, "titleImage: File;");
+  fileContent = fileContent.replace(/coverImage: string;/g, "coverImage: File;");
 
   // images: string[]; -> images: File[];
-  fileContent = fileContent.replace(/images: string\[\];/g, "images: File[];");
+  fileContent = fileContent.replace(/profileImage: string;/g, "profileImage: File;");
 
   // 修正後のファイルを再度書き込み
   fs.writeFileSync(filePath, fileContent, "utf8");

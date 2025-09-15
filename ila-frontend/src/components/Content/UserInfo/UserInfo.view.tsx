@@ -11,6 +11,7 @@ import { IconSettings, IconPencil } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useUserCheckAvailability } from '@/apis/openapi/users/useUserCheckAvailability';
+import { useMyUserUpdate } from '@/apis/openapi/users/useMyUserUpdate';
 
 type UserInfoViewProps = {
   userData: UsersGetResult | undefined
@@ -22,11 +23,12 @@ export const UserInfoView = memo(function WorkViewComponent({
   const { user, idToken } = useFirebaseAuthContext();
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
-  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [coverImageFile, setCoverImageFile] = useState<File>(new File([], "placeholder.jpg"));
+  const [profileImageFile, setProfileImageFile] = useState<File>(new File([], "placeholder.jpg"));
   const { trigger: checkAvailability, isMutating: isChecking } = useUserCheckAvailability();
   const [isUserIdAvailable, setIsUserIdAvailable] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { trigger: updateMyUser } = useMyUserUpdate();
 
   useEffect(() => {
     setIsLoginUser(!!(user && userData?.customUserId === user.customUserId));
@@ -83,9 +85,21 @@ export const UserInfoView = memo(function WorkViewComponent({
     }
   }, []);
 
-  const handleSave = (values: typeof form.values) => {
+  const handleSave = async (values: typeof form.values) => {
     // ここでAPIを呼び出してプロフィールを更新する処理を実装
     console.log('保存する値:', values, coverImageFile, profileImageFile);
+
+    await updateMyUser({
+      headers: { Authorization: `Bearer ${await idToken}` },
+      body: {
+        coverImage: coverImageFile,
+        profileImage: profileImageFile,
+        customUserId: values.customUserId,
+        userProfile: values.userProfile
+      }
+    });
+
+
     // 更新処理後、モーダルを閉じる
     setOpened(false);
   };
@@ -131,8 +145,8 @@ export const UserInfoView = memo(function WorkViewComponent({
                   coverImageUrl: userData?.coverImageUrl || '',
                   userProfile: userData?.userProfile || '',
                 });
-                setCoverImageFile(null);
-                setProfileImageFile(null);
+                setCoverImageFile(new File([], "placeholder.jpg"));
+                setProfileImageFile(new File([], "placeholder.jpg"));
                 setOpened(true);
               }}
             >
