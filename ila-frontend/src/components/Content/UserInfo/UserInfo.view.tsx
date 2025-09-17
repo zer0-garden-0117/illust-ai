@@ -132,7 +132,10 @@ export const UserInfoView = memo(function WorkViewComponent({
           key={userData?.coverImageUrl} 
           h={140}
           style={{
-            backgroundImage: `url(${userData?.coverImageUrl})`
+            backgroundImage: `url(${userData?.coverImageUrl})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         />
         <Group gap={0} style={{ position: 'relative', width: 'fit-content' }}>
@@ -250,7 +253,10 @@ export const UserInfoView = memo(function WorkViewComponent({
           <Card.Section
             h={140}
             style={{
-              backgroundImage: form.values.coverImageUrl
+              backgroundImage: `url(${userData?.coverImageUrl})`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
             }}
           >
           <Dropzone
@@ -265,6 +271,9 @@ export const UserInfoView = memo(function WorkViewComponent({
               alignItems: 'center',
               justifyContent: 'center',
               backgroundImage: form.values.coverImageUrl ? `url(${form.values.coverImageUrl})` : 'none',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
               backgroundColor: form.values.coverImageUrl ? 'transparent' : 'var(--mantine-color-gray-1)',
               cursor: 'pointer'
             }}
