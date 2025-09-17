@@ -11,7 +11,7 @@ export const useUserInfo = (
   const { idToken } = useFirebaseAuthContext();
   console.log(idToken)
 
-  const { data: userData } = useUsersGet(
+  const { data: userData, mutate: updateUser } = useUsersGet(
     { headers: {
         Authorization: `Bearer ${idToken}`,
       },
@@ -20,6 +20,7 @@ export const useUserInfo = (
   );
 
   return {
-    userData
+    userData,
+    updateUser,
   };
 };

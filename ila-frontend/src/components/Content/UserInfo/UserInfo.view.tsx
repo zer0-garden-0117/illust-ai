@@ -12,23 +12,28 @@ import { useForm } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useUserCheckAvailability } from '@/apis/openapi/users/useUserCheckAvailability';
 import { useMyUserUpdate } from '@/apis/openapi/users/useMyUserUpdate';
+import { useRouter } from "next/navigation";
 
 type UserInfoViewProps = {
   userData: UsersGetResult | undefined
+  updateUser: () => void
 };
 
 export const UserInfoView = memo(function WorkViewComponent({
-  userData
+  userData,
+  updateUser
 }: UserInfoViewProps): JSX.Element {
-  const { user, idToken } = useFirebaseAuthContext();
+  const { user, idToken, getFreshIdToken } = useFirebaseAuthContext();
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
   const [coverImageFile, setCoverImageFile] = useState<File>(new File([], ""));
   const [profileImageFile, setProfileImageFile] = useState<File>(new File([], ""));
   const { trigger: checkAvailability, isMutating: isChecking } = useUserCheckAvailability();
-  const [isUserIdAvailable, setIsUserIdAvailable] = useState<boolean | null>(null);
+  const [isUserIdAvailable, setIsUserIdAvailable] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
   const { trigger: updateMyUser } = useMyUserUpdate();
+  const [isTypingUserId, setIsTypingUserId] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsLoginUser(!!(user && userData?.customUserId === user.customUserId));
@@ -45,13 +50,23 @@ export const UserInfoView = memo(function WorkViewComponent({
 
   const validateCustomUserId = async (value: string) => {
     setIsLoading(true)
-    // ここで0.5秒遅延
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // 3文字以上かつ12文字以下の英数字とアンダースコアのみ許可
+    const regex = /^[a-zA-Z0-9_]{3,12}$/;
+    if (!regex.test(value)) {
+      setIsUserIdAvailable(false);
+      setIsLoading(false);
+      return 'ユーザーIDは3〜12文字の英数字と_のみ使用可能です';
+    }
+
+    // 空文字または元のユーザーIDと同じ場合はチェックしない
     if (!value || value === userData?.customUserId) {
-      setIsUserIdAvailable(null);
+      setIsUserIdAvailable(true);
       setIsLoading(false);
       return null;
     }
+
+    // ここで0.5秒遅延
+    await new Promise(resolve => setTimeout(resolve, 500));
     
     try {
       const isAvailable = await checkAvailability({ 
@@ -63,7 +78,7 @@ export const UserInfoView = memo(function WorkViewComponent({
       return isAvailable ? null : 'このユーザーIDは既に使用されています';
     } catch (error) {
       console.error('ユーザーIDチェックエラー:', error);
-      setIsUserIdAvailable(null);
+      setIsUserIdAvailable(false);
       setIsLoading(false);
       return 'ユーザーIDの確認中にエラーが発生しました';
     }
@@ -98,10 +113,15 @@ export const UserInfoView = memo(function WorkViewComponent({
         userProfile: values.userProfile
       }
     });
-
-
     // 更新処理後、モーダルを閉じる
     setOpened(false);
+
+    // トークンと認証情報を更新
+    await getFreshIdToken();
+    updateUser();
+
+    // 画面遷移
+    router.replace(`/user/${values.customUserId}`);
   };
 
   return (
@@ -301,11 +321,13 @@ export const UserInfoView = memo(function WorkViewComponent({
             {...form.getInputProps('customUserId')}
             mb="md"
             error={form.errors.customUserId}
+            onFocus={() => setIsTypingUserId(true)}
             onBlur={async () => {
               const error = await validateCustomUserId(form.values.customUserId);
               if (error) {
                 form.setFieldError('customUserId', error);
               }
+              setIsTypingUserId(false);
             }}
             disabled={isChecking}
           />
@@ -319,7 +341,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             </Group>
           )}
           {/* 使用可能メッセージを表示 */}
-          {!isLoading && isUserIdAvailable === true && !form.errors.customUserId && (
+          {!isLoading && isUserIdAvailable === true && form.values.customUserId !== userData?.customUserId && !form.errors.customUserId && (
             <Text size="xs" c="blue" mt={-15} mb={10} ml={2}>
               使用可能です
             </Text>
@@ -345,7 +367,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             </Button>
             <Button
               type="submit"
-              disabled={isLoading || !isUserIdAvailable}
+              disabled={isLoading || !isUserIdAvailable || isTypingUserId}
             >
               保存
             </Button>
