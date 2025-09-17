@@ -43,6 +43,7 @@ class UsersController(
         @RequestParam(value = "customUserId", required = true) customUserId: String,
         @RequestParam(value = "userProfile", required = true) userProfile: String
     ): ResponseEntity<ApiUser> {
+        logger.info("patchMyUser")
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val user =

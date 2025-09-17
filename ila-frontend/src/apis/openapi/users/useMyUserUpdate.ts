@@ -31,6 +31,26 @@ export const useMyUserUpdate = (
             'Content-Type': 'multipart/form-data',
           },
           body: arg.body,
+          bodySerializer: (body) => {
+            const fd = new FormData();
+            // coverImageをFormDataに追加
+            if (body.coverImage) {
+              fd.append('coverImage', body.coverImage);
+            }
+            // profileImageをFormDataに追加
+            if (body.profileImage) {
+              fd.append('profileImage', body.profileImage);
+            }
+            // customUserIdをFormDataに追加
+            if (body.customUserId) {
+              fd.append('customUserId', body.customUserId);
+            }
+            // userProfileをFormDataに追加
+            if (body.userProfile) {
+              fd.append('userProfile', body.userProfile);
+            }
+            return fd;
+          }
         }
       );
       if (error) {

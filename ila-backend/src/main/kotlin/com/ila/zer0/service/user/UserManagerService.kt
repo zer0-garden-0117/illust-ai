@@ -85,34 +85,45 @@ class UserManagerService(
         customUserId: String,
         userProfile: String
     ): User {
+        // 引数をすべてログ出力
+        logger.info("Updating user: ${user.userId}, customUserId: $customUserId")
+        logger.info("User profile: $userProfile")
+        logger.info("ProfileImage: ${profileImage.originalFilename}, size: ${profileImage.size}, type: ${profileImage.contentType}")
+        logger.info("CoverImage: ${coverImage.originalFilename}, size: ${coverImage.size}, type: ${coverImage.contentType}")
         // カバー画像の変換
-        val coverImagePng = try {
-            convertService.toPng(coverImage)
-        } catch (e: Exception) {
-            logger.error("Failed to cover image to Png: ${e.message}")
-            throw RuntimeException("Error during cover image conversion")
+        if (coverImage.size != 0.toLong() && coverImage.originalFilename != "") {
+            val coverImagePng = try {
+                convertService.toPng(coverImage)
+            } catch (e: Exception) {
+                logger.error("Failed to cover image to Png: ${e.message}")
+                throw RuntimeException("Error during cover image conversion")
+            }
+            val coverImageUrl = s3Service.uploadToS3(
+                coverImagePng,
+                user.userId + "_coverImage.png",
+                "image/png"
+            )
+            user.coverImageUrl = coverImageUrl
         }
-        val coverImageUrl = s3Service.uploadToS3(
-            coverImagePng,
-            user.userId + "_coverImage.png",
-            "image/png")
 
         // アイコン画像の変換
-        val profileImagePng = try {
-            convertService.toPng(coverImage)
-        } catch (e: Exception) {
-            logger.error("Failed to profile image to Png: ${e.message}")
-            throw RuntimeException("Error during profile image conversion")
+        if (profileImage.size != 0.toLong() && profileImage.originalFilename != "") {
+            val profileImagePng = try {
+                convertService.toPng(coverImage)
+            } catch (e: Exception) {
+                logger.error("Failed to profile image to Png: ${e.message}")
+                throw RuntimeException("Error during profile image conversion")
+            }
+            val profileImageUrl = s3Service.uploadToS3(
+                profileImagePng,
+                user.userId + "_profileImage.png",
+                "image/png")
+            user.profileImageUrl = profileImageUrl
         }
-        val profileImageUrl = s3Service.uploadToS3(
-            profileImagePng,
-            user.userId + "_profileImage.png",
-            "image/png")
 
-        // ユーザー更新
-        user.coverImageUrl = coverImageUrl
-        user.profileImageUrl = profileImageUrl
+        // customUserIdの更新
         user.customUserId = customUserId
+        // userProfileの更新
         user.userProfile = userProfile
         return userService.updateUser(user)
     }

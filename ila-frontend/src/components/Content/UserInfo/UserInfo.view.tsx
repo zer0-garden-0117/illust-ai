@@ -23,8 +23,8 @@ export const UserInfoView = memo(function WorkViewComponent({
   const { user, idToken } = useFirebaseAuthContext();
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
-  const [coverImageFile, setCoverImageFile] = useState<File>(new File([], "placeholder.jpg"));
-  const [profileImageFile, setProfileImageFile] = useState<File>(new File([], "placeholder.jpg"));
+  const [coverImageFile, setCoverImageFile] = useState<File>(new File([], ""));
+  const [profileImageFile, setProfileImageFile] = useState<File>(new File([], ""));
   const { trigger: checkAvailability, isMutating: isChecking } = useUserCheckAvailability();
   const [isUserIdAvailable, setIsUserIdAvailable] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -145,8 +145,8 @@ export const UserInfoView = memo(function WorkViewComponent({
                   coverImageUrl: userData?.coverImageUrl || '',
                   userProfile: userData?.userProfile || '',
                 });
-                setCoverImageFile(new File([], "placeholder.jpg"));
-                setProfileImageFile(new File([], "placeholder.jpg"));
+                setCoverImageFile(new File([], ""));
+                setProfileImageFile(new File([], ""));
                 setOpened(true);
               }}
             >
