@@ -33,6 +33,7 @@ export const UserInfoView = memo(function WorkViewComponent({
   const [isLoading, setIsLoading] = useState(false);
   const { trigger: updateMyUser } = useMyUserUpdate();
   const [isTypingUserId, setIsTypingUserId] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -101,28 +102,31 @@ export const UserInfoView = memo(function WorkViewComponent({
   }, []);
 
   const handleSave = async (values: typeof form.values) => {
-    // ここでAPIを呼び出してプロフィールを更新する処理を実装
-    console.log('保存する値:', values, coverImageFile, profileImageFile);
+    if (isSaving) return;
+    setIsSaving(true);
+    try {
+      await updateMyUser({
+        headers: { Authorization: `Bearer ${await idToken}` },
+        body: {
+          coverImage: coverImageFile,
+          profileImage: profileImageFile,
+          customUserId: values.customUserId,
+          userProfile: values.userProfile
+        }
+      });
+      // 更新処理後、モーダルを閉じる
+      setOpened(false);
 
-    await updateMyUser({
-      headers: { Authorization: `Bearer ${await idToken}` },
-      body: {
-        coverImage: coverImageFile,
-        profileImage: profileImageFile,
-        customUserId: values.customUserId,
-        userProfile: values.userProfile
-      }
-    });
-    // 更新処理後、モーダルを閉じる
-    setOpened(false);
+      // トークンと認証情報を更新
+      await getFreshIdToken();
+      updateUser();
 
-    // トークンと認証情報を更新
-    await getFreshIdToken();
-    updateUser();
-
-    // 画面遷移
-    // router.replace(`/user/${values.customUserId}`);
-    window.location.href = `/user/${values.customUserId}`;
+      // 画面遷移
+      // router.replace(`/user/${values.customUserId}`);
+      window.location.href = `/user/${values.customUserId}`;
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -176,7 +180,7 @@ export const UserInfoView = memo(function WorkViewComponent({
                 setOpened(true);
               }}
             >
-              <Text c="var(--mantine-color-gray-8)">変更</Text>
+              <Text c="var(--mantine-color-gray-8)">編集</Text>
             </Button>
           )}
         </Group>
@@ -246,6 +250,8 @@ export const UserInfoView = memo(function WorkViewComponent({
         onClose={() => setOpened(false)}
         title="プロフィール編集"
         size="lg"
+        closeOnClickOutside={!isSaving}
+        withCloseButton={!isSaving} 
       >
         <form onSubmit={form.onSubmit(handleSave)}>
           {/* カバー画像のドロップゾーン */}
@@ -373,12 +379,13 @@ export const UserInfoView = memo(function WorkViewComponent({
             <Button
               variant="outline"
               onClick={() => setOpened(false)}
-              disabled={isLoading || !isUserIdAvailable}
+              disabled={isLoading || !isUserIdAvailable || isSaving}
             >
               キャンセル
             </Button>
             <Button
               type="submit"
+              loading={isSaving}
               disabled={isLoading || !isUserIdAvailable || isTypingUserId}
             >
               保存
