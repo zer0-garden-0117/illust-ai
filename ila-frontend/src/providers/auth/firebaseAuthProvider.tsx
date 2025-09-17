@@ -77,10 +77,14 @@ export const FirebaseAuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onIdTokenChanged(auth, async (user) => {
-      if (user) {
-        const freshToken = await user.getIdToken();
+    const unsubscribe = onIdTokenChanged(auth, async (fbuser) => {
+      if (fbuser) {
+        const freshToken = await fbuser.getIdToken();
         setIdToken(freshToken);
+        await fetchUserData(fbuser);
+      } else {
+        setIdToken(null);
+        setUser(null);
       }
     });
     return unsubscribe;

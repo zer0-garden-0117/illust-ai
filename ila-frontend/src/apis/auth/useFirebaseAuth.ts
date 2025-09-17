@@ -5,7 +5,8 @@ import {
   signOut, 
   TwitterAuthProvider,
   UserCredential,
-  User as FirebaseUser
+  User as FirebaseUser,
+  getAdditionalUserInfo
 } from 'firebase/auth';
 import { auth } from '../../configs/auth/config2'
 import { useMyUserGet, MyUserGetResult } from '../openapi/users/useMyUserGet';
@@ -23,6 +24,7 @@ export function useFirebaseAuth() {
     try {
       const result: UserCredential = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
+      const info = getAdditionalUserInfo(result);
       const userData = await fetchUser({
         headers: {
           Authorization: `Bearer ${idToken}`,
@@ -32,7 +34,7 @@ export function useFirebaseAuth() {
       return {
         user: userData,
         idToken,
-        additionalUserInfo: result.providerId
+        additionalUserInfo: info ? JSON.stringify(info) : null
       };
     } catch (error) {
       console.error('Twitter sign in error:', error);
