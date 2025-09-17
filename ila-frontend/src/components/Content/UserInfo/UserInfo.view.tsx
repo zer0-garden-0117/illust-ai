@@ -129,6 +129,7 @@ export const UserInfoView = memo(function WorkViewComponent({
     <>
       <Card withBorder padding="xl" radius="md">
         <Card.Section
+          key={userData?.coverImageUrl} 
           h={140}
           style={{
             backgroundImage: `url(${userData?.coverImageUrl})`
