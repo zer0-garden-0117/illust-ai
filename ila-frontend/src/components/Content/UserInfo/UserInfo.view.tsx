@@ -121,7 +121,8 @@ export const UserInfoView = memo(function WorkViewComponent({
     updateUser();
 
     // 画面遷移
-    router.replace(`/user/${values.customUserId}`);
+    // router.replace(`/user/${values.customUserId}`);
+    window.location.href = `/user/${values.customUserId}`;
   };
 
   return (
@@ -135,6 +136,7 @@ export const UserInfoView = memo(function WorkViewComponent({
         />
         <Group gap={0} style={{ position: 'relative', width: 'fit-content' }}>
           <Avatar
+            key={userData?.profileImageUrl}
             src={userData?.profileImageUrl}
             size={80}
             radius={80}

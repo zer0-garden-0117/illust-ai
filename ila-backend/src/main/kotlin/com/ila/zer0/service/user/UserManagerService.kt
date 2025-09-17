@@ -109,7 +109,7 @@ class UserManagerService(
         // アイコン画像の変換
         if (profileImage.size != 0.toLong() && profileImage.originalFilename != "") {
             val profileImagePng = try {
-                convertService.toPng(coverImage)
+                convertService.toPng(profileImage)
             } catch (e: Exception) {
                 logger.error("Failed to profile image to Png: ${e.message}")
                 throw RuntimeException("Error during profile image conversion")
