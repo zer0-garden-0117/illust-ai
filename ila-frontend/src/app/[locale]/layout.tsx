@@ -12,10 +12,10 @@ import 'mantine-react-table/styles.css'; //make sure MRT styles were imported in
 import ClientGoogleAnalytics from '@/utils/googleAnalytics';
 import { FirebaseAuthProvider } from '@/providers/auth/firebaseAuthProvider';
 
-const APP_NAME = 'Illust AI';
-const APP_DESCRIPTION = 'Illust AI';
+const APP_NAME = 'イラストAI';
+const APP_DESCRIPTION = 'イラストAI';
 const APP_IMAGE_URL = process.env.NEXT_PUBLIC_CDN_URL + '/toppage_ogpImage.jpeg'
-const APP_IMAGE_ALT = 'Illust AI';
+const APP_IMAGE_ALT = 'イラストAI';
 
 export const metadata: Metadata = {
   icons: {
