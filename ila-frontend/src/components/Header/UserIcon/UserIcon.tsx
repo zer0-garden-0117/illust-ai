@@ -98,6 +98,7 @@ export const UserIcon: React.FC = () => {
         title="ログインまたはサインアップ"
         centered
         size="sm"
+        radius={"md"}
       >
         <LoginButton onSuccess={closeModal} />
       </Modal>

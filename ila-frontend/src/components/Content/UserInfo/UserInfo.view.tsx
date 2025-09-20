@@ -251,7 +251,8 @@ export const UserInfoView = memo(function WorkViewComponent({
         title="プロフィール編集"
         size="lg"
         closeOnClickOutside={!isSaving}
-        withCloseButton={!isSaving} 
+        withCloseButton={!isSaving}
+        radius={"md"}
       >
         <form onSubmit={form.onSubmit(handleSave)}>
           {/* カバー画像のドロップゾーン */}

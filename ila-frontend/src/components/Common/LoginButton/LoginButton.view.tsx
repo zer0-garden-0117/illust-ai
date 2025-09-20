@@ -27,6 +27,7 @@ export default function LoginButtonView({ onLogin, onLogout }: LoginButtonViewPr
           variant="outline" 
           color="red"
           size="sm"
+          radius={"xl"}
         >
           Logout
         </Button>
@@ -39,6 +40,7 @@ export default function LoginButtonView({ onLogin, onLogout }: LoginButtonViewPr
     return (
     <Group>
       <Button 
+        radius={"xl"}
         onClick={onLogin} 
         leftSection={
           <svg 
