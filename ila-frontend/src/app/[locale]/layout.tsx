@@ -19,7 +19,7 @@ const APP_IMAGE_ALT = 'Illust AI';
 
 export const metadata: Metadata = {
   icons: {
-    icon: 'favicon.ico',
+    icon: '/favicon.ico',
   },
   title: APP_NAME,
   description: APP_DESCRIPTION,
