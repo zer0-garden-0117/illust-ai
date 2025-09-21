@@ -75,8 +75,8 @@ class UserManagerService(
 
     @Transactional
     fun getUserByCustomUserId(
-        callerUserId: String,
-        customUserId: String
+        customUserId: String,
+        callerUserId: String
     ): User? {
         val user = userService.findUserByCustomUserId(customUserId)
         if (user == null) {

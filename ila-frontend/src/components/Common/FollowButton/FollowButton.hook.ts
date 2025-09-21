@@ -3,21 +3,21 @@ import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useState } from "react";
 
 type FollowButtonProps = {
-  customUserId?: string;
+  userId?: string;
   updateUser?: () => void;
 };
 
 export const useFollowButton = (
-  { customUserId, updateUser }: FollowButtonProps
+  { userId, updateUser }: FollowButtonProps
 ) => {
   const { idToken } = useFirebaseAuthContext();
   const { trigger, isMutating, data, error } = useUsersFollow();
 
   const onFollow = async () => {
-    if (!customUserId) return;
+    if (!userId) return;
     await trigger({
       headers: { Authorization: `Bearer ${idToken}` },
-      userId: customUserId
+      userId: userId
     });
     if (updateUser) {
       updateUser();

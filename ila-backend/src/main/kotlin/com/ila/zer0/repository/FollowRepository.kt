@@ -42,6 +42,7 @@ class FollowRepository(
 
     // 指定したユーザーがフォローされているユーザーのリストを取得する
     fun findByFollowUserId(followUserId: String): List<Follow> {
+        logger.info("Finding follow items for followUserId=$followUserId")
         val index = table.index("FollowUserIdIndex")
         val queryConditional = QueryConditional.keyEqualTo(
             Key.builder().partitionValue(followUserId).build()
@@ -55,6 +56,7 @@ class FollowRepository(
         queryRequest.forEach { page ->
             follows.addAll(page.items())
         }
+        logger.info("Found ${follows.size} follow items for followUserId=$followUserId")
         return follows
     }
 

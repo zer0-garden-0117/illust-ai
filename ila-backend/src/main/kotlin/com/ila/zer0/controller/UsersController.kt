@@ -64,9 +64,9 @@ class UsersController(
         @PathVariable("customUserId") customUserId: String
     ): ResponseEntity<ApiUser> {
         logger.info("getUsers")
-        val userId =
+        val callerUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val user = userManagerService.getUserByCustomUserId(userId, customUserId) ?:
+        val user = userManagerService.getUserByCustomUserId(customUserId, callerUserId) ?:
             return ResponseEntity.notFound().build()
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
