@@ -1,5 +1,7 @@
 'use client';
 
+import FollowList from "@/components/Content/FollowList/FollowList";
+
 const UserPage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
@@ -7,7 +9,9 @@ const UserPage: React.FC<{ params: { id: string } }> = (
 
   return (
     <>
-      <h1>Follow Page of User: {userId}</h1>
+    <FollowList
+      userId={userId}
+    />
     </>
   )
 };

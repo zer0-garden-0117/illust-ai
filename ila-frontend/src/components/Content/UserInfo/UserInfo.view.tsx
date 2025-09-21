@@ -191,11 +191,14 @@ export const UserInfoView = memo(function WorkViewComponent({
             </Button>
           )}
         </Group>
-        <Group gap={0} style={{ position: 'relative', width: 'fit-content' }}>
-          <Text ta="center" fz="sm" c="dimmed">
+        <Group gap={40} style={{ position: 'relative', width: 'fit-content', marginLeft: '10px', marginTop: '5px', marginBottom: '10px' }}>
+          <Text
+            fz="sm"
+            c="dimmed"
+            style={{ whiteSpace: 'pre-line' }}
+          >
             {userData?.userProfile}
           </Text>
-          <Space h={40}/>
         </Group>
         <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
           <div key="Follow">
@@ -392,9 +395,19 @@ export const UserInfoView = memo(function WorkViewComponent({
             placeholder="自己紹介を入力"
             {...form.getInputProps('userProfile')}
             mb="md"
-            autosize
+            autoSave="true"
+            rows={3}
             minRows={3}
+            maxRows={3}
             disabled={isLoading || !isUserIdAvailable}
+            onChange={(e) => {
+              const value = e.currentTarget.value;
+              const lines = value.split("\n");
+              if (lines.length > 3) {
+                e.currentTarget.value = lines.slice(0, 3).join("\n");
+              }
+              form.setFieldValue('userProfile', e.currentTarget.value);
+            }}
           />
           
           <Group justify="flex-end" mt="xl">

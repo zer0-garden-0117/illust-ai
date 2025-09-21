@@ -33,7 +33,9 @@ class UsersController(
             return ResponseEntity.ok(userMapper.toApiUser(registeredUser))
         }
         // 未登録の場合(初回ログイン時)
-        val newUser = userManagerService.registerUser(userId)
+        val userName =
+            getUserName() ?: "Your Name"
+        val newUser = userManagerService.registerUser(userId, userName)
         return ResponseEntity.ok(userMapper.toApiUser(newUser))
     }
 
@@ -179,5 +181,12 @@ class UsersController(
             SecurityContextHolder.getContext().authentication
         val customAuth = authentication as? CustomAuthenticationToken
         return customAuth?.userId
+    }
+
+    private fun getUserName(): String? {
+        val authentication: Authentication? =
+            SecurityContextHolder.getContext().authentication
+        val customAuth = authentication as? CustomAuthenticationToken
+        return customAuth?.userName
     }
 }

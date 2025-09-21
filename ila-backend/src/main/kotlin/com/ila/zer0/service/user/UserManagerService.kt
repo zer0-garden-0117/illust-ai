@@ -35,12 +35,13 @@ class UserManagerService(
 
     @Transactional
     fun registerUser(
-        userId: String
+        userId: String,
+        userName: String
     ): User {
         val newUser = User()
         newUser.userId = userId
         newUser.customUserId = uuidService.generateUuid()
-        newUser.userName = userId
+        newUser.userName = userName
         newUser.userProfile = ""
         newUser.profileImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"
         newUser.coverImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"

@@ -43,7 +43,8 @@ class FirebaseAuthFilter(
                     // 認証成功
                     logger.info("Token claims: ${decodedToken.claims}")
                     val customAuthentication = CustomAuthenticationToken(
-                        userId = decodedToken.uid
+                        userId = decodedToken.uid,
+                        userName = decodedToken.name
                     )
                     SecurityContextHolder.getContext().authentication = customAuthentication
                     logger.info("Authentication set successfully")

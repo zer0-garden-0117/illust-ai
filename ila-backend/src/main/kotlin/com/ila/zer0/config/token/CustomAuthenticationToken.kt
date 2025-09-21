@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority
 data class CustomAuthenticationToken(
     val id: Int? = null,
     val userId: String? = null,
+    val userName: String? = null,
     val role: String? = null,
     val customAuthorities: Collection<GrantedAuthority>? = null
 ) : AbstractAuthenticationToken(customAuthorities) {
