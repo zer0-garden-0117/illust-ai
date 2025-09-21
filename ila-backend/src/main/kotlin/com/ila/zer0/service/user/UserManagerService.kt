@@ -100,7 +100,7 @@ class UserManagerService(
             }
             val coverImageUrl = s3Service.uploadToS3(
                 coverImagePng,
-                user.userId + "_coverImage.png",
+                user.userId + "_coverImage_" + Instant.now().toEpochMilli() + ".png",
                 "image/png"
             )
             user.coverImageUrl = coverImageUrl
@@ -116,7 +116,7 @@ class UserManagerService(
             }
             val profileImageUrl = s3Service.uploadToS3(
                 profileImagePng,
-                user.userId + "_profileImage.png",
+                user.userId + "_profileImage_" + Instant.now().toEpochMilli() + ".png",
                 "image/png")
             user.profileImageUrl = profileImageUrl
         }
