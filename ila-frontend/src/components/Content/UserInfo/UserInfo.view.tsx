@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { memo } from 'react';
-import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader } from '@mantine/core';
+import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor } from '@mantine/core';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import LoginButton from '@/components/Common/LoginButton/LoginButton';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
@@ -122,11 +122,18 @@ export const UserInfoView = memo(function WorkViewComponent({
       updateUser();
 
       // 画面遷移
-      // router.replace(`/user/${values.customUserId}`);
       window.location.href = `/user/${values.customUserId}`;
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleFollowListClick = () => {
+    router.push(`/user/${userData?.customUserId}/follow`);
+  };
+  
+  const handleFollowerListClick = () => {
+    router.push(`/user/${userData?.customUserId}/follower`);
   };
 
   return (
@@ -192,20 +199,30 @@ export const UserInfoView = memo(function WorkViewComponent({
         </Group>
         <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
           <div key="Follow">
-            <Text ta="center" fz="lg" fw={500}>
-              {userData?.follow}
-            </Text>
-            <Text ta="center" fz="sm" c="dimmed" lh={1}>
-              Follow
-            </Text>
+            <Anchor
+              onClick={handleFollowListClick}
+              style={{ textDecorationColor: 'black' }}
+            >
+              <Text ta="center" fz="lg" fw={500} c="black">
+                {userData?.follow}
+              </Text>
+              <Text ta="center" fz="sm" c="dimmed" lh={1}>
+                Follow
+              </Text>
+            </Anchor>
           </div>
           <div key="Follower">
-            <Text ta="center" fz="lg" fw={500}>
-              {userData?.follower}
-            </Text>
-            <Text ta="center" fz="sm" c="dimmed" lh={1}>
-              Follower
-            </Text>
+            <Anchor
+              onClick={handleFollowerListClick}
+              style={{ textDecorationColor: 'black' }}
+            >
+              <Text ta="center" fz="lg" fw={500} c="black">
+                {userData?.follower}
+              </Text>
+              <Text ta="center" fz="sm" c="dimmed" lh={1}>
+                Follower
+              </Text>
+            </Anchor>
           </div>
           <div key="LoginButton">
             {isLoginUser &&

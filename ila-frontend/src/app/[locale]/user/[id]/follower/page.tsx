@@ -1,16 +1,14 @@
 'use client';
 
-import UserInfo from "@/components/Content/UserInfo/UserInfo";
-
 const UserPage: React.FC<{ params: { id: string } }> = (
   { params }
 ) => {
   const userId = decodeURIComponent(params.id);
 
   return (
-    <UserInfo
-      userId={userId}
-    />
+    <>
+      <h1>Follower Page of User: {userId}</h1>
+    </>
   )
 };
 
