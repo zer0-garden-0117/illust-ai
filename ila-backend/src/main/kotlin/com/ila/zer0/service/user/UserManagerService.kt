@@ -62,7 +62,7 @@ class UserManagerService(
     }
 
     @Transactional
-    fun getUserByCustomUserId(
+    fun findUserByCustomUserId(
         customUserId: String
     ): User? {
         val user = userService.findUserByCustomUserId(customUserId)
@@ -70,10 +70,25 @@ class UserManagerService(
             logger.info("user is null $customUserId")
             return null
         }
-        val followCount = followService.getFollowerCount(user.userId)
-        val followerCount = followService.getFollowerCount(user.userId)
-        user.follow = followCount
-        user.follower = followerCount
+        return user
+    }
+
+    @Transactional
+    fun getUserByCustomUserId(
+        callerUserId: String,
+        customUserId: String
+    ): User? {
+        val user = userService.findUserByCustomUserId(customUserId)
+        if (user == null) {
+            logger.info("user is null $customUserId")
+            return null
+        }
+        val follows = followService.findByUserId(user.userId)
+        val followers = followService.findByFollowUserId(user.userId)
+        user.follow = follows.size
+        user.follower = followers.size
+        user.isFollowing = follows.any { it.followUserId == callerUserId }
+        user.isFollowed = followers.any { it.userId == callerUserId }
         return user
     }
 

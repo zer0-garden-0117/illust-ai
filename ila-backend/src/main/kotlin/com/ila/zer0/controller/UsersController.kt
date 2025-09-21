@@ -64,7 +64,9 @@ class UsersController(
         @PathVariable("customUserId") customUserId: String
     ): ResponseEntity<ApiUser> {
         logger.info("getUsers")
-        val user = userManagerService.getUserByCustomUserId(customUserId) ?:
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val user = userManagerService.getUserByCustomUserId(userId, customUserId) ?:
             return ResponseEntity.notFound().build()
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
@@ -75,7 +77,7 @@ class UsersController(
         @PathVariable("customUserId") customUserId: String
     ): ResponseEntity<Unit> {
         logger.info("checkUserAvailability")
-        return if (userManagerService.getUserByCustomUserId(customUserId) == null) {
+        return if (userManagerService.findUserByCustomUserId(customUserId) == null) {
             // 存在しない場合
             ResponseEntity.ok()
                 .header("X-User-Available", "true")
