@@ -12,9 +12,7 @@ export const useUserInfo = (
   console.log(idToken)
 
   const { data: userData, mutate: updateUser } = useUsersGet(
-    { headers: {
-        Authorization: `Bearer ${idToken}`,
-      },
+    { headers: { Authorization: `Bearer ${idToken}` },
       customUserId: userId },
     { revalidateOnFocus: false }
   );

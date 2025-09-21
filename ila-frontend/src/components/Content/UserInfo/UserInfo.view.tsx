@@ -212,7 +212,10 @@ export const UserInfoView = memo(function WorkViewComponent({
               <LoginButton />
             }
             {!isLoginUser &&
-              <FollowButton customUserId={userData?.customUserId} />
+              <FollowButton
+                customUserId={userData?.customUserId}
+                updateUser={updateUser}
+              />
             }
           </div>
         </Group>

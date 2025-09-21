@@ -6,12 +6,13 @@ import FollowButtonView from './FollowButton.view';
 
 type FollowButtonProps = {
   customUserId?: string;
+  updateUser?: () => void;
 };
 
 export const FollowButton: React.FC<FollowButtonProps> = (
-  { customUserId }
+  { customUserId, updateUser }
 ): JSX.Element => {
-  const viewProps = useFollowButton({ customUserId });
+  const viewProps = useFollowButton({ customUserId, updateUser });
   return <FollowButtonView {...viewProps} />;
 };
 
