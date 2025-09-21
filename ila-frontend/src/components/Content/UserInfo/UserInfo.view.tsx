@@ -213,6 +213,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             }
             {!isLoginUser &&
               <FollowButton
+                isFollowState={userData?.isFollowing}
                 userId={userData?.userId}
                 updateUser={updateUser}
               />

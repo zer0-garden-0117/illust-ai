@@ -84,11 +84,13 @@ class UserManagerService(
             return null
         }
         val follows = followService.findByUserId(user.userId)
+        logger.info("follows list: $follows")
         val followers = followService.findByFollowUserId(user.userId)
+        logger.info("followers list: $followers")
         user.follow = follows.size
         user.follower = followers.size
-        user.isFollowing = follows.any { it.followUserId == callerUserId }
-        user.isFollowed = followers.any { it.userId == callerUserId }
+        user.isFollowing = followers.any { it.userId == callerUserId }
+        user.isFollowed = follows.any { it.followUserId == callerUserId }
         return user
     }
 

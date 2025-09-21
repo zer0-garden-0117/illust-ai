@@ -6,19 +6,19 @@ import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 
 type FollowButtonViewProps = {
+  isFollowState?: boolean;
   onFollow: () => void;
+  onUnfollow: () => void;
 };
 
-export default function FollowButtonView({ onFollow }: FollowButtonViewProps) {
+export default function FollowButtonView({ isFollowState, onFollow, onUnfollow }: FollowButtonViewProps) {
   const { user } = useFirebaseAuthContext();
-  const [isFollow, setIsFollow] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const [justFollowed, setJustFollowed] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
 
   const onHandleFollow = () => {
-    if (!isFollow) {
-      setIsFollow(true);
+    if (!isFollowState) {
       setJustFollowed(true);
       onFollow();
     } else {
@@ -27,9 +27,8 @@ export default function FollowButtonView({ onFollow }: FollowButtonViewProps) {
   };
 
   const handleConfirmUnfollow = () => {
-    setIsFollow(false);
     setJustFollowed(false);
-    onFollow();
+    onUnfollow();
     close();
   };
 
@@ -49,14 +48,14 @@ export default function FollowButtonView({ onFollow }: FollowButtonViewProps) {
         variant="outline"
         size="sm"
         color={
-          isFollow
+          isFollowState
             ? (isHover && !justFollowed ? 'red' : 'gray')
             : 'blue'
         }
         radius="xl"
         disabled={justFollowed}
       >
-        {isFollow
+        {isFollowState
           ? (isHover && !justFollowed ? 'フォロー解除' : 'フォロー中')
           : 'フォロー'}
       </Button>
@@ -74,7 +73,7 @@ export default function FollowButtonView({ onFollow }: FollowButtonViewProps) {
             キャンセル
           </Button>
           <Button color="red" onClick={handleConfirmUnfollow} radius="xl">
-            解除する
+            フォロー解除
           </Button>
         </div>
       </Modal>

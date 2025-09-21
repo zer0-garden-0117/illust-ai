@@ -1,21 +1,34 @@
 import { useUsersFollow } from "@/apis/openapi/users/useUsersFollow";
+import { useUsersUnfollow } from "@/apis/openapi/users/useUsersUnfollow";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
-import { useState } from "react";
 
 type FollowButtonProps = {
+  isFollowState?: boolean;
   userId?: string;
   updateUser?: () => void;
 };
 
 export const useFollowButton = (
-  { userId, updateUser }: FollowButtonProps
+  { isFollowState, userId, updateUser }: FollowButtonProps
 ) => {
   const { idToken } = useFirebaseAuthContext();
-  const { trigger, isMutating, data, error } = useUsersFollow();
+  const { trigger: triggerFollow } = useUsersFollow();
+  const { trigger: triggerUnfollow } = useUsersUnfollow();
 
   const onFollow = async () => {
     if (!userId) return;
-    await trigger({
+    await triggerFollow({
+      headers: { Authorization: `Bearer ${idToken}` },
+      userId: userId
+    });
+    if (updateUser) {
+      updateUser();
+    }
+  };
+
+  const onUnfollow = async () => {
+    if (!userId) return;
+    await triggerUnfollow({
       headers: { Authorization: `Bearer ${idToken}` },
       userId: userId
     });
@@ -25,6 +38,8 @@ export const useFollowButton = (
   };
 
   return {
+    isFollowState,
     onFollow,
+    onUnfollow,
   };
 };
