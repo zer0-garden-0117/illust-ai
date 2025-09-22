@@ -11,8 +11,11 @@ export const useFollowList = (
 ) => {
   const { idToken } = useFirebaseAuthContext();
   const router = useRouter();
-
-gi
+  const { data: userData, mutate: updateUser } = useUsersGet(
+    { headers: { Authorization: `Bearer ${idToken}` },
+      customUserId: userId },
+    { revalidateOnFocus: false }
+  );
 
   const handlePageChange = (page: number) => {
     router.push(`/user/${userData?.customUserId}/follow?page=${page}`);
