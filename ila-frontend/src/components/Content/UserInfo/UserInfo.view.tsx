@@ -23,7 +23,7 @@ export const UserInfoView = memo(function WorkViewComponent({
   userData,
   updateUser
 }: UserInfoViewProps): JSX.Element {
-  const { user, idToken, getFreshIdToken } = useFirebaseAuthContext();
+  const { user, getFreshIdToken, getIdTokenLatest } = useFirebaseAuthContext();
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
   const [coverImageFile, setCoverImageFile] = useState<File>(new File([], ""));
@@ -72,7 +72,7 @@ export const UserInfoView = memo(function WorkViewComponent({
     try {
       const isAvailable = await checkAvailability({ 
         customUserId: value,
-        headers: { Authorization: `Bearer ${await idToken}` }
+        headers: { Authorization: `Bearer ${await getIdTokenLatest()}` }
       });
       setIsUserIdAvailable(isAvailable);
       setIsLoading(false);
@@ -106,7 +106,7 @@ export const UserInfoView = memo(function WorkViewComponent({
     setIsSaving(true);
     try {
       await updateMyUser({
-        headers: { Authorization: `Bearer ${await idToken}` },
+        headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
         body: {
           coverImage: coverImageFile,
           profileImage: profileImageFile,

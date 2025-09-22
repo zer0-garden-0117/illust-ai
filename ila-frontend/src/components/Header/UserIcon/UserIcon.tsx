@@ -6,7 +6,7 @@ import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import LoginButton from '@/components/Common/LoginButton/LoginButton';
 
 export const UserIcon: React.FC = () => {
-  const { user, idToken } = useFirebaseAuthContext();
+  const { user } = useFirebaseAuthContext();
   const router = useRouter();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';

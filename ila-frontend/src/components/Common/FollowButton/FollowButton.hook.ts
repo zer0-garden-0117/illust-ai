@@ -11,14 +11,14 @@ type FollowButtonProps = {
 export const useFollowButton = (
   { isFollowState, userId, updateUser }: FollowButtonProps
 ) => {
-  const { idToken } = useFirebaseAuthContext();
+  const { getIdTokenLatest } = useFirebaseAuthContext();
   const { trigger: triggerFollow } = useUsersFollow();
   const { trigger: triggerUnfollow } = useUsersUnfollow();
 
   const onFollow = async () => {
     if (!userId) return;
     await triggerFollow({
-      headers: { Authorization: `Bearer ${idToken}` },
+      headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
       userId: userId
     });
     if (updateUser) {
@@ -29,7 +29,7 @@ export const useFollowButton = (
   const onUnfollow = async () => {
     if (!userId) return;
     await triggerUnfollow({
-      headers: { Authorization: `Bearer ${idToken}` },
+      headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
       userId: userId
     });
     if (updateUser) {

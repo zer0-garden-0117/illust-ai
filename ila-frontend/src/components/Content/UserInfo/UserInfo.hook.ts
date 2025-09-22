@@ -8,14 +8,12 @@ type UseUserInfoProps = {
 export const useUserInfo = (
   { userId }: UseUserInfoProps
 ) => {
-  const { idToken } = useFirebaseAuthContext();
-  console.log(idToken)
+  const { getIdTokenLatest } = useFirebaseAuthContext();
 
-  const { data: userData, mutate: updateUser } = useUsersGet(
-    { headers: { Authorization: `Bearer ${idToken}` },
-      customUserId: userId },
-    { revalidateOnFocus: false }
-  );
+  const { data: userData, mutate: updateUser } = useUsersGet({
+    customUserId: userId,
+    getIdTokenLatest,
+  }, { revalidateOnFocus: true });
 
   return {
     userData,

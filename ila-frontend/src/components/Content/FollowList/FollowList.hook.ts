@@ -11,20 +11,19 @@ type UseFollowListProps = {
 export const useFollowList = (
   { customUserId, page }: UseFollowListProps
 ) => {
-  const { idToken } = useFirebaseAuthContext();
+  const { getIdTokenLatest } = useFirebaseAuthContext();
   const router = useRouter();
 
-  const { data: userData, mutate } = useUsersGet(
-    { headers: { Authorization: `Bearer ${idToken}` },
-      customUserId: customUserId },
-    { revalidateOnFocus: false }
-  );
+  const { data: userData, error } = useUsersGet({
+    customUserId,
+    getIdTokenLatest,
+  }, { revalidateOnFocus: true });
 
   const { data: followUserData, mutate: updateUser } = useFollowUsersGet({
-    headers: { Authorization: `Bearer ${idToken}` },
-    customUserId: customUserId,
+    customUserId,
     offset: (page - 1) * 10,
     limit: 10,
+    getIdTokenLatest,
   });
 
   const handlePageChange = (page: number) => {

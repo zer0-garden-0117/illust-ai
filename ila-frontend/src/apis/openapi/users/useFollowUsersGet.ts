@@ -1,50 +1,55 @@
+// useFollowUsersGet.ts
 import useSWR from 'swr';
 import client from "../apiClient";
 import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRConfiguration, SWRResponse } from 'swr';
-import type { AuthHeader } from '../apiClient';
 
 export type FollowUsersGetResult =
   operations["getFollowUsers"]["responses"]["200"]["content"]["application/json"];
 
 export type FollowUsersGetPath = operations["getFollowUsers"]["parameters"]["path"];
 export type FollowUsersGetQuery = operations["getFollowUsers"]["parameters"]["query"];
-export type FollowUsersGetHeader = AuthHeader;
 
+// 毎回"最新"のIDトークンを返す関数を受け取る
 export type FollowUsersGetArgs = {
-  headers?: FollowUsersGetHeader;
   customUserId: FollowUsersGetPath["customUserId"];
   offset: FollowUsersGetQuery["offset"];
   limit: FollowUsersGetQuery["limit"];
+  getIdTokenLatest: () => Promise<string | null>;
 };
 
 export const useFollowUsersGet = (
   args: FollowUsersGetArgs,
   options?: SWRConfiguration<FollowUsersGetResult, Error>
 ): SWRResponse<FollowUsersGetResult, Error> => {
+  console.log('useFollowUsersGet called with', args)
+  const { customUserId, offset, limit, getIdTokenLatest } = args ?? {};
+
   return useSWR<FollowUsersGetResult, Error>(
-    args.customUserId ? [`/users/follow/${args.customUserId}`, args.offset, args.limit] : null,
-    async (): Promise<FollowUsersGetResult> => {
+    customUserId ? ['/users/follow', customUserId, offset, limit] : null,
+    async ([, id, off, lim]: [string, string, number, number]): Promise<FollowUsersGetResult> => {
+      const token = await getIdTokenLatest();
+      if (!token) throw new Error('Failed to acquire latest ID token');
+
       const { data, error } = await client.GET(
         "/users/follow/{customUserId}",
         {
           headers: {
-            Authorization: `${args?.headers?.Authorization}`,
+            Authorization: `Bearer ${token}`,
           },
           params: {
             path: {
-              customUserId: args.customUserId,
+              customUserId: id,
             },
             query: {
-              offset: args.offset,
-              limit: args.limit,
+              offset: off,
+              limit: lim,
             },
           },
         }
       );
-      if (error) {
-        throw error;
-      }
+
+      if (error) throw error;
       return data;
     },
     options
