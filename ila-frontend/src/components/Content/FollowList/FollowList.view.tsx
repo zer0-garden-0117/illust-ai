@@ -26,6 +26,13 @@ export const FollowListView = memo(function WorkViewComponent({
           <div>
             <Text fz="sm" fw={500}>{item!.userName}</Text>
             <Text fz="xs" c="dimmed">@{item!.customUserId}</Text>
+            <Text fz="xs">
+              {item!.userProfile &&
+                (() => {
+                  const noNewline = item!.userProfile.replace(/\r?\n/g, '');
+                  return noNewline.length > 5 ? noNewline.slice(0, 5) + '...' : noNewline;
+                })()}
+            </Text>
           </div>
         </Group>
 
@@ -35,15 +42,6 @@ export const FollowListView = memo(function WorkViewComponent({
           updateUser={updateUser}
         />
       </Group>
-
-      {item!.userProfile && (
-        <>
-          <Space h={8} />
-          <Text ml={55} size="sm" c="dimmed" style={{ whiteSpace: 'pre-line' }}>
-            {item!.userProfile}
-          </Text>
-        </>
-      )}
     </Card>
   ));
 
