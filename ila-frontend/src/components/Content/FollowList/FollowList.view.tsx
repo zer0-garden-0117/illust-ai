@@ -1,22 +1,25 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Button, Group, Avatar, Text, Card, Space, ActionIcon, Stack } from '@mantine/core';
+import { Button, Group, Avatar, Text, Card, Space, ActionIcon, Stack, Pagination } from '@mantine/core';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import { IconArrowNarrowLeft } from '@tabler/icons-react';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 
 type FollowListViewProps = {
-  userData: UsersGetResult | undefined;
+  userDataList: UsersGetResult | undefined;
+  userDataCount: number;
   updateUser: () => void;
+  handlePageChange: (page: number) => void;
 };
 
 export const FollowListView = memo(function WorkViewComponent({
-  userData,
-  updateUser
+  userDataList,
+  userDataCount,
+  updateUser,
+  handlePageChange,
 }: FollowListViewProps): JSX.Element {
-  // 実データに合わせて配列に差し替えてね（今はデモで2件）
-  const list = [userData, userData].filter(Boolean);
+  const list = [userDataList, userDataList].filter(Boolean);
 
   const items = list.map((item) => (
     <Card key={item!.customUserId} padding="md">
@@ -52,14 +55,14 @@ export const FollowListView = memo(function WorkViewComponent({
           <ActionIcon variant="subtle" color="gray" onClick={() => {}}>
             <IconArrowNarrowLeft color="black" />
           </ActionIcon>
-          <Text>@{userData?.customUserId}</Text>
+          <Text>@{userDataList?.customUserId}</Text>
         </Group>
         <Space h={15} />
-        {/* ここがTableの代わり */}
         <Stack gap="0px">
           {items}
         </Stack>
         <Space h={20} />
+        <Pagination total={userDataCount} radius="md" onChange={handlePageChange}/>
       </Card>
     </>
   );
