@@ -40,37 +40,51 @@ fi
 # userテーブルにテストデータを追加
 echo "Adding test data to user table..."
 
-put_item user '{
-  "userId": {"S": "user001"},
-  "customUserId": {"S": "xxx"},
-  "updatedAt": {"S": "2024-01-15T10:30:00Z"},
-  "userName": {"S": "testUserName"},
-  "userProfile": {"S": "testUserProfile"},
-  "profileImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"},
-  "coverImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"},
-  "createdAt": {"S": "2023-05-10T14:20:00Z"}
-}'
+#put_item user '{
+#  "userId": {"S": "user001"},
+#  "customUserId": {"S": "xxx"},
+#  "updatedAt": {"S": "2024-01-15T10:30:00Z"},
+#  "userName": {"S": "testUserName"},
+#  "userProfile": {"S": "testUserProfile"},
+#  "profileImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"},
+#  "coverImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"},
+#  "createdAt": {"S": "2023-05-10T14:20:00Z"}
+#}'
+#
+#put_item user '{
+#  "userId": {"S": "user002"},
+#  "customUserId": {"S": "yyy"},
+#  "updatedAt": {"S": "2024-01-15T10:30:00Z"},
+#  "userName": {"S": "testUserName"},
+#  "userProfile": {"S": "testUserProfile"},
+#  "profileImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"},
+#  "coverImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"},
+#  "createdAt": {"S": "2023-05-10T14:20:00Z"}
+#}'
+#
+#put_item user '{
+#  "userId": {"S": "user003"},
+#  "customUserId": {"S": "zzz"},
+#  "updatedAt": {"S": "2024-01-15T10:30:00Z"},
+#  "userName": {"S": "testUserName"},
+#  "userProfile": {"S": "testUserProfile"},
+#  "profileImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"},
+#  "coverImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"},
+#  "createdAt": {"S": "2023-05-10T14:20:00Z"}
+#}'
 
-put_item user '{
-  "userId": {"S": "user002"},
-  "customUserId": {"S": "yyy"},
-  "updatedAt": {"S": "2024-01-15T10:30:00Z"},
-  "userName": {"S": "testUserName"},
-  "userProfile": {"S": "testUserProfile"},
-  "profileImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"},
-  "coverImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"},
-  "createdAt": {"S": "2023-05-10T14:20:00Z"}
-}'
-
-put_item user '{
-  "userId": {"S": "user003"},
-  "customUserId": {"S": "zzz"},
-  "updatedAt": {"S": "2024-01-15T10:30:00Z"},
-  "userName": {"S": "testUserName"},
-  "userProfile": {"S": "testUserProfile"},
-  "profileImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"},
-  "coverImageUrl": {"S": "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"},
-  "createdAt": {"S": "2023-05-10T14:20:00Z"}
-}'
+for i in $(seq 1 50); do
+  printf -v padded "%03d" "$i"   # 001, 002, ... 050
+  put_item user "{
+    \"userId\": {\"S\": \"user${padded}\"},
+    \"customUserId\": {\"S\": \"${padded}\"},
+    \"updatedAt\": {\"S\": \"2024-01-15T10:30:00Z\"},
+    \"userName\": {\"S\": \"testUserName\"},
+    \"userProfile\": {\"S\": \"testUserProfile\"},
+    \"profileImageUrl\": {\"S\": \"https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png\"},
+    \"coverImageUrl\": {\"S\": \"https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png\"},
+    \"createdAt\": {\"S\": \"2023-05-10T14:20:00Z\"}
+  }"
+done
 
 echo "Test data insertion completed."
