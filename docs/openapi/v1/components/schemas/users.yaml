@@ -53,6 +53,19 @@ ApiUser:
       description: このユーザーが認証ユーザーをフォローしているかどうか
       example: true
 
+ApiFollowUsers:
+  description: フォロー情報
+  type: object
+  properties:
+    follows:
+      type: array
+      items:
+        $ref: "../schemas/users.yaml#/ApiUser"
+    totalFollowCount:
+      type: integer
+      description: フォロワーの総数
+      example: 100
+
 ApiUsersActivitySearch:
   type: object
   properties:

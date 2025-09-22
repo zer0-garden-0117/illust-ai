@@ -17,13 +17,13 @@ class FollowService(
         offset: Int,
         limit: Int
     ): FollowWithSearchResult {
-        val liked = followRepository.findByUserId(userId)
+        val follows = followRepository.findByUserId(userId)
 
         // offsetで指定した件数分スキップしlimit分だけ取得
-        val filteredFollow = liked.drop(offset).take(limit)
-        val count = liked.size
+        val filteredFollows = follows.drop(offset).take(limit)
+        val count = follows.size
         return FollowWithSearchResult(
-            follow = filteredFollow,
+            follows = filteredFollows,
             totalCount = count
         )
     }
@@ -44,13 +44,13 @@ class FollowService(
         offset: Int,
         limit: Int
     ): FollowWithSearchResult {
-        val liked = followRepository.findByFollowUserId(userId)
+        val follows = followRepository.findByFollowUserId(userId)
 
         // offsetで指定した件数分スキップしlimit分だけ取得
-        val filteredFollow = liked.drop(offset).take(limit)
-        val count = liked.size
+        val filteredFollows = follows.drop(offset).take(limit)
+        val count = follows.size
         return FollowWithSearchResult(
-            follow = filteredFollow,
+            follows = filteredFollows,
             totalCount = count
         )
     }

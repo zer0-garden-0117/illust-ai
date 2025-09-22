@@ -2,6 +2,7 @@ package com.ila.zer0.service.user
 
 import com.ila.zer0.controller.UsersController
 import com.ila.zer0.dto.UsersActivity
+import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Follow
 import com.ila.zer0.entity.Liked
@@ -178,6 +179,34 @@ class UserManagerService(
         )
         return user
     }
+
+    @Transactional
+    fun getFollowUsersByCustomUserId(customUserId: String, offset: Int, limit: Int, callerUserId: String): UsersWithSearchResult? {
+        val user = userService.findUserByCustomUserId(customUserId)
+        if (user == null) {
+            logger.info("user is null $customUserId")
+            return null
+        }
+
+        val followIds = mutableListOf<String>()
+        val followResult = followService.findByUserIdWithOffset(user.userId, offset, limit)
+        followResult.follows.forEach { follow ->
+            followIds.add(follow.followUserId)
+        }
+
+        // userIdでユーザー情報を取得
+        val followUsers = mutableListOf<User>()
+        val callerUserFollows = followService.findByUserId(callerUserId)
+        followIds.forEach { followId ->
+            val followUser = userService.findUserById(followId)
+            // callerUserFollowsにfollowUser.userIdが含まれているかどうかでisFollowingを設定
+            followUser?.isFollowing = callerUserFollows.any { it.followUserId == followId }
+            followUser?.let { followUsers.add(it) }
+        }
+
+        return UsersWithSearchResult(followUsers, followResult.totalCount)
+    }
+
 
     @Transactional
     fun searchUsersActivity(

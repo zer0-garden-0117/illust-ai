@@ -8,6 +8,8 @@ import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UserManagerService
 import io.swagger.v3.oas.annotations.Parameter
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -110,6 +112,35 @@ class UsersController(
         val user = userManagerService.unfollowUser(myUserId, userId)
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
+    }
+
+    override fun getFollowUsers(
+        @PathVariable("customUserId") customUserId: String,
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int
+    ): ResponseEntity<ApiFollowUsers> {
+        val myUserId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val followUsersResult =
+            userManagerService.getFollowUsersByCustomUserId(customUserId, offset, limit, myUserId)
+                ?: return ResponseEntity.notFound().build()
+
+        // APIモデルに変換
+        val apiUsers = mutableListOf<ApiUser>()
+        followUsersResult.users.forEach { user ->
+            val apiUser = userMapper.toApiUser(user)
+            apiUsers.add(apiUser)
+        }
+        val apiFollowsUsers = ApiFollowUsers(apiUsers, followUsersResult.totalCount)
+        return ResponseEntity.ok(apiFollowsUsers)
+    }
+
+    override fun getFollowerUsers(
+        @PathVariable("customUserId") customUserId: String,
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int
+    ): ResponseEntity<ApiFollowUsers> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     override fun postUsersActivitySearch(
