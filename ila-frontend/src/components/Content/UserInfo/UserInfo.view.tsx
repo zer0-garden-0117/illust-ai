@@ -149,20 +149,36 @@ export const UserInfoView = memo(function WorkViewComponent({
             backgroundPosition: 'center',
           }}
         />
-        <Group gap={0} style={{ position: 'relative', width: 'fit-content' }}>
+        <Group justify="space-between">
           <Avatar
             key={userData?.profileImageUrl}
             src={userData?.profileImageUrl}
             size={80}
             radius={80}
-            mx="auto"
             mt={-30}
           />
+          <div key="LoginButton">
+            {isLoginUser &&
+              <LoginButton />
+            }
+            {!isLoginUser &&
+              <FollowButton
+                isFollowState={userData?.isFollowing}
+                userId={userData?.userId}
+                updateUser={updateUser}
+              />
+            }
+          </div>
         </Group>
-        <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
-          <Text ta="center" fz="lg" fw={500}>
+        <Group justify="space-between">
+          <div>
+          <Text ta="left" fz="xl" fw={500}>
+            {userData?.userName}
+          </Text>
+          <Text ta="left" fz="xs" c="dimmed">
             @{userData?.customUserId}
           </Text>
+          </div>
           {isLoginUser && (
             <Button
               color={"var(--mantine-color-gray-5)"} 
@@ -191,27 +207,16 @@ export const UserInfoView = memo(function WorkViewComponent({
             </Button>
           )}
         </Group>
-        <Group gap={40} style={{ position: 'relative', width: 'fit-content', marginLeft: '10px', marginTop: '5px', marginBottom: '10px' }}>
-          <Text
-            fz="sm"
-            c="dimmed"
-            style={{ whiteSpace: 'pre-line' }}
-          >
-            {userData?.userProfile}
-          </Text>
-        </Group>
+        <Space h={5}/>
         <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
           <div key="Follow">
             <Anchor
               onClick={handleFollowListClick}
               style={{ textDecorationColor: 'black' }}
             >
-              <Text ta="center" fz="lg" fw={500} c="black">
-                {userData?.follow}
-              </Text>
-              <Text ta="center" fz="sm" c="dimmed" lh={1}>
-                Follow
-              </Text>
+            <Text ta="center" fz="xs" fw={500} c="dimmed">
+              <Text fz="xs" span fw={700} c={"black"}>{userData?.follow}</Text> フォロー
+            </Text>
             </Anchor>
           </div>
           <div key="Follower">
@@ -219,26 +224,24 @@ export const UserInfoView = memo(function WorkViewComponent({
               onClick={handleFollowerListClick}
               style={{ textDecorationColor: 'black' }}
             >
-              <Text ta="center" fz="lg" fw={500} c="black">
-                {userData?.follower}
+              <Group>
+              <Text ta="center" fz="xs" fw={500} c="dimmed">
+                <Text fz="xs" span fw={700} c={"black"}>{userData?.follower}</Text> フォロワー
               </Text>
-              <Text ta="center" fz="sm" c="dimmed" lh={1}>
-                Follower
-              </Text>
+              </Group>
             </Anchor>
           </div>
-          <div key="LoginButton">
-            {isLoginUser &&
-              <LoginButton />
-            }
-            {!isLoginUser &&
-              <FollowButton
-                isFollowState={userData?.isFollowing}
-                userId={userData?.userId}
-                updateUser={updateUser}
-              />
-            }
-          </div>
+        </Group>
+        <Group gap={40} style={{ position: 'relative', width: 'fit-content', marginTop: '5px', marginBottom: '10px' }}>
+          <Text
+            fz="sm"
+            style={{
+              whiteSpace: 'pre-line',
+              lineHeight: 1.2
+            }}
+          >
+            {userData?.userProfile}
+          </Text>
         </Group>
         <Space h={15}/>
         <Tabs defaultValue="posted" color="black">
@@ -396,15 +399,15 @@ export const UserInfoView = memo(function WorkViewComponent({
             {...form.getInputProps('userProfile')}
             mb="md"
             autoSave="true"
-            rows={3}
-            minRows={3}
-            maxRows={3}
+            rows={5}
+            minRows={5}
+            maxRows={5}
             disabled={isLoading || !isUserIdAvailable}
             onChange={(e) => {
               const value = e.currentTarget.value;
               const lines = value.split("\n");
-              if (lines.length > 3) {
-                e.currentTarget.value = lines.slice(0, 3).join("\n");
+              if (lines.length > 5) {
+                e.currentTarget.value = lines.slice(0, 5).join("\n");
               }
               form.setFieldValue('userProfile', e.currentTarget.value);
             }}
