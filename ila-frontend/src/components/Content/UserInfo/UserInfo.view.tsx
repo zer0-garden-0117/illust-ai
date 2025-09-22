@@ -129,11 +129,11 @@ export const UserInfoView = memo(function WorkViewComponent({
   };
 
   const handleFollowListClick = () => {
-    router.push(`/user/${userData?.customUserId}/follow`);
+    router.push(`/user/${userData?.customUserId}/follow?page=1`);
   };
   
   const handleFollowerListClick = () => {
-    router.push(`/user/${userData?.customUserId}/follower`);
+    router.push(`/user/${userData?.customUserId}/follower?page=1`);
   };
 
   return (

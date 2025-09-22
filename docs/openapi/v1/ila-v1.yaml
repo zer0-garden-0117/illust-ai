@@ -32,8 +32,11 @@ paths:
   /users/follow/{userId}:
     $ref: "./paths/users.yaml#/UsersFollow"
 
-  /users/follower/{userId}:
-    $ref: "./paths/users.yaml#/UsersFollower"
+  /users/follow/{customUserId}:
+    $ref: "./paths/users.yaml#/UsersFollowById"
+
+  /users/follower/{customUserId}:
+    $ref: "./paths/users.yaml#/UsersFollowerById"
 
   /users/activity/search:
     $ref: "./paths/users.yaml#/UsersActivitySearch"

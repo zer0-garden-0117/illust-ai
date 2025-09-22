@@ -1,28 +1,28 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Button, Group, Avatar, Text, Card, Space, ActionIcon, Stack, Pagination } from '@mantine/core';
-import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
+import { Group, Avatar, Text, Card, Space, ActionIcon, Stack, Pagination } from '@mantine/core';
 import { IconArrowNarrowLeft } from '@tabler/icons-react';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
+import { FollowUsersGetResult } from '@/apis/openapi/users/useFollowUsersGet';
+import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 
 type FollowListViewProps = {
-  userDataList: UsersGetResult | undefined;
-  userDataCount: number;
+  userData: UsersGetResult | undefined
+  followUserData: FollowUsersGetResult | undefined;
   updateUser: () => void;
   handlePageChange: (page: number) => void;
 };
 
 export const FollowListView = memo(function WorkViewComponent({
-  userDataList,
-  userDataCount,
+  userData,
+  followUserData,
   updateUser,
   handlePageChange,
 }: FollowListViewProps): JSX.Element {
-  const list = [userDataList, userDataList].filter(Boolean);
 
-  const items = list.map((item) => (
-    <Card key={item!.customUserId} padding="md">
+  const items = followUserData?.follows?.map((item) => (
+    <Card key={item.customUserId} padding="md">
       <Group align="flex-start" justify="space-between" wrap="nowrap">
         <Group gap="sm">
           <Avatar size={40} src={item!.profileImageUrl} radius={40} />
@@ -55,14 +55,14 @@ export const FollowListView = memo(function WorkViewComponent({
           <ActionIcon variant="subtle" color="gray" onClick={() => {}}>
             <IconArrowNarrowLeft color="black" />
           </ActionIcon>
-          <Text>@{userDataList?.customUserId}</Text>
+          <Text>@{userData?.customUserId}</Text>
         </Group>
         <Space h={15} />
         <Stack gap="0px">
           {items}
         </Stack>
         <Space h={20} />
-        <Pagination total={userDataCount} radius="md" onChange={handlePageChange}/>
+        <Pagination total={Math.ceil((followUserData?.totalFollowCount ?? 0) / 10)} radius="md" onChange={handlePageChange}/>
       </Card>
     </>
   );

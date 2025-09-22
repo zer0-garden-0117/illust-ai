@@ -2,16 +2,18 @@
 
 import FollowList from "@/components/Content/FollowList/FollowList";
 
-const UserPage: React.FC<{ params: { id: string } }> = (
-  { params }
+const UserPage: React.FC<{ params: { id: string }, searchParams: { page?: string } }> = (
+  { params, searchParams }
 ) => {
-  const userId = decodeURIComponent(params.id);
+  const customUserId = decodeURIComponent(params.id);
+  const page = Number(searchParams.page ?? 1);
 
   return (
     <>
-    <FollowList
-      userId={userId}
-    />
+      <FollowList
+        customUserId={customUserId}
+        page={page}
+      />
     </>
   )
 };

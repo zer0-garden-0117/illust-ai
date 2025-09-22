@@ -5,13 +5,14 @@ import { useFollowList } from './FollowList.hook';
 import { FollowListView } from './FollowList.view';
 
 type FollowListProps = {
-  userId: string;
+  customUserId: string;
+  page: number;
 };
 
 export const FollowList: React.FC<FollowListProps> = (
-  { userId }
+  { customUserId, page }
 ): JSX.Element => {
-  const viewProps = useFollowList({ userId });
+  const viewProps = useFollowList({ customUserId, page });
   return <FollowListView {...viewProps} />;
 };
 

@@ -119,6 +119,8 @@ class UsersController(
         @RequestParam(value = "offset", required = true) offset: Int,
         @RequestParam(value = "limit", required = true) limit: Int
     ): ResponseEntity<ApiFollowUsers> {
+        logger.info("getFollowUsers")
+        logger.info("customUserId: $customUserId, offset: $offset, limit: $limit")
         val myUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val followUsersResult =
