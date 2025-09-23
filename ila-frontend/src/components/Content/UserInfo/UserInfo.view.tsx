@@ -304,6 +304,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             {...form.getInputProps('userName')}
             mb="md"
             error={form.errors.userName}
+            disabled={isLoading || !isUserIdAvailable}
           />
 
           <Textarea
