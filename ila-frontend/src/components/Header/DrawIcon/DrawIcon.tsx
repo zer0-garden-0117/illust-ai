@@ -9,7 +9,7 @@ export const DrawIcon: React.FC = () => {
   const isDark = colorScheme === 'dark';
 
   const onIconClick = () => {
-    setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
+    router.push('/draw');
   };
 
   return (
@@ -27,6 +27,7 @@ export const DrawIcon: React.FC = () => {
               : "var(--mantine-color-gray-5)",
           }
         }}
+        onClick={onIconClick}
       >
         <IconPencil />
       </ActionIcon>

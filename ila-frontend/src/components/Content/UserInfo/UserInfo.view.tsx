@@ -340,6 +340,7 @@ export const UserInfoView = memo(function WorkViewComponent({
           <Group justify="flex-end" mt="xl">
             <Button
               variant="outline"
+              radius="xl"
               onClick={() => setOpened(false)}
               disabled={isLoading || !isUserIdAvailable || isSaving}
             >
@@ -347,6 +348,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             </Button>
             <Button
               type="submit"
+              radius="xl"
               loading={isSaving}
               disabled={isLoading || !isUserIdAvailable || isTypingUserId || !form.values.userName.trim()}
             >
