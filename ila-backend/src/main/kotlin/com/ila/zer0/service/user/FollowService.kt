@@ -19,12 +19,14 @@ class FollowService(
     ): FollowWithSearchResult {
         val follows = followRepository.findByUserId(userId)
 
+        // followsの順番を更新日時の降順にソート
+        val sortedFollows = follows.sortedByDescending { it.updatedAt }
+
         // offsetで指定した件数分スキップしlimit分だけ取得
-        val filteredFollows = follows.drop(offset).take(limit)
-        val count = follows.size
+        val filteredFollows = sortedFollows.drop(offset).take(limit)
         return FollowWithSearchResult(
             follows = filteredFollows,
-            totalCount = count
+            totalCount = follows.size
         )
     }
 
@@ -46,12 +48,14 @@ class FollowService(
     ): FollowWithSearchResult {
         val follows = followRepository.findByFollowUserId(userId)
 
+        // followsの順番を更新日時の降順にソート
+        val sortedFollows = follows.sortedByDescending { it.updatedAt }
+
         // offsetで指定した件数分スキップしlimit分だけ取得
-        val filteredFollows = follows.drop(offset).take(limit)
-        val count = follows.size
+        val filteredFollows = sortedFollows.drop(offset).take(limit)
         return FollowWithSearchResult(
             follows = filteredFollows,
-            totalCount = count
+            totalCount = follows.size
         )
     }
 
