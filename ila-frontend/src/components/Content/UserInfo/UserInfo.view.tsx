@@ -1,142 +1,55 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { memo } from 'react';
-import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor } from '@mantine/core';
-import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
-import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
-import FollowButton from '@/components/Common/FollowButton/FollowButton';
+import React, { useState, memo } from 'react';
+import { UserInfoFormValues } from './UserInfo.hook';
 import { IconSettings, IconPencil } from '@tabler/icons-react';
-import { useForm } from '@mantine/form';
-import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { useUserCheckAvailability } from '@/apis/openapi/users/useUserCheckAvailability';
-import { useMyUserUpdate } from '@/apis/openapi/users/useMyUserUpdate';
-import { useRouter } from "next/navigation";
+import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
+import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
+import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
 type UserInfoViewProps = {
-  userData: UsersGetResult | undefined
-  updateUser: () => void
+  form: UseFormReturnType<UserInfoFormValues>;
+  userData: UsersGetResult | undefined,
+  isLoginUser: boolean,
+  isChecking: boolean,
+  isSaving: boolean,
+  isUserIdAvailable: boolean,
+  isLoading: boolean,
+  opened: boolean,
+  handleSave: (values: any) => Promise<void>,
+  updateUser: () => void,
+  handleCoverImageDrop: (files: File[]) => void,
+  handleProfileImageDrop: (files: File[]) => void,
+  validateCustomUserId: (value: string) => Promise<string | null>,
+  handleEditButton: () => void,
+  handleFollowListClick: () => void,
+  handleFollowerListClick: () => void,
+  setOpened: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const UserInfoView = memo(function WorkViewComponent({
+  form,
   userData,
-  updateUser
+  isLoginUser,
+  isChecking,
+  isSaving,
+  isUserIdAvailable,
+  isLoading,
+  opened,
+  handleSave,
+  updateUser,
+  handleCoverImageDrop,
+  handleProfileImageDrop,
+  validateCustomUserId,
+  handleEditButton,
+  handleFollowListClick,
+  handleFollowerListClick,
+  setOpened
 }: UserInfoViewProps): JSX.Element {
-  const { user, getFreshIdToken, getIdTokenLatest } = useFirebaseAuthContext();
-  const [isLoginUser, setIsLoginUser] = useState(false);
-  const [opened, setOpened] = useState(false);
-  const [coverImageFile, setCoverImageFile] = useState<File>(new File([], ""));
-  const [profileImageFile, setProfileImageFile] = useState<File>(new File([], ""));
-  const { trigger: checkAvailability, isMutating: isChecking } = useUserCheckAvailability();
-  const [isUserIdAvailable, setIsUserIdAvailable] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const { trigger: updateMyUser } = useMyUserUpdate();
   const [isTypingUserId, setIsTypingUserId] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    setIsLoginUser(!!(user && userData?.customUserId === user.customUserId));
-  }, [user, userData]);
-
-  const form = useForm({
-    initialValues: {
-      customUserId: userData?.customUserId || '',
-      profileImageUrl: userData?.profileImageUrl || '',
-      coverImageUrl: userData?.coverImageUrl || '',
-      userName: userData?.userName || '',
-      userProfile: userData?.userProfile || '',
-    },
-  });
-
-  const validateCustomUserId = async (value: string) => {
-    setIsLoading(true)
-    // 3文字以上かつ12文字以下の英数字とアンダースコアのみ許可
-    const regex = /^[a-zA-Z0-9_]{3,12}$/;
-    if (!regex.test(value)) {
-      setIsUserIdAvailable(false);
-      setIsLoading(false);
-      return 'ユーザーIDは3〜12文字の英数字と_のみ使用可能です';
-    }
-
-    // 空文字または元のユーザーIDと同じ場合はチェックしない
-    if (!value || value === userData?.customUserId) {
-      setIsUserIdAvailable(true);
-      setIsLoading(false);
-      return null;
-    }
-
-    // ここで0.5秒遅延
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    try {
-      const isAvailable = await checkAvailability({ 
-        customUserId: value,
-        headers: { Authorization: `Bearer ${await getIdTokenLatest()}` }
-      });
-      setIsUserIdAvailable(isAvailable);
-      setIsLoading(false);
-      return isAvailable ? null : 'このユーザーIDは既に使用されています';
-    } catch (error) {
-      console.error('ユーザーIDチェックエラー:', error);
-      setIsUserIdAvailable(false);
-      setIsLoading(false);
-      return 'ユーザーIDの確認中にエラーが発生しました';
-    }
-  }
-
-  const handleCoverImageDrop = useCallback((files: File[]) => {
-    if (files.length > 0) {
-      setCoverImageFile(files[0]);
-      const previewUrl = URL.createObjectURL(files[0]);
-      form.setFieldValue('coverImageUrl', previewUrl);
-    }
-  }, []);
-
-  const handleProfileImageDrop = useCallback((files: File[]) => {
-    if (files.length > 0) {
-      setProfileImageFile(files[0]);
-      const previewUrl = URL.createObjectURL(files[0]);
-      form.setFieldValue('profileImageUrl', previewUrl);
-    }
-  }, []);
-
-  const handleSave = async (values: typeof form.values) => {
-    if (isSaving) return;
-    setIsSaving(true);
-    try {
-      await updateMyUser({
-        headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
-        body: {
-          coverImage: coverImageFile,
-          profileImage: profileImageFile,
-          customUserId: values.customUserId,
-          userName: values.userName,
-          userProfile: values.userProfile
-        }
-      });
-      // 更新処理後、モーダルを閉じる
-      setOpened(false);
-
-      // トークンと認証情報を更新
-      await getFreshIdToken();
-      updateUser();
-
-      // 画面遷移
-      window.location.href = `/user/${values.customUserId}`;
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleFollowListClick = () => {
-    router.push(`/user/${userData?.customUserId}/follow?page=1`);
-  };
-  
-  const handleFollowerListClick = () => {
-    router.push(`/user/${userData?.customUserId}/follower?page=1`);
-  };
 
   return (
     <>
@@ -193,18 +106,7 @@ export const UserInfoView = memo(function WorkViewComponent({
                   style={{ display: 'block' }}
                 />
               }
-              onClick={() => {
-                form.setValues({
-                  customUserId: userData?.customUserId || '',
-                  profileImageUrl: userData?.profileImageUrl || '',
-                  coverImageUrl: userData?.coverImageUrl || '',
-                  userName: userData?.userName || '',
-                  userProfile: userData?.userProfile || '',
-                });
-                setCoverImageFile(new File([], ""));
-                setProfileImageFile(new File([], ""));
-                setOpened(true);
-              }}
+              onClick={handleEditButton}
             >
               <Text c="var(--mantine-color-gray-8)">編集</Text>
             </Button>
