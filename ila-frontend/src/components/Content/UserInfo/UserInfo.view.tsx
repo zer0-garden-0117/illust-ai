@@ -4,7 +4,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { memo } from 'react';
 import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor } from '@mantine/core';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
-import LoginButton from '@/components/Common/LoginButton/LoginButton';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import { IconSettings, IconPencil } from '@tabler/icons-react';
@@ -13,6 +12,7 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useUserCheckAvailability } from '@/apis/openapi/users/useUserCheckAvailability';
 import { useMyUserUpdate } from '@/apis/openapi/users/useMyUserUpdate';
 import { useRouter } from "next/navigation";
+import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
 
 type UserInfoViewProps = {
   userData: UsersGetResult | undefined
@@ -161,7 +161,7 @@ export const UserInfoView = memo(function WorkViewComponent({
           />
           <div key="LoginButton">
             {isLoginUser &&
-              <LoginButton />
+              <LogoutButton />
             }
             {!isLoginUser &&
               <FollowButton

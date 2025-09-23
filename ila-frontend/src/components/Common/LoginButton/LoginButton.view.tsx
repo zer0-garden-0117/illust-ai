@@ -6,34 +6,11 @@ import { useEffect } from 'react';
 
 type LoginButtonViewProps = {
   onLogin: () => void;
-  onLogout: () => void;
 };
 
 
-export default function LoginButtonView({ onLogin, onLogout }: LoginButtonViewProps) {
-  const { user, loading } = useFirebaseAuthContext();
-
-  // ログイン中
-  if (loading) {
-    return <Loader size="sm" />;
-  }
-
-  // 認証済
-  if (user) {
-    return (
-      <Group>
-        <Button 
-          onClick={onLogout} 
-          variant="outline" 
-          color="red"
-          size="sm"
-          radius={"xl"}
-        >
-          Logout
-        </Button>
-      </Group> 
-    )
-  }
+export default function LoginButtonView({ onLogin }: LoginButtonViewProps) {
+  const { user } = useFirebaseAuthContext();
 
   // 認証前
   if (!user) {

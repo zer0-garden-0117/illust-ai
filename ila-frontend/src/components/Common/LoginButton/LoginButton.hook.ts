@@ -21,17 +21,7 @@ export const useLoginButton = (
     }
   };
 
-  const onLogout = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
-
   return {
-    onSuccess,
-    onLogin,
-    onLogout
+    onLogin
   };
 };
