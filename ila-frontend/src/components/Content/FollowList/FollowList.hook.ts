@@ -38,10 +38,16 @@ export const useFollowList = (
     router.push(`/user/${customUserId}/follow?page=${page}`);
   }
 
+  const handleUserCardClick = (customUserId: string | undefined) => {
+    if (!customUserId) return;
+    router.push(`/user/${customUserId}`);
+  }
+
   return {
     userData,
     followUserData,
     updateUserAndFollowUser,
-    handlePageChange
+    handlePageChange,
+    handleUserCardClick,
   };
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Avatar, Text, Card, Space, ActionIcon, Stack, Pagination } from '@mantine/core';
+import { Group, Avatar, Text, Card, Space, ActionIcon, Stack, Pagination, Divider } from '@mantine/core';
 import { IconArrowNarrowLeft } from '@tabler/icons-react';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import { FollowUsersGetResult } from '@/apis/openapi/users/useFollowUsersGet';
@@ -12,6 +12,7 @@ type FollowListViewProps = {
   followUserData: FollowUsersGetResult | undefined;
   updateUserAndFollowUser: () => void;
   handlePageChange: (page: number) => void;
+  handleUserCardClick: (customUserId: string | undefined) => void;
 };
 
 export const FollowListView = memo(function WorkViewComponent({
@@ -19,31 +20,43 @@ export const FollowListView = memo(function WorkViewComponent({
   followUserData,
   updateUserAndFollowUser,
   handlePageChange,
+  handleUserCardClick,
 }: FollowListViewProps): JSX.Element {
 
   const items = followUserData?.follows?.map((item) => (
-    <Card key={item.customUserId} padding="md">
-      <Group align="flex-start" justify="space-between" wrap="nowrap">
-        <Group gap="sm">
-          <Avatar size={40} src={item!.profileImageUrl} radius={40} />
-          <div>
-            <Text fz="sm" fw={500}>{item!.userName}</Text>
-            <Text fz="xs" c="dimmed">@{item!.customUserId}</Text>
-            <Text fz="xs">
-              {item!.userProfile &&
-                (() => {
+    <Card
+      key={item.customUserId}
+      padding="md"
+      onClick={() => handleUserCardClick(item.customUserId)}
+      style={{ cursor: 'pointer' }}
+    >
+      <Card.Section withBorder />
+        <Space h={10} />
+        <Group align="center" justify="space-between" wrap="nowrap">
+          <Group gap="sm">
+            <Avatar size={40} src={item!.profileImageUrl} radius={40} />
+            <div>
+              <Text fz="sm" fw={500}>{item!.userName}</Text>
+              <Text fz="xs" c="dimmed">@{item!.customUserId}</Text>
+              <Text fz="xs">
+                {(() => {
+                  if (!item!.userProfile) return ' ';
                   const noNewline = item!.userProfile.replace(/\r?\n/g, '');
                   return noNewline.length > 5 ? noNewline.slice(0, 5) + '...' : noNewline;
                 })()}
-            </Text>
-          </div>
-        </Group>
-
-        <FollowButton
-          isFollowState={item!.isFollowing}
-          userId={item!.userId}
-          updateUser={updateUserAndFollowUser}
-        />
+              </Text>
+            </div>
+          </Group>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <FollowButton
+              isFollowState={item!.isFollowing}
+              userId={item!.userId}
+              updateUser={updateUserAndFollowUser}
+            />
+        </div>
       </Group>
     </Card>
   ));
