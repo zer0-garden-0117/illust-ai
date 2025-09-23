@@ -13,6 +13,7 @@ type FollowListViewProps = {
   updateUserAndFollowUser: () => void;
   handlePageChange: (page: number) => void;
   handleUserCardClick: (customUserId: string | undefined) => void;
+  handleArrowLeftClick: () => void;
 };
 
 export const FollowListView = memo(function WorkViewComponent({
@@ -21,6 +22,7 @@ export const FollowListView = memo(function WorkViewComponent({
   updateUserAndFollowUser,
   handlePageChange,
   handleUserCardClick,
+  handleArrowLeftClick
 }: FollowListViewProps): JSX.Element {
 
   const items = followUserData?.follows?.map((item) => (
@@ -65,10 +67,17 @@ export const FollowListView = memo(function WorkViewComponent({
     <>
       <Card withBorder padding="md" radius="md">
         <Group gap={10} style={{ position: 'relative', width: 'fit-content' }}>
-          <ActionIcon variant="subtle" color="gray" onClick={() => {}}>
+          <ActionIcon variant="subtle" color="gray" onClick={handleArrowLeftClick}>
             <IconArrowNarrowLeft color="black" />
           </ActionIcon>
-          <Text>@{userData?.customUserId}</Text>
+          <div>
+            <Text ta="left" fz="xl" fw={500}>
+              {userData?.userName}
+            </Text>
+            <Text ta="left" fz="xs" c="dimmed">
+              @{userData?.customUserId}
+            </Text>
+          </div>
         </Group>
         <Space h={15} />
         <Stack gap="0px">

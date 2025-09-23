@@ -43,11 +43,16 @@ export const useFollowList = (
     router.push(`/user/${customUserId}`);
   }
 
+  const handleArrowLeftClick = () => {
+    router.push(`/user/${customUserId}`);
+  }
+
   return {
     userData,
     followUserData,
     updateUserAndFollowUser,
     handlePageChange,
     handleUserCardClick,
+    handleArrowLeftClick
   };
 };
