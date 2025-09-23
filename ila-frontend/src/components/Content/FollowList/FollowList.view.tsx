@@ -37,16 +37,22 @@ export const FollowListView = memo(function WorkViewComponent({
       <Card.Section withBorder />
         <Space h={10} />
         <Group align="center" justify="space-between" wrap="nowrap">
-          <Group gap="sm">
+          <Group gap="sm" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
             <Avatar size={40} src={item!.profileImageUrl} radius={40} />
             <div>
-              <Text fz="sm" fw={500}>{item!.userName}</Text>
+              <Text fz="sm" fw={500}>
+                {(() => {
+                  if (!item!.userName) return ' ';
+                  const noNewline = item!.userName.replace(/\r?\n/g, '');
+                  return noNewline.length > 10 ? noNewline.slice(0, 10) + '...' : noNewline;
+                })()}
+              </Text>
               <Text fz="xs" c="dimmed">@{item!.customUserId}</Text>
               <Text fz="xs">
                 {(() => {
                   if (!item!.userProfile) return ' ';
                   const noNewline = item!.userProfile.replace(/\r?\n/g, '');
-                  return noNewline.length > 5 ? noNewline.slice(0, 5) + '...' : noNewline;
+                  return noNewline.length > 10 ? noNewline.slice(0, 10) + '...' : noNewline;
                 })()}
               </Text>
             </div>
@@ -71,13 +77,17 @@ export const FollowListView = memo(function WorkViewComponent({
   return (
     <>
       <Card withBorder padding="md" radius="md">
-        <Group gap={10} style={{ position: 'relative', width: 'fit-content' }}>
+        <Group gap={10} wrap="nowrap" style={{ position: 'relative', width: 'fit-content' }}>
           <ActionIcon variant="subtle" color="gray" onClick={handleArrowLeftClick}>
             <IconArrowNarrowLeft color="black" />
           </ActionIcon>
           <div>
             <Text ta="left" fz="xl" fw={500}>
-              {userData?.userName}
+              {(() => {
+                const name = userData?.userName ?? '';
+                const noNewline = name.replace(/\r?\n/g, '');
+                return noNewline.length > 20 ? noNewline.slice(0, 20) + '...' : (noNewline || ' ');
+              })()}
             </Text>
             <Text ta="left" fz="xs" c="dimmed">
               @{userData?.customUserId}
