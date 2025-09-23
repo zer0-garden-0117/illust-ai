@@ -5,11 +5,12 @@ import { Button, Group, Avatar, Text, Loader } from '@mantine/core';
 import { useEffect } from 'react';
 
 type LoginButtonViewProps = {
+  isLogining: boolean;
   onLogin: () => void;
 };
 
 
-export default function LoginButtonView({ onLogin }: LoginButtonViewProps) {
+export default function LoginButtonView({ isLogining, onLogin }: LoginButtonViewProps) {
   const { user } = useFirebaseAuthContext();
 
   // 認証前
@@ -31,6 +32,7 @@ export default function LoginButtonView({ onLogin }: LoginButtonViewProps) {
         }
         color="blue"
         size="md"
+        loading={isLogining}
       >
         Sign in with Twitter
       </Button>
