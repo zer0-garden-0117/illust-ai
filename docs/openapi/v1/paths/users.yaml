@@ -195,6 +195,7 @@ UsersFollowById:
       - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
       - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
       - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/FollowTypeQueryParam"
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/FollowUsersResponse"

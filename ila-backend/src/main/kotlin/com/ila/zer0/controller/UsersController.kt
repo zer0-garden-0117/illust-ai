@@ -8,6 +8,7 @@ import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UserManagerService
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotNull
 import org.slf4j.LoggerFactory
@@ -117,14 +118,15 @@ class UsersController(
     override fun getFollowUsers(
         @PathVariable("customUserId") customUserId: String,
         @RequestParam(value = "offset", required = true) offset: Int,
-        @RequestParam(value = "limit", required = true) limit: Int
+        @RequestParam(value = "limit", required = true) limit: Int,
+        @RequestParam(value = "followType", required = true) followType: String
     ): ResponseEntity<ApiFollowUsers> {
         logger.info("getFollowUsers")
-        logger.info("customUserId: $customUserId, offset: $offset, limit: $limit")
+        logger.info("customUserId: $customUserId, offset: $offset, limit: $limit, followType: $followType")
         val myUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val followUsersResult =
-            userManagerService.getFollowUsersByCustomUserId(customUserId, offset, limit, myUserId)
+            userManagerService.getFollowUsersByCustomUserId(customUserId, offset, limit, followType,myUserId)
                 ?: return ResponseEntity.notFound().build()
 
         // APIモデルに変換

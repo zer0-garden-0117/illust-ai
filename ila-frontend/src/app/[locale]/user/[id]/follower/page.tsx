@@ -1,15 +1,22 @@
 'use client';
 
-const UserPage: React.FC<{ params: { id: string } }> = (
-  { params }
+import FollowList from "@/components/Content/FollowList/FollowList";
+
+const FollowerPage: React.FC<{ params: { id: string }, searchParams: { page?: string } }> = (
+  { params, searchParams }
 ) => {
-  const userId = decodeURIComponent(params.id);
+  const customUserId = decodeURIComponent(params.id);
+  const page = Number(searchParams.page ?? 1);
 
   return (
     <>
-      <h1>Follower Page of User: {userId}</h1>
+      <FollowList
+        customUserId={customUserId}
+        page={page}
+        followType="follower"
+      />
     </>
   )
 };
 
-export default UserPage;
+export default FollowerPage;

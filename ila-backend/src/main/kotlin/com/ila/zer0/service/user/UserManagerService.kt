@@ -1,6 +1,7 @@
 package com.ila.zer0.service.user
 
 import com.ila.zer0.controller.UsersController
+import com.ila.zer0.dto.FollowWithSearchResult
 import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorksWithSearchResult
@@ -181,7 +182,7 @@ class UserManagerService(
     }
 
     @Transactional
-    fun getFollowUsersByCustomUserId(customUserId: String, offset: Int, limit: Int, callerUserId: String): UsersWithSearchResult? {
+    fun getFollowUsersByCustomUserId(customUserId: String, offset: Int, limit: Int, followType: String, callerUserId: String): UsersWithSearchResult? {
         val user = userService.findUserByCustomUserId(customUserId)
         if (user == null) {
             logger.info("user is null $customUserId")
@@ -189,9 +190,24 @@ class UserManagerService(
         }
 
         val followIds = mutableListOf<String>()
-        val followResult = followService.findByUserIdWithOffset(user.userId, offset, limit)
-        followResult.follows.forEach { follow ->
-            followIds.add(follow.followUserId)
+        var followResult: FollowWithSearchResult
+        when (followType) {
+            "follow" -> {
+                followResult = followService.findByUserIdWithOffset(user.userId, offset, limit)
+                followResult.follows.forEach { follow ->
+                    followIds.add(follow.followUserId)
+                }
+            }
+            "follower" -> {
+                followResult = followService.findByFollowUserIdWithOffset(user.userId, offset, limit)
+                followResult.follows.forEach { follow ->
+                    followIds.add(follow.userId)
+                }
+            }
+            else -> {
+                logger.info("Invalid followType: $followType")
+                return null
+            }
         }
 
         // userIdでユーザー情報を取得

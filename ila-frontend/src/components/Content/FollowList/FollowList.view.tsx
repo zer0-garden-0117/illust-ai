@@ -10,14 +10,14 @@ import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 type FollowListViewProps = {
   userData: UsersGetResult | undefined
   followUserData: FollowUsersGetResult | undefined;
-  updateUser: () => void;
+  updateUserAndFollowUser: () => void;
   handlePageChange: (page: number) => void;
 };
 
 export const FollowListView = memo(function WorkViewComponent({
   userData,
   followUserData,
-  updateUser,
+  updateUserAndFollowUser,
   handlePageChange,
 }: FollowListViewProps): JSX.Element {
 
@@ -42,7 +42,7 @@ export const FollowListView = memo(function WorkViewComponent({
         <FollowButton
           isFollowState={item!.isFollowing}
           userId={item!.userId}
-          updateUser={updateUser}
+          updateUser={updateUserAndFollowUser}
         />
       </Group>
     </Card>

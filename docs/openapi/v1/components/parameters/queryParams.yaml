@@ -15,3 +15,12 @@ LimitQueryParam:
   schema:
     type: integer
     example: 10
+  
+FollowTypeQueryParam:
+  name: followType
+  in: query
+  description: フォローの種類
+  required: true
+  schema:
+    type: string
+    enum: [follow, follower]

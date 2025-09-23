@@ -7,12 +7,13 @@ import { FollowListView } from './FollowList.view';
 type FollowListProps = {
   customUserId: string;
   page: number;
+  followType: string;
 };
 
 export const FollowList: React.FC<FollowListProps> = (
-  { customUserId, page }
+  { customUserId, page, followType }
 ): JSX.Element => {
-  const viewProps = useFollowList({ customUserId, page });
+  const viewProps = useFollowList({ customUserId, page, followType });
   return <FollowListView {...viewProps} />;
 };
 
