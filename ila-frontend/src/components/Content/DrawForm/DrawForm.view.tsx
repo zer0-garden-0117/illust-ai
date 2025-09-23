@@ -6,6 +6,7 @@ import { UseFormReturnType } from '@mantine/form';
 import { Button, Card, Group, Radio, Text, Textarea, TextInput } from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
+import { IconPencilCode } from '@tabler/icons-react';
 
 type DrawFormViewProps = {
   form: UseFormReturnType<DrawFormValues>,
@@ -19,9 +20,24 @@ export const DrawFormView = memo(function WorkViewComponent({
 
   return (
     <Card withBorder padding="md" radius="md">
-      <Text fz="md" fw={700} mb="xs">
-        イラストの生成
-      </Text>
+      <Group justify="space-between">
+        <Text fz="md" fw={700} mb="xs">
+          イラストの生成
+        </Text>
+        <Button
+          radius={"xl"}
+          variant="outline"
+          size="xs"
+          leftSection={
+            <IconPencilCode
+              size={16}
+              style={{ display: 'block' }}
+            />
+          }
+        >
+          生成履歴
+        </Button>
+      </Group>
       <form onSubmit={form.onSubmit(handoleDrawClick)}>
         {/* モデルの選択(ラジオボタン) */}
         <Radio.Group
