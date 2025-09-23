@@ -313,7 +313,6 @@ export const UserInfoView = memo(function WorkViewComponent({
             label="自己紹介"
             placeholder="自己紹介を入力"
             {...form.getInputProps('userProfile')}
-            mb="md"
             autoSave="true"
             rows={5}
             minRows={5}
@@ -337,7 +336,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             }}
           />
           
-          <Group justify="flex-end" mt="xl">
+          <Group justify="flex-end" mt="md">
             <Button
               variant="outline"
               radius="xl"
