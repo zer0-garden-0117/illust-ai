@@ -6,6 +6,7 @@ import { IconArrowNarrowLeft } from '@tabler/icons-react';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import { FollowUsersGetResult } from '@/apis/openapi/users/useFollowUsersGet';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type FollowListViewProps = {
   userData: UsersGetResult | undefined
@@ -24,6 +25,7 @@ export const FollowListView = memo(function WorkViewComponent({
   handleUserCardClick,
   handleArrowLeftClick
 }: FollowListViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
 
   const items = followUserData?.follows?.map((item) => (
     <Card
@@ -53,11 +55,14 @@ export const FollowListView = memo(function WorkViewComponent({
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <FollowButton
-              isFollowState={item!.isFollowing}
-              userId={item!.userId}
-              updateUser={updateUserAndFollowUser}
-            />
+            {/* user.userIdとitem.userIdが一致する場合にフォローボタンを非表示 */}
+            {user?.userId === item?.userId ? null : (
+              <FollowButton
+                isFollowState={item!.isFollowing}
+                userId={item!.userId}
+                updateUser={updateUserAndFollowUser}
+              />
+            )}
         </div>
       </Group>
     </Card>
