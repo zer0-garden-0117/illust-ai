@@ -19,7 +19,7 @@ type UserInfoViewProps = {
   isUserIdAvailable: boolean,
   isLoading: boolean,
   opened: boolean,
-  handleSave: (values: any) => Promise<void>,
+  handleSave: (values: UserInfoFormValues) => Promise<void>,
   updateUser: () => void,
   handleCoverImageDrop: (files: File[]) => void,
   handleProfileImageDrop: (files: File[]) => void,

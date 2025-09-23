@@ -100,7 +100,7 @@ export const useUserInfo = (
     }
   }
 
-  const handleSave = async (values: any) => {
+  const handleSave = async (values: UserInfoFormValues) => {
     if (isSaving) return;
     setIsSaving(true);
     try {
