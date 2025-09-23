@@ -4,6 +4,8 @@ import React, { memo } from 'react';
 import { DrawFormValues } from './DrawForm.hook';
 import { UseFormReturnType } from '@mantine/form';
 import { Button, Card, Group, Radio, Text, Textarea, TextInput } from '@mantine/core';
+import { IconPencil } from '@tabler/icons-react';
+import { IconArrowNarrowRight } from '@tabler/icons-react';
 
 type DrawFormViewProps = {
   form: UseFormReturnType<DrawFormValues>,
@@ -29,8 +31,8 @@ export const DrawFormView = memo(function WorkViewComponent({
           {...form.getInputProps('model')}
         >
           <Group mt="xs">
-            <Radio value="illust-ai-v1" label="Illust AI V1" />
-            <Radio value="illust-ai-v2" label="Illust AI V2" disabled/>
+            <Radio value="illust-ai-v1" label="Illust-ai-v1" />
+            <Radio value="illust-ai-v2" label="Illust-ai-v2(近日実装)" disabled/>
           </Group>
         </Radio.Group>
         {/* プロンプト */}
@@ -55,12 +57,30 @@ export const DrawFormView = memo(function WorkViewComponent({
           minRows={5}
           maxRows={5}
         />
-        <Button
-          type="submit"
-          radius="xl"
-        >
-          イラスト生成
-        </Button>
+        <Group justify="flex-end" mt="md">
+          <Button
+            type="submit"
+            radius="xl"
+            rightSection={
+              <>
+                <IconPencil
+                  color="white"
+                  size={20}
+                  style={{ display: 'block' }}
+                />
+                5
+                <IconArrowNarrowRight
+                  color="white"
+                  size={20}
+                  style={{ display: 'block' }}
+                />
+                4
+              </>
+            }
+          >
+            イラスト生成
+          </Button>
+        </Group>
       </form>
     </Card>
   );
