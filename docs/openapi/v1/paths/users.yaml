@@ -45,6 +45,10 @@ UsersMe:
                 type: string
                 description: カスタムのuserId
                 example: xxxxx
+              userName:
+                type: string
+                description: ユーザー名
+                example: xxxxx
               userProfile:
                 type: string
                 description: ユーザーのプロフィール
@@ -53,6 +57,7 @@ UsersMe:
               - coverImage
               - profileImage
               - customUserId
+              - userName
               - userProfile
             encoding:
               coverImage:

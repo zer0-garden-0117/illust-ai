@@ -103,6 +103,7 @@ class UserManagerService(
         coverImage: MultipartFile,
         profileImage: MultipartFile,
         customUserId: String,
+        userName: String,
         userProfile: String
     ): User {
         // 引数をすべてログ出力
@@ -143,6 +144,8 @@ class UserManagerService(
 
         // customUserIdの更新
         user.customUserId = customUserId
+        // userNameの更新
+        user.userName = userName
         // userProfileの更新
         user.userProfile = userProfile
         return userService.updateUser(user)

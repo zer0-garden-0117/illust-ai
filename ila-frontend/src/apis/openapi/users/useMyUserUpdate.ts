@@ -45,6 +45,10 @@ export const useMyUserUpdate = (
             if (body.customUserId) {
               fd.append('customUserId', body.customUserId);
             }
+            // userNameをFormDataに追加
+            if (body.userName) {
+              fd.append('userName', body.userName);
+            }
             // userProfileをFormDataに追加
             if (body.userProfile) {
               fd.append('userProfile', body.userProfile);

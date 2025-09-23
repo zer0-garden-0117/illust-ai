@@ -46,6 +46,7 @@ class UsersController(
         @RequestPart("coverImage", required = true) coverImage: MultipartFile,
         @RequestPart("profileImage", required = true) profileImage: MultipartFile,
         @RequestParam(value = "customUserId", required = true) customUserId: String,
+        @RequestParam(value = "userName", required = true) userName: String,
         @RequestParam(value = "userProfile", required = true) userProfile: String
     ): ResponseEntity<ApiUser> {
         logger.info("patchMyUser")
@@ -53,7 +54,7 @@ class UsersController(
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val user =
             userManagerService.getUserById(userId) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
-        val updatedUser = userManagerService.updateUser(user, coverImage, profileImage, customUserId, userProfile)
+        val updatedUser = userManagerService.updateUser(user, coverImage, profileImage, customUserId, userName, userProfile)
         val updatedApiUser = userMapper.toApiUser(updatedUser)
         return ResponseEntity.ok(updatedApiUser)
     }

@@ -45,6 +45,7 @@ export const UserInfoView = memo(function WorkViewComponent({
       customUserId: userData?.customUserId || '',
       profileImageUrl: userData?.profileImageUrl || '',
       coverImageUrl: userData?.coverImageUrl || '',
+      userName: userData?.userName || '',
       userProfile: userData?.userProfile || '',
     },
   });
@@ -111,6 +112,7 @@ export const UserInfoView = memo(function WorkViewComponent({
           coverImage: coverImageFile,
           profileImage: profileImageFile,
           customUserId: values.customUserId,
+          userName: values.userName,
           userProfile: values.userProfile
         }
       });
@@ -196,6 +198,7 @@ export const UserInfoView = memo(function WorkViewComponent({
                   customUserId: userData?.customUserId || '',
                   profileImageUrl: userData?.profileImageUrl || '',
                   coverImageUrl: userData?.coverImageUrl || '',
+                  userName: userData?.userName || '',
                   userProfile: userData?.userProfile || '',
                 });
                 setCoverImageFile(new File([], ""));
@@ -393,6 +396,14 @@ export const UserInfoView = memo(function WorkViewComponent({
             </Text>
           )}
           
+          <TextInput
+            label="ユーザー名"
+            placeholder="ユーザー名を入力"
+            {...form.getInputProps('userName')}
+            mb="md"
+            error={form.errors.userName}
+          />
+
           <Textarea
             label="自己紹介"
             placeholder="自己紹介を入力"
@@ -432,7 +443,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             <Button
               type="submit"
               loading={isSaving}
-              disabled={isLoading || !isUserIdAvailable || isTypingUserId}
+              disabled={isLoading || !isUserIdAvailable || isTypingUserId || !form.values.userName.trim()}
             >
               保存
             </Button>
