@@ -404,12 +404,20 @@ export const UserInfoView = memo(function WorkViewComponent({
             maxRows={5}
             disabled={isLoading || !isUserIdAvailable}
             onChange={(e) => {
-              const value = e.currentTarget.value;
-              const lines = value.split("\n");
+              let value = e.currentTarget.value;
+              let lines = value.split("\n");
+
+              // 最大行数を制限
               if (lines.length > 5) {
-                e.currentTarget.value = lines.slice(0, 5).join("\n");
+                lines = lines.slice(0, 5);
               }
-              form.setFieldValue('userProfile', e.currentTarget.value);
+
+              // 各行の文字数制限
+              lines = lines.map(line => line.slice(0, 15));
+
+              value = lines.join("\n");
+              e.currentTarget.value = value;
+              form.setFieldValue('userProfile', value);
             }}
           />
           
