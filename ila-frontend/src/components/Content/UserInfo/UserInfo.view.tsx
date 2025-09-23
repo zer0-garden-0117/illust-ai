@@ -85,7 +85,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             }
           </div>
         </Group>
-        <Group justify="space-between">
+        <Group justify="space-between" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
           <div>
           <Text ta="left" fz="xl" fw={500}>
             {userData?.userName}
@@ -106,6 +106,7 @@ export const UserInfoView = memo(function WorkViewComponent({
                   style={{ display: 'block' }}
                 />
               }
+              style={{ flexShrink: 0, minWidth: 120 }}
               onClick={handleEditButton}
             >
               <Text c="var(--mantine-color-gray-8)">編集</Text>
