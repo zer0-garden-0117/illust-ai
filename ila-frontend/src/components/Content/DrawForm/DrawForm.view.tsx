@@ -10,12 +10,14 @@ import { IconPencilCode } from '@tabler/icons-react';
 
 type DrawFormViewProps = {
   form: UseFormReturnType<DrawFormValues>,
-  handoleDrawClick: (values: DrawFormValues) => Promise<void>,
+  handleDrawClick: (values: DrawFormValues) => Promise<void>,
+  handleHistoryClick: () => void
 };
 
 export const DrawFormView = memo(function WorkViewComponent({
   form,
-  handoleDrawClick
+  handleDrawClick,
+  handleHistoryClick
 }: DrawFormViewProps): JSX.Element {
 
   return (
@@ -34,11 +36,12 @@ export const DrawFormView = memo(function WorkViewComponent({
               style={{ display: 'block' }}
             />
           }
+          onClick={handleHistoryClick}
         >
           生成履歴
         </Button>
       </Group>
-      <form onSubmit={form.onSubmit(handoleDrawClick)}>
+      <form onSubmit={form.onSubmit(handleDrawClick)}>
         {/* モデルの選択(ラジオボタン) */}
         <Radio.Group
           name="モデル"

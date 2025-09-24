@@ -1,4 +1,5 @@
 import { useForm } from "@mantine/form";
+import { useRouter } from "next/navigation";
 
 export type DrawFormValues = {
   model: string;
@@ -7,6 +8,8 @@ export type DrawFormValues = {
 };
 
 export const useDrawForm = () => {
+  const router = useRouter();
+
   const form = useForm<DrawFormValues>({
     initialValues: {
       model: 'illust-ai-v1',
@@ -15,12 +18,17 @@ export const useDrawForm = () => {
     },
   });
 
-  const handoleDrawClick = async (values: DrawFormValues) => {
+  const handleDrawClick = async (values: DrawFormValues) => {
     console.log(values);
+  }
+
+  const handleHistoryClick = () => {
+    router.push('/draw/history');
   }
 
   return {
     form,
-    handoleDrawClick
+    handleDrawClick,
+    handleHistoryClick
   };
 };
