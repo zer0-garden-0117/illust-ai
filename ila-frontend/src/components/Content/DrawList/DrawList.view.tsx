@@ -1,12 +1,15 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Card, Group, Text } from '@mantine/core';
+import { Card, Group, SimpleGrid, Text } from '@mantine/core';
+import { ImageCardsForHistory, ImageDataOfImageCardsForHistory } from '@/components/Common/ImageCardsForHistory/ImageCardsForHistory';
 
 type DrawListViewProps = {
+  imageData: ImageDataOfImageCardsForHistory[];
 };
 
 export const DrawListView = memo(function WorkViewComponent({
+  imageData,
 }: DrawListViewProps): JSX.Element {
 
   return (
@@ -16,6 +19,11 @@ export const DrawListView = memo(function WorkViewComponent({
           生成履歴
         </Text>
       </Group>
+      <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
+        {imageData.map((img, idx) => (
+          <ImageCardsForHistory key={img.workId} data={img} index={idx} />
+        ))}
+      </SimpleGrid>
     </Card>
   );
 });
