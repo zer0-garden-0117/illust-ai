@@ -1,6 +1,6 @@
-import { ImageDataOfImageCardsForHistory } from "@/components/Common/ImageCardsForHistory/ImageCardsForHistory";
+import { ImageDataOfImageCardsForHistory } from "@/components/Content/DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
 
-export const useDrawList = () => {
+export const useDrawHistory = () => {
   const imageData: ImageDataOfImageCardsForHistory[] = [
     {
       workId: '1',

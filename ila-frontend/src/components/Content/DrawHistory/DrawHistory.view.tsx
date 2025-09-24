@@ -2,15 +2,15 @@
 
 import React, { memo } from 'react';
 import { Card, Group, SimpleGrid, Text } from '@mantine/core';
-import { ImageCardsForHistory, ImageDataOfImageCardsForHistory } from '@/components/Common/ImageCardsForHistory/ImageCardsForHistory';
+import { ImageCardsForHistory, ImageDataOfImageCardsForHistory } from '@/components/Content/DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
-type DrawListViewProps = {
+type DrawHistoryViewProps = {
   imageData: ImageDataOfImageCardsForHistory[];
 };
 
-export const DrawListView = memo(function WorkViewComponent({
+export const DrawHistoryView = memo(function WorkViewComponent({
   imageData,
-}: DrawListViewProps): JSX.Element {
+}: DrawHistoryViewProps): JSX.Element {
 
   return (
     <Card withBorder padding="md" radius="md">
@@ -27,4 +27,4 @@ export const DrawListView = memo(function WorkViewComponent({
     </Card>
   );
 });
-DrawListView.displayName = 'DrawListView';
+DrawHistoryView.displayName = 'DrawHistoryView';

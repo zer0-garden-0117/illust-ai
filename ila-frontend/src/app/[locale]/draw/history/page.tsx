@@ -1,12 +1,12 @@
 'use client';
 
-import DrawList from "@/components/Content/DrawList/DrawList";
+import { DrawHistory } from "@/components/Content/DrawHistory/DrawHistory";
 
 const DrawPage: React.FC = () => {
 
   return (
     <>
-      <DrawList />
+      <DrawHistory />
     </>
   )
 };
