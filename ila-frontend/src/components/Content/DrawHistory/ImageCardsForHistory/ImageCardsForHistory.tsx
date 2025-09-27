@@ -1,5 +1,6 @@
 import { ActionIcon, AspectRatio, Card, Group, Image, Text } from '@mantine/core';
 import { useIntersection } from '@mantine/hooks';
+import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 export type ImageDataOfImageCardsForHistory = {
@@ -15,6 +16,7 @@ interface ImageCardsForHistoryProps {
 }
 
 export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps) => {
+  const router = useRouter();
   const { ref, entry } = useIntersection({
     root: null,
     threshold: 0.2,
@@ -37,7 +39,9 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
         opacity: hasAppeared ? 1 : 0,
         transform: hasAppeared ? 'translateY(0)' : 'translateY(16px)',
         transition: `opacity 0.6s ease ${index * 0.05}s, transform 0.6s ease ${index * 0.05}s`,
+        cursor: 'pointer'
       }}
+      onClick={() => {router.push(`/draw/history/${data.workId}`)}}
     >
       {/* 画像 */}
       <AspectRatio ratio={1 / Math.sqrt(2)}>
