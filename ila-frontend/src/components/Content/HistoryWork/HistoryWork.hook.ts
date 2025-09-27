@@ -1,8 +1,4 @@
-import { useFollowUsersGet, FollowUsersGetQuery} from "@/apis/openapi/users/useFollowUsersGet";
-import { useUsersGet } from "@/apis/openapi/users/useUsersGet";
-import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
-import { useRouter } from "next/navigation";
-
+import { ImageDataOfImageCardsForHistory } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
 
 type UseHistoryWorkProps = {
   workId: string;
@@ -12,7 +8,15 @@ export const useHistoryWork = (
   { workId }: UseHistoryWorkProps
 ) => {
 
+  const imageData: ImageDataOfImageCardsForHistory = {
+      workId: '1',
+      mainTitle: 'Sample Image 1',
+      titleImage: '/testimage/test.png',
+      thumbnailImage: '/testimage/test.png',
+  };
+
   return {
-    workId
+    workId,
+    imageData,
   };
 };

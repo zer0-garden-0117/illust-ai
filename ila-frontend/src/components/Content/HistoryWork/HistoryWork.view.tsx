@@ -1,21 +1,21 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Text, Card, Grid, Image, Button, Pill, Textarea, Radio } from '@mantine/core';
-import { DateTimePicker, TimeInput } from '@mantine/dates';
+import { Group, Card, Grid, Image, Textarea, Radio, AspectRatio, Center } from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
-import { RiHashtag, RiUserLine, RiFileLine, RiStackLine } from "react-icons/ri";
-import { GoDownload } from "react-icons/go";
-import { CustomPill } from '@/components/Common/CustomPill/CustomPill';
-import { IconAi, IconCube, IconKarate, IconPencil, IconPencilCode, IconRobot } from '@tabler/icons-react';
+import { IconCube, IconPencilCode } from '@tabler/icons-react';
 import { IconClock } from '@tabler/icons-react';
+import { ImageDataOfImageCardsForHistory } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
 type HistoryWorkViewProps = {
   workId: string;
+  imageData: ImageDataOfImageCardsForHistory;
 };
 
 export const HistoryWorkView = memo(function WorkViewComponent({
-  workId
+  workId,
+  imageData
 }: HistoryWorkViewProps): JSX.Element {
   const { user } = useFirebaseAuthContext();
   return (
@@ -24,10 +24,15 @@ export const HistoryWorkView = memo(function WorkViewComponent({
       <Card>
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
           {/* 画像表示 */}
-          <Grid.Col span={{ base: 12, sm: 6, lg: 6 }} style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Image/>
-            </div>
+          <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
+            <Center>
+              <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
+                <Image
+                  src={imageData.titleImage}
+                  alt={imageData.titleImage}
+                />
+              </AspectRatio>
+            </Center>
           </Grid.Col>
 
           {/* 画像のメタデータ */}

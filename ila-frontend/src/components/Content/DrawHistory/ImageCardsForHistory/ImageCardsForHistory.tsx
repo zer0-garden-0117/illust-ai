@@ -8,6 +8,11 @@ export type ImageDataOfImageCardsForHistory = {
   mainTitle: string;
   titleImage: string;
   thumbnailImage: string;
+  prompt?: string;
+  negativePrompt?: string;
+  modelName?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 interface ImageCardsForHistoryProps {
