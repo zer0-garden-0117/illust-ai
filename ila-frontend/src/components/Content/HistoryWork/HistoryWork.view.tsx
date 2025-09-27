@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, Radio, AspectRatio, Center } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, Radio, AspectRatio, Center, Button, Text, Pill } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconCube, IconPencilCode } from '@tabler/icons-react';
@@ -11,17 +11,31 @@ import { ImageDataOfImageCardsForHistory } from '../DrawHistory/ImageCardsForHis
 type HistoryWorkViewProps = {
   workId: string;
   imageData: ImageDataOfImageCardsForHistory;
+  handlePostClick: (workId: string) => void;
 };
 
 export const HistoryWorkView = memo(function WorkViewComponent({
   workId,
-  imageData
+  imageData,
+  handlePostClick,
 }: HistoryWorkViewProps): JSX.Element {
   const { user } = useFirebaseAuthContext();
   return (
     <>
   
       <Card>
+        {/* 画像の投稿ボタン */}
+        <Center>
+          <Button
+            radius={"xl"}
+            w="fit-content"
+            size="compact-md"
+            onClick={() => handlePostClick(workId)}
+          >
+            {"画像を投稿する"}
+          </Button>
+        </Center>
+
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
           {/* 画像表示 */}
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
@@ -37,6 +51,15 @@ export const HistoryWorkView = memo(function WorkViewComponent({
 
           {/* 画像のメタデータ */}
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
+
+            {/* 画像の状態 */}
+            <Group gap={"5px"} mb="5px">
+              <IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>
+              <Text fw={500} fz={"sm"}>
+                状態
+              </Text>
+            </Group>
+            <Pill mb="md">未公開</Pill>
 
             {/* モデルの選択 */}
             <Radio.Group
@@ -98,6 +121,17 @@ export const HistoryWorkView = memo(function WorkViewComponent({
 
           </Grid.Col>
         </Grid>
+
+        {/* 画像の投稿ボタン */}
+        <Center>
+          <Button
+            radius={"xl"}
+            w="fit-content"
+            size="compact-md"
+          >
+            {"画像を投稿する"}
+          </Button>
+        </Center>
       </Card>
     </>
   );

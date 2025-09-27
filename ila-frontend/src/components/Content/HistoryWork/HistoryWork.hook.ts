@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { ImageDataOfImageCardsForHistory } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
 
 type UseHistoryWorkProps = {
@@ -7,6 +8,7 @@ type UseHistoryWorkProps = {
 export const useHistoryWork = (
   { workId }: UseHistoryWorkProps
 ) => {
+  const router = useRouter();
 
   const imageData: ImageDataOfImageCardsForHistory = {
       workId: '1',
@@ -15,8 +17,13 @@ export const useHistoryWork = (
       thumbnailImage: '/testimage/test.png',
   };
 
+  const handlePostClick = (workId: string) => {
+    router.push(`/draw/history/form/${workId}`);
+  }
+
   return {
     workId,
     imageData,
+    handlePostClick
   };
 };
