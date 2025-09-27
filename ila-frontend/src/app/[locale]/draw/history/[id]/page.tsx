@@ -1,5 +1,6 @@
 'use client';
 
+import HistoryWork from "@/components/Content/HistoryWork/HistoryWork";
 import UserInfo from "@/components/Content/UserInfo/UserInfo";
 
 const UserPage: React.FC<{ params: { id: string } }> = (
@@ -9,7 +10,7 @@ const UserPage: React.FC<{ params: { id: string } }> = (
 
   return (
     <>
-      Work ID: {workId}
+      <HistoryWork workId={workId} />
     </>
   )
 };

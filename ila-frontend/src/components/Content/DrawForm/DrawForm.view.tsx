@@ -49,7 +49,7 @@ export const DrawFormView = memo(function WorkViewComponent({
           mb="xs"
           {...form.getInputProps('model')}
         >
-          <Group mt="xs">
+          <Group>
             <Radio value="illust-ai-v1" label="Illust-ai-v1" />
             <Radio value="illust-ai-v2" label="Illust-ai-v2(近日実装)" disabled/>
           </Group>
