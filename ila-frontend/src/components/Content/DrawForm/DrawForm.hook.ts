@@ -19,7 +19,8 @@ export const useDrawForm = () => {
   });
 
   const handleDrawClick = async (values: DrawFormValues) => {
-    console.log(values);
+    // 画像生成のAPIを呼び出す
+    router.push(`/draw/test/processing`);
   }
 
   const handleHistoryClick = () => {

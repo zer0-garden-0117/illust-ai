@@ -17,7 +17,7 @@ type DrawFormViewProps = {
 export const DrawFormView = memo(function WorkViewComponent({
   form,
   handleDrawClick,
-  handleHistoryClick
+  handleHistoryClick,
 }: DrawFormViewProps): JSX.Element {
 
   return (
