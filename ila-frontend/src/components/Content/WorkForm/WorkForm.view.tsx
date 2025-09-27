@@ -57,7 +57,6 @@ export const WorkFormView = memo(function WorkViewComponent({
             <Button
               radius={"xl"}
               w="fit-content"
-              size="compact-md"
               onClick={() => handleSubmitClick(workId)}
             >
               {"投稿"}

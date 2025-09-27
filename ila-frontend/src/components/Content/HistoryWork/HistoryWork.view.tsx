@@ -29,7 +29,6 @@ export const HistoryWorkView = memo(function WorkViewComponent({
           <Button
             radius={"xl"}
             w="fit-content"
-            size="compact-md"
             onClick={() => handlePostClick(workId)}
           >
             {"画像を投稿する"}
@@ -127,7 +126,6 @@ export const HistoryWorkView = memo(function WorkViewComponent({
           <Button
             radius={"xl"}
             w="fit-content"
-            size="compact-md"
             onClick={() => handlePostClick(workId)}
           >
             {"画像を投稿する"}
