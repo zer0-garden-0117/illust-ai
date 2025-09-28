@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import { Group, Card, Grid, Image, Textarea, Radio, AspectRatio, Center, Button, Text, Pill } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
-import { IconCube, IconPencilCode } from '@tabler/icons-react';
+import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-react';
 import { IconClock } from '@tabler/icons-react';
 import { ImageDataOfImageCardsForHistory } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
@@ -53,12 +53,12 @@ export const HistoryWorkView = memo(function WorkViewComponent({
 
             {/* 画像の状態 */}
             <Group gap={"5px"} mb="5px">
-              <IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>
+              <IconPhoto size={20} color='var(--mantine-color-blue-6)'/>
               <Text fw={500} fz={"sm"}>
                 状態
               </Text>
             </Group>
-            <Pill mb="md">未公開</Pill>
+            <Pill mb="md"><Group gap={"5px"}><IconLock size="15px"/>未公開</Group></Pill>
 
             {/* モデルの選択 */}
             <Radio.Group
