@@ -22,8 +22,7 @@ export const HistoryWorkView = memo(function WorkViewComponent({
   const { user } = useFirebaseAuthContext();
   return (
     <>
-  
-      <Card>
+      <Card withBorder>
         {/* 画像の投稿ボタン */}
         <Center>
           <Button
