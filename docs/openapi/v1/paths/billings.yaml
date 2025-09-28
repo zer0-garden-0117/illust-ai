@@ -1,0 +1,66 @@
+BillingsCreateCheckoutSession:
+    post:
+      tags:
+        - billings
+      summary: "Create Checkout Session"
+      description: "Create a Stripe Checkout Session for purchasing a subscription."
+      operationId: createCheckoutSession
+      security:
+        - FirebaseAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../components/schemas/billings.yaml#/ApiBilling"
+      responses:
+        "200":
+          $ref: "../components/responses/billings.yaml#/BillingsResponse"
+        "400":
+          $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+        "401":
+          $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+BillingsCreatePortalSession:
+    post:
+      tags:
+        - billings
+      summary: "Create Portal Session"
+      description: "Create a Stripe Customer Portal Session for managing subscriptions."
+      operationId: createPortalSession
+      security:
+        - FirebaseAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../components/schemas/billings.yaml#/ApiBilling"
+      responses:
+        "200":
+          $ref: "../components/responses/billings.yaml#/BillingsResponse"
+        "400":
+          $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+        "401":
+          $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+BillingsWebhook:
+    post:
+      tags:
+        - billings
+      summary: "Stripe Webhook"
+      description: "Handle Stripe webhook events."
+      operationId: stripeWebhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "Webhook received"
+        "400":
+          $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+        "401":
+          $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"

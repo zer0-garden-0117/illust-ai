@@ -72,6 +72,16 @@ paths:
   /works/tags/{tagId}:
     $ref: "./paths/works.yaml#/WorksTagsById"
 
+  # billings
+  /billings/create-checkout-session:
+    $ref: "./paths/billings.yaml#/BillingsCreateCheckoutSession"
+
+  /billings/create-portal-session:
+    $ref: "./paths/billings.yaml#/BillingsCreatePortalSession"
+
+  /billings/webhook:
+    $ref: "./paths/billings.yaml#/BillingsWebhook"
+
 components:
   securitySchemes:
     FirebaseAuth:
