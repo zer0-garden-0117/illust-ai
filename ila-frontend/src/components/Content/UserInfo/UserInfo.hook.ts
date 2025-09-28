@@ -157,6 +157,10 @@ export const useUserInfo = (
     router.push(`/user/${userData?.customUserId}/follower?page=1`);
   };
 
+  const handlePlanChangeClick = () => {
+    router.push('/plan');
+  }
+
   return {
     form,
     userData,
@@ -166,14 +170,15 @@ export const useUserInfo = (
     isUserIdAvailable,
     isLoading,
     opened,
-    handleSave,
     updateUser,
+    validateCustomUserId,
+    setOpened,
+    handleSave,
     handleCoverImageDrop,
     handleProfileImageDrop,
-    validateCustomUserId,
     handleEditButton,
     handleFollowListClick,
     handleFollowerListClick,
-    setOpened,
+    handlePlanChangeClick,
   };
 };

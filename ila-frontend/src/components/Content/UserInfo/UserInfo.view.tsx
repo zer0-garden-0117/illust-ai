@@ -2,11 +2,11 @@
 
 import React, { useState, memo } from 'react';
 import { UserInfoFormValues } from './UserInfo.hook';
-import { IconSettings, IconPencil } from '@tabler/icons-react';
+import { IconSettings, IconPencil, IconPhoto, IconLock } from '@tabler/icons-react';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
-import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor } from '@mantine/core';
+import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
@@ -19,15 +19,16 @@ type UserInfoViewProps = {
   isUserIdAvailable: boolean,
   isLoading: boolean,
   opened: boolean,
-  handleSave: (values: UserInfoFormValues) => Promise<void>,
   updateUser: () => void,
+  validateCustomUserId: (value: string) => Promise<string | null>,
+  setOpened: React.Dispatch<React.SetStateAction<boolean>>,
+  handleSave: (values: UserInfoFormValues) => Promise<void>,
   handleCoverImageDrop: (files: File[]) => void,
   handleProfileImageDrop: (files: File[]) => void,
-  validateCustomUserId: (value: string) => Promise<string | null>,
   handleEditButton: () => void,
   handleFollowListClick: () => void,
   handleFollowerListClick: () => void,
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>,
+  handlePlanChangeClick: () => void,
 };
 
 export const UserInfoView = memo(function WorkViewComponent({
@@ -39,15 +40,16 @@ export const UserInfoView = memo(function WorkViewComponent({
   isUserIdAvailable,
   isLoading,
   opened,
-  handleSave,
   updateUser,
+  validateCustomUserId,
+  setOpened,
+  handleSave,
   handleCoverImageDrop,
   handleProfileImageDrop,
-  validateCustomUserId,
   handleEditButton,
   handleFollowListClick,
   handleFollowerListClick,
-  setOpened
+  handlePlanChangeClick,
 }: UserInfoViewProps): JSX.Element {
   const [isTypingUserId, setIsTypingUserId] = useState(false);
 
@@ -335,7 +337,32 @@ export const UserInfoView = memo(function WorkViewComponent({
               e.currentTarget.value = value;
               form.setFieldValue('userProfile', value);
             }}
+            mb="md"
           />
+
+          {/* プランの状態 */}
+          <Group gap={"10px"} mb="5px">
+            <Text fw={500} fz={"sm"}>
+              プラン
+            </Text>
+            <Anchor>
+              <Button
+                onClick={handlePlanChangeClick}
+                size='compact-xs'
+                fw={500}
+                fz={"xs"}
+                mb={3}
+              >
+                プランの変更
+              </Button>
+            </Anchor>
+          </Group>
+          <Pill
+            mb="md"
+            style={{ display: 'inline-flex', width: 'fit-content' }}
+          >
+            無料
+          </Pill>
           
           <Group justify="flex-end" mt="md">
             <Button
