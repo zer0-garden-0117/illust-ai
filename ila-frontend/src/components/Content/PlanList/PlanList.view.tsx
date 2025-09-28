@@ -1,9 +1,9 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Button, Card, Group, List, SimpleGrid, Space, Text } from '@mantine/core';
+import { Button, Card, Center, Group, List, SimpleGrid, Space, Text } from '@mantine/core';
 import { PlanData } from './PlanList.hook';
-import { IconAlarm, IconCoinYen, IconMoneybag, IconPencilCode, IconPhoto } from '@tabler/icons-react';
+import { IconAlarm, IconCoinYen, IconMoneybag, IconPencilCode, IconPhoto, IconSparkles } from '@tabler/icons-react';
 
 type PlanListViewProps = {
   planData: PlanData[];
@@ -29,7 +29,15 @@ export const PlanListView = memo(function WorkViewComponent({
           <Card key={plan.id} shadow="sm" padding="lg" radius="md" withBorder>
 
             {/* プラン名 */}
-            <Text fz="lg" fw={700} mb="sm">{plan.name}</Text>
+            <Group mb={"sm"} gap={"3px"}>
+              <Text fz="lg" fw={700}>{plan.name}</Text>
+              {plan.isRecommended && (
+                <Group gap={"1px"}>
+                <Text fz="10px" c="orange" fw={700}>オススメ</Text>
+                <IconSparkles size={"14px"} color='orange'/>
+                </Group>
+              )}
+            </Group>
 
             {/* 月額 */}
             <Group gap={"5px"} mb="5px">
@@ -59,13 +67,16 @@ export const PlanListView = memo(function WorkViewComponent({
             <Text fz="sm" mb="sm">{plan.illustHistoryDays}日保存</Text>
 
             {/* 購入ボタン */}
+            <Center>
             <Button 
               color="blue" 
               radius="md"
               onClick={handleSubscriptionClick}
+              style={{ display: 'inline-flex', width: 'fit-content' }}
             >
-              このプランに変更
+              変更
             </Button>
+            </Center>
 
           </Card>
         ))}

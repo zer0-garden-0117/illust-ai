@@ -6,6 +6,7 @@ export type PlanData = {
   price: number;
   illustNum: number;
   illustHistoryDays: number;
+  isRecommended?: boolean;
   features: string[];
 };
 
@@ -19,7 +20,7 @@ export const usePlanList = () => {
   const planData: PlanData[] = [
     {
       id: 'Free',
-      name: 'Free Plan',
+      name: 'Free',
       price: 0,
       illustNum: 3,
       illustHistoryDays: 3,
@@ -28,7 +29,7 @@ export const usePlanList = () => {
     },
     {
       id: 'Light',
-      name: 'Light Plan',
+      name: 'Light',
       price: 980,
       illustNum: 10,
       illustHistoryDays: 5,
@@ -37,16 +38,17 @@ export const usePlanList = () => {
     },
     {
       id: 'Basic',
-      name: 'Basic Plan',
+      name: 'Basic',
       price: 1980,
       illustNum: 20,
       illustHistoryDays: 7,
+      isRecommended: true,
       features: [
       ]
     },
     {
       id: 'Pro',
-      name: 'Pro Plan',
+      name: 'Pro',
       price: 2980,
       illustNum: 30,
       illustHistoryDays: 14,
@@ -55,7 +57,7 @@ export const usePlanList = () => {
     },
     {
       id: 'Unlimited',
-      name: 'Unlimited Plan',
+      name: 'Unlimited',
       price: 4980,
       illustNum: 50,
       illustHistoryDays: 60,
