@@ -1,13 +1,13 @@
 'use client';
-import { Space } from '@mantine/core';
+import PlanList from '@/components/Content/PlanList/PlanList';
 import { useTranslations } from "next-intl";
-import { BiSolidInvader } from "react-icons/bi";
 
 const PlanPage: React.FC = () => {
   const t = useTranslations("page");
 
   return (
     <>
+      <PlanList />
     </>
   );
 };

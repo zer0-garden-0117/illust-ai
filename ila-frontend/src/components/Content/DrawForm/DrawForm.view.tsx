@@ -58,7 +58,7 @@ export const DrawFormView = memo(function WorkViewComponent({
           size='compact-xs'
           onClick={handlePlanChangeClick}
         >
-          プランを変更
+          プランの変更
         </Button>
       </Notification>
       <Space h="md" />
