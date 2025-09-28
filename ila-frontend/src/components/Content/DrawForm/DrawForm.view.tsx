@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import { DrawFormValues } from './DrawForm.hook';
 import { UseFormReturnType } from '@mantine/form';
 import { Button, Card, Group, Radio, Text, Textarea, TextInput } from '@mantine/core';
-import { IconPencil } from '@tabler/icons-react';
+import { IconCube, IconPencil } from '@tabler/icons-react';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import { IconPencilCode } from '@tabler/icons-react';
 
@@ -45,8 +45,8 @@ export const DrawFormView = memo(function WorkViewComponent({
         {/* モデルの選択(ラジオボタン) */}
         <Radio.Group
           name="モデル"
-          label="モデルの選択"
-          mb="xs"
+          label={<Group gap={"5px"}><IconCube size={20} color='var(--mantine-color-blue-6)'/>モデル</Group>}
+          mb="md"
           {...form.getInputProps('model')}
         >
           <Group>
@@ -56,10 +56,10 @@ export const DrawFormView = memo(function WorkViewComponent({
         </Radio.Group>
         {/* プロンプト */}
         <Textarea
-          label="プロンプト"
+          label={<Group gap={"5px"}><IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>プロンプト</Group>}
           placeholder="1girl, blonde hair, smile, ..."
           {...form.getInputProps('prompt')}
-          mb="xs"
+          mb="mdc"
           error={form.errors.prompt}
           rows={5}
           minRows={5}
@@ -67,7 +67,7 @@ export const DrawFormView = memo(function WorkViewComponent({
         />
         {/* ネガティブプロンプト */}
         <Textarea
-          label="ネガティブプロンプト(任意)"
+          label={<Group gap={"5px"}><IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>ネガティブプロンプト(任意)</Group>}
           placeholder="lowres, bad anatomy, ..."
           {...form.getInputProps('negativePrompt')}
           mb="md"
