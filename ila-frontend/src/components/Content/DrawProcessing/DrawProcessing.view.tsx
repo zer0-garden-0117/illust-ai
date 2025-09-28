@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Pill, Text, Loader, Notification, Space } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Pill, Text, Loader, Notification, Space, Skeleton } from '@mantine/core';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconPencil, IconPencilCode } from '@tabler/icons-react';
 import { ImageDataOfImageCardsForHistory } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
@@ -61,7 +61,7 @@ export const DrawProcessingView = memo(function WorkViewComponent({
         <Center>
           <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
             <Image
-              src={imageData.titleImage}
+              src="https://placehold.co/350x495?text=Creating..."
               alt={imageData.titleImage}
             />
           </AspectRatio>
