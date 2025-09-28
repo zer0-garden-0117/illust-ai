@@ -3,8 +3,8 @@
 import React, { memo } from 'react';
 import { DrawFormValues } from './DrawForm.hook';
 import { UseFormReturnType } from '@mantine/form';
-import { Button, Card, Group, Radio, Text, Textarea, TextInput } from '@mantine/core';
-import { IconCube, IconPencil } from '@tabler/icons-react';
+import { Button, Card, Group, Notification, Radio, Space, Text, Textarea, TextInput } from '@mantine/core';
+import { IconCube, IconInfoCircle, IconInfoSmall, IconPencil } from '@tabler/icons-react';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import { IconPencilCode } from '@tabler/icons-react';
 
@@ -12,18 +12,20 @@ type DrawFormViewProps = {
   form: UseFormReturnType<DrawFormValues>,
   handleDrawClick: (values: DrawFormValues) => Promise<void>,
   handleHistoryClick: () => void
+  handlePlanChangeClick: () => void
 };
 
 export const DrawFormView = memo(function WorkViewComponent({
   form,
   handleDrawClick,
   handleHistoryClick,
+  handlePlanChangeClick
 }: DrawFormViewProps): JSX.Element {
 
   return (
     <Card withBorder padding="md" radius="md">
       <Group justify="space-between">
-        <Text fz="md" fw={700} mb="xs">
+        <Text fz="md" fw={700}>
           イラストの生成
         </Text>
         <Button
@@ -41,6 +43,26 @@ export const DrawFormView = memo(function WorkViewComponent({
           生成履歴
         </Button>
       </Group>
+      <Space h="md" />
+
+      {/* あと何回生成できるか表示 */}
+      <Notification
+        title="生成可能回数"
+        withCloseButton={false}
+        style={{ boxShadow: 'none' }}
+        withBorder
+        icon={<IconInfoSmall size={30} />}
+      >
+        今日はあと5回イラストを生成できます。
+        <Button
+          size='compact-xs'
+          onClick={handlePlanChangeClick}
+        >
+          プランを変更
+        </Button>
+      </Notification>
+      <Space h="md" />
+
       <form onSubmit={form.onSubmit(handleDrawClick)}>
         {/* モデルの選択(ラジオボタン) */}
         <Radio.Group

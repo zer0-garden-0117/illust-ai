@@ -27,9 +27,14 @@ export const useDrawForm = () => {
     router.push('/draw/history');
   }
 
+  const handlePlanChangeClick = () => {
+    router.push('/plan');
+  }
+
   return {
     form,
     handleDrawClick,
-    handleHistoryClick
+    handleHistoryClick,
+    handlePlanChangeClick
   };
 };
