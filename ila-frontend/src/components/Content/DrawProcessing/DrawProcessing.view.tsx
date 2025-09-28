@@ -6,19 +6,19 @@ import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconPencil, IconPencilCode } from '@tabler/icons-react';
 import { ImageDataOfImageCardsForHistory } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
-type WorkFormViewProps = {
+type DrawProcessingViewProps = {
   workId: string;
   imageData: ImageDataOfImageCardsForHistory;
   handleSubmitClick: (workId: string) => void;
   handleLaterClick: () => void;
 };
 
-export const WorkFormView = memo(function WorkViewComponent({
+export const DrawProcessingView = memo(function WorkViewComponent({
   workId,
   imageData,
   handleSubmitClick,
   handleLaterClick
-}: WorkFormViewProps): JSX.Element {
+}: DrawProcessingViewProps): JSX.Element {
   return (
     <>
     <Card withBorder padding="md" radius="md">
@@ -70,4 +70,4 @@ export const WorkFormView = memo(function WorkViewComponent({
     </>
   );
 });
-WorkFormView.displayName = 'WorkFormView';
+DrawProcessingView.displayName = 'DrawProcessingView';
