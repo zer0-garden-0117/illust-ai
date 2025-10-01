@@ -24,7 +24,7 @@ export const PlanListView = memo(function WorkViewComponent({
       </Group>
       <Space h="md" />
       {/* プランリスト */}
-      <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 10 }}>
+      <SimpleGrid cols={{ base: 2, sm: 3, md: 3, lg: 3, xl: 3 }} spacing={{ base: 10 }}>
         {planData.map((plan) => (
           <Card key={plan.id} shadow="sm" padding="lg" radius="md" withBorder>
 
