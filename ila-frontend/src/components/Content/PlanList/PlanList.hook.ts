@@ -13,13 +13,13 @@ export type PlanData = {
 export const usePlanList = () => {
   const router = useRouter();
 
-  const handleSubscriptionClick = () => {
+  const handleSubscriptionClick = (plan: string) => {
     // プラン変更のAPI呼び出し
   }
 
   const planData: PlanData[] = [
     {
-      id: 'Free',
+      id: 'free',
       name: 'Free',
       price: 0,
       illustNum: 3,
@@ -28,7 +28,7 @@ export const usePlanList = () => {
       ]
     },
     {
-      id: 'Light',
+      id: 'light',
       name: 'Light',
       price: 980,
       illustNum: 10,
@@ -37,7 +37,7 @@ export const usePlanList = () => {
       ]
     },
     {
-      id: 'Basic',
+      id: 'basic',
       name: 'Basic',
       price: 1980,
       illustNum: 20,
@@ -47,7 +47,7 @@ export const usePlanList = () => {
       ]
     },
     {
-      id: 'Pro',
+      id: 'pro',
       name: 'Pro',
       price: 2980,
       illustNum: 30,
@@ -56,7 +56,7 @@ export const usePlanList = () => {
       ]
     },
     {
-      id: 'Unlimited',
+      id: 'unlimited',
       name: 'Unlimited',
       price: 4980,
       illustNum: 50,

@@ -7,7 +7,7 @@ import { IconAlarm, IconCoinYen, IconMoneybag, IconPencilCode, IconPhoto, IconSp
 
 type PlanListViewProps = {
   planData: PlanData[];
-  handleSubscriptionClick: () => void
+  handleSubscriptionClick: (plan: string) => void
 };
 
 export const PlanListView = memo(function WorkViewComponent({
@@ -71,7 +71,7 @@ export const PlanListView = memo(function WorkViewComponent({
             <Button 
               color="blue" 
               radius="md"
-              onClick={handleSubscriptionClick}
+              onClick={() => handleSubscriptionClick(plan.id)}
               style={{ display: 'inline-flex', width: 'fit-content' }}
             >
               変更
