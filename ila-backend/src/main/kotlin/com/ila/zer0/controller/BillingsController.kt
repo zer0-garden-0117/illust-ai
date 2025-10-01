@@ -20,7 +20,8 @@ class BillingsController(
     ): ResponseEntity<ApiBilling> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val url = stripeService.createCheckoutSessionUrl(userId, apiBilling.plan)
+        val userName = getUserName()
+        val url = stripeService.createCheckoutSessionUrl(userId, userName, apiBilling.plan)
         val response = ApiBilling().apply {
             this.plan = apiBilling.plan
             this.checkoutSessionUrl = url
@@ -45,5 +46,12 @@ class BillingsController(
             SecurityContextHolder.getContext().authentication
         val customAuth = authentication as? CustomAuthenticationToken
         return customAuth?.userId
+    }
+
+    private fun getUserName(): String? {
+        val authentication: Authentication? =
+            SecurityContextHolder.getContext().authentication
+        val customAuth = authentication as? CustomAuthenticationToken
+        return customAuth?.userName
     }
 }

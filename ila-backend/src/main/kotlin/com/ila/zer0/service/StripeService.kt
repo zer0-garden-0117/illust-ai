@@ -34,10 +34,11 @@ class StripeService(
 
     fun createCheckoutSessionUrl(
         userId: String,
+        userName: String?,
         plan: String?
     ): String {
 
-        val customer = getOrCreateCustomer(userId)
+        val customer = getOrCreateCustomer(userId, userName)
         val priceId = when (plan) {
             "light" -> lightPriceId
             "basic" -> basicPriceId
@@ -72,9 +73,9 @@ class StripeService(
 
     fun createPortalSessionUrl(
         userId: String,
-        email: String
+        userName: String?,
     ): String {
-        val customer = getOrCreateCustomer(userId)
+        val customer = getOrCreateCustomer(userId, userName)
 
         val params = PortalSessionCreateParams.builder()
             .setCustomer(customer.id)
@@ -87,10 +88,11 @@ class StripeService(
         return portal.url
     }
 
-    fun getOrCreateCustomer(userId: String): Customer {
+    fun getOrCreateCustomer(userId: String, userName: String?): Customer {
         findCustomerByAppUserId(userId)?.let { return it }
 
         val createParams = CustomerCreateParams.builder()
+            .setName(userName)
             .setMetadata(mapOf("app_user_id" to userId))
             .build()
 

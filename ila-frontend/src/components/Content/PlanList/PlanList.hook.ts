@@ -1,3 +1,5 @@
+import { useCheckoutSessionCreate } from "@/apis/openapi/billings/useCheckoutSessionCreate";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useRouter } from "next/navigation";
 
 export type PlanData = {
@@ -12,9 +14,19 @@ export type PlanData = {
 
 export const usePlanList = () => {
   const router = useRouter();
+  const { getIdTokenLatest } = useFirebaseAuthContext();
+  const { trigger } = useCheckoutSessionCreate();
 
-  const handleSubscriptionClick = (plan: string) => {
-    // プラン変更のAPI呼び出し
+  const handleSubscriptionClick = async (plan: string) => {
+    const res = await trigger({
+      headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
+      body: { plan: plan },
+    });
+    if (res.checkoutSessionUrl) {
+      window.location.href = res.checkoutSessionUrl;
+    } else {
+      console.error("checkoutSessionUrl is undefined");
+    }
   }
 
   const planData: PlanData[] = [
