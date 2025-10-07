@@ -48,7 +48,7 @@ export const PlanListView = memo(function WorkViewComponent({
                 月額
               </Text>
             </Group>
-            <Text fz="sm" mb="sm">¥{plan.price}</Text>
+            <Text fz="sm" mb="sm">¥<Text span fz="sm" fw={700}>{plan.price}</Text></Text>
 
             {/* 生成回数 */}
             <Group gap={"5px"} mb="5px">
@@ -57,7 +57,7 @@ export const PlanListView = memo(function WorkViewComponent({
                 画像生成
               </Text>
             </Group>
-            <Text fz="sm" mb="sm">{plan.illustNum}回/日</Text>
+            <Text fz="sm" mb="sm"><Text span fz="sm" fw={700}>{plan.illustNum}</Text>回/日</Text>
 
             {/* 生成履歴 */}
             <Group gap={"5px"} mb="5px">
@@ -66,7 +66,7 @@ export const PlanListView = memo(function WorkViewComponent({
                 生成履歴
               </Text>
             </Group>
-            <Text fz="sm" mb="sm">{plan.illustHistoryDays}日保存</Text>
+            <Text fz="sm" mb="sm"><Text span fz="sm" fw={700}>{plan.illustHistoryDays}</Text>日保存</Text>
             {/* 購入ボタン */}
             <Center>
             <Button 

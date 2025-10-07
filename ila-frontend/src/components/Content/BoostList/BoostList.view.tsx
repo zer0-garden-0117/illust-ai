@@ -21,7 +21,7 @@ export const BoostListView = memo(function WorkViewComponent({
     <Card withBorder padding="md" radius="md">
       <Group justify="space-between">
         <Text fz="md" fw={700}>
-          プランの変更
+          ブーストを追加
         </Text>
       </Group>
       <Space h="md" />
@@ -42,7 +42,7 @@ export const BoostListView = memo(function WorkViewComponent({
                 料金
               </Text>
             </Group>
-            <Text fz="sm" mb="sm">¥{plan.price}</Text>
+            <Text fz="sm" mb="sm">¥<Text span fz="sm" fw={700}>{plan.price}</Text></Text>
 
             {/* 増える数 */}
             <Group gap={"5px"} mb="5px">
@@ -51,7 +51,7 @@ export const BoostListView = memo(function WorkViewComponent({
                 画像生成
               </Text>
             </Group>
-            <Text fz="sm" mb="sm">+{plan.increaseNum}回/日</Text>
+            <Text fz="sm" mb="sm">+<Text span fz="sm" fw={700}>{plan.increaseNum}</Text>回/日</Text>
 
             {/* 有効期間 */}
             <Group gap={"5px"} mb="5px">
@@ -60,7 +60,7 @@ export const BoostListView = memo(function WorkViewComponent({
                 有効期間
               </Text>
             </Group>
-            <Text fz="sm" mb="sm">{plan.termDays}日</Text>
+            <Text fz="sm" mb="sm"><Text span fz="sm" fw={700}>{plan.termDays}</Text>日</Text>
 
             {/* 購入ボタン */}
             <Center>
