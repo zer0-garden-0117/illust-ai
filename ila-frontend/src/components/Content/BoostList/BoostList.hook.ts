@@ -3,17 +3,15 @@ import { usePortalSessionCreate } from "@/apis/openapi/billings/usePortalSession
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useRouter } from "next/navigation";
 
-export type PlanData = {
+export type BoostData = {
   id: string;
   name: string;
   price: number;
-  illustNum: number;
-  illustHistoryDays: number;
-  isRecommended?: boolean;
-  features: string[];
+  increaseNum: number;
+  termDays: number;
 };
 
-export const usePlanList = () => {
+export const useBoostList = () => {
   const router = useRouter();
   const { getIdTokenLatest } = useFirebaseAuthContext();
   const { trigger: triggerCheckout } = useCheckoutSessionCreate();
@@ -43,30 +41,25 @@ export const usePlanList = () => {
     }
   }
 
-  const planData: PlanData[] = [
+  const boostData: BoostData[] = [
     {
-      id: 'free',
-      name: 'Free',
-      price: 0,
-      illustNum: 3,
-      illustHistoryDays: 3,
-      features: [
-      ]
+      id: 'Boost',
+      name: 'Boost',
+      price: 290,
+      increaseNum: 10,
+      termDays: 7,
     },
     {
-      id: 'basic',
-      name: 'Basic',
-      price: 980,
-      illustNum: 10,
-      illustHistoryDays: 30,
-      isRecommended: true,
-      features: [
-      ]
-    }
+      id: 'Boost 2X',
+      name: 'Boost 2X',
+      price: 490,
+      increaseNum: 20,
+      termDays: 7,
+    },
   ]
 
   return {
-    planData,
+    boostData,
     handleSubscriptionClick,
     handleSubscriptionChangeClick
   };
