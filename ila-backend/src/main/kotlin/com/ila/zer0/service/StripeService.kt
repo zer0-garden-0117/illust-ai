@@ -80,7 +80,6 @@ class StripeService(
         val params = PortalSessionCreateParams.builder()
             .setCustomer(customer.id)
             .setReturnUrl(stripeReturnUrl)
-            .putAllExtraParam(mapOf("app_user_id" to userId))
             .build()
 
         val portal = PortalSession.create(params)

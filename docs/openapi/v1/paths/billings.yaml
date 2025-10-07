@@ -43,24 +43,3 @@ BillingsCreatePortalSession:
           $ref: "../components/responses/errors.yaml#/BadRequestResponse"
         "401":
           $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-BillingsWebhook:
-    post:
-      tags:
-        - billings
-      summary: "Stripe Webhook"
-      description: "Handle Stripe webhook events."
-      operationId: stripeWebhook
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-      responses:
-        "200":
-          description: "Webhook received"
-        "400":
-          $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-        "401":
-          $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"

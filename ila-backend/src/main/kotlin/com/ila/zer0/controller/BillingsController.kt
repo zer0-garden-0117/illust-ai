@@ -32,13 +32,14 @@ class BillingsController(
     override fun createPortalSession(
         @RequestBody apiBilling: ApiBilling
     ): ResponseEntity<ApiBilling> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
-    }
-
-    override fun stripeWebhook(
-        @RequestBody body: kotlin.Any
-    ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val userName = getUserName()
+        val url = stripeService.createPortalSessionUrl(userId, userName)
+        val response = ApiBilling().apply {
+            this.portalSessionUrl = url
+        }
+        return ResponseEntity.ok(response)
     }
 
     private fun getUserId(): String? {

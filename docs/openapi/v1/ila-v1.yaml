@@ -79,9 +79,6 @@ paths:
   /billings/create-portal-session:
     $ref: "./paths/billings.yaml#/BillingsCreatePortalSession"
 
-  /billings/webhook:
-    $ref: "./paths/billings.yaml#/BillingsWebhook"
-
 components:
   securitySchemes:
     FirebaseAuth:
