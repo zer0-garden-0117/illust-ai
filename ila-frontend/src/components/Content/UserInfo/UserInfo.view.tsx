@@ -29,6 +29,7 @@ type UserInfoViewProps = {
   handleFollowListClick: () => void,
   handleFollowerListClick: () => void,
   handlePlanChangeClick: () => void,
+  handleBoostChangeClick: () => void
 };
 
 export const UserInfoView = memo(function WorkViewComponent({
@@ -50,6 +51,7 @@ export const UserInfoView = memo(function WorkViewComponent({
   handleFollowListClick,
   handleFollowerListClick,
   handlePlanChangeClick,
+  handleBoostChangeClick
 }: UserInfoViewProps): JSX.Element {
   const [isTypingUserId, setIsTypingUserId] = useState(false);
 
@@ -361,7 +363,31 @@ export const UserInfoView = memo(function WorkViewComponent({
             mb="md"
             style={{ display: 'inline-flex', width: 'fit-content' }}
           >
-            無料
+            Basic
+          </Pill>
+
+          {/* ブーストの状態 */}
+          <Group gap={"10px"} mb="5px">
+            <Text fw={500} fz={"sm"}>
+              ブースト
+            </Text>
+            <Anchor>
+              <Button
+                onClick={handleBoostChangeClick}
+                size='compact-xs'
+                fw={500}
+                fz={"xs"}
+                mb={3}
+              >
+                ブーストの追加
+              </Button>
+            </Anchor>
+          </Group>
+          <Pill
+            mb="md"
+            style={{ display: 'inline-flex', width: 'fit-content' }}
+          >
+            Boost 2X (10/14迄)
           </Pill>
           
           <Group justify="flex-end" mt="md">

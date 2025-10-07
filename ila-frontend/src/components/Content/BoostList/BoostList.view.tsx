@@ -21,7 +21,7 @@ export const BoostListView = memo(function WorkViewComponent({
     <Card withBorder padding="md" radius="md">
       <Group justify="space-between">
         <Text fz="md" fw={700}>
-          ブーストを追加
+          ブーストの追加
         </Text>
       </Group>
       <Space h="md" />
@@ -71,7 +71,7 @@ export const BoostListView = memo(function WorkViewComponent({
               onClick={() => handleSubscriptionChangeClick()}
               style={{ display: 'inline-flex', width: 'fit-content' }}
             >
-              変更
+              追加
             </Button>
             </Center>
 

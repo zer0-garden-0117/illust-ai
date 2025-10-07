@@ -161,6 +161,10 @@ export const useUserInfo = (
     router.push('/plan');
   }
 
+  const handleBoostChangeClick = () => {
+    router.push('/boost');
+  }
+
   return {
     form,
     userData,
@@ -180,5 +184,6 @@ export const useUserInfo = (
     handleFollowListClick,
     handleFollowerListClick,
     handlePlanChangeClick,
+    handleBoostChangeClick
   };
 };
