@@ -6,15 +6,13 @@ import { BoostData } from './BoostList.hook';
 import { IconAlarm, IconCoinYen, IconMoneybag, IconPencilCode, IconPhoto, IconRocket, IconSparkles } from '@tabler/icons-react';
 
 type BoostListViewProps = {
-  boostData: BoostData[];
-  handleSubscriptionClick: (plan: string) => void
-  handleSubscriptionChangeClick: () => void
+  boostDatas: BoostData[];
+  handleAddClick: (product: string) => void
 };
 
 export const BoostListView = memo(function WorkViewComponent({
-  boostData,
-  handleSubscriptionClick,
-  handleSubscriptionChangeClick
+  boostDatas,
+  handleAddClick,
 }: BoostListViewProps): JSX.Element {
 
   return (
@@ -27,12 +25,12 @@ export const BoostListView = memo(function WorkViewComponent({
       <Space h="md" />
       {/* プランリスト */}
       <SimpleGrid cols={{ base: 2, sm: 2, md: 2, lg: 2, xl: 2 }} spacing={{ base: 10 }}>
-        {boostData.map((plan) => (
-          <Card key={plan.id} shadow="sm" padding="lg" radius="md" withBorder>
+        {boostDatas.map((boostData) => (
+          <Card key={boostData.id} shadow="sm" padding="lg" radius="md" withBorder>
 
             {/* プラン名 */}
             <Group mb={"sm"} gap={"3px"}>
-              <Text fz="lg" fw={700}>{plan.name}</Text>
+              <Text fz="lg" fw={700}>{boostData.name}</Text>
             </Group>
 
             {/* 料金 */}
@@ -42,7 +40,7 @@ export const BoostListView = memo(function WorkViewComponent({
                 料金
               </Text>
             </Group>
-            <Text fz="sm" mb="sm">¥<Text span fz="sm" fw={700}>{plan.price}</Text></Text>
+            <Text fz="sm" mb="sm">¥<Text span fz="sm" fw={700}>{boostData.price}</Text></Text>
 
             {/* 増える数 */}
             <Group gap={"5px"} mb="5px">
@@ -51,7 +49,7 @@ export const BoostListView = memo(function WorkViewComponent({
                 画像生成
               </Text>
             </Group>
-            <Text fz="sm" mb="sm">+<Text span fz="sm" fw={700}>{plan.increaseNum}</Text>回/日</Text>
+            <Text fz="sm" mb="sm">+<Text span fz="sm" fw={700}>{boostData.increaseNum}</Text>回/日</Text>
 
             {/* 有効期間 */}
             <Group gap={"5px"} mb="5px">
@@ -60,15 +58,14 @@ export const BoostListView = memo(function WorkViewComponent({
                 有効期間
               </Text>
             </Group>
-            <Text fz="sm" mb="sm"><Text span fz="sm" fw={700}>{plan.termDays}</Text>日</Text>
+            <Text fz="sm" mb="sm"><Text span fz="sm" fw={700}>{boostData.termDays}</Text>日</Text>
 
             {/* 購入ボタン */}
             <Center>
             <Button 
               color="blue" 
               radius="md"
-              // onClick={() => handleSubscriptionClick(plan.id)}
-              onClick={() => handleSubscriptionChangeClick()}
+              onClick={() => handleAddClick(boostData.id)}
               style={{ display: 'inline-flex', width: 'fit-content' }}
             >
               追加

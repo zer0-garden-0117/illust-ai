@@ -4,10 +4,14 @@ ApiBilling:
     課金情報
   type: object
   properties:
-    plan:
+    product:
       type: string
-      description: "The current subscription plan of the user."
-      example: pro
+      description: "The product name"
+      example: basic
+    productType:
+      type: string
+      description: "The product type"
+      example: subscription or one-time
     checkoutSessionUrl:
       type: string
       description: "The URL of the created checkout session."

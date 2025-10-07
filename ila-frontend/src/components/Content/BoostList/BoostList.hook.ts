@@ -1,5 +1,4 @@
 import { useCheckoutSessionCreate } from "@/apis/openapi/billings/useCheckoutSessionCreate";
-import { usePortalSessionCreate } from "@/apis/openapi/billings/usePortalSessionCreate";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useRouter } from "next/navigation";
 
@@ -15,12 +14,14 @@ export const useBoostList = () => {
   const router = useRouter();
   const { getIdTokenLatest } = useFirebaseAuthContext();
   const { trigger: triggerCheckout } = useCheckoutSessionCreate();
-  const { trigger: triggerPortal } = usePortalSessionCreate();
 
-  const handleSubscriptionClick = async (plan: string) => {
+  const handleAddClick = async (product: string) => {
     const res = await triggerCheckout({
       headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
-      body: { plan: plan },
+      body: {
+        product: product,
+        productType: 'one-time'
+      },
     });
     if (res.checkoutSessionUrl) {
       window.location.href = res.checkoutSessionUrl;
@@ -29,28 +30,16 @@ export const useBoostList = () => {
     }
   }
 
-  const handleSubscriptionChangeClick = async () => {
-    const res = await triggerPortal({
-      headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
-      body: {},
-    });
-    if (res.portalSessionUrl) {
-      window.location.href = res.portalSessionUrl;
-    } else {
-      console.error("portalSessionUrl is undefined");
-    }
-  }
-
-  const boostData: BoostData[] = [
+  const boostDatas: BoostData[] = [
     {
-      id: 'Boost',
+      id: 'boost',
       name: 'Boost',
       price: 290,
       increaseNum: 10,
       termDays: 7,
     },
     {
-      id: 'Boost 2X',
+      id: 'boost2x',
       name: 'Boost 2X',
       price: 490,
       increaseNum: 20,
@@ -59,8 +48,7 @@ export const useBoostList = () => {
   ]
 
   return {
-    boostData,
-    handleSubscriptionClick,
-    handleSubscriptionChangeClick
+    boostDatas,
+    handleAddClick,
   };
 };

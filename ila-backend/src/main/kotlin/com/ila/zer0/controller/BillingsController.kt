@@ -21,9 +21,9 @@ class BillingsController(
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         val userName = getUserName()
-        val url = stripeService.createCheckoutSessionUrl(userId, userName, apiBilling.plan)
+        val url = stripeService.createCheckoutSessionUrl(userId, userName, apiBilling.product, apiBilling.productType)
         val response = ApiBilling().apply {
-            this.plan = apiBilling.plan
+            this.product = apiBilling.product
             this.checkoutSessionUrl = url
         }
         return ResponseEntity.ok(response)

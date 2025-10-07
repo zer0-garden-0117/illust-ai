@@ -19,10 +19,13 @@ export const usePlanList = () => {
   const { trigger: triggerCheckout } = useCheckoutSessionCreate();
   const { trigger: triggerPortal } = usePortalSessionCreate();
 
-  const handleSubscriptionClick = async (plan: string) => {
+  const handleSubscriptionClick = async (product: string) => {
     const res = await triggerCheckout({
       headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
-      body: { plan: plan },
+      body: {
+        product: product,
+        productType: 'subscription'
+      },
     });
     if (res.checkoutSessionUrl) {
       window.location.href = res.checkoutSessionUrl;
