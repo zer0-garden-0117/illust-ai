@@ -35,11 +35,13 @@ class StripeService(
         val customer = getOrCreateCustomer(userId, userName)
         val priceId = toPriceId(product)
         val mode = toCheckoutMode(productType)
+        val successUrl = toSuccessUrl(productType)
+        val cancelUrl = toCancelUrl(productType)
         val params = baseCheckoutParams(
             mode = mode,
             priceId = priceId,
-            successUrl = "${stripeConfig.stripeSuccessUrl}?session_id={CHECKOUT_SESSION_ID}",
-            cancelUrl = stripeConfig.stripeCancelUrl,
+            successUrl = "${successUrl}?session_id={CHECKOUT_SESSION_ID}",
+            cancelUrl = cancelUrl,
             customerId = customer.id,
             metadata = mapOf("app_user_id" to userId)
         )
@@ -59,11 +61,26 @@ class StripeService(
             else -> throw IllegalArgumentException("Invalid product type: $productType")
         }
 
+    private fun toSuccessUrl(productType: String?): String =
+        when (productType) {
+            "subscription" -> stripeConfig.stripeSuccessPlanUrl
+            "one-time"     -> stripeConfig.stripeSuccessBoostUrl
+            else -> throw IllegalArgumentException("Invalid product type: $productType")
+        }
+
+    private fun toCancelUrl(productType: String?): String =
+        when (productType) {
+            "subscription" -> stripeConfig.stripeCancelPlanUrl
+            "one-time"     -> stripeConfig.stripeCancelBoostUrl
+            else -> throw IllegalArgumentException("Invalid product type: $productType")
+        }
+
     private fun toPriceId(product: String?): String =
         when (product) {
             "basic"   -> stripeConfig.basicPriceId
-            "boost"   -> stripeConfig.boostPriceId
-            "boost2x" -> stripeConfig.boost2xPriceId
+            "boosts"   -> stripeConfig.boostSPriceId
+            "boostm" -> stripeConfig.boostMPriceId
+            "boostl" -> stripeConfig.boostLPriceId
             else -> throw IllegalArgumentException("Invalid product: $product")
         }
 
@@ -98,7 +115,7 @@ class StripeService(
 
         val params = PortalSessionCreateParams.builder()
             .setCustomer(customer.id)
-            .setReturnUrl(stripeConfig.stripeReturnUrl)
+            .setReturnUrl(stripeConfig.stripeReturnPlanUrl)
             .build()
 
         val portal = PortalSession.create(params)

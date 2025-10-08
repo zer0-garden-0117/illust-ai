@@ -24,7 +24,7 @@ export const BoostListView = memo(function WorkViewComponent({
       </Group>
       <Space h="md" />
       {/* プランリスト */}
-      <SimpleGrid cols={{ base: 2, sm: 2, md: 2, lg: 2, xl: 2 }} spacing={{ base: 10 }}>
+      <SimpleGrid cols={{ base: 2, sm: 2, md: 3, lg: 3, xl: 3 }} spacing={{ base: 10 }}>
         {boostDatas.map((boostData) => (
           <Card key={boostData.id} shadow="sm" padding="lg" radius="md" withBorder>
 

@@ -32,18 +32,25 @@ export const useBoostList = () => {
 
   const boostDatas: BoostData[] = [
     {
-      id: 'boost',
-      name: 'Boost',
-      price: 290,
+      id: 'boosts',
+      name: 'Boost S',
+      price: 220,
       increaseNum: 10,
       termDays: 7,
     },
     {
-      id: 'boost2x',
-      name: 'Boost 2X',
-      price: 490,
+      id: 'boostm',
+      name: 'Boost M',
+      price: 880,
+      increaseNum: 10,
+      termDays: 30,
+    },
+      {
+      id: 'boostl',
+      name: 'Boost L',
+      price: 1680,
       increaseNum: 20,
-      termDays: 7,
+      termDays: 30,
     },
   ]
 
