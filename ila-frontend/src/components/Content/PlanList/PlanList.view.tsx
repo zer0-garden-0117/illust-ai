@@ -72,11 +72,11 @@ export const PlanListView = memo(function WorkViewComponent({
             <Button 
               color="blue" 
               radius="md"
-              // onClick={() => handleSubscriptionClick(plan.id)}
-              onClick={() => handleSubscriptionChangeClick()}
+              onClick={() => handleSubscriptionClick(plan.id)}
+              // onClick={() => handleSubscriptionChangeClick()}
               style={{ display: 'inline-flex', width: 'fit-content' }}
             >
-              変更
+              購入
             </Button>
             </Center>
 
