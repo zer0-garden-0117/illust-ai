@@ -4,6 +4,7 @@ import com.ila.zer0.config.token.CustomAuthenticationToken
 import com.ila.zer0.generated.endpoint.BillingsApi
 import com.ila.zer0.generated.model.*
 import com.ila.zer0.service.StripeService
+import com.ila.zer0.service.user.UserManagerService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 class BillingsController(
-    private val stripeService: StripeService
+    private val stripeService: StripeService,
+    private val userManagerService: UserManagerService
 ) : BillingsApi {
 
     override fun createCheckoutSession(
@@ -20,8 +22,8 @@ class BillingsController(
     ): ResponseEntity<ApiBilling> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val userName = getUserName()
-        val url = stripeService.createCheckoutSessionUrl(userId, userName, apiBilling.product, apiBilling.productType)
+        val user = userManagerService.getUserById(userId)
+        val url = stripeService.createCheckoutSessionUrl(userId, user?.userName, apiBilling.product, apiBilling.productType)
         val response = ApiBilling().apply {
             this.product = apiBilling.product
             this.checkoutSessionUrl = url
@@ -34,8 +36,8 @@ class BillingsController(
     ): ResponseEntity<ApiBilling> {
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val userName = getUserName()
-        val url = stripeService.createPortalSessionUrl(userId, userName)
+        val user = userManagerService.getUserById(userId)
+        val url = stripeService.createPortalSessionUrl(userId, user?.userName)
         val response = ApiBilling().apply {
             this.portalSessionUrl = url
         }
@@ -47,12 +49,5 @@ class BillingsController(
             SecurityContextHolder.getContext().authentication
         val customAuth = authentication as? CustomAuthenticationToken
         return customAuth?.userId
-    }
-
-    private fun getUserName(): String? {
-        val authentication: Authentication? =
-            SecurityContextHolder.getContext().authentication
-        val customAuth = authentication as? CustomAuthenticationToken
-        return customAuth?.userName
     }
 }
