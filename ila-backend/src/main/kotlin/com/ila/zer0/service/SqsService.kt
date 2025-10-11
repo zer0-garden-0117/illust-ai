@@ -84,66 +84,14 @@ class SqsService(
         val detailType = root.path("detail-type").asText(null)
         log.info("Processing message with detail-type: $detailType")
 
-        // detailを取得
-        val invoice = root.path("detail").path("data").path("object")
-        val firstLine = invoice.path("lines").path("data").let { arr ->
-            if (arr.isArray && arr.size() > 0) arr.get(0) else null
-        }
-
-        // app_user_idを取得
-        val appUserIdFromLine = firstLine?.path("metadata")?.path("app_user_id")?.asText(null)
-        val appUserIdFromParent = invoice
-            .path("parent")
-            .path("subscription_details")
-            .path("metadata")
-            .path("app_user_id")
-            .asText(null)
-        val appUserId = appUserIdFromLine ?: appUserIdFromParent
-
-        // priceIdを取得
-        val priceId = firstLine
-            ?.path("pricing")
-            ?.path("price_details")
-            ?.path("price")
-            ?.asText(null)
-
-        if (appUserId == null || priceId == null) {
-            log.warn("Missing app_user_id or price_id in invoice: app_user_id=$appUserId, price_id=$priceId")
-            return false
-        }
-
-        log.info(
-            "InvoicePaid extracted: app_user_id={}, price_id={}",
-            appUserId,
-            priceId
-        )
-
-        val isPlan = stripeService.isPlan(priceId)
-        if (isPlan) {
-            // サブスクの場合はinvoice.paidで処理するためスキップ
-            return true
-        }
-
-        // ユーザーを取得
-        val user = userManagerService.getUserById(appUserId)
-        if (user == null) {
-            log.warn("User not found for app_user_id=$appUserId")
-            return false
-        }
-        log.info("user=${user})")
-
-        // priceIdからproductを判定
-        val product = stripeService.toProduct(priceId)
-        log.info("product=$product, isPlan=$isPlan")
-
         // ユーザーのplan,boostを更新
-        if (isPlan) {
-            userManagerService.updatePlan(user, product)
-        } else {
-            val supportTo = stripeService.calSupportTo(priceId)
-            log.info("supportTo=$supportTo")
-            userManagerService.updateBoost(user, product, supportTo)
-        }
+//        if (isPlan) {
+//            userManagerService.updatePlan(user, product)
+//        } else {
+//            val supportTo = stripeService.calSupportTo(priceId)
+//            log.info("supportTo=$supportTo")
+//            userManagerService.updateBoost(user, product, supportTo)
+//        }
 
         return true
     }
