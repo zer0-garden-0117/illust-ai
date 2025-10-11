@@ -64,12 +64,12 @@ class SqsService(
                     log.warn("Failed to handle invoice paid message: ${msg.messageId()}")
                     return@forEach
                 }
-                sqsClient.deleteMessage(
-                    DeleteMessageRequest.builder()
-                        .queueUrl(sqsConfig.invoicePaidQueueUrl)
-                        .receiptHandle(msg.receiptHandle())
-                        .build()
-                )
+//                sqsClient.deleteMessage(
+//                    DeleteMessageRequest.builder()
+//                        .queueUrl(sqsConfig.invoicePaidQueueUrl)
+//                        .receiptHandle(msg.receiptHandle())
+//                        .build()
+//                )
                 log.info("Deleted message: ${msg.messageId()}")
             } catch (ex: Exception) {
                 log.error("Failed to process message: ${msg.messageId()}", ex)
@@ -79,6 +79,12 @@ class SqsService(
 
     private fun handleInvoicePaidMessage(body: String): Boolean {
         val root = mapper.readTree(body)
+
+        // "detail-type"が"invoice.paid"でない場合は無視
+        val detailType = root.path("detail-type").asText(null)
+        log.info("Processing message with detail-type: $detailType")
+
+        // detailを取得
         val invoice = root.path("detail").path("data").path("object")
         val firstLine = invoice.path("lines").path("data").let { arr ->
             if (arr.isArray && arr.size() > 0) arr.get(0) else null
@@ -112,6 +118,12 @@ class SqsService(
             priceId
         )
 
+        val isPlan = stripeService.isPlan(priceId)
+        if (isPlan) {
+            // サブスクの場合はinvoice.paidで処理するためスキップ
+            return true
+        }
+
         // ユーザーを取得
         val user = userManagerService.getUserById(appUserId)
         if (user == null) {
@@ -122,7 +134,6 @@ class SqsService(
 
         // priceIdからproductを判定
         val product = stripeService.toProduct(priceId)
-        val isPlan = stripeService.isPlan(priceId)
         log.info("product=$product, isPlan=$isPlan")
 
         // ユーザーのplan,boostを更新

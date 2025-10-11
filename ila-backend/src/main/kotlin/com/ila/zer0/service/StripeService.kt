@@ -37,6 +37,7 @@ class StripeService(
         val mode = toCheckoutMode(productType)
         val successUrl = toSuccessUrl(productType)
         val cancelUrl = toCancelUrl(productType)
+        val isPlan = isPlan(priceId)
         val params = baseCheckoutParams(
             mode = mode,
             priceId = priceId,
@@ -44,6 +45,7 @@ class StripeService(
             cancelUrl = cancelUrl,
             customerId = customer.id,
             appUserId = userId,
+            isPlan = isPlan,
         )
         val idempotencyKey = "chk_${userId}_${product}_${mode.name.lowercase()}_${Instant.now().epochSecond}"
         val requestOptions = RequestOptions.builder()
@@ -114,6 +116,7 @@ class StripeService(
         cancelUrl: String,
         customerId: String,
         appUserId: String,
+        isPlan: Boolean,
     ): SessionCreateParams {
         val b = SessionCreateParams.builder()
             .setMode(mode)
@@ -131,12 +134,16 @@ class StripeService(
             b.setSubscriptionData(
                 SessionCreateParams.SubscriptionData.builder()
                     .putMetadata("app_user_id", appUserId)
+                    .putMetadata("app_product", priceId)
+                    .putMetadata("is_plan", isPlan.toString())
                     .build()
             )
         } else if (mode == SessionCreateParams.Mode.PAYMENT) {
             b.setPaymentIntentData(
                 SessionCreateParams.PaymentIntentData.builder()
                     .putMetadata("app_user_id", appUserId)
+                    .putMetadata("app_product", priceId)
+                    .putMetadata("is_plan", isPlan.toString())
                     .build()
             )
         }
