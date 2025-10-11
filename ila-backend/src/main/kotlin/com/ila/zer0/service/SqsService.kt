@@ -64,12 +64,12 @@ class SqsService(
                     log.warn("Failed to handle invoice paid message: ${msg.messageId()}")
                     return@forEach
                 }
-//                sqsClient.deleteMessage(
-//                    DeleteMessageRequest.builder()
-//                        .queueUrl(sqsConfig.invoicePaidQueueUrl)
-//                        .receiptHandle(msg.receiptHandle())
-//                        .build()
-//                )
+                sqsClient.deleteMessage(
+                    DeleteMessageRequest.builder()
+                        .queueUrl(sqsConfig.invoicePaidQueueUrl)
+                        .receiptHandle(msg.receiptHandle())
+                        .build()
+                )
                 log.info("Deleted message: ${msg.messageId()}")
             } catch (ex: Exception) {
                 log.error("Failed to process message: ${msg.messageId()}", ex)
@@ -80,19 +80,54 @@ class SqsService(
     private fun handleInvoicePaidMessage(body: String): Boolean {
         val root = mapper.readTree(body)
 
-        // "detail-type"が"invoice.paid"でない場合は無視
-        val detailType = root.path("detail-type").asText(null)
+        val detailType = root.path("detail-type").asText()
         log.info("Processing message with detail-type: $detailType")
 
-        // ユーザーのplan,boostを更新
-//        if (isPlan) {
-//            userManagerService.updatePlan(user, product)
-//        } else {
-//            val supportTo = stripeService.calSupportTo(priceId)
-//            log.info("supportTo=$supportTo")
-//            userManagerService.updateBoost(user, product, supportTo)
-//        }
+        val metadata = root.path("detail")?.path("data")?.path("object")?.path("metadata")
+        log.info("Metadata: $metadata")
 
+        val linesMetadatas = root.path("detail")?.path("data")?.path("object")?.path("lines")?.path("data")?.firstOrNull()?.path("metadata")
+        log.info("Lines metadata: $linesMetadatas")
+
+        // detail-typeが"payment_intent.succeeded"で かつ metadataが存在しない場合は何もしない
+        if ((detailType == "payment_intent.succeeded") && ((metadata == null) || metadata.isEmpty())) {
+            log.info("Skipping message: detail-type is not 'invoice.paid' or metadata is missing")
+            return true
+        }
+
+        val appUserId = metadata?.path("app_user_id")?.asText(null)
+            ?: linesMetadatas?.path("app_user_id")?.asText(null)
+        val appPriceId = metadata?.path("app_price_id")?.asText(null)
+            ?: linesMetadatas?.path("app_price_id")?.asText(null)
+        val isPlan = metadata?.path("is_plan")?.asText(null)?.toBoolean()
+            ?: linesMetadatas?.path("is_plan")?.asText(null)?.toBoolean()
+        log.info("appUserId: $appUserId, appPriceId: $appPriceId, isPlan: $isPlan")
+
+        // appUserId、appPriceId、isPlanのいずれかが存在しない場合は何もしない
+        if (appUserId == null || appPriceId == null || isPlan == null) {
+            log.warn("Skipping message: Missing required metadata (appUserId, appPriceId, isPlan)")
+            return false
+        }
+
+        // プロダクト取得
+        val product = stripeService.toProduct(appPriceId)
+
+        // ユーザー取得
+        val user = userManagerService.getUserById(appUserId) ?: run {
+            log.warn("User not found: $appUserId")
+            return false
+        }
+
+        // ユーザーのプラン、ブーストの更新
+        if (isPlan) {
+            log.info("Updating plan for user $appUserId to product $appPriceId")
+            userManagerService.updatePlan(user, product)
+        } else {
+            log.info("Updating boost for user $appUserId to product $appPriceId")
+            val supportTo = stripeService.calSupportTo(appPriceId)
+            log.info("Support to date: $supportTo")
+            userManagerService.updateBoost(user, product, supportTo)
+        }
         return true
     }
 }

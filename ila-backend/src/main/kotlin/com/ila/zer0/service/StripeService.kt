@@ -14,6 +14,8 @@ import com.stripe.param.billingportal.SessionCreateParams as PortalSessionCreate
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Service
 class StripeService(
@@ -101,13 +103,18 @@ class StripeService(
     // 現在日時からサポート日時を算出する
     // boostS: 7日, boostM: 30日, boostL: 30日
     // 返却は2025/01/01の形式
-    fun calSupportTo(priceId: String): String =
-        when (priceId) {
-            stripeConfig.boostSPriceId -> Instant.now().plusSeconds(7 * 24 * 60 * 60).toString().substring(0,10)
-            stripeConfig.boostMPriceId -> Instant.now().plusSeconds(30 * 24 * 60 * 60).toString().substring(0,10)
-            stripeConfig.boostLPriceId -> Instant.now().plusSeconds(30 * 24 * 60 * 60).toString().substring(0,10)
+    fun calSupportTo(priceId: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+            .withZone(ZoneId.of("Asia/Tokyo"))
+        val now = Instant.now()
+        val supportTo = when (priceId) {
+            stripeConfig.boostSPriceId -> now.plusSeconds(7 * 24 * 60 * 60)
+            stripeConfig.boostMPriceId -> now.plusSeconds(30 * 24 * 60 * 60)
+            stripeConfig.boostLPriceId -> now.plusSeconds(30 * 24 * 60 * 60)
             else -> throw IllegalArgumentException("Invalid priceId: $priceId")
         }
+        return formatter.format(supportTo)
+    }
 
     private fun baseCheckoutParams(
         mode: SessionCreateParams.Mode,
@@ -134,7 +141,7 @@ class StripeService(
             b.setSubscriptionData(
                 SessionCreateParams.SubscriptionData.builder()
                     .putMetadata("app_user_id", appUserId)
-                    .putMetadata("app_product", priceId)
+                    .putMetadata("app_price_id", priceId)
                     .putMetadata("is_plan", isPlan.toString())
                     .build()
             )
@@ -142,7 +149,7 @@ class StripeService(
             b.setPaymentIntentData(
                 SessionCreateParams.PaymentIntentData.builder()
                     .putMetadata("app_user_id", appUserId)
-                    .putMetadata("app_product", priceId)
+                    .putMetadata("app_price_id", priceId)
                     .putMetadata("is_plan", isPlan.toString())
                     .build()
             )
