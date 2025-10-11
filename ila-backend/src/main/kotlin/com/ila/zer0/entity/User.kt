@@ -43,4 +43,10 @@ data class User(
 
     @get:DynamoDbAttribute("isFollowed")
     var isFollowed: Boolean = false,
+
+    @get:DynamoDbAttribute("plan")
+    var plan: String = "",
+
+    @get:DynamoDbAttribute("boost")
+    var boost: List<String> = emptyList(),
 )

@@ -17,7 +17,8 @@ import java.util.*
 class SqsService(
     private val sqsClient: SqsClient,
     private val sqsConfig: SqsConfig,
-    private val userManagerService: UserManagerService
+    private val userManagerService: UserManagerService,
+    private val stripeService: StripeService
 ) {
 
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -58,27 +59,81 @@ class SqsService(
 
         resp.messages().forEach { msg ->
             try {
-                handleInvoicePaidMessage(msg.body())
-                // 成功時は削除
-//                sqsClient.deleteMessage(
-//                    DeleteMessageRequest.builder()
-//                        .queueUrl(sqsConfig.invoicePaidQueueUrl)
-//                        .receiptHandle(msg.receiptHandle())
-//                        .build()
-//                )
-//                log.info("Deleted message: ${msg.messageId()}")
+                val res = handleInvoicePaidMessage(msg.body())
+                if (!res) {
+                    log.warn("Failed to handle invoice paid message: ${msg.messageId()}")
+                    return@forEach
+                }
+                sqsClient.deleteMessage(
+                    DeleteMessageRequest.builder()
+                        .queueUrl(sqsConfig.invoicePaidQueueUrl)
+                        .receiptHandle(msg.receiptHandle())
+                        .build()
+                )
+                log.info("Deleted message: ${msg.messageId()}")
             } catch (ex: Exception) {
                 log.error("Failed to process message: ${msg.messageId()}", ex)
             }
         }
     }
 
-    private fun handleInvoicePaidMessage(body: String) {
-        val node = mapper.readTree(body)
-        val eventType = node.path("type").asText(null)
-        log.info("Received invoicePaid message: type=$eventType, body=$body")
+    private fun handleInvoicePaidMessage(body: String): Boolean {
+        val root = mapper.readTree(body)
+        val invoice = root.path("detail").path("data").path("object")
+        val firstLine = invoice.path("lines").path("data").let { arr ->
+            if (arr.isArray && arr.size() > 0) arr.get(0) else null
+        }
 
-        // TODO: DynamoDB更新やStripeイベント処理などをここに実装
-//        userManagerService.updateUser()
+        // app_user_idを取得
+        val appUserIdFromLine = firstLine?.path("metadata")?.path("app_user_id")?.asText(null)
+        val appUserIdFromParent = invoice
+            .path("parent")
+            .path("subscription_details")
+            .path("metadata")
+            .path("app_user_id")
+            .asText(null)
+        val appUserId = appUserIdFromLine ?: appUserIdFromParent
+
+        // priceIdを取得
+        val priceId = firstLine
+            ?.path("pricing")
+            ?.path("price_details")
+            ?.path("price")
+            ?.asText(null)
+
+        if (appUserId == null || priceId == null) {
+            log.warn("Missing app_user_id or price_id in invoice: app_user_id=$appUserId, price_id=$priceId")
+            return false
+        }
+
+        log.info(
+            "InvoicePaid extracted: app_user_id={}, price_id={}",
+            appUserId,
+            priceId
+        )
+
+        // ユーザーを取得
+        val user = userManagerService.getUserById(appUserId)
+        if (user == null) {
+            log.warn("User not found for app_user_id=$appUserId")
+            return false
+        }
+        log.info("user=${user})")
+
+        // priceIdからproductを判定
+        val product = stripeService.toProduct(priceId)
+        val isPlan = stripeService.isPlan(priceId)
+        log.info("product=$product, isPlan=$isPlan")
+
+        // ユーザーのplan,boostを更新
+        if (isPlan) {
+            userManagerService.updatePlan(user, product)
+        } else {
+            val supportTo = stripeService.calSupportTo(priceId)
+            log.info("supportTo=$supportTo")
+            userManagerService.updateBoost(user, product, supportTo)
+        }
+
+        return true
     }
 }

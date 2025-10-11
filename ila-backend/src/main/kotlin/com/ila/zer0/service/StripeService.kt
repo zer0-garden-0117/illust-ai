@@ -43,7 +43,7 @@ class StripeService(
             successUrl = "${successUrl}?session_id={CHECKOUT_SESSION_ID}",
             cancelUrl = cancelUrl,
             customerId = customer.id,
-            metadata = mapOf("app_user_id" to userId)
+            appUserId = userId,
         )
         val idempotencyKey = "chk_${userId}_${product}_${mode.name.lowercase()}_${Instant.now().epochSecond}"
         val requestOptions = RequestOptions.builder()
@@ -84,15 +84,38 @@ class StripeService(
             else -> throw IllegalArgumentException("Invalid product: $product")
         }
 
+    fun toProduct(priceId: String): String =
+        when (priceId) {
+            stripeConfig.basicPriceId -> "Basic"
+            stripeConfig.boostSPriceId -> "Boost S"
+            stripeConfig.boostMPriceId -> "Boost M"
+            stripeConfig.boostLPriceId -> "Boost L"
+            else -> throw IllegalArgumentException("Invalid priceId: $priceId")
+        }
+
+    fun isPlan(priceId: String): Boolean =
+        priceId == stripeConfig.basicPriceId
+
+    // 現在日時からサポート日時を算出する
+    // boostS: 7日, boostM: 30日, boostL: 30日
+    // 返却は2025/01/01の形式
+    fun calSupportTo(priceId: String): String =
+        when (priceId) {
+            stripeConfig.boostSPriceId -> Instant.now().plusSeconds(7 * 24 * 60 * 60).toString().substring(0,10)
+            stripeConfig.boostMPriceId -> Instant.now().plusSeconds(30 * 24 * 60 * 60).toString().substring(0,10)
+            stripeConfig.boostLPriceId -> Instant.now().plusSeconds(30 * 24 * 60 * 60).toString().substring(0,10)
+            else -> throw IllegalArgumentException("Invalid priceId: $priceId")
+        }
+
     private fun baseCheckoutParams(
         mode: SessionCreateParams.Mode,
         priceId: String,
         successUrl: String,
         cancelUrl: String,
         customerId: String,
-        metadata: Map<String, String>
+        appUserId: String,
     ): SessionCreateParams {
-        return SessionCreateParams.builder()
+        val b = SessionCreateParams.builder()
             .setMode(mode)
             .addLineItem(
                 SessionCreateParams.LineItem.builder()
@@ -103,8 +126,21 @@ class StripeService(
             .setSuccessUrl(successUrl)
             .setCancelUrl(cancelUrl)
             .setCustomer(customerId)
-            .putAllMetadata(metadata)
-            .build()
+
+        if (mode == SessionCreateParams.Mode.SUBSCRIPTION) {
+            b.setSubscriptionData(
+                SessionCreateParams.SubscriptionData.builder()
+                    .putMetadata("app_user_id", appUserId)
+                    .build()
+            )
+        } else if (mode == SessionCreateParams.Mode.PAYMENT) {
+            b.setPaymentIntentData(
+                SessionCreateParams.PaymentIntentData.builder()
+                    .putMetadata("app_user_id", appUserId)
+                    .build()
+            )
+        }
+        return b.build()
     }
 
     fun createPortalSessionUrl(

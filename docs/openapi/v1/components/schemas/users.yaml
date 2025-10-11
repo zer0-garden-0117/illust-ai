@@ -52,6 +52,15 @@ ApiUser:
       type: boolean
       description: このユーザーが認証ユーザーをフォローしているかどうか
       example: true
+    plan:
+      type: string
+      description: ユーザーのプラン
+      example: free
+    boost:
+      type: array
+      items:
+        type: string
+      description: ブーストプランのリスト
 
 ApiFollowUsers:
   description: フォロー情報

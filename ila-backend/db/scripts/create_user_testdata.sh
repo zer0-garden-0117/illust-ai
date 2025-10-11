@@ -83,7 +83,9 @@ for i in $(seq 1 50); do
     \"userProfile\": {\"S\": \"testUserProfile\"},
     \"profileImageUrl\": {\"S\": \"https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png\"},
     \"coverImageUrl\": {\"S\": \"https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png\"},
-    \"createdAt\": {\"S\": \"2023-05-10T14:20:00Z\"}
+    \"createdAt\": {\"S\": \"2023-05-10T14:20:00Z\"},
+    \"plan\": {\"S\": \"Free\"},
+    \"boost\": {\"L\": [{\"S\": \"Boost S:2025/10/17\"}, {\"S\": \"Boost M:2025/11/11\"}]}
   }"
 done
 

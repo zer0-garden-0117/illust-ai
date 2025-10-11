@@ -47,6 +47,7 @@ class UserManagerService(
         newUser.userProfile = ""
         newUser.profileImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"
         newUser.coverImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"
+        newUser.plan = "free"
         newUser.createdAt = Instant.now()
         newUser.updatedAt = Instant.now()
         return userService.registerUser(newUser)
@@ -148,6 +149,23 @@ class UserManagerService(
         user.userName = userName
         // userProfileの更新
         user.userProfile = userProfile
+        return userService.updateUser(user)
+    }
+
+    fun updatePlan(
+        user: User,
+        plan: String
+    ): User {
+        user.plan = plan
+        return userService.updateUser(user)
+    }
+
+    fun updateBoost(
+        user: User,
+        boost: String,
+        supportTo: String,
+    ): User {
+        user.boost = user.boost + listOf("$boost:$supportTo")
         return userService.updateUser(user)
     }
 
