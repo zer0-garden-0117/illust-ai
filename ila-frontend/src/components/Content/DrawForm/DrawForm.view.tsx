@@ -5,6 +5,7 @@ import { DrawFormValues } from './DrawForm.hook';
 import { UseFormReturnType } from '@mantine/form';
 import { Button, Card, Group, Notification, Radio, Space, Text, Textarea, TextInput } from '@mantine/core';
 import { IconCube, IconInfoCircle, IconInfoSmall, IconPencil } from '@tabler/icons-react';
+import { IoInformationSharp } from "react-icons/io5";
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import { IconPencilCode } from '@tabler/icons-react';
 
@@ -51,7 +52,7 @@ export const DrawFormView = memo(function WorkViewComponent({
         withCloseButton={false}
         style={{ boxShadow: 'none' }}
         withBorder
-        icon={<IconInfoSmall size={30} />}
+        icon={<IoInformationSharp size={20} />}
       >
         今日はあと5回イラストを生成できます。
         <Button

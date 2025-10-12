@@ -43,7 +43,7 @@ class StripeService(
         val params = baseCheckoutParams(
             mode = mode,
             priceId = priceId,
-            successUrl = "${successUrl}?session_id={CHECKOUT_SESSION_ID}",
+            successUrl = "${successUrl}?priceId=$priceId",
             cancelUrl = cancelUrl,
             customerId = customer.id,
             appUserId = userId,
