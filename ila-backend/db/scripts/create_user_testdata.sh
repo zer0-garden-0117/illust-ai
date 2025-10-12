@@ -73,7 +73,7 @@ echo "Adding test data to user table..."
 #  "createdAt": {"S": "2023-05-10T14:20:00Z"}
 #}'
 
-for i in $(seq 1 50); do
+for i in $(seq 1 5); do
   printf -v padded "%03d" "$i"   # 001, 002, ... 050
   put_item user "{
     \"userId\": {\"S\": \"user${padded}\"},

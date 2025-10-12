@@ -48,6 +48,7 @@ class UserManagerService(
         newUser.profileImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/icon2.png"
         newUser.coverImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"
         newUser.plan = "Free"
+        newUser.boost = listOf()
         newUser.createdAt = Instant.now()
         newUser.updatedAt = Instant.now()
         return userService.registerUser(newUser)
