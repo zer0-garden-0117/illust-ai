@@ -149,4 +149,20 @@ create_table follow \
             }
         ]"
 
+# usage テーブルの作成（ユーザー日次使用量）
+create_table usage \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=yyyymmdd,AttributeType=S \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH \
+        AttributeName=yyyymmdd,KeyType=RANGE
+
+# usage テーブルの ttl 属性を自動削除に使用
+aws dynamodb update-time-to-live \
+    --profile "$PROFILE" \
+    --table-name usage \
+    --time-to-live-specification "Enabled=true, AttributeName=ttl" \
+    --endpoint-url "$ENDPOINT_URL"
+
 echo "Table creation process completed."

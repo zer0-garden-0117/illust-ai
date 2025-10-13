@@ -8,6 +8,7 @@ import com.ila.zer0.generated.endpoint.WorksApi
 import com.ila.zer0.generated.model.*
 import com.ila.zer0.mapper.TagMapper
 import com.ila.zer0.mapper.WorkMapper
+import com.ila.zer0.service.user.UsageService
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.work.WorkManagerService
 import io.swagger.v3.oas.annotations.Parameter
@@ -23,17 +24,17 @@ class WorksController(
     private val workManagerService: WorkManagerService,
     private val workMapper: WorkMapper,
     private val tagMapper: TagMapper,
-    private val userManagerService: UserManagerService
+    private val userManagerService: UserManagerService,
+    private val usageService: UsageService
 ) : WorksApi {
 
     override fun createWorks(
         @RequestBody apiWorkWithTag: ApiWorkWithTag
     ): ResponseEntity<ApiWorkWithTag> {
-        // ユーザー情報を取得
-        val user =
-            getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        // イラスト生成数を確認
-        if (user.illustNum <= 0) {
+        // ユーザーを取得
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        // 生成可能数をチェック
+        if (usageService.getRemainingToday(user.userId, defaultLimit = user.illustNum) <= 0) {
             return ResponseEntity(HttpStatus.PAYMENT_REQUIRED)
         }
 
@@ -45,7 +46,7 @@ class WorksController(
         val workWithTag = workManagerService.createWork(work, tags)
 
         // イラスト生成数をデクリメント
-        userManagerService.decrementIllustNum(user)
+        usageService.consumeOneToday(user.userId, limitIfAbsent = user.illustNum)
 
         // APIモデルに変換して返却
         return ResponseEntity.ok(toApiWorkWithTag(workWithTag))

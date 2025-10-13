@@ -32,6 +32,7 @@ class UserManagerService(
     private val uuidService: UuidService,
     private val convertService: ConvertService,
     private val s3Service: S3Service,
+    private val usageService: UsageService
 ) {
     val logger = LoggerFactory.getLogger(UserManagerService::class.java)
 
@@ -49,7 +50,6 @@ class UserManagerService(
         newUser.coverImageUrl = "https://ila-backend.s3.us-east-2.amazonaws.com/cover2.png"
         newUser.plan = "Free"
         newUser.boost = listOf()
-        newUser.illustNum = 3
         newUser.createdAt = Instant.now()
         newUser.updatedAt = Instant.now()
         return userService.registerUser(newUser)
@@ -64,6 +64,8 @@ class UserManagerService(
         val followerCount = followService.getFollowerCount(userId)
         user.follow = followCount
         user.follower = followerCount
+        val limit = calLimitNumByPlanAndBoost(user.plan, user.boost)
+        user.illustNum = usageService.getRemainingToday(user.userId, limit)
         return user
     }
 
@@ -151,30 +153,6 @@ class UserManagerService(
         user.userName = userName
         // userProfileの更新
         user.userProfile = userProfile
-        return userService.updateUser(user)
-    }
-
-    fun updatePlan(
-        user: User,
-        plan: String
-    ): User {
-        user.plan = plan
-        return userService.updateUser(user)
-    }
-
-    fun updateBoost(
-        user: User,
-        boost: String,
-        supportTo: String,
-    ): User {
-        user.boost = user.boost + listOf("$boost:$supportTo")
-        return userService.updateUser(user)
-    }
-
-    fun decrementIllustNum(
-        user: User,
-    ): User {
-        user.illustNum -= 1
         return userService.updateUser(user)
     }
 
@@ -343,5 +321,23 @@ class UserManagerService(
     @Transactional
     fun deleteUsers(userId: String) {
         likedService.deleteUser(userId)
+    }
+
+    fun calLimitNumByPlanAndBoost(plan: String, boost: List<String>): Int {
+        var limitNum = when (plan) {
+            "Free" -> 3
+            "Basic" -> 10
+            else -> 3
+        }
+        boost.forEach {
+            val plan = it.split(":").first()
+            limitNum += when (plan) {
+                "Boost S" -> 10
+                "Boost M" -> 10
+                "Boost L" -> 20
+                else -> 0
+            }
+        }
+        return limitNum
     }
 }
