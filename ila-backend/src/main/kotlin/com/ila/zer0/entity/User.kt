@@ -49,4 +49,7 @@ data class User(
 
     @get:DynamoDbAttribute("boost")
     var boost: List<String> = emptyList(),
+
+    @get:DynamoDbAttribute("illustNum")
+    var illustNum: Int = 0,
 )

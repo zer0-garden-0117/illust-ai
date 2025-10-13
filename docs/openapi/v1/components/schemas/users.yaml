@@ -61,6 +61,10 @@ ApiUser:
       items:
         type: string
       description: ブーストプランのリスト
+    illustNum:
+      type: integer
+      description: イラスト生成数
+      example: 3
 
 ApiFollowUsers:
   description: フォロー情報

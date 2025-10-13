@@ -8,6 +8,7 @@ import { IconCube, IconInfoCircle, IconInfoSmall, IconPencil } from '@tabler/ico
 import { IoInformationSharp } from "react-icons/io5";
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import { IconPencilCode } from '@tabler/icons-react';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type DrawFormViewProps = {
   form: UseFormReturnType<DrawFormValues>,
@@ -22,6 +23,7 @@ export const DrawFormView = memo(function WorkViewComponent({
   handleHistoryClick,
   handlePlanChangeClick
 }: DrawFormViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
 
   return (
     <Card withBorder padding="md" radius="md">
@@ -54,7 +56,7 @@ export const DrawFormView = memo(function WorkViewComponent({
         withBorder
         icon={<IoInformationSharp size={20} />}
       >
-        今日はあと5回イラストを生成できます。
+        今日はあと{user?.illustNum}回イラストを生成できます。
         <Button
           size='compact-xs'
           onClick={handlePlanChangeClick}
@@ -110,13 +112,13 @@ export const DrawFormView = memo(function WorkViewComponent({
                   size={20}
                   style={{ display: 'block' }}
                 />
-                5
+                {user?.illustNum}
                 <IconArrowNarrowRight
                   color="white"
                   size={20}
                   style={{ display: 'block' }}
                 />
-                4
+                {(user?.illustNum ?? 0) - 1}
               </>
             }
           >

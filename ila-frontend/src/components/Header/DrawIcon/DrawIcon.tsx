@@ -2,9 +2,11 @@ import React from 'react';
 import { Box, ActionIcon, useMantineColorScheme, Group, Badge } from '@mantine/core';
 import { useRouter } from "next/navigation";
 import { IconPencil } from '@tabler/icons-react';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 export const DrawIcon: React.FC = () => {
   const router = useRouter();
+  const { user } = useFirebaseAuthContext();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
 
@@ -45,7 +47,7 @@ export const DrawIcon: React.FC = () => {
           justifyContent: 'center',
         }}
       >
-        5
+        {user?.illustNum}
       </Badge>
     </Group>
     </Box>
