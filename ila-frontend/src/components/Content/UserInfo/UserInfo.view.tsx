@@ -363,7 +363,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             mb="md"
             style={{ display: 'inline-flex', width: 'fit-content' }}
           >
-            Basic
+            {userData?.plan}
           </Pill>
 
           {/* ブーストの状態 */}
@@ -383,12 +383,20 @@ export const UserInfoView = memo(function WorkViewComponent({
               </Button>
             </Anchor>
           </Group>
-          <Pill
-            mb="md"
-            style={{ display: 'inline-flex', width: 'fit-content' }}
-          >
-            Boost 2X (10/14迄)
-          </Pill>
+          <Group gap={1}>
+            {userData?.boost?.map((boostItem, index) => {
+              const [label, date] = boostItem.split(':');
+              return (
+                <Pill
+                  key={index}
+                  mb="md"
+                  style={{ display: 'inline-flex', width: 'fit-content', marginRight: 8 }}
+                >
+                  {label} ({date}まで有効)
+                </Pill>
+              );
+            })}
+          </Group>
           
           <Group justify="flex-end" mt="md">
             <Button
