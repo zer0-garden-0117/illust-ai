@@ -1,6 +1,8 @@
 package com.ila.zer0.controller
 
+import com.ila.zer0.config.token.CustomAuthenticationToken
 import com.ila.zer0.entity.Tag
+import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import com.ila.zer0.generated.endpoint.WorksApi
 import com.ila.zer0.generated.model.*
@@ -12,6 +14,8 @@ import io.swagger.v3.oas.annotations.Parameter
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -25,12 +29,23 @@ class WorksController(
     override fun createWorks(
         @RequestBody apiWorkWithTag: ApiWorkWithTag
     ): ResponseEntity<ApiWorkWithTag> {
+        // ユーザー情報を取得
+        val user =
+            getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        // イラスト生成数を確認
+        if (user.illustNum <= 0) {
+            return ResponseEntity(HttpStatus.PAYMENT_REQUIRED)
+        }
+
         // ドメインモデルに変換
         val work: Work = workMapper.toWork(apiWorkWithTag.apiWork!!)
         val tags: List<Tag> = tagMapper.toTag(apiWorkWithTag.apiTags!!)
 
         // 作品作成
         val workWithTag = workManagerService.createWork(work, tags)
+
+        // イラスト生成数をデクリメント
+        userManagerService.decrementIllustNum(user)
 
         // APIモデルに変換して返却
         return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
@@ -107,5 +122,15 @@ class WorksController(
             apiTags = apiTags
         )
         return apiWorkWithTag
+    }
+
+    private fun getUser(): User? {
+        val authentication: Authentication? =
+            SecurityContextHolder.getContext().authentication
+        val customAuth = authentication as? CustomAuthenticationToken
+        if (customAuth?.userId == null) {
+            return null
+        }
+        return userManagerService.getUserById(customAuth.userId)
     }
 }

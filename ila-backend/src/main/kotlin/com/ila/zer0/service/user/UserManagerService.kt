@@ -171,6 +171,13 @@ class UserManagerService(
         return userService.updateUser(user)
     }
 
+    fun decrementIllustNum(
+        user: User,
+    ): User {
+        user.illustNum -= 1
+        return userService.updateUser(user)
+    }
+
     @Transactional
     fun deleteUser(
         userId: String
