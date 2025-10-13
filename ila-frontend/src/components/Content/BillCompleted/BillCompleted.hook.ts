@@ -1,6 +1,4 @@
 import { useRouter } from "next/navigation";
-import { ImageDataOfImageCardsForHistory } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
-import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
 type UseBillCompletedrops = {
   priceId: string;
@@ -11,14 +9,19 @@ export const useBillCompleted = (
 ) => {
 
   const router = useRouter();
-  const productName = "Sample Product";
+
+  const productName = 
+    priceId === 'price_1SFZtJGV099jFwTVZhlq19fo' ? 'Basic' :
+    priceId === 'price_1SFuRWGV099jFwTVqJj2MZUG' ? 'Boost S' :
+    priceId === 'price_1SFuRyGV099jFwTVZWPwlLq0' ? 'Boost M' :
+    priceId === 'price_1SFuTHGV099jFwTVP7VUCctG' ? 'Boost L' :
+    'Unknown';
 
   const handleDrawClick = () => {
     router.push('/draw');
   }
 
   return {
-    priceId,
     productName,
     handleDrawClick,
   };

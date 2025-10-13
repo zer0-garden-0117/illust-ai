@@ -1,18 +1,15 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Pill, Text, Loader, Notification, Space } from '@mantine/core';
-import { IoInformationSharp } from 'react-icons/io5';
-import { IconX, IconCheck } from '@tabler/icons-react';
+import { Group, Card, Button, Notification, Space } from '@mantine/core';
+import { IconCheck } from '@tabler/icons-react';
 
 type BillCompletedViewProps = {
-  priceId: string;
   productName: string;
   handleDrawClick: () => void;
 };
 
 export const BillCompletedView = memo(function WorkViewComponent({
-  priceId,
   productName,
   handleDrawClick,
 }: BillCompletedViewProps): JSX.Element {
@@ -26,7 +23,7 @@ export const BillCompletedView = memo(function WorkViewComponent({
         withBorder
         icon={<IconCheck size={20} />}
       >
-        {priceId}の購入が完了しました
+        {productName}の購入が完了しました
       </Notification>
       <Space h="md" />
       
