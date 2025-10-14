@@ -26,7 +26,7 @@ class WorkManagerService(
     private val logger = LoggerFactory.getLogger(WorkService::class.java)
 
     @Transactional
-    fun createWork(work: Work, tags: List<Tag>): WorkWithTag {
+    fun createWork(work: Work): WorkWithTag {
         // 作品の登録
         val nowDate = Instant.now()
         val workId = uuidService.generateUuid()
@@ -36,16 +36,16 @@ class WorkManagerService(
         workService.registerWork(work)
 
         // タグの登録
-        val filteredTags = tags.filter { it.tag.isNotBlank() }
-        val globalTag = Tag().apply { tag = "other_GLOBAL" }
-        val allTags = filteredTags + globalTag
-        allTags.forEach { tag ->  tag.workId = workId; tag.updatedAt = nowDate }
-        tagRepository.registerTags(allTags)
+//        val filteredTags = tags.filter { it.tag.isNotBlank() }
+//        val globalTag = Tag().apply { tag = "other_GLOBAL" }
+//        val allTags = filteredTags + globalTag
+//        allTags.forEach { tag ->  tag.workId = workId; tag.updatedAt = nowDate }
+//        tagRepository.registerTags(allTags)
 
         // 画像生成SQS通知
         sqsService.sendCreateImageMessage(work.workId, "create", work.prompt, work.createdAt)
 
-        return WorkWithTag(work, tags)
+        return WorkWithTag(work, listOf<Tag>())
     }
 
     @Transactional

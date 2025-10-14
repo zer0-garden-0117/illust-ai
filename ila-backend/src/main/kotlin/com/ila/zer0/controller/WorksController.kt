@@ -38,12 +38,10 @@ class WorksController(
             return ResponseEntity(HttpStatus.PAYMENT_REQUIRED)
         }
 
-        // ドメインモデルに変換
-        val work: Work = workMapper.toWork(apiWorkWithTag.apiWork!!)
-        val tags: List<Tag> = tagMapper.toTag(apiWorkWithTag.apiTags!!)
+        val work = Work()
 
         // 作品作成
-        val workWithTag = workManagerService.createWork(work, tags)
+        val workWithTag = workManagerService.createWork(work)
 
         // イラスト生成数をデクリメント
         usageService.consumeOneToday(user.userId, limitIfAbsent = user.illustNum)

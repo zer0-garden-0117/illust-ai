@@ -1,3 +1,5 @@
+import { useWorksCreate } from "@/apis/openapi/works/useWorksCreate";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +10,9 @@ export type DrawFormValues = {
 };
 
 export const useDrawForm = () => {
+  const { getIdTokenLatest ,getFreshIdToken } = useFirebaseAuthContext();
   const router = useRouter();
+  const { trigger: createWork } = useWorksCreate();
 
   const form = useForm<DrawFormValues>({
     initialValues: {
@@ -19,7 +23,19 @@ export const useDrawForm = () => {
   });
 
   const handleDrawClick = async (values: DrawFormValues) => {
-    // 画像生成のAPIを呼び出す
+    // 画像生成のAPIを呼び出す    
+    await createWork({
+      headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
+      body: {
+        apiWork: {
+          mainTitle: "",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }
+      }
+    });
+    // トークンを更新してから遷移
+    await getFreshIdToken();
     router.push(`/draw/test/processing`);
   }
 
