@@ -165,4 +165,20 @@ aws dynamodb update-time-to-live \
     --time-to-live-specification "Enabled=true, AttributeName=ttl" \
     --endpoint-url "$ENDPOINT_URL"
 
+# product テーブルの作成
+create_table product \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=expiresKey,AttributeType=S \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH \
+        AttributeName=expiresKey,KeyType=RANGE
+
+# product テーブルの ttl 属性を自動削除に使用
+aws dynamodb update-time-to-live \
+    --profile "$PROFILE" \
+    --table-name product \
+    --time-to-live-specification "Enabled=true, AttributeName=ttl" \
+    --endpoint-url "$ENDPOINT_URL"
+
 echo "Table creation process completed."

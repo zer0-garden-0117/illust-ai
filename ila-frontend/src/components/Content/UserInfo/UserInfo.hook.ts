@@ -5,6 +5,7 @@ import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useMyUserUpdate } from "@/apis/openapi/users/useMyUserUpdate";
 import { useUserCheckAvailability } from "@/apis/openapi/users/useUserCheckAvailability";
 import { useUsersGet } from "@/apis/openapi/users/useUsersGet";
+import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
 
 type UseUserInfoProps = {
   userId: string;
@@ -22,7 +23,7 @@ export const useUserInfo = (
   { userId }: UseUserInfoProps
 ) => {
   const router = useRouter();
-  const { user, getFreshIdToken, getIdTokenLatest } = useFirebaseAuthContext();
+  const { user: loginUser, getFreshIdToken, getIdTokenLatest } = useFirebaseAuthContext();
   const { trigger: checkAvailability, isMutating: isChecking } = useUserCheckAvailability();
   const { trigger: updateMyUser } = useMyUserUpdate();
   const [coverImageFile, setCoverImageFile] = useState<File>(new File([], ""));
@@ -39,8 +40,8 @@ export const useUserInfo = (
   }, { revalidateOnFocus: true });
 
   useEffect(() => {
-    setIsLoginUser(!!(user && userData?.customUserId === user.customUserId));
-  }, [user, userData]);
+    setIsLoginUser(!!(loginUser && userData?.customUserId === loginUser.customUserId));
+  }, [loginUser, userData]);
 
   const form = useForm<UserInfoFormValues>({
     initialValues: {
@@ -168,6 +169,7 @@ export const useUserInfo = (
   return {
     form,
     userData,
+    loginUser: loginUser as MyUserGetResult,
     isLoginUser,
     isChecking,
     isSaving,

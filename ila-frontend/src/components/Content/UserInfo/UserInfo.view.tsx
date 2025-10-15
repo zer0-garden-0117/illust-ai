@@ -9,10 +9,12 @@ import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
 import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
 
 type UserInfoViewProps = {
   form: UseFormReturnType<UserInfoFormValues>;
   userData: UsersGetResult | undefined,
+  loginUser: MyUserGetResult,
   isLoginUser: boolean,
   isChecking: boolean,
   isSaving: boolean,
@@ -35,6 +37,7 @@ type UserInfoViewProps = {
 export const UserInfoView = memo(function WorkViewComponent({
   form,
   userData,
+  loginUser,
   isLoginUser,
   isChecking,
   isSaving,
@@ -363,7 +366,12 @@ export const UserInfoView = memo(function WorkViewComponent({
             mb="md"
             style={{ display: 'inline-flex', width: 'fit-content' }}
           >
-            {userData?.plan}
+            {(() => {
+              const parts = loginUser?.plan?.split(':') || [];
+              const [planName, renewDate, renewTime] = parts;
+              if (!planName) return 'Free';
+              return `${planName} (${renewDate}:${renewTime}に自動更新)`;
+            })()}
           </Pill>
 
           {/* ブーストの状態 */}
@@ -384,7 +392,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             </Anchor>
           </Group>
           <Group gap={1}>
-            {userData?.boost?.map((boostItem, index) => {
+            {loginUser?.boost?.map((boostItem, index) => {
               const [label, date] = boostItem.split(':');
               return (
                 <Pill

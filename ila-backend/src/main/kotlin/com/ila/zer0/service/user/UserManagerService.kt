@@ -32,7 +32,8 @@ class UserManagerService(
     private val uuidService: UuidService,
     private val convertService: ConvertService,
     private val s3Service: S3Service,
-    private val usageService: UsageService
+    private val usageService: UsageService,
+    private val productService: ProductService
 ) {
     val logger = LoggerFactory.getLogger(UserManagerService::class.java)
 
@@ -66,6 +67,18 @@ class UserManagerService(
         user.follower = followerCount
         val limit = calLimitNumByPlanAndBoost(user.plan, user.boost)
         user.illustNum = usageService.getRemainingToday(user.userId, limit)
+        val products = productService.findActive(user.userId)
+        // productsにBasicが含まれていればplanをBasicに設定、含まれていなければFreeに設定
+        // planをBasicにする場合は、Basic:it.autoUpdateToの形式でuser.planに設定
+        if (products.any { it.product == "Basic" }) {
+            val basicProduct = products.first { it.product == "Basic" }
+            user.plan = "Basic:" + basicProduct.autoUpdateTo
+        } else {
+            user.plan = "Free"
+        }
+        // boostにBasic以外の有効なプランをプロダクト名:有効期限の形式で追加
+        user.boost = products.filter { it.product != "Basic" }
+            .map { it.product + ":" + it.supportTo }
         return user
     }
 
