@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
@@ -33,6 +33,7 @@ export const useUserInfo = (
   const [isLoading, setIsLoading] = useState(false);
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
+  const [isUserDataLoading, setIsUserDataLoading] = useState(false);
 
   const { data: userData, mutate: updateUser } = useUsersGet({
     customUserId: userId,
@@ -42,6 +43,10 @@ export const useUserInfo = (
   useEffect(() => {
     setIsLoginUser(!!(loginUser && userData?.customUserId === loginUser.customUserId));
   }, [loginUser, userData]);
+
+  useEffect(() => {
+    setIsUserDataLoading(!userData);
+  }, [userData]);
 
   const form = useForm<UserInfoFormValues>({
     initialValues: {
@@ -115,15 +120,14 @@ export const useUserInfo = (
           userProfile: values.userProfile
         }
       });
-      // 更新処理後、モーダルを閉じる
-      setOpened(false);
 
       // トークンと認証情報を更新
       await getFreshIdToken();
       updateUser();
+      setIsUserDataLoading(true);
 
-      // 画面遷移
-      window.location.href = `/user/${values.customUserId}`;
+      // 更新処理後、モーダルを閉じる
+      setOpened(false);
     } finally {
       setIsSaving(false);
     }
@@ -175,6 +179,7 @@ export const useUserInfo = (
     isSaving,
     isUserIdAvailable,
     isLoading,
+    isUserDataLoading,
     opened,
     updateUser,
     validateCustomUserId,

@@ -7,8 +7,9 @@ export const SkeltonIcon: React.FC<
   width?: number
   height?: number
   marginTop?: number
+  isUserDataLoading?: boolean
 }
-> = ({ profileImageUrl, width, height, marginTop }) => {
+> = ({ profileImageUrl, width, height, marginTop, isUserDataLoading = false }) => {
   return (
     <div
       style={{
@@ -19,7 +20,7 @@ export const SkeltonIcon: React.FC<
         marginTop: marginTop,
       }}
     >
-      <Skeleton visible={!profileImageUrl} height={height} width={width} radius="50%">
+      <Skeleton visible={!profileImageUrl || isUserDataLoading} height={height} width={width} radius="50%">
         <Image
           key={profileImageUrl}
           src={profileImageUrl || '/default-profile.png'}

@@ -21,6 +21,7 @@ type UserInfoViewProps = {
   isSaving: boolean,
   isUserIdAvailable: boolean,
   isLoading: boolean,
+  isUserDataLoading: boolean,
   opened: boolean,
   updateUser: () => void,
   validateCustomUserId: (value: string) => Promise<string | null>,
@@ -44,6 +45,7 @@ export const UserInfoView = memo(function WorkViewComponent({
   isSaving,
   isUserIdAvailable,
   isLoading,
+  isUserDataLoading,
   opened,
   updateUser,
   validateCustomUserId,
@@ -72,7 +74,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             backgroundPosition: 'center',
           }}
         >
-          <Skeleton visible={!userData} height={140} width="100%">
+          <Skeleton visible={!userData || isUserDataLoading} height={140} width="100%">
             <div style={{ width: '100%', height: '140px' }}></div>
           </Skeleton>
         </Card.Section>
@@ -83,6 +85,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             width={70}
             height={70}
             marginTop={-30}
+            isUserDataLoading={isUserDataLoading}
           />
           <div key="LoginButton">
             {isLoginUser &&
