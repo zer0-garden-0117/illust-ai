@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Box, ActionIcon, useMantineColorScheme, Avatar, Modal, Button, Text } from '@mantine/core';
+import { Box, ActionIcon, useMantineColorScheme, Avatar, Modal, Button, Text, Skeleton } from '@mantine/core';
 import { useRouter } from "next/navigation";
 import { IconUser } from '@tabler/icons-react';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import LoginButton from '@/components/Common/LoginButton/LoginButton';
+import { SkeltonIcon } from '@/components/Content/SkeltonIcon/SkeltonIcon';
 
 export const UserIcon: React.FC = () => {
-  const { user } = useFirebaseAuthContext();
+  const { user, loading } = useFirebaseAuthContext();
   const router = useRouter();
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
@@ -25,54 +26,29 @@ export const UserIcon: React.FC = () => {
   };
 
   const avatarSize = 36;
-  const actionIconSize = 36;
+
+  // loading 中は何も表示しない
+  if (loading) {
+    return (
+      <Box>
+        <Skeleton circle height={avatarSize} width={avatarSize} />
+      </Box>
+    );
+  }
 
   return (
     <Box>
       {/* ログイン済の場合 */}
       {user && (
-        <ActionIcon
-          size={actionIconSize}
-          onClick={onIconClick}
-          variant="transparent"
-          color={isDark ? "var(--mantine-color-gray-5)" : "var(--mantine-color-gray-8)"} 
-          radius="xl"
-          styles={{
-            root: {
-              width: actionIconSize,
-              height: actionIconSize,
-              borderColor: isDark 
-                ? "var(--mantine-color-gray-8)"
-                : "var(--mantine-color-gray-5)",
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }
-          }}
-        >
-          <Avatar 
-            variant="transparent"
-            src={user?.profileImageUrl} 
-            radius="xl"
-            size={avatarSize}
-            styles={{
-              root: {
-                width: avatarSize,
-                height: avatarSize,
-                minWidth: avatarSize,
-                minHeight: avatarSize,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              },
-              image: {
-                objectFit: 'cover'
-              }
-            }}
-          >
-          </Avatar>
-        </ActionIcon>
-      )}
+        <Box onClick={onIconClick}>
+          <SkeltonIcon
+            profileImageUrl={user?.profileImageUrl}
+            width={avatarSize}
+            height={avatarSize}
+            marginTop={0}
+          />
+        </Box>
+       )}
       {/* ログイン前 */}
       {!user && (
         <Button

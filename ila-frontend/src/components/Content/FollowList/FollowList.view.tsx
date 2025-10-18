@@ -1,12 +1,13 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Avatar, Text, Card, Space, ActionIcon, Stack, Pagination, Divider } from '@mantine/core';
+import { Group, Avatar, Text, Card, Space, ActionIcon, Stack, Pagination, Divider, Skeleton, Flex } from '@mantine/core';
 import { IconArrowNarrowLeft } from '@tabler/icons-react';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import { FollowUsersGetResult } from '@/apis/openapi/users/useFollowUsersGet';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
+import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 
 type FollowListViewProps = {
   userData: UsersGetResult | undefined
@@ -38,7 +39,12 @@ export const FollowListView = memo(function WorkViewComponent({
         <Space h={10} />
         <Group align="center" justify="space-between" wrap="nowrap">
           <Group gap="sm" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
-            <Avatar size={40} src={item!.profileImageUrl} radius={40} />
+            <SkeltonIcon
+              profileImageUrl={item!.profileImageUrl}
+              width={40}
+              height={40}
+              marginTop={0}
+            />
             <div>
               <Text fz="sm" fw={500}>
                 {(() => {
@@ -73,6 +79,7 @@ export const FollowListView = memo(function WorkViewComponent({
       </Group>
     </Card>
   ));
+  const isLoading = !followUserData?.follows;
 
   return (
     <>
@@ -81,22 +88,49 @@ export const FollowListView = memo(function WorkViewComponent({
           <ActionIcon variant="subtle" color="gray" onClick={handleArrowLeftClick}>
             <IconArrowNarrowLeft color="black" />
           </ActionIcon>
-          <div>
-            <Text ta="left" fz="xl" fw={500}>
-              {(() => {
-                const name = userData?.userName ?? '';
-                const noNewline = name.replace(/\r?\n/g, '');
-                return noNewline.length > 20 ? noNewline.slice(0, 20) + '...' : (noNewline || ' ');
-              })()}
+          <Flex direction="column">
+          <Skeleton visible={!userData} radius="xl" height={30} width={100}>
+          <Text ta="left" fz="xl" fw={500}>
+            {(() => {
+              const name = userData?.userName ?? '';
+              const noNewline = name.replace(/\r?\n/g, '');
+              return noNewline.length > 20 ? noNewline.slice(0, 20) + '...' : (noNewline || ' ');
+            })()}
             </Text>
+          </Skeleton>
+          <Skeleton visible={!userData} radius="xl" width={80}>
             <Text ta="left" fz="xs" c="dimmed">
               @{userData?.customUserId}
             </Text>
-          </div>
+          </Skeleton>
+          </Flex>
         </Group>
         <Space h={15} />
         <Stack gap="0px">
-          {items}
+          {isLoading ? (
+            // Skeleton 表示
+              <Card padding="md">
+                <Card.Section withBorder />
+                <Group align="center" justify="space-between" wrap="nowrap">
+                  <Group gap="sm" wrap="nowrap">
+                    <SkeltonIcon
+                      profileImageUrl={undefined}
+                      width={30}
+                      height={30}
+                      marginTop={20}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <Skeleton height={12} width="100" mt={12} />
+                      <Skeleton height={10} width="80" mt={10} />
+                      <Skeleton height={10} width="80" mt={10} />
+                    </div>
+                  </Group>
+                  <Skeleton height={30} width={70} radius="xl" />
+                </Group>
+              </Card>
+            ) : (
+            items
+          )}
         </Stack>
         <Space h={20} />
         <Pagination total={Math.ceil((followUserData?.totalFollowCount ?? 0) / 10)} radius="md" onChange={handlePageChange}/>

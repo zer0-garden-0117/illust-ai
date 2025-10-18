@@ -6,10 +6,11 @@ import { IconSettings, IconPencil, IconPhoto, IconLock } from '@tabler/icons-rea
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
-import { Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill } from '@mantine/core';
+import { Skeleton, Image, Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
+import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 
 type UserInfoViewProps = {
   form: UseFormReturnType<UserInfoFormValues>;
@@ -70,14 +71,18 @@ export const UserInfoView = memo(function WorkViewComponent({
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
-        />
+        >
+          <Skeleton visible={!userData} height={140} width="100%">
+            <div style={{ width: '100%', height: '140px' }}></div>
+          </Skeleton>
+        </Card.Section>
+
         <Group justify="space-between">
-          <Avatar
-            key={userData?.profileImageUrl}
-            src={userData?.profileImageUrl}
-            size={80}
-            radius={80}
-            mt={-30}
+          <SkeltonIcon
+            profileImageUrl={userData?.profileImageUrl}
+            width={70}
+            height={70}
+            marginTop={-30}
           />
           <div key="LoginButton">
             {isLoginUser &&
@@ -246,14 +251,12 @@ export const UserInfoView = memo(function WorkViewComponent({
                 position: 'relative'
               }}
             >
-              <Avatar
-                src={form.values.profileImageUrl}
-                size={80}
-                radius={80}
-                mx="auto"
-                mt={-50}
-              >
-              </Avatar>
+              <SkeltonIcon
+                profileImageUrl={form.values.profileImageUrl}
+                width={70}
+                height={70}
+                marginTop={-30}
+              />
               <Center
                 mt={-20}
                 style={{
