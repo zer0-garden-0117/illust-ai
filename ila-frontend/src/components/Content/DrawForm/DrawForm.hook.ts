@@ -2,6 +2,7 @@ import { useWorksCreate } from "@/apis/openapi/works/useWorksCreate";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export type DrawFormValues = {
   model: string;
@@ -13,16 +14,18 @@ export const useDrawForm = () => {
   const { getIdTokenLatest ,getFreshIdToken } = useFirebaseAuthContext();
   const router = useRouter();
   const { trigger: createWork } = useWorksCreate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<DrawFormValues>({
     initialValues: {
       model: 'illust-ai-v1',
       prompt: '',
-      negativePrompt: ''
+      negativePrompt: '',
     },
   });
 
   const handleDrawClick = async (values: DrawFormValues) => {
+    setIsSubmitting(true);
     // 画像生成のAPIを呼び出す    
     await createWork({
       headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
@@ -53,6 +56,7 @@ export const useDrawForm = () => {
 
   return {
     form,
+    isSubmitting,
     handleDrawClick,
     handleHistoryClick,
     handlePlanChangeClick,

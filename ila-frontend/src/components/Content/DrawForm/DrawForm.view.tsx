@@ -12,6 +12,7 @@ import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type DrawFormViewProps = {
   form: UseFormReturnType<DrawFormValues>,
+  isSubmitting: boolean,
   handleDrawClick: (values: DrawFormValues) => Promise<void>,
   handleHistoryClick: () => void
   handlePlanChangeClick: () => void
@@ -20,6 +21,7 @@ type DrawFormViewProps = {
 
 export const DrawFormView = memo(function WorkViewComponent({
   form,
+  isSubmitting,
   handleDrawClick,
   handleHistoryClick,
   handlePlanChangeClick,
@@ -108,6 +110,7 @@ export const DrawFormView = memo(function WorkViewComponent({
         />
         <Group justify="flex-end" mt="md">
           <Button
+            loading={isSubmitting}
             type="submit"
             radius="xl"
             rightSection={
