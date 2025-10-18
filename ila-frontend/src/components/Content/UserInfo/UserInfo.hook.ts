@@ -9,6 +9,7 @@ import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
 
 type UseUserInfoProps = {
   userId: string;
+  tab: string;
 };
 
 export type UserInfoFormValues = {
@@ -20,7 +21,7 @@ export type UserInfoFormValues = {
 };
 
 export const useUserInfo = (
-  { userId }: UseUserInfoProps
+  { userId, tab }: UseUserInfoProps
 ) => {
   const router = useRouter();
   const { user: loginUser, getFreshIdToken, getIdTokenLatest } = useFirebaseAuthContext();
@@ -171,6 +172,7 @@ export const useUserInfo = (
   }
 
   return {
+    tab,
     form,
     userData,
     loginUser: loginUser as MyUserGetResult,

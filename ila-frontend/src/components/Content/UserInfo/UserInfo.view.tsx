@@ -11,8 +11,10 @@ import { UseFormReturnType } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
+import { useRouter } from 'next/navigation';
 
 type UserInfoViewProps = {
+  tab: string;
   form: UseFormReturnType<UserInfoFormValues>;
   userData: UsersGetResult | undefined,
   loginUser: MyUserGetResult,
@@ -37,6 +39,7 @@ type UserInfoViewProps = {
 };
 
 export const UserInfoView = memo(function WorkViewComponent({
+  tab,
   form,
   userData,
   loginUser,
@@ -60,6 +63,7 @@ export const UserInfoView = memo(function WorkViewComponent({
   handleBoostChangeClick
 }: UserInfoViewProps): JSX.Element {
   const [isTypingUserId, setIsTypingUserId] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -165,15 +169,24 @@ export const UserInfoView = memo(function WorkViewComponent({
           </Text>
         </Group>
         <Space h={15}/>
-        <Tabs defaultValue="posted" color="black">
+        <Tabs key={tab} defaultValue={tab} color="black">
           <Tabs.List>
-            <Tabs.Tab value="posted">
+            <Tabs.Tab
+              value="posted"
+              onClick={() => { router.push(`${userData?.customUserId}?tab=posted`); }}
+            >
               投稿済
             </Tabs.Tab>
-            <Tabs.Tab value="favorite" >
+            <Tabs.Tab
+              value="favorite"
+              onClick={() => { router.push(`${userData?.customUserId}?tab=favorite`); }}
+            >
               いいね
             </Tabs.Tab>
-            <Tabs.Tab value="images" >
+            <Tabs.Tab
+              value="images"
+              onClick={() => { router.push(`${userData?.customUserId}?tab=images`); }}
+            >
               画像生成一覧
             </Tabs.Tab>
           </Tabs.List>
