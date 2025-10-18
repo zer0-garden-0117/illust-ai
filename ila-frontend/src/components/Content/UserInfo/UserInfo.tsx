@@ -7,12 +7,13 @@ import { UserInfoView } from './UserInfo.view';
 type UserInfoProps = {
   userId: string;
   tab: string;
+  page: number;
 };
 
 export const UserInfo: React.FC<UserInfoProps> = (
-  { userId, tab }
+  { userId, tab, page }
 ): JSX.Element => {
-  const viewProps = useUserInfo({ userId, tab });
+  const viewProps = useUserInfo({ userId, tab, page });
   return <UserInfoView {...viewProps} />;
 };
 
