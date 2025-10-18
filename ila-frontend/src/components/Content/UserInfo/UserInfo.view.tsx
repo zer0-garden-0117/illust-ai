@@ -12,6 +12,7 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 import { useRouter } from 'next/navigation';
+import DrawHistory from '../DrawHistory/DrawHistory';
 
 type UserInfoViewProps = {
   tab: string;
@@ -168,41 +169,43 @@ export const UserInfoView = memo(function WorkViewComponent({
             {userData?.userProfile}
           </Text>
         </Group>
-        <Space h={15}/>
-        <Tabs key={tab} defaultValue={tab} color="black">
-          <Tabs.List>
-            <Tabs.Tab
-              value="posted"
-              onClick={() => { router.push(`${userData?.customUserId}?tab=posted`); }}
-            >
-              投稿済
-            </Tabs.Tab>
-            <Tabs.Tab
-              value="favorite"
-              onClick={() => { router.push(`${userData?.customUserId}?tab=favorite`); }}
-            >
-              いいね
-            </Tabs.Tab>
-            <Tabs.Tab
-              value="images"
-              onClick={() => { router.push(`${userData?.customUserId}?tab=images`); }}
-            >
-              画像生成一覧
-            </Tabs.Tab>
-          </Tabs.List>
+        <Group gap="3px" mt="xs">
+          <Button
+            size="compact-sm"
+            // radius="xl"
+            variant={tab === 'posted' ? 'filled' : 'light'}
+            onClick={() => router.push(`${userData?.customUserId}?tab=posted`)}
+          >
+            投稿済
+          </Button>
+          <Button
+            size="compact-sm"
+            // radius="xl"
+            variant={tab === 'favorite' ? 'filled' : 'light'}
+            onClick={() => router.push(`${userData?.customUserId}?tab=favorite`)}
+          >
+            いいね
+          </Button>
+          <Button
+            size="compact-sm"
+            // radius="xl"
+            variant={tab === 'images' ? 'filled' : 'light'}
+            onClick={() => router.push(`${userData?.customUserId}?tab=images`)}
+          >
+            画像生成一覧
+          </Button>
+        </Group>
+        <Space h={10}/>
 
-          <Tabs.Panel value="posted">
-            <Card>投稿済</Card>
-          </Tabs.Panel>
-
-          <Tabs.Panel value="favorite">
-            <Card>いいね</Card>
-          </Tabs.Panel>
-
-          <Tabs.Panel value="images">
-            <Card>画像生成一覧</Card>
-          </Tabs.Panel>
-        </Tabs>
+        {tab === 'posted' && (
+          <DrawHistory />
+        )}
+        {tab === 'favorite' && (
+          <DrawHistory />
+        )}
+        {tab === 'images' && (
+          <DrawHistory />
+        )}
       </Card>
 
       {/* プロフィール編集モーダル */}
