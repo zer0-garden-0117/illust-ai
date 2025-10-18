@@ -15,13 +15,15 @@ type DrawFormViewProps = {
   handleDrawClick: (values: DrawFormValues) => Promise<void>,
   handleHistoryClick: () => void
   handlePlanChangeClick: () => void
+  handleBoostAddClick: () => void
 };
 
 export const DrawFormView = memo(function WorkViewComponent({
   form,
   handleDrawClick,
   handleHistoryClick,
-  handlePlanChangeClick
+  handlePlanChangeClick,
+  handleBoostAddClick
 }: DrawFormViewProps): JSX.Element {
   const { user } = useFirebaseAuthContext();
 
@@ -59,9 +61,12 @@ export const DrawFormView = memo(function WorkViewComponent({
         今日はあと{user?.illustNum}回イラストを生成できます。
         <Button
           size='compact-xs'
-          onClick={handlePlanChangeClick}
+          onClick={
+            user?.plan === 'Free' ? handlePlanChangeClick : handleBoostAddClick
+          }
         >
-          プランの変更
+          {/* user.planがFreeの場合は、プランの変更を表示し、Free以外の場合はブーストの追加を表示 */}
+          {user?.plan === 'Free' ? 'プランの変更' : 'ブーストの追加'}
         </Button>
       </Notification>
       <Space h="md" />

@@ -4,6 +4,7 @@ import React, { memo } from 'react';
 import { Button, Card, Center, Group, List, SimpleGrid, Space, Text } from '@mantine/core';
 import { PlanData } from './PlanList.hook';
 import { IconAlarm, IconCoinYen, IconMoneybag, IconPencilCode, IconPhoto, IconSparkles } from '@tabler/icons-react';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type PlanListViewProps = {
   planData: PlanData[];
@@ -16,6 +17,7 @@ export const PlanListView = memo(function WorkViewComponent({
   handleSubscriptionClick,
   handleSubscriptionChangeClick
 }: PlanListViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
 
   return (
     <Card withBorder padding="md" radius="md">
@@ -69,15 +71,23 @@ export const PlanListView = memo(function WorkViewComponent({
             <Text fz="sm" mb="sm"><Text span fz="sm" fw={700}>{plan.illustHistoryDays}</Text>日保存</Text>
             {/* 購入ボタン */}
             <Center>
+            {/* plan.idがfreeの場合はボタンを表示しない */}
+            {plan.id !== 'free' && (
             <Button 
               color="blue" 
               radius="md"
-              onClick={() => handleSubscriptionClick(plan.id)}
-              // onClick={() => handleSubscriptionChangeClick()}
+              onClick={
+                // user.planがFreeの場合は、購入。Free以外の場合はプラン変更。
+                user?.plan === 'Free'
+                  ? () => handleSubscriptionClick(plan.id)
+                  : () => handleSubscriptionChangeClick()
+              }
               style={{ display: 'inline-flex', width: 'fit-content' }}
             >
-              購入
+              {/* user.planがFreeの場合は、購入。 */}
+              {user?.plan === 'Free' ? '購入' : '解約'}
             </Button>
+            )}
             </Center>
 
           </Card>

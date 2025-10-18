@@ -47,10 +47,15 @@ export const useDrawForm = () => {
     router.push('/plan');
   }
 
+  const handleBoostAddClick = () => {
+    router.push('/boost');
+  }
+
   return {
     form,
     handleDrawClick,
     handleHistoryClick,
-    handlePlanChangeClick
+    handlePlanChangeClick,
+    handleBoostAddClick
   };
 };

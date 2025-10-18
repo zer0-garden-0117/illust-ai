@@ -68,7 +68,7 @@ export const BoostListView = memo(function WorkViewComponent({
               onClick={() => handleAddClick(boostData.id)}
               style={{ display: 'inline-flex', width: 'fit-content' }}
             >
-              追加
+              購入
             </Button>
             </Center>
 
