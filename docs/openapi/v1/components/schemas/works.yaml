@@ -22,6 +22,9 @@ ApiWork:
       type: string
       description: "作品のプロンプト"
       example: "scenery"
+    negativePrompt:
+      type: string
+      description: "作品のネガティブプロンプト"
     status:
       type: string
       description: "作品の状態"

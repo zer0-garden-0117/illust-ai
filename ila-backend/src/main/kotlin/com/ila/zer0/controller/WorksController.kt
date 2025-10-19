@@ -29,7 +29,7 @@ class WorksController(
 ) : WorksApi {
 
     override fun createWorks(
-        @RequestBody apiWorkWithTag: ApiWorkWithTag
+        @RequestBody apiWork: ApiWork
     ): ResponseEntity<ApiWorkWithTag> {
         // ユーザーを取得
         val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
@@ -38,16 +38,23 @@ class WorksController(
             return ResponseEntity(HttpStatus.PAYMENT_REQUIRED)
         }
 
-        val work = Work()
+        val work = Work().apply {
+            prompt = apiWork.prompt!!
+            negativePrompt = apiWork.negativePrompt!!
+        }
 
         // 作品作成
-        val workWithTag = workManagerService.createWork(work)
+        val creatingWork = workManagerService.createWork(work)
 
         // イラスト生成数をデクリメント
         usageService.consumeOneToday(user.userId, limitIfAbsent = user.illustNum)
 
         // APIモデルに変換して返却
-        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
+        val apiWorkWithTag = ApiWorkWithTag().apply {
+            this.apiWork = workMapper.toApiWork(creatingWork)
+            this.apiTags = ApiTag()
+        }
+        return ResponseEntity.ok(apiWorkWithTag)
     }
 
     override fun patchWorksMetaDatasById(

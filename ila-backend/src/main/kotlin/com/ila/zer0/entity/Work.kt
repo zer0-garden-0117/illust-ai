@@ -26,6 +26,9 @@ data class Work(
     @get:DynamoDbAttribute("prompt")
     var prompt: String = "",
 
+    @get:DynamoDbAttribute("negativePrompt")
+    var negativePrompt: String = "",
+
     @get:DynamoDbAttribute("status")
     var status: String = "",
 
