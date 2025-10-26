@@ -30,11 +30,8 @@ export const useDrawForm = () => {
     await createWork({
       headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
       body: {
-        apiWork: {
-          mainTitle: "",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        }
+        prompt: values.prompt,
+        negativePrompt: values.negativePrompt,
       }
     });
     // トークンを更新してから遷移
