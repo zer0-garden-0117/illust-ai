@@ -13,6 +13,9 @@ import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.work.WorkManagerService
 import io.swagger.v3.oas.annotations.Parameter
 import jakarta.validation.Valid
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -37,10 +40,21 @@ class WorksController(
         if (usageService.getRemainingToday(user.userId, defaultLimit = user.illustNum) <= 0) {
             return ResponseEntity(HttpStatus.PAYMENT_REQUIRED)
         }
+        // プランによってttlとsupportToに設定する日数を設定
+        val days = if (user.plan == "Basic") 30 else 7
+        // ttlにはunix epoch millisで設定
+        val tll = System.currentTimeMillis() + days * 24 * 60 * 60 * 1000L
+        // supportToには今日の日付からdaysを足した日付をyyyy/MM/dd HH:mm形式で設定
+        val supportToDays = ZonedDateTime.now(ZoneId.of("Asia/Tokyo"))
+            .plusDays(days.toLong())
+            .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
 
         val work = Work().apply {
+            userId = user.userId
             prompt = apiWork.prompt!!
             negativePrompt = apiWork.negativePrompt!!
+            supportTo = supportToDays
+            ttl = tll
         }
 
         // 作品作成

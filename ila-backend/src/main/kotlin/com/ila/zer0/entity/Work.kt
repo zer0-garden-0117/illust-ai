@@ -63,5 +63,8 @@ data class Work(
     var rate: Double = 0.0,
 
     @get:DynamoDbAttribute("ttl")
-    var ttl: Long? = null
+    var ttl: Long? = null,
+
+    @get:DynamoDbAttribute("supportTo")
+    var supportTo: String? = null
 )
