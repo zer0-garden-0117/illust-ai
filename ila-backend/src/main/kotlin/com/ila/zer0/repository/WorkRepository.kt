@@ -40,6 +40,20 @@ class WorkRepository(
         }
     }
 
+    fun findByUserId(userId: String): List<Work> {
+        val index = table.index("UserIdIndex")
+        val query = QueryConditional.keyEqualTo(
+                Key.builder().partitionValue(userId).build()
+                    )
+        val req = index.query { r ->
+                r.queryConditional(query)
+                 .scanIndexForward(false)
+            }
+        val works = mutableListOf<Work>()
+        req.forEach { page -> works.addAll(page.items()) }
+        return works
+    }
+
     fun registerWork(work: Work): Work {
         return try {
             table.putItem(work)

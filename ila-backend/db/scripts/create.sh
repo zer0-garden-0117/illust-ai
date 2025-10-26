@@ -49,8 +49,29 @@ create_table() {
 create_table work \
     --attribute-definitions \
         AttributeName=workId,AttributeType=S \
+        AttributeName=createdAt,AttributeType=S \
+        AttributeName=userId,AttributeType=S \
     --key-schema \
-        AttributeName=workId,KeyType=HASH
+        AttributeName=workId,KeyType=HASH \
+        AttributeName=createdAt,KeyType=RANGE \
+    --global-secondary-indexes \
+        "[
+            {
+                \"IndexName\": \"UserIdIndex\",
+                \"KeySchema\": [
+                    {\"AttributeName\":\"userId\",\"KeyType\":\"HASH\"},
+                    {\"AttributeName\":\"createdAt\",\"KeyType\":\"RANGE\"}
+                ],
+                \"Projection\": {\"ProjectionType\":\"ALL\"}
+            }
+        ]"
+
+# work テーブルの ttl 属性を自動削除に使用
+aws dynamodb update-time-to-live \
+    --profile "$PROFILE" \
+    --table-name work \
+    --time-to-live-specification "Enabled=true, AttributeName=ttl" \
+    --endpoint-url "$ENDPOINT_URL"
 
 # tag テーブルの作成
 create_table tag \

@@ -3,6 +3,8 @@ package com.ila.zer0.entity
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondarySortKey
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
 import java.time.Instant
 
@@ -10,6 +12,13 @@ import java.time.Instant
 data class Work(
     @get:DynamoDbPartitionKey
     var workId: String = "",
+
+    @get:DynamoDbSecondaryPartitionKey(indexNames = ["UserIdIndex"])
+    var userId: String = "",
+
+    @get:DynamoDbSortKey
+    @get:DynamoDbSecondarySortKey(indexNames = ["UserIdIndex"])
+    var createdAt: Instant = Instant.now(),
 
     @get:DynamoDbAttribute("updatedAt")
     var updatedAt: Instant = Instant.now(),
@@ -52,7 +61,7 @@ data class Work(
 
     @get:DynamoDbAttribute("rate")
     var rate: Double = 0.0,
-    
-    @get:DynamoDbAttribute("createdAt")
-    var createdAt: Instant = Instant.now()
+
+    @get:DynamoDbAttribute("ttl")
+    var ttl: Long? = null
 )

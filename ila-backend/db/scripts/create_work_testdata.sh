@@ -42,6 +42,7 @@ echo "Adding test data to work table..."
 
 put_item work '{
   "workId": {"S": "jahMEp6J"},
+  "userId": {"S": "user001"},
   "rate": {"N": "0"},
   "likes": {"N": "0"},
   "createdAt": {"S": "2025-05-03T15:18:21.537932307Z"},
@@ -58,6 +59,7 @@ put_item work '{
 
 put_item work '{
   "workId": {"S": "xERd9FNW"},
+  "userId": {"S": "user001"},
   "rate": {"N": "0"},
   "likes": {"N": "0"},
   "createdAt": {"S": "2025-05-03T15:17:12.143934005Z"},
@@ -74,6 +76,7 @@ put_item work '{
 
 put_item work '{
   "workId": {"S": "t_5XgsVa"},
+  "userId": {"S": "user001"},
   "rate": {"N": "0"},
   "likes": {"N": "0"},
   "createdAt": {"S": "2025-05-03T16:00:40.646656452Z"},
@@ -90,6 +93,7 @@ put_item work '{
 
 put_item work '{
   "workId": {"S": "EK4UpOm4"},
+  "userId": {"S": "user001"},
   "rate": {"N": "0"},
   "likes": {"N": "0"},
   "createdAt": {"S": "2025-05-03T15:59:48.530122627Z"},
@@ -106,6 +110,7 @@ put_item work '{
 
 put_item work '{
   "workId": {"S": "vX3DCagv"},
+  "userId": {"S": "user001"},
   "rate": {"N": "0"},
   "likes": {"N": "0"},
   "createdAt": {"S": "2025-05-03T15:59:01.225319455Z"},

@@ -16,6 +16,10 @@ class WorkService(
         return workRepository.findByWorkId(workId)
     }
 
+    fun findWorksByUserId(userId: String): List<Work> {
+        return workRepository.findByUserId(userId)
+    }
+
     fun findWorksByIds(workIds: List<String>): List<Work> {
         val works = mutableListOf<Work>()
         workIds.forEach { workId ->
