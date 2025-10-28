@@ -24,3 +24,12 @@ FollowTypeQueryParam:
   schema:
     type: string
     enum: [follow, follower]
+
+UserWorksFilterTypeQueryParam:
+  name: userWorksFilterType
+  in: query
+  description: ユーザーの作品のフィルターの種類
+  required: true
+  schema:
+    type: string
+    enum: [posted, liked, all]

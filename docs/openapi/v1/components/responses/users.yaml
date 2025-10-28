@@ -7,6 +7,15 @@ UsersResponse:
       schema:
         $ref: "../schemas/users.yaml#/ApiUser"
 
+UsersWorksResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiUsersWorks"
+
 FollowUsersResponse:
   description: |-
     200 OK

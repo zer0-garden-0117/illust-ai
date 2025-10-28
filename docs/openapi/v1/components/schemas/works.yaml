@@ -177,3 +177,16 @@ ApiWorksWithSearchResult:
   required:
     - works
     - totalCount
+
+ApiUsersWorks:
+  description: ユーザーの作品リスト
+  type: object
+  properties:
+    works:
+      type: array
+      items:
+        $ref: "../schemas/works.yaml#/ApiWork"
+    totalWorksCount:
+      type: integer
+      description: 作品の総数
+      example: 100

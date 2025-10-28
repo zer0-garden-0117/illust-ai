@@ -29,6 +29,9 @@ paths:
   /users/{customUserId}:
     $ref: "./paths/users.yaml#/UsersById"
 
+  /users/{customUserId}/works:
+    $ref: "./paths/users.yaml#/UsersWorks"
+
   /users/follow/{userId}:
     $ref: "./paths/users.yaml#/UsersFollow"
 

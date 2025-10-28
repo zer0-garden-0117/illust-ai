@@ -1,13 +1,19 @@
 package com.ila.zer0.service.work
 
+import com.ila.zer0.dto.FollowWithSearchResult
+import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorkWithTag
 import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Tag
+import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import com.ila.zer0.repository.TagRepository
 import com.ila.zer0.repository.WorkRepository
 import com.ila.zer0.service.SqsService
+import com.ila.zer0.service.UuidService
 import com.ila.zer0.service.tag.TagService
+import com.ila.zer0.service.user.UserManagerService
+import com.ila.zer0.service.user.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,7 +26,9 @@ class WorkManagerService(
     private val tagRepository: TagRepository,
     private val tagService: TagService,
     private val sqsService: SqsService,
-    private val uuidService: com.ila.zer0.service.UuidService
+    private val uuidService: UuidService,
+    private val userService: UserService,
+    private val userManagerService: UserManagerService
 ) {
 
     private val logger = LoggerFactory.getLogger(WorkService::class.java)
@@ -53,6 +61,28 @@ class WorkManagerService(
         val work = workService.findWorkById(workId)
         val tags = tagService.findByWorkIds(workId)
         return WorkWithTag(work, tags)
+    }
+
+    @Transactional
+    fun getUsersWorksByCustomUserIdWithFilter(customUserId: String, offset: Int, limit: Int, userWorksFilterType: String): WorksWithSearchResult? {
+        val user = userService.findUserByCustomUserId(customUserId)
+        if (user == null) {
+            logger.info("user is null $customUserId")
+            return null
+        }
+
+        when (userWorksFilterType) {
+            "posted", "all" -> {
+                return workService.findByUserIdWithOffset(user.userId, offset, limit, userWorksFilterType)
+            }
+            "liked" -> {
+                return userManagerService.getUsersLiked(user.userId, offset, limit)
+            }
+            else -> {
+                logger.info("不正なuserWorksFilterTypeが指定されました: $userWorksFilterType")
+                return null
+            }
+        }
     }
 
     @Transactional

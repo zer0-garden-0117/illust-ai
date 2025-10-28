@@ -20,6 +20,9 @@ interface WorkMapper {
     @Mapping(target = "rateSum", ignore = true)
     @Mapping(target = "rateCount", ignore = true)
     @Mapping(target = "rate", ignore = true)
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "ttl", ignore = true)
+    @Mapping(target = "supportTo", ignore = true)
     fun toWork(apiWork: ApiWork): Work
 
     @Mapping(
