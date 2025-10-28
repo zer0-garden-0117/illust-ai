@@ -192,7 +192,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             variant={tab === 'images' ? 'filled' : 'light'}
             onClick={() => router.push(`${userData?.customUserId}?tab=images`)}
           >
-            画像生成一覧
+            生成履歴
           </Button>
         </Group>
         <Space h={10}/>
