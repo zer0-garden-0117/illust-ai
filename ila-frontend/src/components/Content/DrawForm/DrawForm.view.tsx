@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import { DrawFormValues } from './DrawForm.hook';
 import { UseFormReturnType } from '@mantine/form';
-import { Button, Card, Group, Notification, Radio, Space, Text, Textarea, TextInput } from '@mantine/core';
+import { Button, Card, Group, Loader, Notification, Radio, Space, Text, Textarea, TextInput } from '@mantine/core';
 import { IconCube, IconInfoCircle, IconInfoSmall, IconPencil } from '@tabler/icons-react';
 import { IoInformationSharp } from "react-icons/io5";
 import { IconArrowNarrowRight } from '@tabler/icons-react';
@@ -46,6 +46,7 @@ export const DrawFormView = memo(function WorkViewComponent({
             />
           }
           onClick={handleHistoryClick}
+          disabled={isSubmitting} 
         >
           生成履歴
         </Button>
@@ -60,12 +61,13 @@ export const DrawFormView = memo(function WorkViewComponent({
         withBorder
         icon={<IoInformationSharp size={20} />}
       >
-        今日はあと{user?.illustNum}回イラストを生成できます。
+        今日はあと{user?.remainingIllustNum}回イラストを生成できます。
         <Button
           size='compact-xs'
           onClick={
             user?.plan === 'Free' ? handlePlanChangeClick : handleBoostAddClick
           }
+          disabled={isSubmitting} 
         >
           {/* user.planがFreeの場合は、プランの変更を表示し、Free以外の場合はブーストの追加を表示 */}
           {user?.plan === 'Free' ? 'プランの変更' : 'ブーストの追加'}
@@ -110,27 +112,28 @@ export const DrawFormView = memo(function WorkViewComponent({
         />
         <Group justify="flex-end" mt="md">
           <Button
-            loading={isSubmitting}
             type="submit"
             radius="xl"
+            disabled={isSubmitting}
             rightSection={
-              <>
-                <IconPencil
-                  color="white"
-                  size={20}
-                  style={{ display: 'block' }}
-                />
-                {user?.illustNum}
-                <IconArrowNarrowRight
-                  color="white"
-                  size={20}
-                  style={{ display: 'block' }}
-                />
-                {(user?.illustNum ?? 0) - 1}
-              </>
+              !isSubmitting ? (
+                <>
+                  <IconPencil color="white" size={20} style={{ display: 'block' }} />
+                  {user?.remainingIllustNum}
+                  <IconArrowNarrowRight color="white" size={20} style={{ display: 'block' }} />
+                  {(user?.remainingIllustNum ?? 0) - 1}
+                </>
+              ) : undefined
             }
           >
-            イラスト生成
+            {isSubmitting ? (
+              <Group gap="xs" align="center">
+                <span>イラスト生成中…</span>
+                <Loader size="xs" />
+              </Group>
+            ) : (
+              'イラスト生成'
+            )}
           </Button>
         </Group>
       </form>

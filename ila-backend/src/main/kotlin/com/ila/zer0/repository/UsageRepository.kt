@@ -94,7 +94,7 @@ class UsageRepository(
     fun consumeOne(
         userId: String,
         yyyymmdd: String,
-        limitIfAbsent: Int = 5,
+        limitIfAbsent: Int,
         ttlEpochSeconds: Long? = null
     ): Int {
         try {

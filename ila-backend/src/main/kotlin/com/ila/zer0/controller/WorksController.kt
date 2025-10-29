@@ -37,7 +37,7 @@ class WorksController(
         // ユーザーを取得
         val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         // 生成可能数をチェック
-        if (usageService.getRemainingToday(user.userId, defaultLimit = user.illustNum) <= 0) {
+        if (usageService.getRemainingToday(user.userId, defaultLimit = user.illustNumLimit) <= 0) {
             return ResponseEntity(HttpStatus.PAYMENT_REQUIRED)
         }
         // プランによってttlとsupportToに設定する日数を設定
@@ -61,7 +61,7 @@ class WorksController(
         val creatingWork = workManagerService.createWork(work)
 
         // イラスト生成数をデクリメント
-        usageService.consumeOneToday(user.userId, limitIfAbsent = user.illustNum)
+        usageService.consumeOneToday(user.userId, limitIfAbsent = user.illustNumLimit)
 
         // APIモデルに変換して返却
         val apiWorkWithTag = ApiWorkWithTag().apply {

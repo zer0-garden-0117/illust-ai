@@ -50,6 +50,9 @@ data class User(
     @get:DynamoDbAttribute("boost")
     var boost: List<String> = emptyList(),
 
-    @get:DynamoDbAttribute("illustNum")
-    var illustNum: Int = 0,
+    @get:DynamoDbAttribute("illustNumLimit")
+    var illustNumLimit: Int = 0,
+
+    @get:DynamoDbAttribute("remainingIllustNum")
+    var remainingIllustNum: Int = 0,
 )

@@ -61,9 +61,13 @@ ApiUser:
       items:
         type: string
       description: ブーストプランのリスト
-    illustNum:
+    illustNumLimit:
       type: integer
-      description: イラスト生成数
+      description: イラスト生成回数の上限
+      example: 30
+    remainingIllustNum:
+      type: integer
+      description: 残りのイラスト生成回数
       example: 3
 
 ApiFollowUsers:

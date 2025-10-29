@@ -26,7 +26,7 @@ class UsageService(
 
     fun consumeOneToday(
         userId: String,
-        limitIfAbsent: Int = 5,
+        limitIfAbsent: Int,
         ttlDays: Long = 35
     ): Int {
         val sk = todaySk()

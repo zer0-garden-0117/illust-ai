@@ -65,8 +65,8 @@ class UserManagerService(
         val followerCount = followService.getFollowerCount(userId)
         user.follow = followCount
         user.follower = followerCount
-        val limit = calLimitNumByPlanAndBoost(user.plan, user.boost)
-        user.illustNum = usageService.getRemainingToday(user.userId, limit)
+        user.illustNumLimit = calLimitNumByPlanAndBoost(user.plan, user.boost)
+        user.remainingIllustNum = usageService.getRemainingToday(userId, user.illustNumLimit)
         val products = productService.findActive(user.userId)
         // productsにBasicが含まれていればplanをBasicに設定、含まれていなければFreeに設定
         // planをBasicにする場合は、Basic:it.autoUpdateToの形式でuser.planに設定

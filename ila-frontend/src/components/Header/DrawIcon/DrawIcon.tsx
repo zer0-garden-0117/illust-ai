@@ -64,7 +64,7 @@ export const DrawIcon: React.FC = () => {
             justifyContent: 'center',
           }}
         >
-          {user?.illustNum}
+          {user?.remainingIllustNum}
         </Badge>
       )}
     </Group>
