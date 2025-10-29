@@ -29,7 +29,9 @@ export const useDrawHistory = (
   const handlePageChange = (page: number): void => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
-    router.push(`${pathname}?${params.toString()}`);
+    const url = `${pathname}?${params.toString()}`;
+    router.push(url, { scroll: true });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return {
