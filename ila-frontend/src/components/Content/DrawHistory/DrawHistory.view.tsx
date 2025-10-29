@@ -2,14 +2,15 @@
 
 import React, { memo } from 'react';
 import { Card, Group, SimpleGrid, Text } from '@mantine/core';
-import { ImageCardsForHistory, ImageDataOfImageCardsForHistory } from '@/components/Content/DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ImageCardsForHistory } from '@/components/Content/DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
 
 type DrawHistoryViewProps = {
-  imageData: ImageDataOfImageCardsForHistory[];
+  userWorksData: UsersWorksGetResult | undefined;
 };
 
 export const DrawHistoryView = memo(function WorkViewComponent({
-  imageData,
+  userWorksData,
 }: DrawHistoryViewProps): JSX.Element {
 
   return (
@@ -20,8 +21,8 @@ export const DrawHistoryView = memo(function WorkViewComponent({
         </Text>
       </Group>
       <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
-        {imageData.map((img, idx) => (
-          <ImageCardsForHistory key={img.workId} data={img} index={idx} />
+        {userWorksData?.works?.map((work, idx) => (
+          <ImageCardsForHistory key={work.workId} data={work} index={idx} />
         ))}
       </SimpleGrid>
     </Card>

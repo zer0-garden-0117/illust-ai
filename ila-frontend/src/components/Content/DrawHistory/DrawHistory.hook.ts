@@ -1,52 +1,28 @@
-import { ImageDataOfImageCardsForHistory } from "@/components/Content/DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
+import { useUsersWorksGet } from "@/apis/openapi/users/useUsersWorksGet";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
+import type { components } from "../../../generated/services/ila-v1";
+export type UserWorksFilterTypeQueryParam = components["parameters"]["UserWorksFilterTypeQueryParam"];
 
-export const useDrawHistory = () => {
-  const imageData: ImageDataOfImageCardsForHistory[] = [
-    {
-      workId: '1',
-      mainTitle: 'Sample Image 1',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
-    },
-    {
-      workId: '2',
-      mainTitle: 'Sample Image 2',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
-    },
-    {
-      workId: '3',
-      mainTitle: 'Sample Image 3',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
-    },
-    {
-      workId: '4',
-      mainTitle: 'Sample Image 4',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
-    },
-    {
-      workId: '5',
-      mainTitle: 'Sample Image 5',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
-    },
-    {
-      workId: '6',
-      mainTitle: 'Sample Image 6',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
-    },
-    {
-      workId: '7',
-      mainTitle: 'Samplxe Image 7',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
-    },
-  ];
+type UseDrawHistoryProps = {
+  customUserId: string;
+  page: number;
+  userWorksFilterType: UserWorksFilterTypeQueryParam;
+};
+
+export const useDrawHistory = (
+    { customUserId, page, userWorksFilterType }: UseDrawHistoryProps
+) => {
+  const { getIdTokenLatest } = useFirebaseAuthContext();
+
+  const { data: userWorksData, mutate: updateUserWorks } = useUsersWorksGet({
+      customUserId: customUserId,
+      offset: (page - 1) * 10,
+      limit: 10,
+      userWorksFilterType,
+      getIdTokenLatest,
+    });
 
   return {
-    imageData
+    userWorksData
   };
 };

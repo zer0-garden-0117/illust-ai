@@ -198,13 +198,25 @@ export const UserInfoView = memo(function WorkViewComponent({
         <Space h={10}/>
 
         {tab === 'posted' && (
-          <DrawHistory />
+          <DrawHistory
+            customUserId={userData?.customUserId || ''}
+            page={1}
+            userWorksFilterType="posted"
+          />
         )}
         {tab === 'favorite' && (
-          <DrawHistory />
+          <DrawHistory
+            customUserId={userData?.customUserId || ''}
+            page={1}
+            userWorksFilterType="liked"
+          />
         )}
         {tab === 'images' && (
-          <DrawHistory />
+          <DrawHistory
+            customUserId={userData?.customUserId || ''}
+            page={1}
+            userWorksFilterType="all"
+          />
         )}
       </Card>
 

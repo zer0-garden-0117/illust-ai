@@ -2,21 +2,12 @@ import { ActionIcon, AspectRatio, Card, Group, Image, Text } from '@mantine/core
 import { useIntersection } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
+import type { components } from "../../../../generated/services/ila-v1";
 
-export type ImageDataOfImageCardsForHistory = {
-  workId: string;
-  mainTitle: string;
-  titleImage: string;
-  thumbnailImage: string;
-  prompt?: string;
-  negativePrompt?: string;
-  modelName?: string;
-  createdAt?: string;
-  updatedAt?: string;
-};
+export type ApiWork = components["schemas"]["ApiWork"];
 
 interface ImageCardsForHistoryProps {
-  data: ImageDataOfImageCardsForHistory;
+  data: ApiWork;
   index: number;
 }
 
@@ -52,7 +43,7 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       <AspectRatio ratio={1 / Math.sqrt(2)}>
         <div style={{ cursor: 'pointer' }}>
           <Image
-            src={data.thumbnailImage}
+            src={data.thumbnailImgUrl}
             alt={data.mainTitle || 'Image without title'}
             style={{ width: '100%', height: '100%' }}
           />

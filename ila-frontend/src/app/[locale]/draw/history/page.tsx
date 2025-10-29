@@ -1,14 +1,20 @@
 'use client';
 
 import { DrawHistory } from "@/components/Content/DrawHistory/DrawHistory";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
-const DrawPage: React.FC = () => {
+const DrawHistoryPage: React.FC = () => {
+  const { user } = useFirebaseAuthContext();
 
   return (
     <>
-      <DrawHistory />
+      <DrawHistory
+        customUserId={user?.customUserId || ''}
+        page={1}
+        userWorksFilterType="all"
+      />
     </>
   )
 };
 
-export default DrawPage;
+export default DrawHistoryPage;

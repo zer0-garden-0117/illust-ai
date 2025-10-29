@@ -1,4 +1,3 @@
-// useFollowUsersGet.ts
 import useSWR from 'swr';
 import client from "../apiClient";
 import type { operations } from "../../../generated/services/ila-v1";
@@ -10,7 +9,6 @@ export type FollowUsersGetResult =
 export type FollowUsersGetPath = operations["getFollowUsers"]["parameters"]["path"];
 export type FollowUsersGetQuery = operations["getFollowUsers"]["parameters"]["query"];
 
-// 毎回"最新"のIDトークンを返す関数を受け取る
 export type FollowUsersGetArgs = {
   customUserId: FollowUsersGetPath["customUserId"];
   offset: FollowUsersGetQuery["offset"];
