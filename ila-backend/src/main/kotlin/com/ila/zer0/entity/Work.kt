@@ -16,7 +16,6 @@ data class Work(
     @get:DynamoDbSecondaryPartitionKey(indexNames = ["UserIdIndex"])
     var userId: String = "",
 
-    @get:DynamoDbSortKey
     @get:DynamoDbSecondarySortKey(indexNames = ["UserIdIndex"])
     var createdAt: Instant = Instant.now(),
 

@@ -49,11 +49,10 @@ create_table() {
 create_table work \
     --attribute-definitions \
         AttributeName=workId,AttributeType=S \
-        AttributeName=createdAt,AttributeType=S \
         AttributeName=userId,AttributeType=S \
+        AttributeName=createdAt,AttributeType=S \
     --key-schema \
         AttributeName=workId,KeyType=HASH \
-        AttributeName=createdAt,KeyType=RANGE \
     --global-secondary-indexes \
         "[
             {
