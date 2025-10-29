@@ -337,7 +337,8 @@ class UserManagerService(
     }
 
     fun calLimitNumByPlanAndBoost(plan: String, boost: List<String>): Int {
-        var limitNum = when (plan) {
+        val basePlan = plan.split(":").first()
+        var limitNum = when (basePlan) {
             "Free" -> 3
             "Basic" -> 10
             else -> 3
