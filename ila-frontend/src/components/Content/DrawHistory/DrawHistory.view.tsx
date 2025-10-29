@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Card, Group, Pagination, SimpleGrid, Space, Text } from '@mantine/core';
+import { Card, Group, Pagination, SimpleGrid, Skeleton, Space, Text } from '@mantine/core';
 import { ImageCardsForHistory } from '@/components/Content/DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
 
@@ -26,6 +26,11 @@ export const DrawHistoryView = memo(function WorkViewComponent({
         </Text>
       </Group>
       <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
+        {!userWorksData &&
+          Array.from({ length: 12 }).map((_, idx) => (
+            <ImageCardsForHistory key={idx} data={{}} index={idx} />
+          ))
+        }
         {userWorksData?.works?.map((work, idx) => (
           <ImageCardsForHistory key={work.workId} data={work} index={idx} />
         ))}

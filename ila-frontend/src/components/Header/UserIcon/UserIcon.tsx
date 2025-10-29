@@ -37,7 +37,7 @@ export const UserIcon: React.FC = () => {
   }
 
   return (
-    <Box>
+    <Box style={{ cursor: 'pointer' }}>
       {/* ログイン済の場合 */}
       {user && (
         <Box onClick={onIconClick}>

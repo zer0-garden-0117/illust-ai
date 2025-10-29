@@ -1,5 +1,4 @@
 import { ActionIcon, AspectRatio, Card, Group, Image, Skeleton, Text } from '@mantine/core';
-import { useIntersection } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import type { components } from "../../../../generated/services/ila-v1";
@@ -13,15 +12,10 @@ interface ImageCardsForHistoryProps {
 
 export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps) => {
   const router = useRouter();
-  const { ref, entry } = useIntersection({
-    root: null,
-    threshold: 0.2,
-  });
   const [imgLoaded, setImgLoaded] = React.useState(false);
 
   return (
     <Card
-      ref={ref}
       p="md"
       radius="md"
       withBorder
@@ -63,11 +57,23 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
         </Text>
       </Group>
 
-      {/* アクション */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px' }}>
-        <ActionIcon variant="transparent" color="gray">
-          test
-        </ActionIcon>
+      {/* 生成日時 */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px'}}>
+        <Text fz="xs" color="dimmed">
+          {data.createdAt ? (
+            // 日付は2025/03/15(土)のように表示
+            <span>
+              {new Date(data.createdAt).toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                weekday: 'short',
+              })}
+            </span>
+          ) : (
+            <Skeleton width={90} height={10} radius="sm" />
+          )}
+        </Text>
       </div>
     </Card>
   );
