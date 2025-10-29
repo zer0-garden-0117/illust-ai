@@ -16,8 +16,8 @@ export const useDrawHistory = (
 
   const { data: userWorksData, mutate: updateUserWorks } = useUsersWorksGet({
       customUserId: customUserId,
-      offset: (page - 1) * 10,
-      limit: 10,
+      offset: (page - 1) * 12,
+      limit: 12,
       userWorksFilterType,
       getIdTokenLatest,
     });

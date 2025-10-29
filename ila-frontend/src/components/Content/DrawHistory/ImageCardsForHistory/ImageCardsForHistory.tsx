@@ -1,7 +1,7 @@
-import { ActionIcon, AspectRatio, Card, Group, Image, Text } from '@mantine/core';
+import { ActionIcon, AspectRatio, Card, Group, Image, Skeleton, Text } from '@mantine/core';
 import { useIntersection } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { components } from "../../../../generated/services/ila-v1";
 
 export type ApiWork = components["schemas"]["ApiWork"];
@@ -17,13 +17,7 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
     root: null,
     threshold: 0.2,
   });
-  const [hasAppeared, setHasAppeared] = React.useState(false);
-
-  useEffect(() => {
-    if (entry?.isIntersecting) {
-      setHasAppeared(true);
-    }
-  }, [entry]);
+  const [imgLoaded, setImgLoaded] = React.useState(false);
 
   return (
     <Card
@@ -31,23 +25,28 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       p="md"
       radius="md"
       withBorder
-      style={{
-        opacity: hasAppeared ? 1 : 0,
-        transform: hasAppeared ? 'translateY(0)' : 'translateY(16px)',
-        transition: `opacity 0.6s ease ${index * 0.05}s, transform 0.6s ease ${index * 0.05}s`,
-        cursor: 'pointer'
-      }}
+      style={{ cursor: 'pointer' }}
       onClick={() => {router.push(`/draw/history/${data.workId}`)}}
     >
       {/* 画像 */}
       <AspectRatio ratio={1 / Math.sqrt(2)}>
-        <div style={{ cursor: 'pointer' }}>
-          <Image
-            src={data.thumbnailImgUrl}
-            alt={data.mainTitle || 'Image without title'}
-            style={{ width: '100%', height: '100%' }}
-          />
-        </div>
+        <Skeleton
+          visible={!imgLoaded}
+          h="100%"
+          w="100%"
+          radius="sm"
+        >
+          <div style={{ cursor: 'pointer', width: '100%', height: '100%' }}>
+            <Image
+              src={data.thumbnailImgUrl}
+              alt={data.mainTitle || 'Image without title'}
+              style={{ width: '100%', height: '100%', opacity: imgLoaded ? 1 : 0, transition: 'opacity 200ms ease' }}
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgLoaded(true)}
+              loading="lazy"
+            />
+          </div>
+        </Skeleton>
       </AspectRatio>
 
       {/* タイトル */}
