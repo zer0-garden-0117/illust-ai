@@ -173,6 +173,7 @@ export const useUserInfo = (
   }
 
   return {
+    page,
     tab,
     form,
     userData,

@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import DrawHistory from '../DrawHistory/DrawHistory';
 
 type UserInfoViewProps = {
+  page: number;
   tab: string;
   form: UseFormReturnType<UserInfoFormValues>;
   userData: UsersGetResult | undefined,
@@ -40,6 +41,7 @@ type UserInfoViewProps = {
 };
 
 export const UserInfoView = memo(function WorkViewComponent({
+  page,
   tab,
   form,
   userData,
@@ -200,21 +202,21 @@ export const UserInfoView = memo(function WorkViewComponent({
         {tab === 'posted' && (
           <DrawHistory
             customUserId={userData?.customUserId || ''}
-            page={1}
+            page={page}
             userWorksFilterType="posted"
           />
         )}
         {tab === 'favorite' && (
           <DrawHistory
             customUserId={userData?.customUserId || ''}
-            page={1}
+            page={page}
             userWorksFilterType="liked"
           />
         )}
         {tab === 'images' && (
           <DrawHistory
             customUserId={userData?.customUserId || ''}
-            page={1}
+            page={page}
             userWorksFilterType="all"
           />
         )}
