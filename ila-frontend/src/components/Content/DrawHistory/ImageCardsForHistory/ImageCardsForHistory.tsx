@@ -31,7 +31,7 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       {/* 画像 */}
       <AspectRatio ratio={1 / Math.sqrt(2)}>
         <Skeleton
-          visible={!imgLoaded}
+          visible={!imgLoaded || data.thumbnailImgUrl === ''}
           h="100%"
           w="100%"
           radius="sm"

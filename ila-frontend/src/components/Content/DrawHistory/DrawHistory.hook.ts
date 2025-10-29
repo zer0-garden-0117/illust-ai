@@ -33,6 +33,7 @@ export const useDrawHistory = (
   }
 
   return {
+    page,
     userWorksData,
     handlePageChange
   };

@@ -10,6 +10,7 @@ import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 
 type FollowListViewProps = {
+  page: number;
   userData: UsersGetResult | undefined
   followUserData: FollowUsersGetResult | undefined;
   updateUserAndFollowUser: () => void;
@@ -19,6 +20,7 @@ type FollowListViewProps = {
 };
 
 export const FollowListView = memo(function WorkViewComponent({
+  page,
   userData,
   followUserData,
   updateUserAndFollowUser,
@@ -133,7 +135,7 @@ export const FollowListView = memo(function WorkViewComponent({
           )}
         </Stack>
         <Space h={20} />
-        <Pagination total={Math.ceil((followUserData?.totalFollowCount ?? 0) / 10)} radius="md" onChange={handlePageChange}/>
+        <Pagination value={page} total={Math.ceil((followUserData?.totalFollowCount ?? 0) / 10)} radius="md" onChange={handlePageChange}/>
       </Card>
     </>
   );

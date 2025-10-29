@@ -6,11 +6,13 @@ import { ImageCardsForHistory } from '@/components/Content/DrawHistory/ImageCard
 import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
 
 type DrawHistoryViewProps = {
+  page: number;
   userWorksData: UsersWorksGetResult | undefined;
   handlePageChange: (page: number) => void;
 };
 
 export const DrawHistoryView = memo(function WorkViewComponent({
+  page,
   userWorksData,
   handlePageChange
 }: DrawHistoryViewProps): JSX.Element {
@@ -30,7 +32,7 @@ export const DrawHistoryView = memo(function WorkViewComponent({
       </SimpleGrid>
     </Card>
     <Space h={20} />
-    <Pagination total={Math.ceil((userWorksData?.totalWorksCount ?? 0) / 12)} radius="md" onChange={handlePageChange}/>
+    <Pagination value={page} total={Math.ceil((userWorksData?.totalWorksCount ?? 0) / 12)} radius="md" onChange={handlePageChange}/>
     </>
   );
 });

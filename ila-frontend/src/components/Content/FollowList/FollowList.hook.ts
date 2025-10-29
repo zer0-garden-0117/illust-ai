@@ -48,6 +48,7 @@ export const useFollowList = (
   }
 
   return {
+    page,
     userData,
     followUserData,
     updateUserAndFollowUser,
