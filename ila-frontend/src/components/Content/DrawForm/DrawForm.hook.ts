@@ -26,8 +26,8 @@ export const useDrawForm = () => {
 
   const handleDrawClick = async (values: DrawFormValues) => {
     setIsSubmitting(true);
-    // 画像生成のAPIを呼び出す    
-    await createWork({
+    // 画像生成のAPIを呼び出す
+    const response = await createWork({
       headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
       body: {
         prompt: values.prompt,
@@ -36,7 +36,8 @@ export const useDrawForm = () => {
     });
     // トークンを更新してから遷移
     await getFreshIdToken();
-    router.push(`/draw/test/processing`);
+    console.log('Created work:', response);
+    router.push(`/draw/processing/${response.workId}`);
   }
 
   const handleHistoryClick = () => {

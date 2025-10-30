@@ -33,7 +33,7 @@ class WorksController(
 
     override fun createWorks(
         @RequestBody apiWork: ApiWork
-    ): ResponseEntity<ApiWorkWithTag> {
+    ): ResponseEntity<ApiWork> {
         // ユーザーを取得
         val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         // 生成可能数をチェック
@@ -64,51 +64,14 @@ class WorksController(
         usageService.consumeOneToday(user.userId, limitIfAbsent = user.illustNumLimit)
 
         // APIモデルに変換して返却
-        val apiWorkWithTag = ApiWorkWithTag().apply {
-            this.apiWork = workMapper.toApiWork(creatingWork)
-            this.apiTags = ApiTag()
-        }
-        return ResponseEntity.ok(apiWorkWithTag)
+        return ResponseEntity.ok(workMapper.toApiWork(creatingWork))
     }
-
-    override fun patchWorksMetaDatasById(
-        @PathVariable("workId") workId: String,
-        @Valid @RequestBody apiWorkMetaData: ApiWorkMetaData
-    ): ResponseEntity<ApiWorkWithTag> {
-        // workを取得してメタデータを更新
-        val workWithTag = workManagerService.findWorkById(workId = workId)
-        workWithTag.work.mainTitle = apiWorkMetaData.mainTitle!!
-        workWithTag.work.subTitle = apiWorkMetaData.subTitle!!
-        workWithTag.work.description = apiWorkMetaData.description!!
-        workWithTag.work.status = apiWorkMetaData.status!!
-
-        // 作品更新
-        workManagerService.updateWork(workWithTag.work)
-
-        // APIモデルに変換して返却
-        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
-    }
-
 
     override fun getWorksById(
         @PathVariable("workId") workId: String
-    ): ResponseEntity<ApiWorkWithTag> {
-        val workWithTag = workManagerService.findWorkById(workId = workId)
-        val response = toApiWorkWithTag(workWithTag)
-        return ResponseEntity.ok(response)
-    }
-
-    override fun deleteWorksById(
-        @PathVariable("workId") workId: String
-    ): ResponseEntity<ApiWorkWithTag> {
-        // 作品の削除
-        val workWithTag = workManagerService.deleteWorkById(workId)
-        // ユーザーの情報からも削除
-        userManagerService.deleteWorkId(workId)
-
-        // DomainのモデルをApiのモデルに変換
-        val response = toApiWorkWithTag(workWithTag)
-        return ResponseEntity.ok(response)
+    ): ResponseEntity<ApiWork> {
+        val work = workManagerService.findWorkById(workId = workId)
+        return ResponseEntity.ok(workMapper.toApiWork(work))
     }
 
     override fun searchWorksByTags(

@@ -32,7 +32,7 @@ WorksIdResponse:
   content:
     application/json:
       schema:
-        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
+        $ref: "../schemas/works.yaml#/ApiWork"
 
 WorksTagsResponse:
   description: |-

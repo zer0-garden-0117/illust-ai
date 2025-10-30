@@ -4,29 +4,23 @@ import React, { memo } from 'react';
 import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Pill, Text, Loader, Notification, Space, Skeleton } from '@mantine/core';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconPencil, IconPencilCode } from '@tabler/icons-react';
-import { ImageDataOfImageCardsForHistory } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
 type DrawProcessingViewProps = {
-  workId: string;
-  imageData: ImageDataOfImageCardsForHistory;
-  handleSubmitClick: (workId: string) => void;
+  imageData: ApiWork | undefined;
   handleLaterClick: () => void;
 };
 
 export const DrawProcessingView = memo(function WorkViewComponent({
-  workId,
   imageData,
-  handleSubmitClick,
   handleLaterClick
 }: DrawProcessingViewProps): JSX.Element {
   return (
     <>
     <Card withBorder padding="md" radius="md">
+
+      {/* あとで見るボタン */}
       <Group justify="flex-end">
-      {/* <Group justify="space-between"> */}
-        {/* <Text fz="md" fw={700} mb="xs">
-          イラストの生成中
-        </Text> */}
         <Button
           radius={"xl"}
           variant="outline"
@@ -42,7 +36,6 @@ export const DrawProcessingView = memo(function WorkViewComponent({
           あとで見る
         </Button>
       </Group>
-
       <Space h="md" />
 
       {/* 説明 */}
@@ -55,17 +48,17 @@ export const DrawProcessingView = memo(function WorkViewComponent({
       >
         イラストを生成中です。しばらくお待ちください。
       </Notification>
+      <Space h="xl" />
 
-        <Space h="xl" />
-
-        <Center>
-          <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
-            <Image
-              src="https://placehold.co/350x495?text=Creating..."
-              alt={imageData.titleImage}
-            />
-          </AspectRatio>
-        </Center>
+      {/* 画像プレビュー */}
+      <Center>
+        <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
+          <Image
+            src="https://placehold.co/350x495?text=Creating..."
+            alt={imageData?.thumbnailImgUrl}
+          />
+        </AspectRatio>
+      </Center>
     </Card>
     </>
   );

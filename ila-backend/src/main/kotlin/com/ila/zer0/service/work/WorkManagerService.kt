@@ -57,10 +57,9 @@ class WorkManagerService(
     }
 
     @Transactional
-    fun findWorkById(workId: String): com.ila.zer0.dto.WorkWithTag {
+    fun findWorkById(workId: String): Work {
         val work = workService.findWorkById(workId)
-        val tags = tagService.findByWorkIds(workId)
-        return WorkWithTag(work, tags)
+        return work
     }
 
     @Transactional
