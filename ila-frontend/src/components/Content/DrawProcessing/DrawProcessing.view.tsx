@@ -9,12 +9,16 @@ type DrawProcessingViewProps = {
   imageData: ApiWork | undefined;
   handleLaterClick: () => void;
   handleHistoryClick: () => void;
+  handlePostClick: (workId: string | undefined) => void;
+  handleWorkClick: (workId: string | undefined) => void;
 };
 
 export const DrawProcessingView = memo(function WorkViewComponent({
   imageData,
   handleLaterClick,
-  handleHistoryClick
+  handleHistoryClick,
+  handlePostClick,
+  handleWorkClick,
 }: DrawProcessingViewProps): JSX.Element {
   return (
     <>
@@ -64,12 +68,29 @@ export const DrawProcessingView = memo(function WorkViewComponent({
         {imageData?.thumbnailImgUrl ? (
           <Image
             src={imageData.thumbnailImgUrl}
+            onClick={() => handleWorkClick(imageData?.workId)}
+            style={{ cursor: 'pointer' }}
           />
         ) : (
           <Skeleton height="100%" />
         )}
         </AspectRatio>
       </Center>
+      <Space h="md" />
+
+      {/* 画像の投稿ボタン */}
+      {/* imageData?.statusが"created"の時だけ投稿するを表示 */}
+      {imageData?.status === "created" && (
+        <Center>
+          <Button
+            radius={"xl"}
+            w="fit-content"
+            onClick={() => handlePostClick(imageData?.workId)}
+          >
+            {"投稿する"}
+          </Button>
+        </Center>
+      )}
     </Card>
     </>
   );

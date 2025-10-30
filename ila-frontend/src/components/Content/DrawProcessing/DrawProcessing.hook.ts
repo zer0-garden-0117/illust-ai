@@ -44,9 +44,21 @@ export const useDrawProcessing = (
     router.push(`/draw/history`);
   }
 
+  const handlePostClick = (workId: string | undefined) => {
+    if (!workId) return;
+    router.push(`/draw/form/${workId}`);
+  }
+
+  const handleWorkClick = (workId: string | undefined) => {
+    if (!workId) return;
+    router.push(`/draw/history/${workId}`);
+  }
+
   return {
     imageData,
     handleLaterClick,
-    handleHistoryClick
+    handleHistoryClick,
+    handlePostClick,
+    handleWorkClick
   };
 };

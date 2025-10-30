@@ -4,11 +4,11 @@ import React, { memo } from 'react';
 import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button } from '@mantine/core';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconPencil } from '@tabler/icons-react';
-import { ImageDataOfImageCardsForHistory } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
 type WorkFormViewProps = {
   workId: string;
-  imageData: ImageDataOfImageCardsForHistory;
+  imageData: ApiWork;
   handleSubmitClick: (workId: string) => void;
 };
 
@@ -26,8 +26,7 @@ export const WorkFormView = memo(function WorkViewComponent({
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
                 <Image
-                  src={imageData.titleImage}
-                  alt={imageData.titleImage}
+                  src={imageData.thumbnailImgUrl}
                 />
               </AspectRatio>
             </Center>

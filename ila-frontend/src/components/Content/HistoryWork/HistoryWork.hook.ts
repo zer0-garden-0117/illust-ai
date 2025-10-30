@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { ImageDataOfImageCardsForHistory } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
+import { ApiWork } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
 
 type UseHistoryWorkProps = {
   workId: string;
@@ -10,15 +10,15 @@ export const useHistoryWork = (
 ) => {
   const router = useRouter();
 
-  const imageData: ImageDataOfImageCardsForHistory = {
+  const imageData: ApiWork = {
       workId: '1',
       mainTitle: 'Sample Image 1',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
+      titleImgUrl: '/testimage/test.png',
+      thumbnailImgUrl: '/testimage/test.png',
   };
 
   const handlePostClick = (workId: string) => {
-    router.push(`/draw/history/form/${workId}`);
+    router.push(`/draw/form/${workId}`);
   }
 
   return {

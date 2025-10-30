@@ -6,11 +6,11 @@ import { DateTimePicker } from '@mantine/dates';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-react';
 import { IconClock } from '@tabler/icons-react';
-import { ImageDataOfImageCardsForHistory } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
 type HistoryWorkViewProps = {
   workId: string;
-  imageData: ImageDataOfImageCardsForHistory;
+  imageData: ApiWork;
   handlePostClick: (workId: string) => void;
 };
 
@@ -23,25 +23,13 @@ export const HistoryWorkView = memo(function WorkViewComponent({
   return (
     <>
       <Card withBorder>
-        {/* 画像の投稿ボタン */}
-        <Center>
-          <Button
-            radius={"xl"}
-            w="fit-content"
-            onClick={() => handlePostClick(workId)}
-          >
-            {"画像を投稿する"}
-          </Button>
-        </Center>
-
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
           {/* 画像表示 */}
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
                 <Image
-                  src={imageData.titleImage}
-                  alt={imageData.titleImage}
+                  src={imageData.thumbnailImgUrl}
                 />
               </AspectRatio>
             </Center>
@@ -120,14 +108,14 @@ export const HistoryWorkView = memo(function WorkViewComponent({
           </Grid.Col>
         </Grid>
 
-        {/* 画像の投稿ボタン */}
+        {/* 投稿ボタン */}
         <Center>
           <Button
             radius={"xl"}
             w="fit-content"
             onClick={() => handlePostClick(workId)}
           >
-            {"画像を投稿する"}
+            {"投稿する"}
           </Button>
         </Center>
       </Card>
