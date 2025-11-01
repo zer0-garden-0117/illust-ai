@@ -1,12 +1,12 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, Radio, AspectRatio, Center, Button, Text, Pill, Skeleton } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Text, Pill, Skeleton, Modal } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-react';
 import { IconClock } from '@tabler/icons-react';
 import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { useDisclosure } from '@mantine/hooks';
 
 type WorkViewProps = {
   workId: string;
@@ -19,7 +19,7 @@ export const WorkView = memo(function WorkViewComponent({
   imageData,
   handlePostClick,
 }: WorkViewProps): JSX.Element {
-  const { user } = useFirebaseAuthContext();
+  const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
       <Card withBorder>
@@ -32,6 +32,7 @@ export const WorkView = memo(function WorkViewComponent({
                 <Image
                   src={imageData?.thumbnailImgUrl}
                   style={{ cursor: 'pointer' }}
+                  onClick={open}
                 />
               ) : (
                 <Skeleton height="100%" />
@@ -191,6 +192,34 @@ export const WorkView = memo(function WorkViewComponent({
           </Button>
         </Center>
       </Card>
+
+      {/* モーダルで画像拡大表示 */}
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        size="auto"
+        withCloseButton={false}
+        styles={{
+          content: {
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            padding: 0,
+          },
+        }}
+      >
+        <AspectRatio ratio={1 / Math.sqrt(2)} style={{ width: '100%', height: '100%' }}>
+          <Image
+            src={imageData?.titleImgUrl}
+            fit="contain"
+            style={{
+              maxWidth: '100%',
+              maxHeight: '85vh',
+              objectFit: 'contain',
+            }}
+          />
+        </AspectRatio>
+      </Modal>
     </>
   );
 });
