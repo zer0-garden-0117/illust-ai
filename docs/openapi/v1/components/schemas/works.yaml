@@ -18,6 +18,10 @@ ApiWork:
       type: string
       description: "作品の説明"
       example: "New Subject"
+    model:
+      type: string
+      description: "モデル"
+      example: "illust-ai-v1"
     prompt:
       type: string
       description: "作品のプロンプト"

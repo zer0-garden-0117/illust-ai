@@ -50,19 +50,44 @@ export const WorkView = memo(function WorkViewComponent({
                 状態
               </Text>
             </Group>
-            <Pill mb="md"><Group gap={"5px"}><IconLock size="15px"/>未公開</Group></Pill>
+            {imageData?.status ? (
+              <Pill mb="md">
+                <Group gap={"5px"}>
+                  {/* imageData?.statusがposted以外はIconLockを非表示 */}
+                  {imageData?.status === "posted" ? null : <IconLock size="15px"/>}
+                  {imageData?.status}
+                </Group>
+              </Pill>
+            ) : (
+              <Skeleton 
+                mb="md"
+                height={20}
+                width={"80px"}
+                radius={"xl"}
+              />
+            )}
 
             {/* モデルの選択 */}
-            <Radio.Group
-              name="モデル"
-              label={<Group gap={"5px"}><IconCube size={20} color='var(--mantine-color-blue-6)'/>モデル</Group>}
-              mb="md"
-            >
-              <Group mt={"3px"}>
-                <Radio value="illust-ai-v1" label="Illust-ai-v1" />
-                <Radio value="illust-ai-v2" label="Illust-ai-v2(近日実装)" disabled/>
-              </Group>
-            </Radio.Group>
+            <Group gap={"5px"} mb="5px">
+              <IconPhoto size={20} color='var(--mantine-color-blue-6)'/>
+              <Text fw={500} fz={"sm"}>
+                モデル
+              </Text>
+            </Group>
+            {imageData?.status ? (
+              <Pill mb="md">
+                <Group gap={"5px"}>
+                  {imageData?.workId}
+                </Group>
+              </Pill>
+            ) : (
+              <Skeleton 
+                mb="md"
+                height={20}
+                width={"80px"}
+                radius={"xl"}
+              />
+            )}
 
             {/* プロンプト */}
             <Textarea
