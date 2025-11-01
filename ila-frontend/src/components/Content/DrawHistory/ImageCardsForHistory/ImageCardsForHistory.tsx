@@ -19,8 +19,8 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       p="md"
       radius="md"
       withBorder
-      style={{ cursor: 'pointer' }}
-      onClick={() => {router.push(`/illust/${data.workId}`)}}
+      style={{ cursor: imgLoaded ? 'pointer' : 'default', pointerEvents: imgLoaded ? 'auto' : 'none' }}
+      onClick={() => { if (imgLoaded) router.push(`/illust/${data.workId}`) }}
     >
       {/* 画像 */}
       <AspectRatio ratio={1 / Math.sqrt(2)}>
