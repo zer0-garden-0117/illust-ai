@@ -7,6 +7,7 @@ import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-rea
 import { IconClock } from '@tabler/icons-react';
 import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { useDisclosure } from '@mantine/hooks';
+import { WorkModal } from './WorkModal/WorkModal';
 
 type WorkViewProps = {
   workId: string;
@@ -194,32 +195,7 @@ export const WorkView = memo(function WorkViewComponent({
       </Card>
 
       {/* モーダルで画像拡大表示 */}
-      <Modal
-        opened={opened}
-        onClose={close}
-        centered
-        size="auto"
-        withCloseButton={false}
-        styles={{
-          content: {
-            maxWidth: '90vw',
-            maxHeight: '90vh',
-            padding: 0,
-          },
-        }}
-      >
-        <AspectRatio ratio={1 / Math.sqrt(2)} style={{ width: '100%', height: '100%' }}>
-          <Image
-            src={imageData?.titleImgUrl}
-            fit="contain"
-            style={{
-              maxWidth: '100%',
-              maxHeight: '85vh',
-              objectFit: 'contain',
-            }}
-          />
-        </AspectRatio>
-      </Modal>
+      <WorkModal opened={opened} onClose={close} imageUrl={imageData?.titleImgUrl} />
     </>
   );
 });
