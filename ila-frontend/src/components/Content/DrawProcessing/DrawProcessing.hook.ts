@@ -51,7 +51,7 @@ export const useDrawProcessing = (
 
   const handleWorkClick = (workId: string | undefined) => {
     if (!workId) return;
-    router.push(`/illust/history/${workId}`);
+    router.push(`/illust/${workId}`);
   }
 
   return {
