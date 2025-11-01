@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation";
-import { ApiWork } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 

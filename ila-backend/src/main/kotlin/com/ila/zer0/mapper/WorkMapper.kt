@@ -22,7 +22,7 @@ interface WorkMapper {
     @Mapping(target = "rate", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "ttl", ignore = true)
-    @Mapping(target = "supportTo", ignore = true)
+    @Mapping(target = "expiredAt", ignore = true)
     @Mapping(target = "model", ignore = true)
     fun toWork(apiWork: ApiWork): Work
 
@@ -34,6 +34,11 @@ interface WorkMapper {
     @Mapping(
         source = "updatedAt",
         target = "updatedAt",
+        qualifiedByName = ["instantToOffsetDateTime"]
+    )
+    @Mapping(
+        source = "expiredAt",
+        target = "expiredAt",
         qualifiedByName = ["instantToOffsetDateTime"]
     )
     fun toApiWork(work: Work): ApiWork

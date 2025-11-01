@@ -44,17 +44,17 @@ class WorksController(
         val days = if (user.plan == "Basic") 30 else 7
         // ttlにはunix epoch millisで設定
         val tll = System.currentTimeMillis() + days * 24 * 60 * 60 * 1000L
-        // supportToには今日の日付からdaysを足した日付をyyyy/MM/dd HH:mm形式で設定
+        // expiredAtには今日の日付からdaysを足した日付をInstant形式で設定
         val supportToDays = ZonedDateTime.now(ZoneId.of("Asia/Tokyo"))
             .plusDays(days.toLong())
-            .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
+            .toInstant()
 
         val work = Work().apply {
             userId = user.userId
             prompt = apiWork.prompt!!
             negativePrompt = apiWork.negativePrompt!!
             model = apiWork.model!!
-            supportTo = supportToDays
+            expiredAt = supportToDays
             ttl = tll
         }
 

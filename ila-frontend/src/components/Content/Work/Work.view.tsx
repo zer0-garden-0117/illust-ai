@@ -46,9 +46,7 @@ export const WorkView = memo(function WorkViewComponent({
             {/* 画像の状態 */}
             <Group gap={"5px"} mb="5px">
               <IconPhoto size={20} color='var(--mantine-color-blue-6)'/>
-              <Text fw={500} fz={"sm"}>
-                状態
-              </Text>
+              <Text fw={500} fz={"sm"}>状態</Text>
             </Group>
             {imageData?.status ? (
               <Pill mb="md">
@@ -61,7 +59,7 @@ export const WorkView = memo(function WorkViewComponent({
             ) : (
               <Skeleton 
                 mb="md"
-                height={20}
+                height={22}
                 width={"80px"}
                 radius={"xl"}
               />
@@ -69,71 +67,115 @@ export const WorkView = memo(function WorkViewComponent({
 
             {/* モデルの選択 */}
             <Group gap={"5px"} mb="5px">
-              <IconPhoto size={20} color='var(--mantine-color-blue-6)'/>
-              <Text fw={500} fz={"sm"}>
-                モデル
-              </Text>
+              <IconCube size={20} color='var(--mantine-color-blue-6)'/>
+              <Text fw={500} fz={"sm"}>モデル</Text>
             </Group>
             {imageData?.status ? (
               <Pill mb="md">
                 <Group gap={"5px"}>
-                  {imageData?.workId}
+                  {imageData?.model}
                 </Group>
               </Pill>
             ) : (
               <Skeleton 
                 mb="md"
-                height={20}
+                height={22}
                 width={"80px"}
                 radius={"xl"}
               />
             )}
 
             {/* プロンプト */}
-            <Textarea
-              label={<Group gap={"5px"}><IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>プロンプト</Group>}
-              placeholder="1girl, blonde hair, smile, ..."
-              mb="md"
-              rows={5}
-              minRows={5}
-              maxRows={5}
-              readOnly
-              value={"1girl, blonde hair, smile, ..."}
-            />
+            <Group gap={"5px"} mb="5px">
+              <IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>
+              <Text fw={500} fz={"sm"}>プロンプト</Text>
+            </Group>
+            {imageData?.prompt ? (
+              <Textarea
+                mb="md"
+                rows={5}
+                minRows={5}
+                maxRows={5}
+                readOnly
+                value={imageData?.prompt || ""}
+              />
+            ) : (
+              <Skeleton 
+                mb="md"
+                height={121.438}
+                width={"100%"}
+                radius={"md"}
+              />
+            )}
 
             {/* ネガティブプロンプト */}
-            <Textarea
-              label={<Group gap={"5px"}><IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>ネガティブプロンプト</Group>}
-              placeholder="lowres, bad anatomy, ..."
-              mb="md"
-              rows={5}
-              minRows={5}
-              maxRows={5}
-              readOnly
-              value={"lowres, bad anatomy, ..."}
-            />
+            <Group gap={"5px"} mb="5px">
+              <IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>
+              <Text fw={500} fz={"sm"}>ネガティブプロンプト</Text>
+            </Group>
+            {imageData? (
+              <Textarea
+                mb="md"
+                rows={5}
+                minRows={5}
+                maxRows={5}
+                readOnly
+                value={imageData?.negativePrompt || ""}
+              />
+            ) : (
+              <Skeleton 
+                mb="md"
+                height={121.438}
+                width={"100%"}
+                radius={"md"}
+              />
+            )}
 
             {/* 生成日時 */}
-            <DateTimePicker
-              withSeconds
-              label={<Group gap={"5px"}><IconClock size={20} color='var(--mantine-color-blue-6)'/>生成日時</Group>}
-              placeholder="Pick date and time"
-              valueFormat="YYYY/MM/DD HH:mm:ss"
-              value={new Date()}
-              readOnly
-              mb="md"
-            />
+            <Group gap={"5px"} mb="5px">
+              <IconClock size={20} color='var(--mantine-color-blue-6)'/>
+              <Text fw={500} fz={"sm"}>生成日時</Text>
+            </Group>
+            {imageData?.createdAt ? (
+              <DateTimePicker
+                withSeconds
+                placeholder="Pick date and time"
+                valueFormat="YYYY/MM/DD HH:mm:ss"
+                value={new Date(imageData?.createdAt || '')}
+                readOnly
+                mb="md"
+              />
+            ) : (
+              <Skeleton 
+                mb="md"
+                height={36}
+                width={"100%"}
+                radius={"md"}
+              />
+            )}
 
-            {/* 履歴の有効期限 */}
-            <DateTimePicker
-              withSeconds
-              label={<Group gap={"5px"}><IconClock size={20} color='var(--mantine-color-blue-6)'/>履歴の有効期限</Group>}
-              placeholder="Pick date and time"
-              valueFormat="YYYY/MM/DD HH:mm:ss"
-              value={new Date()}
-              readOnly
-              mb="md"
-            />
+            {/* 有効期限 */}
+            <Group gap={"5px"} mb="5px">
+              <IconClock size={20} color='var(--mantine-color-blue-6)'/>
+              <Text fw={500} fz={"sm"}>履歴の有効期限</Text>
+            </Group>
+            {imageData?.expiredAt ? (
+              <DateTimePicker
+                withSeconds
+                placeholder="Pick date and time"
+                valueFormat="YYYY/MM/DD HH:mm:ss"
+                value={new Date(imageData?.expiredAt || '')}
+                readOnly
+                mb="md"
+              />
+            ) : (
+              <Skeleton 
+                mb="md"
+                height={36}
+                width={"100%"}
+                radius={"md"}
+              />
+            )}
 
           </Grid.Col>
         </Grid>

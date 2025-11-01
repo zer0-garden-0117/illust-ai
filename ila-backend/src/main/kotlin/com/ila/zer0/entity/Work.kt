@@ -67,6 +67,6 @@ data class Work(
     @get:DynamoDbAttribute("ttl")
     var ttl: Long? = null,
 
-    @get:DynamoDbAttribute("supportTo")
-    var supportTo: String? = null
+    @get:DynamoDbAttribute("expiredAt")
+    var expiredAt: Instant = Instant.now(),
 )
