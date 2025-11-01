@@ -23,6 +23,7 @@ interface WorkMapper {
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "ttl", ignore = true)
     @Mapping(target = "supportTo", ignore = true)
+    @Mapping(target = "model", ignore = true)
     fun toWork(apiWork: ApiWork): Work
 
     @Mapping(

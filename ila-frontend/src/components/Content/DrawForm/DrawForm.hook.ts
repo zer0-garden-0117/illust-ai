@@ -30,6 +30,7 @@ export const useDrawForm = () => {
     const response = await createWork({
       headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
       body: {
+        model: values.model,
         prompt: values.prompt,
         negativePrompt: values.negativePrompt,
       }

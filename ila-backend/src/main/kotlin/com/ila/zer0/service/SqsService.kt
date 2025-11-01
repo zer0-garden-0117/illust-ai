@@ -24,12 +24,15 @@ class SqsService(
     private val log = LoggerFactory.getLogger(this::class.java)
     private val mapper = ObjectMapper()
     
-    fun sendCreateImageMessage(workId: String, action: String, prompt: String, nowDate: Instant): String {
+    fun sendCreateImageMessage(
+        workId: String, action: String, prompt: String, negativePrompt: String, model: String, nowDate: Instant
+    ): String {
         val message = mapOf(
             "workId" to workId,
             "action" to action,
-            "workflow" to "workflow1.json",
+            "model" to model,
             "prompt" to prompt,
+            "negativePrompt" to negativePrompt,
             "timestamp" to nowDate.toString()
         )
         val messageJson = mapper.writeValueAsString(message)

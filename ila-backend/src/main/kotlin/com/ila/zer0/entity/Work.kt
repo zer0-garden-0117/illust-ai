@@ -28,6 +28,9 @@ data class Work(
     @get:DynamoDbAttribute("subTitle")
     var subTitle: String = "",
 
+    @get:DynamoDbAttribute("model")
+    var model: String = "",
+
     @get:DynamoDbAttribute("description")
     var description: String = "",
 

@@ -45,8 +45,14 @@ class WorkManagerService(
         workService.registerWork(work)
 
         // 画像生成SQS通知
-        sqsService.sendCreateImageMessage(work.workId, "create", work.prompt, work.createdAt)
-
+        sqsService.sendCreateImageMessage(
+            work.workId,
+            "create",
+            work.prompt,
+            work.negativePrompt,
+            work.model,
+            work.createdAt
+        )
         return work
     }
 

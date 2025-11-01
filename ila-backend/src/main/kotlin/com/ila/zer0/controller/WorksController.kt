@@ -53,6 +53,7 @@ class WorksController(
             userId = user.userId
             prompt = apiWork.prompt!!
             negativePrompt = apiWork.negativePrompt!!
+            model = apiWork.model!!
             supportTo = supportToDays
             ttl = tll
         }
