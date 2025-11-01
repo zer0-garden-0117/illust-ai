@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, Radio, AspectRatio, Center, Button, Text, Pill } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, Radio, AspectRatio, Center, Button, Text, Pill, Skeleton } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-react';
@@ -28,9 +28,14 @@ export const WorkView = memo(function WorkViewComponent({
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
+              {imageData?.thumbnailImgUrl ? (
                 <Image
-                  src={imageData.thumbnailImgUrl}
+                  src={imageData?.thumbnailImgUrl}
+                  style={{ cursor: 'pointer' }}
                 />
+              ) : (
+                <Skeleton height="100%" />
+              )}
               </AspectRatio>
             </Center>
           </Grid.Col>
