@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { DrawFormValues } from './DrawForm.hook';
+import { CreateWorkValues } from './CreateForm.hook';
 import { UseFormReturnType } from '@mantine/form';
 import { Button, Card, Group, Loader, Notification, Radio, Space, Text, Textarea, TextInput } from '@mantine/core';
 import { IconCube, IconInfoCircle, IconInfoSmall, IconPencil } from '@tabler/icons-react';
@@ -10,23 +10,23 @@ import { IconArrowNarrowRight } from '@tabler/icons-react';
 import { IconPencilCode } from '@tabler/icons-react';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
-type DrawFormViewProps = {
-  form: UseFormReturnType<DrawFormValues>,
+type CreateWorkViewProps = {
+  form: UseFormReturnType<CreateWorkValues>,
   isSubmitting: boolean,
-  handleDrawClick: (values: DrawFormValues) => Promise<void>,
+  handleDrawClick: (values: CreateWorkValues) => Promise<void>,
   handleHistoryClick: () => void
   handlePlanChangeClick: () => void
   handleBoostAddClick: () => void
 };
 
-export const DrawFormView = memo(function WorkViewComponent({
+export const CreateWorkView = memo(function WorkViewComponent({
   form,
   isSubmitting,
   handleDrawClick,
   handleHistoryClick,
   handlePlanChangeClick,
   handleBoostAddClick
-}: DrawFormViewProps): JSX.Element {
+}: CreateWorkViewProps): JSX.Element {
   const { user } = useFirebaseAuthContext();
 
   return (
@@ -140,4 +140,4 @@ export const DrawFormView = memo(function WorkViewComponent({
     </Card>
   );
 });
-DrawFormView.displayName = 'DrawFormView';
+CreateWorkView.displayName = 'CreateWorkView';

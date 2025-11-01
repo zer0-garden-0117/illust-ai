@@ -1,12 +1,12 @@
 'use client';
 
-import DrawForm from "@/components/Content/DrawForm/DrawForm";
+import CreateForm from "@/components/Content/CreateForm/CreateForm";
 
 const DrawPage: React.FC = () => {
 
   return (
     <>
-      <DrawForm />
+      <CreateForm />
     </>
   )
 };

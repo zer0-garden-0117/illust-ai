@@ -4,19 +4,19 @@ import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export type DrawFormValues = {
+export type CreateWorkValues = {
   model: string;
   prompt: string;
   negativePrompt: string;
 };
 
-export const useDrawForm = () => {
+export const useCreateWork = () => {
   const { getIdTokenLatest ,getFreshIdToken } = useFirebaseAuthContext();
   const router = useRouter();
   const { trigger: createWork } = useWorksCreate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<DrawFormValues>({
+  const form = useForm<CreateWorkValues>({
     initialValues: {
       model: 'illust-ai-v1',
       prompt: '',
@@ -24,7 +24,7 @@ export const useDrawForm = () => {
     },
   });
 
-  const handleDrawClick = async (values: DrawFormValues) => {
+  const handleDrawClick = async (values: CreateWorkValues) => {
     setIsSubmitting(true);
     // 画像生成のAPIを呼び出す
     const response = await createWork({
