@@ -183,6 +183,8 @@ export const WorkView = memo(function WorkViewComponent({
         </Grid>
 
         {/* 投稿ボタン */}
+        {/* imageData.isMineがtrueの時のみ表示 */}
+        {imageData?.isMine && (
         <Center>
           <Button
             radius={"xl"}
@@ -192,6 +194,7 @@ export const WorkView = memo(function WorkViewComponent({
             {"投稿する"}
           </Button>
         </Center>
+        )}
       </Card>
 
       {/* モーダルで画像拡大表示 */}

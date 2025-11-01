@@ -69,4 +69,10 @@ data class Work(
 
     @get:DynamoDbAttribute("expiredAt")
     var expiredAt: Instant = Instant.now(),
+
+    @get:DynamoDbAttribute("isMine")
+    var isMine: Boolean = false,
+
+    @get:DynamoDbAttribute("isLiked")
+    var isLiked: Boolean = false,
 )

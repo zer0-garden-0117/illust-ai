@@ -72,6 +72,8 @@ class WorksController(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWork> {
         val work = workManagerService.findWorkById(workId = workId)
+        val user = getUser()
+        work.isMine = if (user != null) work.userId == user.userId else false
         return ResponseEntity.ok(workMapper.toApiWork(work))
     }
 

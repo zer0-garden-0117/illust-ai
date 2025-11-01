@@ -64,6 +64,14 @@ ApiWork:
       format: date-time
       description: "作品の有効期限"
       example: "2024-07-08T00:00:00+09:00"
+    isMine:
+      type: boolean
+      description: "認証ユーザーの作品かどうか"
+      example: true
+    isLiked:
+      type: boolean
+      description: "認証ユーザーがこの作品にいいねしているかどうか"
+      example: true
 
 ApiWorkImage:
   description: 作品の画像情報
