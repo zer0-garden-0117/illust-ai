@@ -2,21 +2,20 @@
 
 import React, { memo } from 'react';
 import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button } from '@mantine/core';
-import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 import { IconPencil } from '@tabler/icons-react';
 import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
-type WorkFormViewProps = {
+type PostFormViewProps = {
   workId: string;
   imageData: ApiWork;
   handleSubmitClick: (workId: string) => void;
 };
 
-export const WorkFormView = memo(function WorkViewComponent({
+export const PostFormView = memo(function WorkViewComponent({
   workId,
   imageData,
   handleSubmitClick,
-}: WorkFormViewProps): JSX.Element {
+}: PostFormViewProps): JSX.Element {
   return (
     <>
       <Card withBorder>
@@ -38,12 +37,12 @@ export const WorkFormView = memo(function WorkViewComponent({
             style={{
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'center', // 垂直方向中央
+              justifyContent: 'center',
             }}
           >
             <Textarea
               label={<Group gap={"5px"}><IconPencil size={20} color='var(--mantine-color-blue-6)'/>キャプション</Group>}
-              placeholder="キャプションを入力してください。ハッシュタグも使用できます。"
+              placeholder="キャプションを入力してください。"
               mb="md"
               rows={5}
               minRows={5}
@@ -68,4 +67,4 @@ export const WorkFormView = memo(function WorkViewComponent({
     </>
   );
 });
-WorkFormView.displayName = 'WorkFormView';
+PostFormView.displayName = 'PostFormView';

@@ -1,22 +1,22 @@
 import { useRouter } from "next/navigation";
-import { ImageDataOfImageCardsForHistory } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
+import { ApiWork } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
-type UseWorkFormProps = {
+type UsePostFormProps = {
   workId: string;
 };
 
-export const useWorkForm = (
-  { workId }: UseWorkFormProps
+export const usePostForm = (
+  { workId }: UsePostFormProps
 ) => {
   const { user } = useFirebaseAuthContext();
   const router = useRouter();
 
-  const imageData: ImageDataOfImageCardsForHistory = {
+  const imageData: ApiWork = {
       workId: '1',
       mainTitle: 'Sample Image 1',
-      titleImage: '/testimage/test.png',
-      thumbnailImage: '/testimage/test.png',
+      titleImgUrl: '/testimage/test.png',
+      thumbnailImgUrl: '/testimage/test.png',
   };
 
   const handleSubmitClick = (workId: string) => {

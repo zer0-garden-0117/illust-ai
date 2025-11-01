@@ -1,6 +1,6 @@
 'use client';
 
-import WorkForm from "@/components/Content/WorkForm/WorkForm";
+import PostForm from "@/components/Content/PostForm/PostForm";
 
 const WorkFormPage: React.FC<{ params: { id: string } }> = (
   { params }
@@ -9,7 +9,7 @@ const WorkFormPage: React.FC<{ params: { id: string } }> = (
 
   return (
     <>
-      <WorkForm workId={workId} />
+      <PostForm workId={workId} />
     </>
   )
 };
