@@ -8,17 +8,17 @@ import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-rea
 import { IconClock } from '@tabler/icons-react';
 import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
-type HistoryWorkViewProps = {
+type WorkViewProps = {
   workId: string;
   imageData: ApiWork;
   handlePostClick: (workId: string) => void;
 };
 
-export const HistoryWorkView = memo(function WorkViewComponent({
+export const WorkView = memo(function WorkViewComponent({
   workId,
   imageData,
   handlePostClick,
-}: HistoryWorkViewProps): JSX.Element {
+}: WorkViewProps): JSX.Element {
   const { user } = useFirebaseAuthContext();
   return (
     <>
@@ -122,4 +122,4 @@ export const HistoryWorkView = memo(function WorkViewComponent({
     </>
   );
 });
-HistoryWorkView.displayName = 'HistoryWorkView';
+WorkView.displayName = 'WorkView';

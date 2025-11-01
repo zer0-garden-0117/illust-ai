@@ -1,12 +1,12 @@
 import { useRouter } from "next/navigation";
 import { ApiWork } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
 
-type UseHistoryWorkProps = {
+type UseWorkProps = {
   workId: string;
 };
 
-export const useHistoryWork = (
-  { workId }: UseHistoryWorkProps
+export const useWork = (
+  { workId }: UseWorkProps
 ) => {
   const router = useRouter();
 
