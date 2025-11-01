@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
-import { ApiWork } from "../DrawHistory/ImageCardsForHistory/ImageCardsForHistory";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
+import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 
 type UsePostFormProps = {
   workId: string;
@@ -9,15 +9,12 @@ type UsePostFormProps = {
 export const usePostForm = (
   { workId }: UsePostFormProps
 ) => {
-  const { user } = useFirebaseAuthContext();
+  const { user, getIdTokenLatest } = useFirebaseAuthContext();
   const router = useRouter();
-
-  const imageData: ApiWork = {
-      workId: '1',
-      mainTitle: 'Sample Image 1',
-      titleImgUrl: '/testimage/test.png',
-      thumbnailImgUrl: '/testimage/test.png',
-  };
+  const { data: imageData, error, mutate: updateWork } = useWorksGetById({
+    workId,
+    getIdTokenLatest,
+  }, { revalidateOnFocus: false });
 
   const handleSubmitClick = (workId: string) => {
     // ここにサブミット処理を実装

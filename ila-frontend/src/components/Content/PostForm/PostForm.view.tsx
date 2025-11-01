@@ -7,7 +7,7 @@ import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistor
 
 type PostFormViewProps = {
   workId: string;
-  imageData: ApiWork;
+  imageData: ApiWork | undefined;
   handleSubmitClick: (workId: string) => void;
 };
 
@@ -25,7 +25,7 @@ export const PostFormView = memo(function WorkViewComponent({
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
                 <Image
-                  src={imageData.thumbnailImgUrl}
+                  src={imageData?.thumbnailImgUrl}
                 />
               </AspectRatio>
             </Center>
@@ -47,7 +47,6 @@ export const PostFormView = memo(function WorkViewComponent({
               rows={5}
               minRows={5}
               maxRows={5}
-              readOnly
             />
 
           {/* サブミットボタン */}
