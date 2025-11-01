@@ -14,4 +14,4 @@ export const locales = [
     'fil',     // Filipino
     'pt',      // Português
   ] as const;
-export const localePrefix = `always`
+export const localePrefix = `never`
