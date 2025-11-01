@@ -41,17 +41,17 @@ export const useDrawProcessing = (
   }
 
   const handleHistoryClick = () => {
-    router.push(`/draw/history`);
+    router.push(`/illust/history`);
   }
 
   const handlePostClick = (workId: string | undefined) => {
     if (!workId) return;
-    router.push(`/draw/form/${workId}`);
+    router.push(`/illust/form/${workId}`);
   }
 
   const handleWorkClick = (workId: string | undefined) => {
     if (!workId) return;
-    router.push(`/draw/history/${workId}`);
+    router.push(`/illust/history/${workId}`);
   }
 
   return {

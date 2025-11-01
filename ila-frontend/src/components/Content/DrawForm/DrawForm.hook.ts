@@ -37,11 +37,11 @@ export const useDrawForm = () => {
     // トークンを更新してから遷移
     await getFreshIdToken();
     console.log('Created work:', response);
-    router.push(`/draw/processing/${response.workId}`);
+    router.push(`/illust/processing/${response.workId}`);
   }
 
   const handleHistoryClick = () => {
-    router.push('/draw/history');
+    router.push('/illust/history');
   }
 
   const handlePlanChangeClick = () => {

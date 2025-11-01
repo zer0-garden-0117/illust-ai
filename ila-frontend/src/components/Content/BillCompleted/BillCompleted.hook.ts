@@ -18,7 +18,7 @@ export const useBillCompleted = (
     'Unknown';
 
   const handleDrawClick = () => {
-    router.push('/draw');
+    router.push('/illust/create');
   }
 
   return {

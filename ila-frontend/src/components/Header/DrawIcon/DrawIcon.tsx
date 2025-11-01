@@ -11,7 +11,7 @@ export const DrawIcon: React.FC = () => {
   const isDark = colorScheme === 'dark';
 
   const onIconClick = () => {
-    router.push('/draw');
+    router.push('/illust/create');
   };
 
   // loading 中は何も表示しない

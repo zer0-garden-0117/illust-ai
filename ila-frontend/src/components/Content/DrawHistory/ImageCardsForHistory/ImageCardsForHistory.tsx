@@ -20,7 +20,7 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       radius="md"
       withBorder
       style={{ cursor: 'pointer' }}
-      onClick={() => {router.push(`/draw/history/${data.workId}`)}}
+      onClick={() => {router.push(`/illust/history/${data.workId}`)}}
     >
       {/* 画像 */}
       <AspectRatio ratio={1 / Math.sqrt(2)}>

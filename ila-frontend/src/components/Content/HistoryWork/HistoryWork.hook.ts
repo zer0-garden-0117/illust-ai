@@ -18,7 +18,7 @@ export const useHistoryWork = (
   };
 
   const handlePostClick = (workId: string) => {
-    router.push(`/draw/form/${workId}`);
+    router.push(`/illust/form/${workId}`);
   }
 
   return {
