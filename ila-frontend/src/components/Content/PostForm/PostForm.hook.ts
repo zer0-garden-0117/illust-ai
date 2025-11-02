@@ -34,7 +34,6 @@ export const usePostForm = (
 
   const handlePostClick = async (values: PostWorkValues) => {
     setIsSubmitting(true);
-    // 投稿処理をここに実装
     // await triggerPost({
     //   headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
     //   workId: workId,
@@ -42,10 +41,14 @@ export const usePostForm = (
     //     description: values.description,
     //   }
     // });
-    // 5秒待機（デバッグ用）
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    // 1秒待つ（擬似的なAPI呼び出し）
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
     setIsPosted(true);
+  }
+
+  const handleConfirmClick = () => {
+    router.push(`/illust/${workId}`);
   }
 
   return {
@@ -54,6 +57,7 @@ export const usePostForm = (
     imageData,
     isSubmitting,
     isPosted,
-    handlePostClick
+    handlePostClick,
+    handleConfirmClick
   };
 };

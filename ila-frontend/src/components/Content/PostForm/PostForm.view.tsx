@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader, Space } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader, Space, Box } from '@mantine/core';
 import { IconCheck, IconPencil } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { UseFormReturnType } from '@mantine/form';
@@ -14,6 +14,7 @@ type PostFormViewProps = {
   isSubmitting: boolean;
   isPosted: boolean;
   handlePostClick: (values: PostWorkValues) => Promise<void>,
+  handleConfirmClick: () => void;
 };
 
 export const PostFormView = memo(function WorkViewComponent({
@@ -23,6 +24,7 @@ export const PostFormView = memo(function WorkViewComponent({
   isSubmitting,
   isPosted,
   handlePostClick,
+  handleConfirmClick
 }: PostFormViewProps): JSX.Element {
   console.log('isSubmitting:', isSubmitting);
   console.log('isPosted:', isPosted);
@@ -64,7 +66,22 @@ export const PostFormView = memo(function WorkViewComponent({
             />
 
           {/* サブミットボタン */}
-          <Center>
+          <Group justify="flex-end" mt="md">
+          {/* isPostedがtrueの時はボタンを表示 */}
+            {isPosted && (
+              <>
+              <Space h="md" />
+                <Button
+                  type="submit"
+                  radius={"xl"}
+                  w="fit-content"
+                  onClick={handleConfirmClick}
+                  variant='outline'
+                >
+                  投稿の確認
+                </Button>
+              </>
+            )}
             <Button
               type="submit"
               radius={"xl"}
@@ -86,25 +103,8 @@ export const PostFormView = memo(function WorkViewComponent({
                 '投稿'
               )}
             </Button>
-          </Center>
+          </Group>
           </form>
-
-          {/* isPostedがtrueの時はボタンを表示 */}
-          {isPosted && (
-          <>
-            <Space h="md" />
-            <Center>
-              <Button
-                type="submit"
-                radius={"xl"}
-                w="fit-content"
-                disabled={isSubmitting || isPosted}
-              >
-                投稿の確認
-              </Button>
-            </Center>
-          </>
-          )}
           </Grid.Col>
         </Grid>
       </Card>

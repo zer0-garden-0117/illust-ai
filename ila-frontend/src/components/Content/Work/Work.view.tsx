@@ -46,28 +46,6 @@ export const WorkView = memo(function WorkViewComponent({
           {/* 画像のメタデータ */}
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
 
-            {/* 画像の状態 */}
-            <Group gap={"5px"} mb="5px">
-              <IconPhoto size={20} color='var(--mantine-color-blue-6)'/>
-              <Text fw={500} fz={"sm"}>状態</Text>
-            </Group>
-            {imageData?.apiWork?.status ? (
-              <Pill mb="md">
-                <Group gap={"5px"}>
-                  {/* imageData?.statusがposted以外はIconLockを非表示 */}
-                  {imageData?.apiWork?.status === "posted" ? null : <IconLock size="15px"/>}
-                  {imageData?.apiWork?.status}
-                </Group>
-              </Pill>
-            ) : (
-              <Skeleton 
-                mb="md"
-                height={22}
-                width={"80px"}
-                radius={"xl"}
-              />
-            )}
-
             {/* モデルの選択 */}
             <Group gap={"5px"} mb="5px">
               <IconCube size={20} color='var(--mantine-color-blue-6)'/>
