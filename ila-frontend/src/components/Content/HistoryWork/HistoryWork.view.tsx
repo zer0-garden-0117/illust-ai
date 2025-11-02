@@ -9,17 +9,17 @@ import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsFo
 import { useDisclosure } from '@mantine/hooks';
 import { WorkModal } from '../WorkModal/WorkModal';
 
-type WorkViewProps = {
+type HistoryWorkViewProps = {
   workId: string;
-  imageData: ApiWorkWithTag;
+  imageData: ApiWorkWithTag | undefined;
   handlePostClick: (workId: string) => void;
 };
 
-export const WorkView = memo(function WorkViewComponent({
+export const HistoryWorkView = memo(function HistoryWorkViewComponent({
   workId,
   imageData,
   handlePostClick,
-}: WorkViewProps): JSX.Element {
+}: HistoryWorkViewProps): JSX.Element {
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
@@ -181,4 +181,4 @@ export const WorkView = memo(function WorkViewComponent({
     </>
   );
 });
-WorkView.displayName = 'WorkView';
+HistoryWorkView.displayName = 'HistoryWorkView';

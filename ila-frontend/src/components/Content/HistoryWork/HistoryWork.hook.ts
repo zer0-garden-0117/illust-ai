@@ -2,12 +2,12 @@ import { useRouter } from "next/navigation";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
-type UseWorkProps = {
+type UseHistoryWorkProps = {
   workId: string;
 };
 
-export const useWork = (
-  { workId }: UseWorkProps
+export const useHistoryWork = (
+  { workId }: UseHistoryWorkProps
 ) => {
   const router = useRouter();
   const { getIdTokenLatest } = useFirebaseAuthContext();
