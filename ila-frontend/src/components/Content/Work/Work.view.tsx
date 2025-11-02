@@ -7,7 +7,7 @@ import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-rea
 import { IconClock } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { useDisclosure } from '@mantine/hooks';
-import { WorkModal } from './WorkModal/WorkModal';
+import { WorkModal } from '../WorkModal/WorkModal';
 
 type WorkViewProps = {
   workId: string;
