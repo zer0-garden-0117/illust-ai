@@ -254,51 +254,6 @@ UsersFollowerById:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
-UsersActivitySearch:
-  post:
-    operationId: postUsersActivitySearch
-    tags:
-      - users
-    summary: ユーザーのアクション情報を取得
-    description: |
-      ユーザーのアクション情報を取得
-    security:
-      - FirebaseAuth: []
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/users.yaml#/ApiUsersActivitySearch"
-    responses:
-      "200":
-        $ref: "../components/responses/users.yaml#/UsersActivitySearchResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-UsersLiked:
-  get:
-    operationId: getUsersLiked
-    tags:
-      - users
-    summary: いいねを取得する
-    description: |
-      いいねを取得する
-    security:
-      - FirebaseAuth: []
-    parameters:
-      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
-      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
-    responses:
-      "200":
-        $ref: "../components/responses/users.yaml#/UsersLikedResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
 UsersLikedByWorkId:
   post:
     operationId: postUsersLikedByWorkdId
@@ -333,66 +288,6 @@ UsersLikedByWorkId:
     responses:
       "200":
         $ref: "../components/responses/users.yaml#/UsersLikedByWorkIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-UsersViewed:
-  get:
-    operationId: getUsersViewed
-    tags:
-      - users
-    summary: 閲覧済を取得する
-    description: |
-      いいねを取得する
-    security:
-      - FirebaseAuth: []
-    parameters:
-      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
-      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
-    responses:
-      "200":
-        $ref: "../components/responses/users.yaml#/UsersViewedResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-UsersViewedByWorkId:
-  post:
-    operationId: postUsersViewedByWorkdId
-    tags:
-      - users
-    summary: 指定した作品に閲覧済を付与する
-    description: |
-      指定した作品に閲覧済を付与する
-    security:
-      - FirebaseAuth: []
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
-    responses:
-      "200":
-        $ref: "../components/responses/users.yaml#/UsersViewedByWorkIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-  delete:
-    operationId: deleteUsersViewedByWorkdId
-    tags:
-      - users
-    summary: 指定した作品の閲覧済を削除する
-    description: |
-      指定した作品の閲覧済を付削除する
-    security:
-      - FirebaseAuth: []
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
-    responses:
-      "200":
-        $ref: "../components/responses/users.yaml#/UsersViewedByWorkIdResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":

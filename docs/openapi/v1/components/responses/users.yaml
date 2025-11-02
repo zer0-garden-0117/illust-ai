@@ -25,24 +25,6 @@ FollowUsersResponse:
       schema:
         $ref: "../schemas/users.yaml#/ApiFollowUsers"
 
-UsersActivitySearchResponse:
-  description: |-
-    200 OK
-    - 正常終了
-  content:
-    application/json:
-      schema:
-        $ref: "../schemas/users.yaml#/ApiUsersActivity"
-
-UsersLikedResponse:
-  description: |-
-    200 OK
-    - 正常終了
-  content:
-    application/json:
-      schema:
-        $ref: "../schemas/works.yaml#/ApiWorksWithSearchResult"
-
 UsersLikedByWorkIdResponse:
   description: |-
     200 OK
@@ -51,23 +33,3 @@ UsersLikedByWorkIdResponse:
     application/json:
       schema:
         $ref: "../schemas/users.yaml#/ApiLiked"
-
-UsersViewedResponse:
-  description: |-
-    200 OK
-    - 正常終了
-  content:
-    application/json:
-      schema:
-        type: array
-        items:
-          $ref: "../schemas/users.yaml#/ApiViewed"
-
-UsersViewedByWorkIdResponse:
-  description: |-
-    200 OK
-    - 正常終了
-  content:
-    application/json:
-      schema:
-        $ref: "../schemas/users.yaml#/ApiViewed"

@@ -70,11 +70,34 @@ class WorksController(
 
     override fun getWorksById(
         @PathVariable("workId") workId: String
-    ): ResponseEntity<ApiWork> {
-        val work = workManagerService.findWorkById(workId = workId)
-        val user = getUser()
-        work.isMine = if (user != null) work.userId == user.userId else false
-        return ResponseEntity.ok(workMapper.toApiWork(work))
+    ): ResponseEntity<ApiWorkWithTag> {
+        val workWithTag = workManagerService.findWorkById(workId = workId)
+        val response = toApiWorkWithTag(workWithTag)
+        return ResponseEntity.ok(response)
+    }
+
+    override fun updatedWorksById(
+        @PathVariable("workId") workId: String,
+        @Valid @RequestBody apiWork: ApiWork
+    ): ResponseEntity<ApiWorkWithTag> {
+        val workWithTag = workManagerService.findWorkById(workId = workId)
+        workWithTag.work.description = apiWork.description!!
+        workWithTag.work.status = "posted"
+        workManagerService.updateWork(workWithTag.work)
+        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
+    }
+
+    override fun deleteWorksById(
+        @PathVariable("workId") workId: String
+    ): ResponseEntity<ApiWorkWithTag> {
+        // 作品の削除
+        val workWithTag = workManagerService.deleteWorkById(workId)
+        // ユーザーの情報からも削除
+        userManagerService.deleteWorkId(workId)
+
+        // DomainのモデルをApiのモデルに変換
+        val response = toApiWorkWithTag(workWithTag)
+        return ResponseEntity.ok(response)
     }
 
     override fun searchWorksByTags(
@@ -88,12 +111,13 @@ class WorksController(
         )
 
         // APIモデルに変換
-        val apiWorks = mutableListOf<ApiWork>()
+        val apiWorksWithTags = mutableListOf<ApiWorkWithTag>()
         workResult?.works?.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
-            apiWorks.add(apiWork)
+            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
+            apiWorksWithTags.add(apiWorkWithTag)
         }
-        val apiWorkWithDetails = ApiWorksWithSearchResult(apiWorks, workResult?.totalCount ?: 0)
+        val apiWorkWithDetails = ApiWorksWithSearchResult(apiWorksWithTags, workResult?.totalCount ?: 0)
         return ResponseEntity.ok(apiWorkWithDetails)
     }
 

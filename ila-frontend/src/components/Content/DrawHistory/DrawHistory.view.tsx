@@ -32,7 +32,7 @@ export const DrawHistoryView = memo(function WorkViewComponent({
           ))
         }
         {userWorksData?.works?.map((work, idx) => (
-          <ImageCardsForHistory key={work.workId} data={work} index={idx} />
+          <ImageCardsForHistory key={work.apiWork?.workId} data={work.apiWork} index={idx} />
         ))}
       </SimpleGrid>
     </Card>

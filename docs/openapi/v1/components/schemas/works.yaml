@@ -73,73 +73,11 @@ ApiWork:
       description: "認証ユーザーがこの作品にいいねしているかどうか"
       example: true
 
-ApiWorkImage:
-  description: 作品の画像情報
-  type: object
-  properties:
-    workId:
-      type: string
-      description: "作品の一意の識別子"
-      example: 1
-    titleImgUrl:
-      type: string
-      description: "タイトル画像のURL"
-      example: "http://example.com/new_title_image.avif"
-    thumbnailImgUrl:
-      type: string
-      description: "サムネイル画像のURL"
-      example: "http://example.com/new_thumbnail_image.avif"
-
-ApiWorkMetaData:
-  description: 作品のメタデータ
-  type: object
-  properties:
-    mainTitle:
-      type: string
-      description: "作品のメインタイトル"
-      example: "New Work"
-    subTitle:
-      type: string
-      description: "作品のサブタイトル"
-      example: "New Subject"
-    description:
-      type: string
-      description: "作品の説明"
-      example: "New Subject"
-    status:
-      type: string
-      description: "作品の状態"
-      example: "open"
-
 ApiTag:
   description: タグ
   type: object
   properties:
-    characters:
-      type: array
-      items:
-        type: string
-        description: キャラクター
-        example: "真白"
-    creators:
-      type: array
-      items:
-        type: string
-        description: 作者
-        example: "作者A"
-    genres:
-      type: array
-      items:
-        type: string
-        description: 題材ジャンル
-        example: "オリジナル(or二次創作orパロディ)"
-    formats:
-      type: array
-      items:
-        type: string
-        description: 作品形式
-        example: "CG(orコミックorゲーム"
-    others:
+    tags:
       type: array
       items:
         type: string
@@ -186,7 +124,7 @@ ApiWorksWithSearchResult:
       type: array
       description: "検索結果の作品リスト"
       items:
-        $ref: "../schemas/works.yaml#/ApiWork"
+        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
     totalCount:
       type: integer
       description: "検索結果の総件数"
@@ -202,7 +140,7 @@ ApiUsersWorks:
     works:
       type: array
       items:
-        $ref: "../schemas/works.yaml#/ApiWork"
+        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
     totalWorksCount:
       type: integer
       description: 作品の総数

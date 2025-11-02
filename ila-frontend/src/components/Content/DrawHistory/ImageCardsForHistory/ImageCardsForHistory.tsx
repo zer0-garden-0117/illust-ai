@@ -6,7 +6,7 @@ import type { components } from "../../../../generated/services/ila-v1";
 export type ApiWork = components["schemas"]["ApiWork"];
 
 interface ImageCardsForHistoryProps {
-  data: ApiWork;
+  data: ApiWork | undefined;
   index: number;
 }
 
@@ -19,21 +19,21 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       p="md"
       radius="md"
       withBorder
-      style={{ cursor: imgLoaded ? 'pointer' : 'default', pointerEvents: imgLoaded ? 'auto' : 'none' }}
-      onClick={() => { if (imgLoaded) router.push(`/illust/${data.workId}`) }}
+      style={{ cursor: 'pointer' }}
+      onClick={() => {router.push(`/draw/history/${data?.workId}`)}}
     >
       {/* 画像 */}
       <AspectRatio ratio={1 / Math.sqrt(2)}>
         <Skeleton
-          visible={!imgLoaded || data.thumbnailImgUrl === ''}
+          visible={!imgLoaded || data?.thumbnailImgUrl === ''}
           h="100%"
           w="100%"
           radius="sm"
         >
           <div style={{ cursor: 'pointer', width: '100%', height: '100%' }}>
             <Image
-              src={data.thumbnailImgUrl}
-              alt={data.mainTitle || 'Image without title'}
+              src={data?.thumbnailImgUrl}
+              alt={data?.mainTitle || 'Image without title'}
               style={{ width: '100%', height: '100%', opacity: imgLoaded ? 1 : 0, transition: 'opacity 200ms ease' }}
               onLoad={() => setImgLoaded(true)}
               onError={() => setImgLoaded(true)}
@@ -53,14 +53,14 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
             textOverflow: 'ellipsis',
           }}
         >
-          {data.mainTitle}
+          {data?.mainTitle}
         </Text>
       </Group>
 
       {/* 生成日時 */}
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px'}}>
         <Text fz="xs" color="dimmed">
-          {data.createdAt ? (
+          {data?.createdAt ? (
             // 日付は2025/03/15(土)のように表示
             <span>
               {new Date(data.createdAt).toLocaleDateString('ja-JP', {

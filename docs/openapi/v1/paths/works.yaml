@@ -54,11 +54,40 @@ WorksById:
     summary: IDを指定して作品情報を取得する
     description: |
       IDを指定して作品情報を取得する。
+    security:
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
       "200":
         $ref: "../components/responses/works.yaml#/WorksIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+  patch:
+    operationId: updatedWorksById
+    tags:
+      - works
+    summary: IDを指定して作品情報を更新する
+    description: |
+      IDを指定して作品情報を更新する。
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
+    requestBody:
+      description: |-
+        ### User
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/works.yaml#/ApiWork"
+    responses:
+      "200":
+        $ref: "../components/responses/works.yaml#/WorksIdGetResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
@@ -78,95 +107,6 @@ WorksById:
     responses:
       "200":
         $ref: "../components/responses/works.yaml#/WorksIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-WorksMetaDatasById:
-  patch:
-    operationId: patchWorksMetaDatasById
-    tags:
-      - works
-    summary: IDを指定して作品のメタデータを追加する
-    description: |
-      IDを指定して作品のメタデータを追加する。
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
-    requestBody:
-      description: |-
-        ### User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/works.yaml#/ApiWorkMetaData"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-WorksTags:
-  get:
-    operationId: getTags
-    tags:
-      - works
-    summary: タグを取得する
-    description: |
-      タグを取得する
-    security:
-      - FirebaseAuth: []
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksTagsGetResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-  post:
-    operationId: registerTags
-    tags:
-      - works
-    summary: タグを追加する
-    description: |
-      タグを追加する
-    security:
-      - FirebaseAuth: []
-    requestBody:
-      description: |-
-        ### User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/works.yaml#/ApiTag"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksTagsResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-WorksTagsById:
-  delete:
-    operationId: deleteTagsById
-    tags:
-      - works
-    summary: タグを削除する
-    description: |
-      タグを削除する
-    security:
-      - FirebaseAuth: []
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/TagsPathParam"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksTagsResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":

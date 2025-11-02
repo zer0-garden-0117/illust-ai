@@ -41,20 +41,8 @@ paths:
   /users/follower/{customUserId}:
     $ref: "./paths/users.yaml#/UsersFollowerById"
 
-  /users/activity/search:
-    $ref: "./paths/users.yaml#/UsersActivitySearch"
-
-  /users/liked:
-    $ref: "./paths/users.yaml#/UsersLiked"
-
   /users/liked/{workId}:
     $ref: "./paths/users.yaml#/UsersLikedByWorkId"
-
-  /users/viewed:
-    $ref: "./paths/users.yaml#/UsersViewed"
-
-  /users/viewed/{workId}:
-    $ref: "./paths/users.yaml#/UsersViewedByWorkId"
 
   # works
   /works/create:
@@ -63,17 +51,8 @@ paths:
   /works/{workId}:
     $ref: "./paths/works.yaml#/WorksById"
 
-  /works/{workId}/metaDatas:
-    $ref: "./paths/works.yaml#/WorksMetaDatasById"
-
   /works/searchByTags:
     $ref: "./paths/works.yaml#/WorksSearchByTags"
-
-  /works/tags:
-    $ref: "./paths/works.yaml#/WorksTags"
-
-  /works/tags/{tagId}:
-    $ref: "./paths/works.yaml#/WorksTagsById"
 
   # billings
   /billings/create-checkout-session:
@@ -97,15 +76,6 @@ components:
 
     ApiLiked:
       $ref: "./components/schemas/users.yaml#/ApiLiked"
-
-    ApiViewed:
-      $ref: "./components/schemas/users.yaml#/ApiViewed"
-
-    ApiUsersActivity:
-      $ref: "./components/schemas/users.yaml#/ApiUsersActivity"
-
-    ApiUsersActivitySearch:
-      $ref: "./components/schemas/users.yaml#/ApiUsersActivitySearch"
 
     # works
     ApiWorkWithTag:

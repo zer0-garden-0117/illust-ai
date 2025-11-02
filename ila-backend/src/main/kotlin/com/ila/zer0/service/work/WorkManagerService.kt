@@ -59,6 +59,7 @@ class WorkManagerService(
     @Transactional
     fun updateWork(updatedWork: Work): Work {
         workService.updateWork(updatedWork)
+        tagService.registerTagsFromDescription(updatedWork.workId, updatedWork.description)
         return updatedWork
     }
 

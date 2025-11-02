@@ -108,12 +108,13 @@ class UsersController(
             ?: return ResponseEntity.notFound().build()
 
         // APIモデルに変換
-        val apiWorks = mutableListOf<ApiWork>()
+        val apiWorkWithTags = mutableListOf<ApiWorkWithTag>()
         usersWorks.works.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
-            apiWorks.add(apiWork)
+            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
+            apiWorkWithTags.add(apiWorkWithTag)
         }
-        val apiUsersWorks = ApiUsersWorks(apiWorks, usersWorks.totalCount)
+        val apiUsersWorks = ApiUsersWorks(apiWorkWithTags, usersWorks.totalCount)
         return ResponseEntity.ok(apiUsersWorks)
     }
 
@@ -169,20 +170,6 @@ class UsersController(
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    override fun postUsersActivitySearch(
-        apiUsersActivitySearch: ApiUsersActivitySearch
-    ): ResponseEntity<ApiUsersActivity> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val activityList =
-            userManagerService.searchUsersActivity(
-                userId,
-                apiUsersActivitySearch.workIds
-            )
-        val apiUsersActivityList = toApiUsersActivity(activityList)
-        return ResponseEntity.ok(apiUsersActivityList)
-    }
-
     // いいね付与
     override fun postUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
         val userId =
@@ -199,38 +186,6 @@ class UsersController(
         val liked = userManagerService.deleteUsersLiked(userId, workId)
         val apiLiked = userMapper.toApiLiked(liked)
         return ResponseEntity.ok(apiLiked)
-    }
-
-    // いいね取得
-    override fun getUsersLiked(
-        offset: Int,
-        limit: Int
-    ): ResponseEntity<ApiWorksWithSearchResult> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val likedResult =
-            userManagerService.getUsersLiked(userId, offset, limit)
-
-        val apiWorks = mutableListOf<ApiWork>()
-        likedResult.works.forEach { work ->
-            val apiWork = workMapper.toApiWork(work)
-            apiWorks.add(apiWork)
-        }
-        val apiWorkWithDetails = ApiWorksWithSearchResult(
-            works = apiWorks,
-            totalCount = likedResult.totalCount
-        )
-        return ResponseEntity.ok(apiWorkWithDetails)
-    }
-
-    fun toApiUsersActivity(activityList: UsersActivity): ApiUsersActivity {
-        val apiLiked = mutableListOf<ApiLiked>()
-        activityList.liked.forEach { liked ->
-            apiLiked.add(userMapper.toApiLiked(liked))
-        }
-        return ApiUsersActivity(
-            apiLikeds = apiLiked
-        )
     }
 
     private fun getUserId(): String? {
