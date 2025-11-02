@@ -1,8 +1,8 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader } from '@mantine/core';
-import { IconPencil } from '@tabler/icons-react';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader, Space } from '@mantine/core';
+import { IconCheck, IconPencil } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { UseFormReturnType } from '@mantine/form';
 import { PostWorkValues } from './PostForm.hook';
@@ -12,6 +12,7 @@ type PostFormViewProps = {
   workId: string;
   imageData: ApiWorkWithTag | undefined;
   isSubmitting: boolean;
+  isPosted: boolean;
   handlePostClick: (values: PostWorkValues) => Promise<void>,
 };
 
@@ -20,8 +21,11 @@ export const PostFormView = memo(function WorkViewComponent({
   workId,
   imageData,
   isSubmitting,
+  isPosted,
   handlePostClick,
 }: PostFormViewProps): JSX.Element {
+  console.log('isSubmitting:', isSubmitting);
+  console.log('isPosted:', isPosted);
   return (
     <>
       <Card withBorder>
@@ -56,6 +60,7 @@ export const PostFormView = memo(function WorkViewComponent({
               rows={5}
               minRows={5}
               maxRows={5}
+              disabled={isSubmitting || isPosted}
             />
 
           {/* サブミットボタン */}
@@ -64,12 +69,18 @@ export const PostFormView = memo(function WorkViewComponent({
               type="submit"
               radius={"xl"}
               w="fit-content"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isPosted}
             >
+              {/* isSubmittingがtrueの時はLoaderを表示、isPostedがtrueの時は"投稿完了"と表示 */}
               {isSubmitting ? (
                 <Group gap="xs" align="center">
                   <span>投稿中…</span>
                   <Loader size="xs" color='gray'/>
+                </Group>
+              ) : isPosted ? (
+                <Group gap="xs" align="center">
+                  <span>投稿完了</span>
+                  <IconCheck size={20} />
                 </Group>
               ) : (
                 '投稿'
@@ -77,6 +88,23 @@ export const PostFormView = memo(function WorkViewComponent({
             </Button>
           </Center>
           </form>
+
+          {/* isPostedがtrueの時はボタンを表示 */}
+          {isPosted && (
+          <>
+            <Space h="md" />
+            <Center>
+              <Button
+                type="submit"
+                radius={"xl"}
+                w="fit-content"
+                disabled={isSubmitting || isPosted}
+              >
+                投稿の確認
+              </Button>
+            </Center>
+          </>
+          )}
           </Grid.Col>
         </Grid>
       </Card>
