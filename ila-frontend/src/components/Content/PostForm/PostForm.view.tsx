@@ -43,7 +43,7 @@ export const PostFormView = memo(function WorkViewComponent({
           >
             <Textarea
               label={<Group gap={"5px"}><IconPencil size={20} color='var(--mantine-color-blue-6)'/>キャプション</Group>}
-              placeholder="キャプションを入力してください。"
+              placeholder="キャプションを入力してください。#でタグ付けできます。例: #黒髪 #白背景"
               mb="md"
               rows={5}
               minRows={5}
