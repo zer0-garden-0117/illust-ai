@@ -129,7 +129,7 @@ export const CreateWorkView = memo(function WorkViewComponent({
             {isSubmitting ? (
               <Group gap="xs" align="center">
                 <span>イラスト生成中…</span>
-                <Loader size="xs" />
+                <Loader size="xs" color='gray'/>
               </Group>
             ) : (
               'イラスト生成'

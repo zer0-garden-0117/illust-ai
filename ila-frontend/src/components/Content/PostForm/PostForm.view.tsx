@@ -1,20 +1,26 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader } from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { UseFormReturnType } from '@mantine/form';
+import { PostWorkValues } from './PostForm.hook';
 
 type PostFormViewProps = {
+  form: UseFormReturnType<PostWorkValues>;
   workId: string;
   imageData: ApiWorkWithTag | undefined;
-  handleSubmitClick: (workId: string) => void;
+  isSubmitting: boolean;
+  handlePostClick: (values: PostWorkValues) => Promise<void>,
 };
 
 export const PostFormView = memo(function WorkViewComponent({
+  form,
   workId,
   imageData,
-  handleSubmitClick,
+  isSubmitting,
+  handlePostClick,
 }: PostFormViewProps): JSX.Element {
   return (
     <>
@@ -41,9 +47,11 @@ export const PostFormView = memo(function WorkViewComponent({
               justifyContent: 'center',
             }}
           >
+            <form onSubmit={form.onSubmit(handlePostClick)}>
             <Textarea
               label={<Group gap={"5px"}><IconPencil size={20} color='var(--mantine-color-blue-6)'/>キャプション</Group>}
               placeholder="キャプションを入力してください。#でタグ付けできます。例: #黒髪 #白背景"
+              {...form.getInputProps('description')}  
               mb="md"
               rows={5}
               minRows={5}
@@ -53,14 +61,22 @@ export const PostFormView = memo(function WorkViewComponent({
           {/* サブミットボタン */}
           <Center>
             <Button
+              type="submit"
               radius={"xl"}
               w="fit-content"
-              onClick={() => handleSubmitClick(workId)}
+              disabled={isSubmitting}
             >
-              {"投稿"}
+              {isSubmitting ? (
+                <Group gap="xs" align="center">
+                  <span>投稿中…</span>
+                  <Loader size="xs" color='gray'/>
+                </Group>
+              ) : (
+                '投稿'
+              )}
             </Button>
           </Center>
-
+          </form>
           </Grid.Col>
         </Grid>
       </Card>
