@@ -3,11 +3,11 @@
 import React, { memo } from 'react';
 import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button } from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
-import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 
 type PostFormViewProps = {
   workId: string;
-  imageData: ApiWork | undefined;
+  imageData: ApiWorkWithTag | undefined;
   handleSubmitClick: (workId: string) => void;
 };
 
@@ -25,7 +25,8 @@ export const PostFormView = memo(function WorkViewComponent({
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
                 <Image
-                  src={imageData?.thumbnailImgUrl}
+                  src={imageData?.apiWork?.thumbnailImgUrl}
+                  alt=""
                 />
               </AspectRatio>
             </Center>

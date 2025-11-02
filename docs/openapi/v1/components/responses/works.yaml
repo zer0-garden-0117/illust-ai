@@ -16,15 +16,6 @@ WorksSearchResponse:
       schema:
         $ref: "../schemas/works.yaml#/ApiWorksWithSearchResult"
 
-WorksIdGetResponse:
-  description: |-
-    200 OK
-    - 正常終了
-  content:
-    application/json:
-      schema:
-        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
-
 WorksIdResponse:
   description: |-
     200 OK
@@ -32,7 +23,7 @@ WorksIdResponse:
   content:
     application/json:
       schema:
-        $ref: "../schemas/works.yaml#/ApiWork"
+        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
 
 WorksTagsResponse:
   description: |-

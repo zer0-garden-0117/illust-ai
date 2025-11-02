@@ -1,6 +1,7 @@
 package com.ila.zer0.controller
 
 import com.ila.zer0.config.token.CustomAuthenticationToken
+import com.ila.zer0.dto.WorkWithTag
 import com.ila.zer0.entity.Tag
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
@@ -33,7 +34,7 @@ class WorksController(
 
     override fun createWorks(
         @RequestBody apiWork: ApiWork
-    ): ResponseEntity<ApiWork> {
+    ): ResponseEntity<ApiWorkWithTag> {
         // ユーザーを取得
         val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         // 生成可能数をチェック
@@ -64,8 +65,13 @@ class WorksController(
         // イラスト生成数をデクリメント
         usageService.consumeOneToday(user.userId, limitIfAbsent = user.illustNumLimit)
 
+        val workWithTag = WorkWithTag(
+            work = work,
+            tags = emptyList()
+        )
+
         // APIモデルに変換して返却
-        return ResponseEntity.ok(workMapper.toApiWork(creatingWork))
+        return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
     }
 
     override fun getWorksById(

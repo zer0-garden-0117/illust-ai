@@ -3,10 +3,10 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import type { components } from "../../../../generated/services/ila-v1";
 
-export type ApiWork = components["schemas"]["ApiWork"];
+export type ApiWorkWithTag = components["schemas"]["ApiWorkWithTag"];
 
 interface ImageCardsForHistoryProps {
-  data: ApiWork | undefined;
+  data: ApiWorkWithTag | undefined;
   index: number;
 }
 
@@ -20,20 +20,20 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       radius="md"
       withBorder
       style={{ cursor: 'pointer' }}
-      onClick={() => {router.push(`/draw/history/${data?.workId}`)}}
+      onClick={() => {router.push(`/illust/${data?.apiWork?.workId}`)}}
     >
       {/* 画像 */}
       <AspectRatio ratio={1 / Math.sqrt(2)}>
         <Skeleton
-          visible={!imgLoaded || data?.thumbnailImgUrl === ''}
+          visible={!imgLoaded || data?.apiWork?.thumbnailImgUrl === ''}
           h="100%"
           w="100%"
           radius="sm"
         >
           <div style={{ cursor: 'pointer', width: '100%', height: '100%' }}>
             <Image
-              src={data?.thumbnailImgUrl}
-              alt={data?.mainTitle || 'Image without title'}
+              src={data?.apiWork?.thumbnailImgUrl}
+              alt={data?.apiWork?.mainTitle || 'Image without title'}
               style={{ width: '100%', height: '100%', opacity: imgLoaded ? 1 : 0, transition: 'opacity 200ms ease' }}
               onLoad={() => setImgLoaded(true)}
               onError={() => setImgLoaded(true)}
@@ -53,17 +53,17 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
             textOverflow: 'ellipsis',
           }}
         >
-          {data?.mainTitle}
+          {data?.apiWork?.mainTitle}
         </Text>
       </Group>
 
       {/* 生成日時 */}
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px'}}>
         <Text fz="xs" color="dimmed">
-          {data?.createdAt ? (
+          {data?.apiWork?.createdAt ? (
             // 日付は2025/03/15(土)のように表示
             <span>
-              {new Date(data.createdAt).toLocaleDateString('ja-JP', {
+              {new Date(data.apiWork.createdAt).toLocaleDateString('ja-JP', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',

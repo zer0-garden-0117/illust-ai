@@ -64,9 +64,13 @@ class WorkManagerService(
     }
 
     @Transactional
-    fun findWorkById(workId: String): Work {
+    fun findWorkById(workId: String): WorkWithTag {
         val work = workService.findWorkById(workId)
-        return work
+        val tags = tagRepository.findByWorkId(workId)
+        return WorkWithTag(
+            work = work,
+            tags = tags
+        )
     }
 
     @Transactional
@@ -117,7 +121,7 @@ class WorkManagerService(
     }
 
     @Transactional
-    fun deleteWorkById(workId: String): com.ila.zer0.dto.WorkWithTag {
+    fun deleteWorkById(workId: String): WorkWithTag {
         // 作品の取得
         val work = workRepository.findByWorkId(workId)
         val tags = tagRepository.findByWorkId(workId)
@@ -128,7 +132,7 @@ class WorkManagerService(
         // tagテーブルから削除
         tagRepository.deleteTagByWorkId(workId)
 
-        return com.ila.zer0.dto.WorkWithTag(
+        return WorkWithTag(
             work = work,
             tags = tags
         )

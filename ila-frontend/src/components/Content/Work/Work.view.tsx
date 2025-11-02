@@ -5,13 +5,13 @@ import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Text, 
 import { DateTimePicker } from '@mantine/dates';
 import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-react';
 import { IconClock } from '@tabler/icons-react';
-import { ApiWork } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { useDisclosure } from '@mantine/hooks';
 import { WorkModal } from './WorkModal/WorkModal';
 
 type WorkViewProps = {
   workId: string;
-  imageData: ApiWork;
+  imageData: ApiWorkWithTag;
   handlePostClick: (workId: string) => void;
 };
 
@@ -29,11 +29,12 @@ export const WorkView = memo(function WorkViewComponent({
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
-              {imageData?.thumbnailImgUrl ? (
+              {imageData?.apiWork?.thumbnailImgUrl ? (
                 <Image
-                  src={imageData?.thumbnailImgUrl}
+                  src={imageData?.apiWork?.thumbnailImgUrl}
                   style={{ cursor: 'pointer' }}
                   onClick={open}
+                  alt=""
                 />
               ) : (
                 <Skeleton height="100%" />
@@ -50,12 +51,12 @@ export const WorkView = memo(function WorkViewComponent({
               <IconPhoto size={20} color='var(--mantine-color-blue-6)'/>
               <Text fw={500} fz={"sm"}>状態</Text>
             </Group>
-            {imageData?.status ? (
+            {imageData?.apiWork?.status ? (
               <Pill mb="md">
                 <Group gap={"5px"}>
                   {/* imageData?.statusがposted以外はIconLockを非表示 */}
-                  {imageData?.status === "posted" ? null : <IconLock size="15px"/>}
-                  {imageData?.status}
+                  {imageData?.apiWork?.status === "posted" ? null : <IconLock size="15px"/>}
+                  {imageData?.apiWork?.status}
                 </Group>
               </Pill>
             ) : (
@@ -72,10 +73,10 @@ export const WorkView = memo(function WorkViewComponent({
               <IconCube size={20} color='var(--mantine-color-blue-6)'/>
               <Text fw={500} fz={"sm"}>モデル</Text>
             </Group>
-            {imageData?.status ? (
+            {imageData?.apiWork?.status ? (
               <Pill mb="md">
                 <Group gap={"5px"}>
-                  {imageData?.model}
+                  {imageData?.apiWork?.model}
                 </Group>
               </Pill>
             ) : (
@@ -92,14 +93,14 @@ export const WorkView = memo(function WorkViewComponent({
               <IconPencilCode size={20} color='var(--mantine-color-blue-6)'/>
               <Text fw={500} fz={"sm"}>プロンプト</Text>
             </Group>
-            {imageData?.prompt ? (
+            {imageData?.apiWork?.prompt ? (
               <Textarea
                 mb="md"
                 rows={5}
                 minRows={5}
                 maxRows={5}
                 readOnly
-                value={imageData?.prompt || ""}
+                value={imageData?.apiWork?.prompt || ""}
               />
             ) : (
               <Skeleton 
@@ -122,7 +123,7 @@ export const WorkView = memo(function WorkViewComponent({
                 minRows={5}
                 maxRows={5}
                 readOnly
-                value={imageData?.negativePrompt || ""}
+                value={imageData?.apiWork?.negativePrompt || ""}
               />
             ) : (
               <Skeleton 
@@ -138,12 +139,12 @@ export const WorkView = memo(function WorkViewComponent({
               <IconClock size={20} color='var(--mantine-color-blue-6)'/>
               <Text fw={500} fz={"sm"}>生成日時</Text>
             </Group>
-            {imageData?.createdAt ? (
+            {imageData?.apiWork?.createdAt ? (
               <DateTimePicker
                 withSeconds
                 placeholder="Pick date and time"
                 valueFormat="YYYY/MM/DD HH:mm:ss"
-                value={new Date(imageData?.createdAt || '')}
+                value={new Date(imageData?.apiWork?.createdAt || '')}
                 readOnly
                 mb="md"
               />
@@ -161,12 +162,12 @@ export const WorkView = memo(function WorkViewComponent({
               <IconClock size={20} color='var(--mantine-color-blue-6)'/>
               <Text fw={500} fz={"sm"}>履歴の有効期限</Text>
             </Group>
-            {imageData?.expiredAt ? (
+            {imageData?.apiWork?.expiredAt ? (
               <DateTimePicker
                 withSeconds
                 placeholder="Pick date and time"
                 valueFormat="YYYY/MM/DD HH:mm:ss"
-                value={new Date(imageData?.expiredAt || '')}
+                value={new Date(imageData?.apiWork?.expiredAt || '')}
                 readOnly
                 mb="md"
               />
@@ -184,7 +185,7 @@ export const WorkView = memo(function WorkViewComponent({
 
         {/* 投稿ボタン */}
         {/* imageData.isMineがtrueの時のみ表示 */}
-        {imageData?.isMine && (
+        {imageData?.apiWork?.isMine && (
         <Center>
           <Button
             radius={"xl"}
@@ -198,7 +199,7 @@ export const WorkView = memo(function WorkViewComponent({
       </Card>
 
       {/* モーダルで画像拡大表示 */}
-      <WorkModal opened={opened} onClose={close} imageUrl={imageData?.titleImgUrl} />
+      <WorkModal opened={opened} onClose={close} imageUrl={imageData?.apiWork?.titleImgUrl} />
     </>
   );
 });

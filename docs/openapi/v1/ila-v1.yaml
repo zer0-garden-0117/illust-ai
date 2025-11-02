@@ -108,9 +108,6 @@ components:
     WorksIdResponse:
       $ref: "./components/responses/works.yaml#/WorksIdResponse"
 
-    WorksIdGetResponse:
-      $ref: "./components/responses/works.yaml#/WorksIdGetResponse"
-
     WorksTagsResponse:
       $ref: "./components/responses/works.yaml#/WorksTagsResponse"
 
