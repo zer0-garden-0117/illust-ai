@@ -78,6 +78,7 @@ class WorksController(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWorkWithTag> {
         val workWithTag = workManagerService.findWorkById(workId = workId)
+        workWithTag.work.isMine = (getUser()?.userId == workWithTag.work.userId)
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
     }
