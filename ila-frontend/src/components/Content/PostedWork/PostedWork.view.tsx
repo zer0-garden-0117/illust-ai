@@ -84,7 +84,7 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                     </Menu>
                 </Group>
                   {/* キャプションを表示 */}
-                  <Text mt="sm">
+                  <Text mt="sm" style={{ whiteSpace: 'pre-wrap' }}>
                     {imageData?.apiWork?.description}
                   </Text>
                   {/* 画像のいいね数 */}
