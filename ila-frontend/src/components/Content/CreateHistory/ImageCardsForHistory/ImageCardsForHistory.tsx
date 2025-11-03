@@ -31,11 +31,11 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       <AspectRatio ratio={1 / Math.sqrt(2)}>
         <Skeleton
           visible={!imgLoaded || data?.apiWork?.thumbnailImgUrl === ''}
-          h="100%"
+          h="106%"
           w="100%"
           radius="sm"
         >
-          <div style={{ cursor: 'pointer', width: '100%', height: '100%' }}>
+          <div>
             <Image
               src={data?.apiWork?.thumbnailImgUrl}
               alt={data?.apiWork?.mainTitle || 'Image without title'}
@@ -49,7 +49,7 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       </AspectRatio>
 
       {/* タイトル */}
-      <Group style={{ width: '100%', overflow: 'hidden' }}>
+      <Group style={{ width: '100%', overflow: 'hidden' }} mt={12}>
         <Text
           mt={5}
           style={{

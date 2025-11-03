@@ -11,13 +11,15 @@ import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 type PostedWorkViewProps = {
   workId: string;
   imageData: ApiWorkWithTag | undefined;
-  handlePostClick: (workId: string) => void;
+  handleEditClick: (workId: string) => void;
+  handleDeleteClick: (workId: string) => void;
 };
 
 export const PostedWorkView = memo(function PostedWorkViewComponent({
   workId,
   imageData,
-  handlePostClick,
+  handleEditClick,
+  handleDeleteClick,
 }: PostedWorkViewProps): JSX.Element {
   const [opened, { open, close }] = useDisclosure(false);
   return (
@@ -67,12 +69,14 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                       <Menu.Dropdown>
                         <Menu.Item
                           leftSection={<IconEdit size={14} />}
+                          onClick={() => handleEditClick(workId)}
                         >
                           編集
                         </Menu.Item>
                         <Menu.Item
                           color="red"
                           leftSection={<IconTrash size={14} />}
+                          onClick={() => handleDeleteClick(workId)}
                         >
                           削除
                         </Menu.Item>

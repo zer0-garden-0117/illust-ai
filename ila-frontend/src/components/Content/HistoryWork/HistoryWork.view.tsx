@@ -30,12 +30,14 @@ export const HistoryWorkView = memo(function HistoryWorkViewComponent({
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
               {imageData?.apiWork?.thumbnailImgUrl ? (
+                <div>
                 <Image
                   src={imageData?.apiWork?.thumbnailImgUrl}
                   style={{ cursor: 'pointer' }}
                   onClick={open}
                   alt=""
                 />
+                </div>
               ) : (
                 <Skeleton height="100%" />
               )}

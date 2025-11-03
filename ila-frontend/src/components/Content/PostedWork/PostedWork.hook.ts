@@ -17,13 +17,18 @@ export const usePostedWork = (
     getIdTokenLatest,
   }, { revalidateOnFocus: false });
 
-  const handlePostClick = (workId: string) => {
+  const handleEditClick = (workId: string) => {
+    router.push(`/illust/form/${workId}`);
+  }
+
+  const handleDeleteClick = async (workId: string) => {
     router.push(`/illust/form/${workId}`);
   }
 
   return {
     workId,
     imageData,
-    handlePostClick
+    handleEditClick,
+    handleDeleteClick
   };
 };

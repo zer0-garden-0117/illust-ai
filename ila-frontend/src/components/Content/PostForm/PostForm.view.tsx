@@ -36,10 +36,12 @@ export const PostFormView = memo(function WorkViewComponent({
           <Grid.Col span={{ base: 12, sm: 6, lg: 6 }}>
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
+                <div>
                 <Image
                   src={imageData?.apiWork?.thumbnailImgUrl}
                   alt=""
                 />
+                </div>
               </AspectRatio>
             </Center>
           </Grid.Col>
