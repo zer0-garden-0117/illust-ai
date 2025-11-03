@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWorksDeleteById } from "@/apis/openapi/works/useWorksDeleteById";
 
 type UseDeleteFormProps = {
@@ -32,12 +32,19 @@ export const useDeleteForm = (
     },
   });
 
+  // imageDataが取得されたらformに反映
+  useEffect(() => {
+    if (imageData?.apiWork?.description) {
+      form.setValues({ description: imageData.apiWork.description });
+    }
+  }, [imageData?.apiWork?.description]);
+
   const handlePostClick = async (values: PostWorkValues) => {
     setIsSubmitting(true);
-    // await triggerDelete({
-    //   headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
-    //   workId: workId,
-    // });
+    await triggerDelete({
+      headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
+      workId: workId,
+    });
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
     setIsPosted(true);

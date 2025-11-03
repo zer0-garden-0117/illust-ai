@@ -1,11 +1,12 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader, Space, Box } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader, Space, Box, Modal, Text } from '@mantine/core';
 import { IconCheck, IconPencil } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { UseFormReturnType } from '@mantine/form';
 import { PostWorkValues } from './DeleteForm.hook';
+import { useDisclosure } from '@mantine/hooks';
 
 type DeleteFormViewProps = {
   form: UseFormReturnType<PostWorkValues>;
@@ -26,10 +27,47 @@ export const DeleteFormView = memo(function WorkViewComponent({
   handlePostClick,
   handleBackClick
 }: DeleteFormViewProps): JSX.Element {
-  console.log('isSubmitting:', isSubmitting);
-  console.log('isPosted:', isPosted);
+
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const handleConfirmDelete = () => {
+    form.onSubmit(handlePostClick)();
+    close();
+  };
+
   return (
     <>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="削除の確認"
+        centered
+        withCloseButton={false}
+      >
+        <Text size="sm" mb="md">
+          本当に削除しますか？この操作は取り消しできません。
+        </Text>
+        <Group justify="flex-end" mt="md">
+          <Button variant="default" onClick={close} disabled={isSubmitting}>
+            キャンセル
+          </Button>
+          <Button
+            color="red"
+            onClick={handleConfirmDelete}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <Group gap="xs" align="center">
+                <span>削除中…</span>
+                <Loader size="xs" />
+              </Group>
+            ) : (
+              '削除'
+            )}
+          </Button>
+        </Group>
+      </Modal>
+
       <Card withBorder>
         <Grid justify="center" style={{ marginTop: '20px', marginBottom: '20px' }}>
           {/* 画像表示 */}
@@ -37,10 +75,10 @@ export const DeleteFormView = memo(function WorkViewComponent({
             <Center>
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
                 <div>
-                <Image
-                  src={imageData?.apiWork?.thumbnailImgUrl}
-                  alt=""
-                />
+                  <Image
+                    src={imageData?.apiWork?.thumbnailImgUrl}
+                    alt=""
+                  />
                 </div>
               </AspectRatio>
             </Center>
@@ -56,57 +94,59 @@ export const DeleteFormView = memo(function WorkViewComponent({
             }}
           >
             <form onSubmit={form.onSubmit(handlePostClick)}>
-            <Textarea
-              label={<Group gap={"5px"}><IconPencil size={20} color='var(--mantine-color-blue-6)'/>キャプション</Group>}
-              placeholder="キャプションを入力してください。#でタグ付けできます。例: #黒髪 #白背景"
-              {...form.getInputProps('description')}  
-              mb="md"
-              rows={5}
-              minRows={5}
-              maxRows={5}
-              disabled={isSubmitting || isPosted}
-            />
+              <Textarea
+                label={<Group gap={"5px"}><IconPencil size={20} color='var(--mantine-color-blue-6)'/>キャプション</Group>}
+                placeholder="キャプションを入力してください。#でタグ付けできます。例: #黒髪 #白背景"
+                {...form.getInputProps('description')}
+                mb="md"
+                rows={5}
+                minRows={5}
+                maxRows={5}
+                disabled={isSubmitting || isPosted}
+              />
 
-          {/* サブミットボタン */}
-          <Group justify="flex-end" mt="md">
+              {/* サブミットボタン */}
+              <Group justify="flex-end" mt="md">
           {/* isPostedがtrueの時はボタンを表示 */}
-            {isPosted && (
-              <>
-              <Space h="md" />
+                {isPosted && (
+                  <>
+                    <Space h="md" />
+                    <Button
+                      type="button"
+                      radius={"xl"}
+                      w="fit-content"
+                      onClick={handleBackClick}
+                      variant='outline'
+                    >
+                      一覧に戻る
+                    </Button>
+                  </>
+                )}
+
+                {/* 削除ボタン：submit ではなくモーダルを開く */}
                 <Button
-                  type="submit"
+                  type="button"
                   radius={"xl"}
                   w="fit-content"
-                  onClick={handleBackClick}
-                  variant='outline'
+                  disabled={isSubmitting || isPosted}
+                  onClick={open}
                 >
-                  一覧に戻る
-                </Button>
-              </>
-            )}
-            <Button
-              type="submit"
-              radius={"xl"}
-              w="fit-content"
-              disabled={isSubmitting || isPosted}
-            >
-              {/* isSubmittingがtrueの時はLoaderを表示、isPostedがtrueの時は完了を表示 */}
-              {isSubmitting ? (
-                <Group gap="xs" align="center">
-                  <span>削除中…</span>
+                  {isSubmitting ? (
+                    <Group gap="xs" align="center">
+                      <span>削除中…</span>
                   <Loader size="xs" color='gray'/>
-                </Group>
-              ) : isPosted ? (
-                <Group gap="xs" align="center">
-                  <span>削除完了</span>
-                  <IconCheck size={20} />
-                </Group>
-              ) : (
-                '削除'
-              )}
-            </Button>
-          </Group>
-          </form>
+                    </Group>
+                  ) : isPosted ? (
+                    <Group gap="xs" align="center">
+                      <span>削除完了</span>
+                      <IconCheck size={20} />
+                    </Group>
+                  ) : (
+                    '削除'
+                  )}
+                </Button>
+              </Group>
+            </form>
           </Grid.Col>
         </Grid>
       </Card>
