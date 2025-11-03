@@ -7,6 +7,7 @@ import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCards
 import { UseFormReturnType } from '@mantine/form';
 import { PostWorkValues } from './DeleteForm.hook';
 import { useDisclosure } from '@mantine/hooks';
+import { ForbiddenCard } from '../ForbiddenCard/ForbiddenCard';
 
 type DeleteFormViewProps = {
   form: UseFormReturnType<PostWorkValues>;
@@ -27,13 +28,15 @@ export const DeleteFormView = memo(function WorkViewComponent({
   handlePostClick,
   handleBackClick
 }: DeleteFormViewProps): JSX.Element {
-
   const [opened, { open, close }] = useDisclosure(false);
-
   const handleConfirmDelete = () => {
     form.onSubmit(handlePostClick)();
     close();
   };
+
+  if (!imageData?.apiWork?.isMine) {
+    return <ForbiddenCard alertText='イラストを生成したユーザー以外は削除できません。' />;
+  }
 
   return (
     <>

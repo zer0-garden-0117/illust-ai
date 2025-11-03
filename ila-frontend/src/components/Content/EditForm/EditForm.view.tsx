@@ -1,11 +1,13 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader, Space, Box } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader, Space, Box, Alert, Notification } from '@mantine/core';
 import { IconCheck, IconPencil } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { UseFormReturnType } from '@mantine/form';
 import { PostWorkValues } from './EditForm.hook';
+import { IoInformationSharp } from 'react-icons/io5';
+import { ForbiddenCard } from '../ForbiddenCard/ForbiddenCard';
 
 type EditFormViewProps = {
   form: UseFormReturnType<PostWorkValues>;
@@ -26,8 +28,10 @@ export const EditFormView = memo(function WorkViewComponent({
   handlePostClick,
   handleConfirmClick
 }: EditFormViewProps): JSX.Element {
-  console.log('isSubmitting:', isSubmitting);
-  console.log('isPosted:', isPosted);
+  if (!imageData?.apiWork?.isMine) {
+    return <ForbiddenCard alertText='イラストを生成したユーザー以外は編集できません。' />;
+  }
+
   return (
     <>
       <Card withBorder>

@@ -36,7 +36,7 @@ class WorksController(
         @RequestBody apiWork: ApiWork
     ): ResponseEntity<ApiWorkWithTag> {
         // バリデーション
-        if (apiWork.prompt.isNullOrEmpty() || apiWork.negativePrompt.isNullOrEmpty() || apiWork.model.isNullOrEmpty()) {
+        if (apiWork.prompt.isNullOrEmpty() || apiWork.model.isNullOrEmpty()) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
