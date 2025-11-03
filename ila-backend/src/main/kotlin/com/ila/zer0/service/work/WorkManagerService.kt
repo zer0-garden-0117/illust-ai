@@ -82,7 +82,7 @@ class WorkManagerService(
         }
 
         when (userWorksFilterType) {
-            "posted", "all" -> {
+            "posted", "created" -> {
                 return workService.findByUserIdWithOffset(user.userId, offset, limit, userWorksFilterType)
             }
             "liked" -> {

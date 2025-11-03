@@ -14,7 +14,7 @@ const CreateHistoryPage: React.FC<{ searchParams: { page?: string } }> = (
       <CreateHistory
         customUserId={user?.customUserId || ''}
         page={page}
-        userWorksFilterType="all"
+        userWorksFilterType="created"
       />
     </>
   )

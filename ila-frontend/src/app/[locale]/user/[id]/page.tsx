@@ -6,7 +6,7 @@ const UserPage: React.FC<{ params: { id: string }, searchParams: { tab?: string,
   { params, searchParams }
 ) => {
   const userId = decodeURIComponent(params.id);
-  const tab = searchParams.tab ?? 'posted';
+  const tab = searchParams.tab ?? 'home';
   const page = Number(searchParams.page ?? 1);
 
   return (

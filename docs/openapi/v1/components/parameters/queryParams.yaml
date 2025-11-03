@@ -32,4 +32,4 @@ UserWorksFilterTypeQueryParam:
   required: true
   schema:
     type: string
-    enum: [posted, liked, all]
+    enum: [posted, liked, created]

@@ -65,8 +65,10 @@ class WorkService(
 
         // userWorksFilterTypeに応じてstatusでフィルタリング(allの時はそのまま)
         val worksWithStatus = when (userWorksFilterType) {
+            // postedの時はpostedのみ抽出
             "posted" -> works.filter { it.status == "posted" }
-            "all" -> works
+            // createdの時はcreated、creatingのみ抽出
+            "created" -> works.filter { it.status == "created" || it.status == "creating" }
             else -> works
         }
 
