@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWorksUpdate } from "@/apis/openapi/works/useWorksUpdate";
 
 type UseEditFormProps = {
@@ -31,6 +31,13 @@ export const useEditForm = (
       description: '',
     },
   });
+
+  // imageDataが取得されたらformに反映
+  useEffect(() => {
+    if (imageData?.apiWork?.description) {
+      form.setValues({ description: imageData.apiWork.description });
+    }
+  }, [imageData?.apiWork?.description]);
 
   const handlePostClick = async (values: PostWorkValues) => {
     setIsSubmitting(true);
