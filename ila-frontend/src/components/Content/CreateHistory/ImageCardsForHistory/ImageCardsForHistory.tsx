@@ -20,7 +20,12 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
       radius="md"
       withBorder
       style={{ cursor: 'pointer' }}
-      onClick={() => {router.push(`/illust/history/${data?.apiWork?.workId}`)}}
+      onClick={() => {
+        // data.statusがpostedの時はillust/[workId]に遷移し、それ以外の時はillust/history/[workId]に遷移
+        data?.apiWork?.status === 'posted' ?
+          router.push(`/illust/${data?.apiWork?.workId}`) :
+          router.push(`/illust/history/${data?.apiWork?.workId}`)
+      }}
     >
       {/* 画像 */}
       <AspectRatio ratio={1 / Math.sqrt(2)}>
