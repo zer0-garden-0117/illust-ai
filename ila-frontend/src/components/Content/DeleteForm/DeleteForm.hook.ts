@@ -3,7 +3,7 @@ import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
-import { useWorksUpdate } from "@/apis/openapi/works/useWorksUpdate";
+import { useWorksDeleteById } from "@/apis/openapi/works/useWorksDeleteById";
 
 type UseDeleteFormProps = {
   workId: string;
@@ -17,7 +17,7 @@ export const useDeleteForm = (
   { workId }: UseDeleteFormProps
 ) => {
   const { user, getIdTokenLatest } = useFirebaseAuthContext();
-  const { trigger: triggerPost } = useWorksUpdate();
+  const { trigger: triggerDelete } = useWorksDeleteById();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
@@ -34,20 +34,17 @@ export const useDeleteForm = (
 
   const handlePostClick = async (values: PostWorkValues) => {
     setIsSubmitting(true);
-    await triggerPost({
-      headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
-      workId: workId,
-      body: {
-        description: values.description,
-      }
-    });
+    // await triggerDelete({
+    //   headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
+    //   workId: workId,
+    // });
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
     setIsPosted(true);
   }
 
-  const handleConfirmClick = () => {
-    router.push(`/illust/${workId}`);
+  const handleBackClick = () => {
+    router.push(`/user/${user?.customUserId}`);
   }
 
   return {
@@ -57,6 +54,6 @@ export const useDeleteForm = (
     isSubmitting,
     isPosted,
     handlePostClick,
-    handleConfirmClick
+    handleBackClick
   };
 };

@@ -14,7 +14,7 @@ type DeleteFormViewProps = {
   isSubmitting: boolean;
   isPosted: boolean;
   handlePostClick: (values: PostWorkValues) => Promise<void>,
-  handleConfirmClick: () => void;
+  handleBackClick: () => void;
 };
 
 export const DeleteFormView = memo(function WorkViewComponent({
@@ -24,7 +24,7 @@ export const DeleteFormView = memo(function WorkViewComponent({
   isSubmitting,
   isPosted,
   handlePostClick,
-  handleConfirmClick
+  handleBackClick
 }: DeleteFormViewProps): JSX.Element {
   console.log('isSubmitting:', isSubmitting);
   console.log('isPosted:', isPosted);
@@ -77,10 +77,10 @@ export const DeleteFormView = memo(function WorkViewComponent({
                   type="submit"
                   radius={"xl"}
                   w="fit-content"
-                  onClick={handleConfirmClick}
+                  onClick={handleBackClick}
                   variant='outline'
                 >
-                  投稿の確認
+                  一覧に戻る
                 </Button>
               </>
             )}
@@ -90,7 +90,7 @@ export const DeleteFormView = memo(function WorkViewComponent({
               w="fit-content"
               disabled={isSubmitting || isPosted}
             >
-              {/* isSubmittingがtrueの時はLoaderを表示、isPostedがtrueの時は"投稿完了"と表示 */}
+              {/* isSubmittingがtrueの時はLoaderを表示、isPostedがtrueの時は完了を表示 */}
               {isSubmitting ? (
                 <Group gap="xs" align="center">
                   <span>削除中…</span>
