@@ -18,11 +18,11 @@ export const usePostedWork = (
   }, { revalidateOnFocus: false });
 
   const handleEditClick = (workId: string) => {
-    router.push(`/illust/form/${workId}`);
+    router.push(`/illust/edit/${workId}`);
   }
 
   const handleDeleteClick = async (workId: string) => {
-    router.push(`/illust/form/${workId}`);
+    router.push(`/illust/delete/${workId}`);
   }
 
   return {
