@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Text, Pill, Skeleton, ActionIcon, Space } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Text, Pill, Skeleton, ActionIcon, Space, Menu } from '@mantine/core';
 import { IconCube, IconEdit, IconHeart, IconHeartFilled, IconMenu, IconMenu2, IconPencilCode, IconShare, IconTrash } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { useDisclosure } from '@mantine/hooks';
@@ -53,14 +53,31 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                     >
                       <IconShare size={16} color='var(--mantine-color-blue-6)' />
                     </ActionIcon>
-                    <ActionIcon
-                      style={{
-                        backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5))',
-                        '&:hover': { backgroundColor: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6))' }
-                      }}
-                    >
-                      <IconMenu2 size={16} color='var(--mantine-color-gray-6)' />
-                    </ActionIcon>
+                    <Menu shadow="md">
+                      <Menu.Target>
+                      <ActionIcon
+                        style={{
+                          backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5))',
+                          '&:hover': { backgroundColor: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6))' }
+                        }}
+                      >
+                        <IconMenu2 size={16} color='var(--mantine-color-gray-6)' />
+                      </ActionIcon>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        <Menu.Item
+                          leftSection={<IconEdit size={14} />}
+                        >
+                          編集
+                        </Menu.Item>
+                        <Menu.Item
+                          color="red"
+                          leftSection={<IconTrash size={14} />}
+                        >
+                          削除
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
                 </Group>
                   {/* キャプションを表示 */}
                   <Text>
