@@ -13,15 +13,19 @@ type UseCreateHistoryProps = {
 export const useCreateHistory = (
     { customUserId, page, userWorksFilterType }: UseCreateHistoryProps
 ) => {
-  const { getIdTokenLatest } = useFirebaseAuthContext();
+  const { getIdTokenLatest, user } = useFirebaseAuthContext();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  // userWorksFilterTypeがpostedかつ、customUserIdが自分のcustomUserIdと等しい場合は11を設定、
+  // それ以外の場合は12を設定する
+  const illustNum =
+    userWorksFilterType === 'posted' && customUserId === user?.customUserId ? 11 : 12;
 
   const { data: userWorksData, mutate: updateUserWorks } = useUsersWorksGet({
       customUserId: customUserId,
-      offset: (page - 1) * 12,
-      limit: 12,
+      offset: (page - 1) * illustNum,
+      limit: illustNum,
       userWorksFilterType,
       getIdTokenLatest,
   });
@@ -36,6 +40,8 @@ export const useCreateHistory = (
 
   return {
     page,
+    customUserId,
+    userWorksFilterType,
     userWorksData,
     handlePageChange
   };
