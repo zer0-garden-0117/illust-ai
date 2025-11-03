@@ -17,6 +17,11 @@ interface WorkMapper {
         target = "updatedAt",
         qualifiedByName = ["offsetDateTimeToInstant"]
     )
+    @Mapping(
+        source = "postedAt",
+        target = "postedAt",
+        qualifiedByName = ["offsetDateTimeToInstant"]
+    )
     @Mapping(target = "rateSum", ignore = true)
     @Mapping(target = "rateCount", ignore = true)
     @Mapping(target = "rate", ignore = true)
@@ -39,6 +44,11 @@ interface WorkMapper {
     @Mapping(
         source = "expiredAt",
         target = "expiredAt",
+        qualifiedByName = ["instantToOffsetDateTime"]
+    )
+    @Mapping(
+        source = "postedAt",
+        target = "postedAt",
         qualifiedByName = ["instantToOffsetDateTime"]
     )
     fun toApiWork(work: Work): ApiWork

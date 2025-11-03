@@ -35,6 +35,11 @@ class WorksController(
     override fun createWorks(
         @RequestBody apiWork: ApiWork
     ): ResponseEntity<ApiWorkWithTag> {
+        // バリデーション
+        if (apiWork.prompt.isNullOrEmpty() || apiWork.negativePrompt.isNullOrEmpty() || apiWork.model.isNullOrEmpty()) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
         // ユーザーを取得
         val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         // 生成可能数をチェック
@@ -87,9 +92,26 @@ class WorksController(
         @PathVariable("workId") workId: String,
         @Valid @RequestBody apiWork: ApiWork
     ): ResponseEntity<ApiWorkWithTag> {
+        // バリデーション
+        if (apiWork.description.isNullOrEmpty()) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        // 作品の取得
         val workWithTag = workManagerService.findWorkById(workId = workId)
+        // 認証ユーザーの作品か確認
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        if (workWithTag.work.userId != user.userId) {
+            return ResponseEntity(HttpStatus.FORBIDDEN)
+        }
+
+        // 説明文を更新
         workWithTag.work.description = apiWork.description!!
-        workWithTag.work.status = "posted"
+        // ステータスがposted以外の場合はpostedに更新し、postedAtを設定
+        if (workWithTag.work.status != "posted") {
+            workWithTag.work.status = "posted"
+            workWithTag.work.postedAt = ZonedDateTime.now(ZoneId.of("Asia/Tokyo")).toInstant()
+        }
         workManagerService.updateWork(workWithTag.work)
         return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
     }
@@ -97,8 +119,16 @@ class WorksController(
     override fun deleteWorksById(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWorkWithTag> {
+        // 作品の取得
+        val workWithTag = workManagerService.findWorkById(workId = workId)
+        // 認証ユーザーの作品か確認
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        if (workWithTag.work.userId != user.userId) {
+            return ResponseEntity(HttpStatus.FORBIDDEN)
+        }
+
         // 作品の削除
-        val workWithTag = workManagerService.deleteWorkById(workId)
+        workManagerService.deleteWorkById(workId)
         // ユーザーの情報からも削除
         userManagerService.deleteWorkId(workId)
 

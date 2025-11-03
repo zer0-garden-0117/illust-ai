@@ -34,14 +34,13 @@ export const usePostForm = (
 
   const handlePostClick = async (values: PostWorkValues) => {
     setIsSubmitting(true);
-    // await triggerPost({
-    //   headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
-    //   workId: workId,
-    //   body: {
-    //     description: values.description,
-    //   }
-    // });
-    // 1秒待つ（擬似的なAPI呼び出し）
+    await triggerPost({
+      headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
+      workId: workId,
+      body: {
+        description: values.description,
+      }
+    });
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
     setIsPosted(true);

@@ -73,10 +73,10 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                     <Text fz="sm" c="dimmed">{imageData?.apiWork?.likes}</Text>
                   </Group>
                   {/* 投稿日時 */}
-                  {imageData?.apiWork?.createdAt ? (
+                  {imageData?.apiWork?.postedAt ? (
                     <Text fz="sm" color="dimmed">
                     <span>
-                      {new Date(imageData?.apiWork?.createdAt).toLocaleDateString('ja-JP', {
+                      {new Date(imageData?.apiWork?.postedAt).toLocaleDateString('ja-JP', {
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',
