@@ -106,6 +106,7 @@ export const DeleteFormView = memo(function WorkViewComponent({
                 minRows={5}
                 maxRows={5}
                 disabled={isSubmitting || isPosted}
+                readOnly
               />
 
               {/* サブミットボタン */}
