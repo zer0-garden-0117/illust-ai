@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader } from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
-import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 
 type PostCompletedViewProps = {
   workId: string;

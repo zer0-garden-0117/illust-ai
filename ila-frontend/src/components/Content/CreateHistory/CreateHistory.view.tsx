@@ -2,20 +2,20 @@
 
 import React, { memo } from 'react';
 import { Card, Group, Pagination, SimpleGrid, Skeleton, Space, Text } from '@mantine/core';
-import { ImageCardsForHistory } from '@/components/Content/DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ImageCardsForHistory } from '@/components/Content/CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
 
-type DrawHistoryViewProps = {
+type CreateHistoryViewProps = {
   page: number;
   userWorksData: UsersWorksGetResult | undefined;
   handlePageChange: (page: number) => void;
 };
 
-export const DrawHistoryView = memo(function WorkViewComponent({
+export const CreateHistoryView = memo(function WorkViewComponent({
   page,
   userWorksData,
   handlePageChange
-}: DrawHistoryViewProps): JSX.Element {
+}: CreateHistoryViewProps): JSX.Element {
 
   return (
     <>
@@ -41,4 +41,4 @@ export const DrawHistoryView = memo(function WorkViewComponent({
     </>
   );
 });
-DrawHistoryView.displayName = 'DrawHistoryView';
+CreateHistoryView.displayName = 'CreateHistoryView';

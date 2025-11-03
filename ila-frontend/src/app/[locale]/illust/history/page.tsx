@@ -1,9 +1,9 @@
 'use client';
 
-import { DrawHistory } from "@/components/Content/DrawHistory/DrawHistory";
+import { CreateHistory } from "@/components/Content/CreateHistory/CreateHistory";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
-const DrawHistoryPage: React.FC<{ searchParams: { page?: string } }> = (
+const CreateHistoryPage: React.FC<{ searchParams: { page?: string } }> = (
   { searchParams }
 ) => {
   const { user } = useFirebaseAuthContext();
@@ -11,7 +11,7 @@ const DrawHistoryPage: React.FC<{ searchParams: { page?: string } }> = (
 
   return (
     <>
-      <DrawHistory
+      <CreateHistory
         customUserId={user?.customUserId || ''}
         page={page}
         userWorksFilterType="all"
@@ -20,4 +20,4 @@ const DrawHistoryPage: React.FC<{ searchParams: { page?: string } }> = (
   )
 };
 
-export default DrawHistoryPage;
+export default CreateHistoryPage;

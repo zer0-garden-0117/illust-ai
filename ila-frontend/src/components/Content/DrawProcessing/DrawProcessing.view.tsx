@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import { Group, Card, Image, AspectRatio, Center, Button, Notification, Space, Skeleton } from '@mantine/core';
 import { IconCheck, IconPencilCode } from '@tabler/icons-react';
-import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 
 type DrawProcessingViewProps = {
   imageData: ApiWorkWithTag | undefined;

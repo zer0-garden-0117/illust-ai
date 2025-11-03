@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Text, Pill, Skeleton, ActionIcon, Space } from '@mantine/core';
 import { IconCube, IconEdit, IconHeart, IconHeartFilled, IconMenu, IconMenu2, IconPencilCode, IconShare, IconTrash } from '@tabler/icons-react';
-import { ApiWorkWithTag } from '../DrawHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { useDisclosure } from '@mantine/hooks';
 import { WorkModal } from '../WorkModal/WorkModal';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';

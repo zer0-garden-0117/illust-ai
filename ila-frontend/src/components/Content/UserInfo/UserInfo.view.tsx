@@ -12,7 +12,7 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 import { useRouter } from 'next/navigation';
-import DrawHistory from '../DrawHistory/DrawHistory';
+import CreateHistory from '../CreateHistory/CreateHistory';
 
 type UserInfoViewProps = {
   page: number;
@@ -174,50 +174,33 @@ export const UserInfoView = memo(function WorkViewComponent({
         <Group gap="3px" mt="xs">
           <Button
             size="compact-sm"
-            // radius="xl"
-            variant={tab === 'posted' ? 'filled' : 'light'}
-            onClick={() => router.push(`${userData?.customUserId}?tab=posted`)}
+            variant={tab === 'home' ? 'filled' : 'light'}
+            onClick={() => router.push(`${userData?.customUserId}?tab=home`)}
           >
-            投稿済
+            ホーム
           </Button>
           <Button
             size="compact-sm"
-            // radius="xl"
             variant={tab === 'favorite' ? 'filled' : 'light'}
             onClick={() => router.push(`${userData?.customUserId}?tab=favorite`)}
           >
             いいね
           </Button>
-          <Button
-            size="compact-sm"
-            // radius="xl"
-            variant={tab === 'images' ? 'filled' : 'light'}
-            onClick={() => router.push(`${userData?.customUserId}?tab=images`)}
-          >
-            生成履歴
-          </Button>
         </Group>
         <Space h={10}/>
 
-        {tab === 'posted' && (
-          <DrawHistory
+        {tab === 'home' && (
+          <CreateHistory
             customUserId={userData?.customUserId || ''}
             page={page}
             userWorksFilterType="posted"
           />
         )}
         {tab === 'favorite' && (
-          <DrawHistory
+          <CreateHistory
             customUserId={userData?.customUserId || ''}
             page={page}
             userWorksFilterType="liked"
-          />
-        )}
-        {tab === 'images' && (
-          <DrawHistory
-            customUserId={userData?.customUserId || ''}
-            page={page}
-            userWorksFilterType="all"
           />
         )}
       </Card>

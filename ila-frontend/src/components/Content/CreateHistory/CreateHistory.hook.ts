@@ -4,14 +4,14 @@ import type { components } from "../../../generated/services/ila-v1";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 export type UserWorksFilterTypeQueryParam = components["parameters"]["UserWorksFilterTypeQueryParam"];
 
-type UseDrawHistoryProps = {
+type UseCreateHistoryProps = {
   customUserId: string;
   page: number;
   userWorksFilterType: UserWorksFilterTypeQueryParam;
 };
 
-export const useDrawHistory = (
-    { customUserId, page, userWorksFilterType }: UseDrawHistoryProps
+export const useCreateHistory = (
+    { customUserId, page, userWorksFilterType }: UseCreateHistoryProps
 ) => {
   const { getIdTokenLatest } = useFirebaseAuthContext();
   const router = useRouter();
