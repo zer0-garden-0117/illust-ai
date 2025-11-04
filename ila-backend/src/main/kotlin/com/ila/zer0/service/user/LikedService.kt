@@ -2,17 +2,17 @@ package com.ila.zer0.service.user
 
 import com.ila.zer0.dto.LikedWithSearchResult
 import com.ila.zer0.entity.Liked
+import com.ila.zer0.entity.Work
 import com.ila.zer0.repository.LikedRepository
-import com.ila.zer0.repository.WorkRepository
-import com.ila.zer0.service.tag.TagService
 import org.springframework.stereotype.Service
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.time.Instant
 
 @Service
 class LikedService(
-    private val likedRepository: LikedRepository,
-    private val tagService: TagService,
-    private val workRepository: WorkRepository
+    private val likedRepository: LikedRepository
 ) {
     // offset：スキップ件数。例えば、offset = 10の場合、最初の10件をスキップ
     // limit：limit件数。例えば、limit = 10の場合、11件目から20件目までの10件を返す
@@ -44,6 +44,17 @@ class LikedService(
             Pair(userId, workId)
         }
         return likedRepository.findByUserIdsAndWorkIds(userIdWorkIdPairs)
+    }
+
+    fun findByWorkId(
+        workId: String,
+    ): List<Liked> {
+        val allLikeds = likedRepository.findByWorkId(workId)
+
+        // updatedAt順にソート（降順）
+        val sortedLikeds = allLikeds.sortedByDescending { it.updatedAt }
+
+        return sortedLikeds
     }
 
     fun registerLiked(userId: String, workId: String): Liked {

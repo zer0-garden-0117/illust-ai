@@ -123,7 +123,7 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
             {/* ユーザー */}
             <Group gap="sm" mb="md">
               <SkeltonIcon
-                profileImageUrl={""}
+                profileImageUrl={imageData?.apiWork?.profileImageUrl}
                 width={40}
                 height={40}
                 marginTop={0}
@@ -131,12 +131,12 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
               <div>
                 <Text fz="sm" fw={500}>
                   {(() => {
-                    // if (!item!.userName) return ' ';
-                    const noNewline = "username".replace(/\r?\n/g, '');
+                    if (!imageData?.apiWork?.userName) return ' ';
+                    const noNewline = imageData.apiWork.userName.replace(/\r?\n/g, '');
                     return noNewline.length > 10 ? noNewline.slice(0, 10) + '...' : noNewline;
                   })()}
                 </Text>
-                <Text fz="xs" c="dimmed">@{"test"}</Text>
+                <Text fz="xs" c="dimmed">@{imageData?.apiWork?.customUserId}</Text>
               </div>
             </Group>
 

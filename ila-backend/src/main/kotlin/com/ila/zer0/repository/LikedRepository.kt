@@ -76,6 +76,23 @@ class LikedRepository(
         }
     }
 
+    fun findByWorkId(workId: String): List<Liked> {
+        val index = table.index("WorkIdIndex")
+        val queryConditional = QueryConditional.keyEqualTo(
+            Key.builder().partitionValue(workId).build()
+        )
+        val queryRequest = index.query { r ->
+            r.queryConditional(queryConditional)
+                .scanIndexForward(false)
+        }
+
+        val likeds = mutableListOf<Liked>()
+        queryRequest.forEach { page ->
+            likeds.addAll(page.items())
+        }
+        return likeds
+    }
+
     fun registerLiked(liked: Liked): Liked {
         return try {
             table.putItem(liked)

@@ -83,6 +83,14 @@ class UserManagerService(
     }
 
     @Transactional
+    fun getUserByIdForWork(
+        userId: String
+    ): User? {
+        val user = userService.findUserById(userId) ?: return null
+        return user
+    }
+
+    @Transactional
     fun findUserByCustomUserId(
         customUserId: String
     ): User? {

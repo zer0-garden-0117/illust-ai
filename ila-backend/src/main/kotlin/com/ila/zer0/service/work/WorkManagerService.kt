@@ -12,6 +12,7 @@ import com.ila.zer0.repository.WorkRepository
 import com.ila.zer0.service.SqsService
 import com.ila.zer0.service.UuidService
 import com.ila.zer0.service.tag.TagService
+import com.ila.zer0.service.user.LikedService
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.user.UserService
 import org.slf4j.LoggerFactory
@@ -28,7 +29,8 @@ class WorkManagerService(
     private val sqsService: SqsService,
     private val uuidService: UuidService,
     private val userService: UserService,
-    private val userManagerService: UserManagerService
+    private val userManagerService: UserManagerService,
+    private val likedService: LikedService
 ) {
 
     private val logger = LoggerFactory.getLogger(WorkService::class.java)
@@ -136,5 +138,10 @@ class WorkManagerService(
             work = work,
             tags = tags
         )
+    }
+
+    @Transactional
+    fun getLikesCountByWorkId(workId: String): Int {
+        return likedService.findByWorkId(workId).size
     }
 }

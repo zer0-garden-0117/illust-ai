@@ -77,6 +77,18 @@ ApiWork:
       type: boolean
       description: "認証ユーザーがこの作品にいいねしているかどうか"
       example: true
+    userName:
+      type: string
+      description: ユーザー名
+      example: xxxxx
+    customUserId:
+      type: string
+      description: カスタムのuserId
+      example: xxxxx
+    profileImageUrl:
+      type: string
+      description: ユーザーアイコン画像
+      example: xxxxx
 
 ApiTag:
   description: タグ

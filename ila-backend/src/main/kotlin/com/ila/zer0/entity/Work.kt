@@ -78,4 +78,13 @@ data class Work(
 
     @get:DynamoDbAttribute("isLiked")
     var isLiked: Boolean = false,
+
+    @get:DynamoDbAttribute("userName")
+    var userName: String = "",
+
+    @get:DynamoDbAttribute("customUserId")
+    var customUserId: String = "",
+
+    @get:DynamoDbAttribute("profileImageUrl")
+    var profileImageUrl: String = "",
 )

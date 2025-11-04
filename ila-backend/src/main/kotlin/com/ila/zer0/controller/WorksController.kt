@@ -84,6 +84,16 @@ class WorksController(
     ): ResponseEntity<ApiWorkWithTag> {
         val workWithTag = workManagerService.findWorkById(workId = workId)
         workWithTag.work.isMine = (getUser()?.userId == workWithTag.work.userId)
+
+        // statusがpostedの場合、表示用のユーザー情報、いいね数を取得
+        if (workWithTag.work.status == "posted") {
+            val user = userManagerService.getUserByIdForWork(workWithTag.work.userId)
+                ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
+            workWithTag.work.userName = user.userName
+            workWithTag.work.customUserId = user.customUserId
+            workWithTag.work.profileImageUrl = user.profileImageUrl
+            workWithTag.work.likes = workManagerService.getLikesCountByWorkId(workWithTag.work.workId)
+        }
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
     }
