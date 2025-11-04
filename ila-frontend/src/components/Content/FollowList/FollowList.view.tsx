@@ -34,8 +34,6 @@ export const FollowListView = memo(function WorkViewComponent({
     <Card
       key={item.customUserId}
       padding="md"
-      onClick={() => handleUserCardClick(item.customUserId)}
-      style={{ cursor: 'pointer' }}
     >
       <Card.Section withBorder />
         <Space h={10} />
@@ -46,24 +44,41 @@ export const FollowListView = memo(function WorkViewComponent({
               width={40}
               height={40}
               marginTop={0}
+              onClick={() => handleUserCardClick(item.customUserId)}
             />
-            <div>
-              <Text fz="sm" fw={500}>
+            <Flex direction="column" align="flex-start">
+              <Text
+                fz="sm"
+                fw={500}
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleUserCardClick(item.customUserId)}
+              >
                 {(() => {
                   if (!item!.userName) return ' ';
                   const noNewline = item!.userName.replace(/\r?\n/g, '');
                   return noNewline.length > 10 ? noNewline.slice(0, 10) + '...' : noNewline;
                 })()}
               </Text>
-              <Text fz="xs" c="dimmed">@{item!.customUserId}</Text>
-              <Text fz="xs">
+              <Text
+                fz="xs"
+                c="dimmed"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleUserCardClick(item.customUserId)}
+              >
+                @{item!.customUserId}
+              </Text>
+              <Text
+                fz="xs"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleUserCardClick(item.customUserId)}
+              >
                 {(() => {
                   if (!item!.userProfile) return ' ';
                   const noNewline = item!.userProfile.replace(/\r?\n/g, '');
                   return noNewline.length > 10 ? noNewline.slice(0, 10) + '...' : noNewline;
                 })()}
               </Text>
-            </div>
+            </Flex>
           </Group>
           <div
             onClick={(e) => e.stopPropagation()}
@@ -120,6 +135,7 @@ export const FollowListView = memo(function WorkViewComponent({
                       width={30}
                       height={30}
                       marginTop={20}
+                      onClick={() => handleUserCardClick(undefined)}
                     />
                     <div style={{ flex: 1 }}>
                       <Skeleton height={12} width="100" mt={12} />
