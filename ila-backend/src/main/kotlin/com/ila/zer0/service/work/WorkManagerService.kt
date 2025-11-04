@@ -1,6 +1,7 @@
 package com.ila.zer0.service.work
 
 import com.ila.zer0.dto.FollowWithSearchResult
+import com.ila.zer0.dto.LikesCountAndIsLiked
 import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorkWithTag
 import com.ila.zer0.dto.WorksWithSearchResult
@@ -141,7 +142,11 @@ class WorkManagerService(
     }
 
     @Transactional
-    fun getLikesCountByWorkId(workId: String): Int {
-        return likedService.findByWorkId(workId).size
+    fun getLikesCountAndIsLikedByWorkId(workId: String, userId: String): LikesCountAndIsLiked {
+        val likeds =  likedService.findByWorkId(workId)
+        return LikesCountAndIsLiked(
+            likesCount = likeds.size,
+            isLiked = likeds.any { it.userId == userId }
+        )
     }
 }

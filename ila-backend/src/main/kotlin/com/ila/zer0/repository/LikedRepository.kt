@@ -187,4 +187,28 @@ class LikedRepository(
         }
     }
 
+    fun findByUserIdAndWorkId(userId: String, workId: String): Liked? {
+        return try {
+            val key = Key.builder()
+                .partitionValue(userId)
+                .sortValue(workId)
+                .build()
+
+            val liked = table.getItem(key)
+
+            if (liked == null) {
+                logger.info("No liked item found for userId=$userId, workId=$workId")
+            } else {
+                logger.info("Found liked item for userId=$userId, workId=$workId")
+            }
+
+            liked
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "Failed to find liked item for userId=$userId, workId=$workId",
+                e
+            )
+        }
+    }
+
 }

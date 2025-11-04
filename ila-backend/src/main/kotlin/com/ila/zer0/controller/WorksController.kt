@@ -1,6 +1,7 @@
 package com.ila.zer0.controller
 
 import com.ila.zer0.config.token.CustomAuthenticationToken
+import com.ila.zer0.dto.LikesCountAndIsLiked
 import com.ila.zer0.dto.WorkWithTag
 import com.ila.zer0.entity.Tag
 import com.ila.zer0.entity.User
@@ -83,16 +84,19 @@ class WorksController(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWorkWithTag> {
         val workWithTag = workManagerService.findWorkById(workId = workId)
-        workWithTag.work.isMine = (getUser()?.userId == workWithTag.work.userId)
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        workWithTag.work.isMine = (user.userId == workWithTag.work.userId)
 
         // statusがpostedの場合、表示用のユーザー情報、いいね数を取得
         if (workWithTag.work.status == "posted") {
-            val user = userManagerService.getUserByIdForWork(workWithTag.work.userId)
+            val workUser = userManagerService.getUserByIdForWork(workWithTag.work.userId)
                 ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
-            workWithTag.work.userName = user.userName
-            workWithTag.work.customUserId = user.customUserId
-            workWithTag.work.profileImageUrl = user.profileImageUrl
-            workWithTag.work.likes = workManagerService.getLikesCountByWorkId(workWithTag.work.workId)
+            workWithTag.work.userName = workUser.userName
+            workWithTag.work.customUserId = workUser.customUserId
+            workWithTag.work.profileImageUrl = workUser.profileImageUrl
+            val likesCountAndIsLiked = workManagerService.getLikesCountAndIsLikedByWorkId(workWithTag.work.workId, user.userId)
+            workWithTag.work.likes = likesCountAndIsLiked.likesCount
+            workWithTag.work.isLiked = likesCountAndIsLiked.isLiked
         }
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)

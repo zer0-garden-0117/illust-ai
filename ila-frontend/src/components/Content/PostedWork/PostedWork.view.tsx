@@ -1,8 +1,8 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Text, Pill, Skeleton, ActionIcon, Space, Menu, Flex } from '@mantine/core';
-import { IconCube, IconEdit, IconHeart, IconHeartFilled, IconMenu, IconMenu2, IconPencilCode, IconShare, IconTrash } from '@tabler/icons-react';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Text, Pill, Skeleton, ActionIcon, Space, Menu, Flex, Loader } from '@mantine/core';
+import { IconCube, IconEdit, IconHeart, IconHeartFilled, IconLoader, IconMenu, IconMenu2, IconPencilCode, IconShare, IconTrash } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { useDisclosure } from '@mantine/hooks';
 import { WorkModal } from '../WorkModal/WorkModal';
@@ -11,17 +11,21 @@ import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 type PostedWorkViewProps = {
   workId: string;
   imageData: ApiWorkWithTag | undefined;
+  isSubmitting: boolean;
   handleEditClick: (workId: string) => void;
   handleDeleteClick: (workId: string) => void;
   handleUserClick: (customUserId: string | undefined) => void;
+  handleLikeClick: (workId: string) => void;
 };
 
 export const PostedWorkView = memo(function PostedWorkViewComponent({
   workId,
   imageData,
+  isSubmitting,
   handleEditClick,
   handleDeleteClick,
-  handleUserClick
+  handleUserClick,
+  handleLikeClick
 }: PostedWorkViewProps): JSX.Element {
   const [opened, { open, close }] = useDisclosure(false);
   return (
@@ -46,8 +50,21 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                         backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5))',
                         '&:hover': { backgroundColor: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6))' }
                       }}
+                      onClick={() => handleLikeClick(workId)}
                     >
-                      <IconHeart size={16} color='var(--mantine-color-red-6)' />
+                      {isSubmitting ? (
+                        <Skeleton width={16} height={16} />
+                      ) : imageData?.apiWork?.isLiked ? (
+                        <IconHeartFilled
+                          size={16}
+                          color='var(--mantine-color-red-6)'
+                        />
+                      ) : (
+                        <IconHeart
+                          size={16}
+                          color='var(--mantine-color-gray-6)'
+                        />
+                      )}
                     </ActionIcon>
                     <ActionIcon
                       style={{
