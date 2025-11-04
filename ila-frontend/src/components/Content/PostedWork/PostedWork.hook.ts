@@ -25,10 +25,17 @@ export const usePostedWork = (
     router.push(`/illust/delete/${workId}`);
   }
 
+  const handleUserClick = (customUserId: string | undefined) => {
+    if (customUserId) {
+      router.push(`/user/${customUserId}`);
+    }
+  }
+
   return {
     workId,
     imageData,
     handleEditClick,
-    handleDeleteClick
+    handleDeleteClick,
+    handleUserClick,
   };
 };

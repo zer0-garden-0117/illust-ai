@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Text, Pill, Skeleton, ActionIcon, Space, Menu } from '@mantine/core';
+import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Text, Pill, Skeleton, ActionIcon, Space, Menu, Flex } from '@mantine/core';
 import { IconCube, IconEdit, IconHeart, IconHeartFilled, IconMenu, IconMenu2, IconPencilCode, IconShare, IconTrash } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
 import { useDisclosure } from '@mantine/hooks';
@@ -13,6 +13,7 @@ type PostedWorkViewProps = {
   imageData: ApiWorkWithTag | undefined;
   handleEditClick: (workId: string) => void;
   handleDeleteClick: (workId: string) => void;
+  handleUserClick: (customUserId: string | undefined) => void;
 };
 
 export const PostedWorkView = memo(function PostedWorkViewComponent({
@@ -20,6 +21,7 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
   imageData,
   handleEditClick,
   handleDeleteClick,
+  handleUserClick
 }: PostedWorkViewProps): JSX.Element {
   const [opened, { open, close }] = useDisclosure(false);
   return (
@@ -127,17 +129,30 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                 width={40}
                 height={40}
                 marginTop={0}
+                onClick={() => handleUserClick(imageData?.apiWork?.customUserId)}
               />
-              <div>
-                <Text fz="sm" fw={500}>
+              <Flex direction="column" align="flex-start">
+                <Text
+                  fz="sm"
+                  fw={500}
+                  style={{ cursor: 'pointer', display: 'inline' }}
+                  onClick={() => handleUserClick(imageData?.apiWork?.customUserId)}
+                >
                   {(() => {
                     if (!imageData?.apiWork?.userName) return ' ';
                     const noNewline = imageData.apiWork.userName.replace(/\r?\n/g, '');
                     return noNewline.length > 10 ? noNewline.slice(0, 10) + '...' : noNewline;
                   })()}
                 </Text>
-                <Text fz="xs" c="dimmed">@{imageData?.apiWork?.customUserId}</Text>
-              </div>
+                <Text
+                  fz="xs"
+                  c="dimmed"
+                  style={{ cursor: 'pointer', lineHeight: 1 }}
+                  onClick={() => handleUserClick(imageData?.apiWork?.customUserId)}
+                >
+                  @{imageData?.apiWork?.customUserId}
+                </Text>
+              </Flex>
             </Group>
 
             {/* モデルの選択 */}
