@@ -1,16 +1,16 @@
 import { ActionIcon, AspectRatio, Card, Group, Image, Skeleton, Text } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import type { components } from "../../../../generated/services/ila-v1";
+import type { components } from "../../../generated/services/ila-v1";
 
 export type ApiWorkWithTag = components["schemas"]["ApiWorkWithTag"];
 
-interface ImageCardsForHistoryProps {
+interface ImageCardProps {
   data: ApiWorkWithTag | undefined;
   index: number;
 }
 
-export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps) => {
+export const ImageCard = ({ data, index }: ImageCardProps) => {
   const router = useRouter();
   const [imgLoaded, setImgLoaded] = React.useState(false);
 
@@ -84,4 +84,4 @@ export const ImageCardsForHistory = ({ data, index }: ImageCardsForHistoryProps)
   );
 };
 
-ImageCardsForHistory.displayName = 'ImageCardsForHistory';
+ImageCard.displayName = 'ImageCard';

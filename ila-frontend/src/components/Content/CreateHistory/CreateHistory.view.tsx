@@ -2,7 +2,7 @@
 
 import React, { memo } from 'react';
 import { Card, Group, Pagination, SimpleGrid, Space, Text } from '@mantine/core';
-import { ImageCardsForHistory } from '@/components/Content/CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ImageCard } from '@/components/Content/ImageCard/ImageCard';
 import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
 import { UserWorksFilterTypeQueryParam } from './CreateHistory.hook';
 import { CreateCard } from '../CreateCard/CreateCard';
@@ -39,7 +39,7 @@ export const CreateHistoryView = memo(function WorkViewComponent({
       <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
         {!userWorksData &&
           Array.from({ length: 12 }).map((_, idx) => (
-            <ImageCardsForHistory key={idx} data={{}} index={idx} />
+            <ImageCard key={idx} data={{}} index={idx} />
           ))
         }
         {/* userWorksFilterTypeがpostedかつ、customUserIdがuser.customUserIdと等しい場合はCreateCardを表示 */}
@@ -47,7 +47,7 @@ export const CreateHistoryView = memo(function WorkViewComponent({
           <CreateCard />
         )}
         {userWorksData?.works?.map((work, idx) => (
-          <ImageCardsForHistory key={work.apiWork?.workId} data={work} index={idx} />
+          <ImageCard key={work.apiWork?.workId} data={work} index={idx} />
         ))}
       </SimpleGrid>
     </Card>

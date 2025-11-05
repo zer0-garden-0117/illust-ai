@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Loader, Space, Box, Alert, Notification } from '@mantine/core';
 import { IconCheck, IconPencil } from '@tabler/icons-react';
-import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWorkWithTag } from '../ImageCard/ImageCard';
 import { UseFormReturnType } from '@mantine/form';
 import { PostWorkValues } from './EditForm.hook';
 import { IoInformationSharp } from 'react-icons/io5';

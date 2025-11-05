@@ -5,7 +5,7 @@ import { Group, Card, Grid, Image, Textarea, AspectRatio, Center, Button, Text, 
 import { DateTimePicker } from '@mantine/dates';
 import { IconCube, IconLock, IconPencilCode, IconPhoto } from '@tabler/icons-react';
 import { IconClock } from '@tabler/icons-react';
-import { ApiWorkWithTag } from '../CreateHistory/ImageCardsForHistory/ImageCardsForHistory';
+import { ApiWorkWithTag } from '../ImageCard/ImageCard';
 import { useDisclosure } from '@mantine/hooks';
 import { WorkModal } from '../WorkModal/WorkModal';
 
