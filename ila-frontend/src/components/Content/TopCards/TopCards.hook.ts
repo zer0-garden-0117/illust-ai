@@ -11,7 +11,9 @@ export const useTopCards = () => {
       limit: illustNum,
       worksFilterType
     },
-    { keepPreviousData: true }
+    { keepPreviousData: true,
+      revalidateOnFocus: false
+    }
   );
 
   const handleMoreClick = async () => {

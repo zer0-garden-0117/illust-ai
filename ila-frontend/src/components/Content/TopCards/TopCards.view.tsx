@@ -21,6 +21,10 @@ export const TopCardsView = memo(function WorkViewComponent({
   const loadedCount = worksData?.works?.length ?? 0;
   const skeletonCount =
     worksData && illustNum > loadedCount ? illustNum - loadedCount : 0;
+  const isMoreView =
+    worksData && worksData.totalWorksCount && (worksData.totalWorksCount >= (worksData.works?.length ?? 0) + 4);
+  console.log('totalWorksCount:', worksData?.totalWorksCount);
+  console.log('worksData.works?.length:', worksData?.works?.length);
 
   return (
     <>
@@ -54,6 +58,7 @@ export const TopCardsView = memo(function WorkViewComponent({
         <Space h="md" />
 
         {/* もっとボタン */}
+        {isMoreView && (
         <Center>
           <Button
             variant="outline"
@@ -63,6 +68,7 @@ export const TopCardsView = memo(function WorkViewComponent({
             もっと見る
           </Button>
         </Center>
+        )}
 
       </Card>
     </>
