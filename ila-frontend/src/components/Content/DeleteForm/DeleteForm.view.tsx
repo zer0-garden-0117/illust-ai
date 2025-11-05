@@ -34,7 +34,7 @@ export const DeleteFormView = memo(function WorkViewComponent({
     close();
   };
 
-  if (!imageData?.apiWork?.isMine) {
+  if (imageData && !imageData.apiWork?.isMine) {
     return <ForbiddenCard alertText='イラストを生成したユーザー以外は削除できません。' />;
   }
 

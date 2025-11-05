@@ -28,7 +28,8 @@ export const EditFormView = memo(function WorkViewComponent({
   handlePostClick,
   handleConfirmClick
 }: EditFormViewProps): JSX.Element {
-  if (!imageData?.apiWork?.isMine) {
+  // imageDataが存在し、かつapiWorkのisMineプロパティがfalseの場合、ForbiddenCardを表示
+  if (imageData && !imageData.apiWork?.isMine) {
     return <ForbiddenCard alertText='イラストを生成したユーザー以外は編集できません。' />;
   }
 
