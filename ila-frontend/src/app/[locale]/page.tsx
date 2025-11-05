@@ -1,13 +1,13 @@
 'use client';
-import { Space } from '@mantine/core';
+import TopCards from "@/components/Content/TopCards/TopCards";
 import { useTranslations } from "next-intl";
-import { BiSolidInvader } from "react-icons/bi";
 
 const TopPage: React.FC = () => {
   const t = useTranslations("page");
 
   return (
     <>
+      <TopCards />
     </>
   );
 };
