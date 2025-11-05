@@ -14,7 +14,7 @@ UsersWorksResponse:
   content:
     application/json:
       schema:
-        $ref: "../schemas/works.yaml#/ApiUsersWorks"
+        $ref: "../schemas/works.yaml#/ApiWorks"
 
 FollowUsersResponse:
   description: |-

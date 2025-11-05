@@ -33,3 +33,12 @@ UserWorksFilterTypeQueryParam:
   schema:
     type: string
     enum: [posted, liked, created]
+
+WorksFilterTypeQueryParam:
+  name: worksFilterType
+  in: query
+  description: 作品のフィルターの種類
+  required: true
+  schema:
+    type: string
+    enum: [new, theme]

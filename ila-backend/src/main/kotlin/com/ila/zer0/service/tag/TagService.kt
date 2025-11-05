@@ -85,7 +85,8 @@ class TagService(
     // descriptionは #から始まる語をタグとして登録（日本語・全角英数・絵文字対応）
     fun registerTagsFromDescription(
         workId: String,
-        description: String
+        description: String,
+        isFirstUpdate: Boolean
     ) {
         // 正規化（全角/半角の差異を吸収、合成文字を統一）
         val normalized = Normalizer.normalize(description, Normalizer.Form.NFKC)
@@ -123,10 +124,25 @@ class TagService(
                     tag = tag
                 )
             }
-            .toList()
+            .toMutableList()
 
-        if (tags.isNotEmpty()) {
-            tagRepository.registerTags(tags)
+        // "GLOBAL"タグを追加
+        tags.add(
+            Tag(
+                workId = workId,
+                tag = "GLOBAL"
+            )
+        )
+
+        // 初回更新ではない場合、前のタグがあれば削除
+        if (!isFirstUpdate) {
+            val prevTags = tagRepository.findByWorkId(workId)
+            if (prevTags.isNotEmpty()) {
+                tagRepository.deleteTagByWorkId(workId)
+            }
         }
+
+        // タグ登録
+        tagRepository.registerTags(tags)
     }
 }

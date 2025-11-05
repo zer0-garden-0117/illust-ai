@@ -14,7 +14,7 @@ WorksSearchResponse:
   content:
     application/json:
       schema:
-        $ref: "../schemas/works.yaml#/ApiWorksWithSearchResult"
+        $ref: "../schemas/works.yaml#/ApiWorks"
 
 WorksIdResponse:
   description: |-

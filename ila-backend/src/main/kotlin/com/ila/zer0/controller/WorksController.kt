@@ -14,7 +14,9 @@ import com.ila.zer0.service.user.UsageService
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.work.WorkManagerService
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -32,6 +34,33 @@ class WorksController(
     private val userManagerService: UserManagerService,
     private val usageService: UsageService
 ) : WorksApi {
+
+    override fun getPublicWorks(
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int,
+        @RequestParam(value = "worksFilterType", required = true) worksFilterType: String
+    ): ResponseEntity<ApiWorks> {
+        if (worksFilterType != "new" && worksFilterType != "theme") {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        val workResult = if (worksFilterType == "new") {
+            workManagerService.findWorksByTags(listOf("GLOBAL"), offset, limit)
+        } else {
+            workManagerService.findWorksByTags(listOf("theme"), offset, limit)
+        }
+
+        // APIモデルに変換
+        val apiWorksWithTags = mutableListOf<ApiWorkWithTag>()
+        workResult?.works?.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
+            apiWorksWithTags.add(apiWorkWithTag)
+        }
+        val apiWorks = ApiWorks(apiWorksWithTags, workResult?.totalCount ?: 0)
+        return ResponseEntity.ok(apiWorks)
+    }
+
 
     override fun createWorks(
         @RequestBody apiWork: ApiWork
@@ -122,11 +151,13 @@ class WorksController(
         // 説明文を更新
         workWithTag.work.description = apiWork.description!!
         // ステータスがposted以外の場合はpostedに更新し、postedAtを設定
+        var isFirstUpdate = false
         if (workWithTag.work.status != "posted") {
             workWithTag.work.status = "posted"
             workWithTag.work.postedAt = ZonedDateTime.now(ZoneId.of("Asia/Tokyo")).toInstant()
+            isFirstUpdate = true
         }
-        workManagerService.updateWork(workWithTag.work)
+        workManagerService.updateWork(workWithTag.work, isFirstUpdate)
         return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
     }
 
@@ -153,7 +184,7 @@ class WorksController(
 
     override fun searchWorksByTags(
         @RequestBody(required = false) apiWorkSearchByTags: ApiWorkSearchByTags
-    ): ResponseEntity<ApiWorksWithSearchResult> {
+    ): ResponseEntity<ApiWorks> {
         // 作品検索
         val workResult = workManagerService.findWorksByTags(
             apiWorkSearchByTags.tags,
@@ -168,8 +199,8 @@ class WorksController(
             val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
             apiWorksWithTags.add(apiWorkWithTag)
         }
-        val apiWorkWithDetails = ApiWorksWithSearchResult(apiWorksWithTags, workResult?.totalCount ?: 0)
-        return ResponseEntity.ok(apiWorkWithDetails)
+        val apiWorks = ApiWorks(apiWorksWithTags, workResult?.totalCount ?: 0)
+        return ResponseEntity.ok(apiWorks)
     }
 
 

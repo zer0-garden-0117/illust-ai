@@ -103,7 +103,7 @@ class UsersController(
         @RequestParam(value = "offset", required = true) offset: Int,
         @RequestParam(value = "limit", required = true) limit: Int,
         @RequestParam(value = "userWorksFilterType", required = true) userWorksFilterType: String
-    ): ResponseEntity<ApiUsersWorks> {
+    ): ResponseEntity<ApiWorks> {
         val usersWorks = workManagerService.getUsersWorksByCustomUserIdWithFilter(customUserId, offset, limit, userWorksFilterType)
             ?: return ResponseEntity.notFound().build()
 
@@ -114,8 +114,8 @@ class UsersController(
             val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
             apiWorkWithTags.add(apiWorkWithTag)
         }
-        val apiUsersWorks = ApiUsersWorks(apiWorkWithTags, usersWorks.totalCount)
-        return ResponseEntity.ok(apiUsersWorks)
+        val apiWorks = ApiWorks(apiWorkWithTags, usersWorks.totalCount)
+        return ResponseEntity.ok(apiWorks)
     }
 
     override fun followUsers(

@@ -45,13 +45,16 @@ paths:
     $ref: "./paths/users.yaml#/UsersLikedByWorkId"
 
   # works
+  /public/works:
+    $ref: "./paths/works.yaml#/PublicWorks"
+
   /works/create:
     $ref: "./paths/works.yaml#/WorksCreate"
 
   /works/{workId}:
     $ref: "./paths/works.yaml#/WorksById"
 
-  /works/searchByTags:
+  /public/works/searchByTags:
     $ref: "./paths/works.yaml#/WorksSearchByTags"
 
   # billings
@@ -86,9 +89,6 @@ components:
 
     ApiWorkSearchByTags:
       $ref: "./components/schemas/works.yaml#/ApiWorkSearchByTags"
-
-    ApiWorksWithSearchResult:
-      $ref: "./components/schemas/works.yaml#/ApiWorksWithSearchResult"
 
     ApiTag:
       $ref: "./components/schemas/works.yaml#/ApiTag"

@@ -60,9 +60,9 @@ class WorkManagerService(
     }
 
     @Transactional
-    fun updateWork(updatedWork: Work): Work {
+    fun updateWork(updatedWork: Work, isFirstUpdate: Boolean): Work {
         workService.updateWork(updatedWork)
-        tagService.registerTagsFromDescription(updatedWork.workId, updatedWork.description)
+        tagService.registerTagsFromDescription(updatedWork.workId, updatedWork.description, isFirstUpdate)
         return updatedWork
     }
 

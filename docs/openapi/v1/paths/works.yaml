@@ -1,3 +1,25 @@
+PublicWorks:
+  get:
+    operationId: getPublicWorks
+    tags:
+      - works
+    summary: 指定した条件で作品を取得する
+    description: |
+      指定した条件で作品を取得する
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/WorksFilterTypeQueryParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersWorksResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
 WorksCreate:
   post:
     operationId: createWorks

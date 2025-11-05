@@ -133,25 +133,8 @@ ApiWorkSearchByTags:
     - offset
     - limit
 
-ApiWorksWithSearchResult:
-  description: 検索結果
-  type: object
-  properties:
-    works:
-      type: array
-      description: "検索結果の作品リスト"
-      items:
-        $ref: "../schemas/works.yaml#/ApiWorkWithTag"
-    totalCount:
-      type: integer
-      description: "検索結果の総件数"
-      example: 100
-  required:
-    - works
-    - totalCount
-
-ApiUsersWorks:
-  description: ユーザーの作品リスト
+ApiWorks:
+  description: 作品リスト
   type: object
   properties:
     works:
