@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Card, Center, Button, Space, SimpleGrid } from '@mantine/core';
+import { Card, Center, Button, Space, SimpleGrid, Text, Group } from '@mantine/core';
 import { PublicWorksGetResult } from '@/apis/openapi/works/usePublicWorksGet';
 import { ImageCard } from '../ImageCard/ImageCard';
 
@@ -29,7 +29,11 @@ export const TopCardsView = memo(function WorkViewComponent({
   return (
     <>
       <Card withBorder padding="md" radius="md">
-
+        <Group justify="space-between">
+          <Text fz="md" fw={700} mb="xs">
+            新着イラスト
+          </Text>
+        </Group>
         {/* newの作品 */}
         <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
           {/* Skeleton */}
