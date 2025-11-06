@@ -9,7 +9,7 @@ type TopCardsViewProps = {
   worksData: PublicWorksGetResult | undefined;
   illustNum: number;
   isSubmitting: boolean;
-  handleMoreClick: () => Promise<void>;
+  handleMoreClick: () => void;
 };
 
 export const TopCardsView = memo(function WorkViewComponent({
