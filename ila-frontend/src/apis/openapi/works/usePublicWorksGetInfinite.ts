@@ -63,6 +63,7 @@ export const usePublicWorksGetInfinite = (
 
   return useSWRInfinite<PublicWorksGetResult, Error>(getKey, fetcher, {
     revalidateOnFocus: false,
+    revalidateFirstPage: false,
     ...options,
   });
 };
