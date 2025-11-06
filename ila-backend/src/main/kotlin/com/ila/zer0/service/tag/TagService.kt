@@ -37,7 +37,7 @@ class TagService(
         )
     }
 
-    fun findByWorkIds(
+    fun findByWorkId(
         workId: String,
     ): List<Tag> {
         val allTags = tagRepository.findByWorkId(workId)
@@ -73,10 +73,9 @@ class TagService(
         // updatedAt順にソート（降順）
         val sortedTags = uniqueTags.sortedByDescending { it.updatedAt }
 
-        val works = mutableListOf<Work>()
-        sortedTags.forEach { tag ->
-            works.add(workRepository.findByWorkId(tag.workId))
-        }
+        // sortedTagsからworkIdsを生成
+        val workIds = sortedTags.map { it.workId }
+        val works = workRepository.findByWorkIds(workIds)
 
         return works
     }

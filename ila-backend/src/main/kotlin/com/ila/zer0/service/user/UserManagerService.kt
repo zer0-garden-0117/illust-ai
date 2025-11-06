@@ -9,6 +9,8 @@ import com.ila.zer0.entity.Follow
 import com.ila.zer0.entity.Liked
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
+import com.ila.zer0.repository.UserRepository
+import com.ila.zer0.repository.WorkRepository
 import com.ila.zer0.service.ConvertService
 import com.ila.zer0.service.S3Service
 import com.ila.zer0.service.UuidService
@@ -33,7 +35,8 @@ class UserManagerService(
     private val convertService: ConvertService,
     private val s3Service: S3Service,
     private val usageService: UsageService,
-    private val productService: ProductService
+    private val productService: ProductService,
+    private val workRepository: WorkRepository
 ) {
     val logger = LoggerFactory.getLogger(UserManagerService::class.java)
 
@@ -273,11 +276,9 @@ class UserManagerService(
         val likedWithSearchResult =
             likedService.findByUserIdWithOffset(userId, offset, limit)
 
-        val works = mutableListOf<Work>()
-        likedWithSearchResult.liked.forEach { liked ->
-            val work = workService.findWorkById(liked.workId)
-            works.add(work)
-        }
+        // likedWithSearchResultからworkIdのリストを生成
+        val workIds = likedWithSearchResult.liked.map { it.workId }
+        val works = workRepository.findByWorkIds(workIds)
 
         return WorksWithSearchResult(
             works = works,
