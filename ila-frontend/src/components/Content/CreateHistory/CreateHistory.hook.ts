@@ -22,13 +22,16 @@ export const useCreateHistory = (
   const illustNum =
     userWorksFilterType === 'posted' && customUserId === user?.customUserId ? 11 : 12;
 
-  const { data: userWorksData, mutate: updateUserWorks } = useUsersWorksGet({
+  const { data: userWorksData, mutate: updateUserWorks } = useUsersWorksGet(
+    {
       customUserId: customUserId,
       offset: (page - 1) * illustNum,
       limit: illustNum,
       userWorksFilterType,
       getIdTokenLatest,
-  });
+    },
+    { revalidateOnFocus: false }
+  );
   
   const handlePageChange = (page: number): void => {
     const params = new URLSearchParams(searchParams.toString());

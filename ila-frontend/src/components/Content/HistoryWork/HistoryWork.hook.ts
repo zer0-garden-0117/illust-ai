@@ -12,10 +12,12 @@ export const useHistoryWork = (
   const router = useRouter();
   const { getIdTokenLatest } = useFirebaseAuthContext();
 
-  const { data: imageData, error, mutate: updateWork } = useWorksGetById({
-    workId,
-    getIdTokenLatest,
-  }, { revalidateOnFocus: false });
+  const { data: imageData, error, mutate: updateWork } = useWorksGetById(
+    {
+      workId,
+      getIdTokenLatest,
+    },
+    { revalidateOnFocus: false });
 
   const handlePostClick = (workId: string) => {
     router.push(`/illust/form/${workId}`);
