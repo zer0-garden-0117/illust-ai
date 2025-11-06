@@ -28,6 +28,7 @@ export const ImageCard = ({ data, index }: ImageCardProps) => {
       }}
     >
       {/* 画像 */}
+      <Card.Section>
       <AspectRatio ratio={1 / Math.sqrt(2)}>
         <Skeleton
           visible={!imgLoaded || data?.apiWork?.thumbnailImgUrl === ''}
@@ -47,6 +48,7 @@ export const ImageCard = ({ data, index }: ImageCardProps) => {
           </div>
         </Skeleton>
       </AspectRatio>
+      </Card.Section>
 
       {/* タイトル */}
       <Group style={{ width: '100%', overflow: 'hidden' }} mt={12}>
@@ -80,6 +82,7 @@ export const ImageCard = ({ data, index }: ImageCardProps) => {
           )}
         </Text>
       </div>
+
     </Card>
   );
 };

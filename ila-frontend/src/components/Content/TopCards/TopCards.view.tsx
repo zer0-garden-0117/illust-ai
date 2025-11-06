@@ -4,6 +4,7 @@ import React, { memo } from 'react';
 import { Card, Center, Button, Space, SimpleGrid, Text, Group } from '@mantine/core';
 import { PublicWorksGetResult } from '@/apis/openapi/works/usePublicWorksGet';
 import { ImageCard } from '../ImageCard/ImageCard';
+import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
 
 type TopCardsViewProps = {
   worksData: PublicWorksGetResult | undefined;
@@ -40,20 +41,20 @@ export const TopCardsView = memo(function WorkViewComponent({
           {/* Skeleton */}
           {!worksData &&
             Array.from({ length: illustNum }).map((_, idx) => (
-              <ImageCard key={idx} data={{}} index={idx} />
+              <ImageCardWithUser key={idx} data={{}} index={idx} />
             ))
           }
 
           {/* 取得済みデータの表示 */}
           {worksData?.works?.map((work, idx) => (
-            <ImageCard key={work.apiWork?.workId} data={work} index={idx} />
+            <ImageCardWithUser key={work.apiWork?.workId} data={work} index={idx} />
           ))}
 
           {/* もっと見るの再取得の分だけ Skeleton を末尾に追加 */}
           {worksData &&
             skeletonCount > 0 &&
             Array.from({ length: skeletonCount }).map((_, idx) => (
-              <ImageCard
+              <ImageCardWithUser
                 key={`more-skeleton-${idx}`}
                 data={{}}
                 index={loadedCount + idx}
