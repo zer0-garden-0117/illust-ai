@@ -9,6 +9,7 @@ import com.ila.zer0.entity.Tag
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import com.ila.zer0.repository.TagRepository
+import com.ila.zer0.repository.UserRepository
 import com.ila.zer0.repository.WorkRepository
 import com.ila.zer0.service.SqsService
 import com.ila.zer0.service.UuidService
@@ -17,6 +18,8 @@ import com.ila.zer0.service.user.LikedService
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.user.UserService
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
@@ -31,7 +34,8 @@ class WorkManagerService(
     private val uuidService: UuidService,
     private val userService: UserService,
     private val userManagerService: UserManagerService,
-    private val likedService: LikedService
+    private val likedService: LikedService,
+    private val userRepository: UserRepository,
 ) {
 
     private val logger = LoggerFactory.getLogger(WorkService::class.java)
@@ -113,13 +117,22 @@ class WorkManagerService(
             workIds.add(tag.workId)
         }
 
-        // 作品IDで作品情報を取得
-        val works = mutableListOf<Work>()
-        workIds.forEach { workId ->
-            val work = workRepository.findByWorkId(workId)
-            works.add(work)
-        }
+        // 作品情報取得
+        val works = workRepository.findByWorkIds(workIds)
 
+        // ユーザー情報取得
+        val userIds = works.map { it.userId }.toSet().toList()
+        val users = userRepository.findByUserIds(userIds)
+
+        // ユーザー情報を作品に紐付け
+        val userMap = users.associateBy { it.userId }
+        works.forEach { work ->
+            userMap[work.userId]?.let { user ->
+                work.userName = user.userName
+                work.customUserId = user.customUserId
+                work.profileImageUrl = user.profileImageUrl
+            }
+        }
         return WorksWithSearchResult(works, tagResult.totalCount)
     }
 

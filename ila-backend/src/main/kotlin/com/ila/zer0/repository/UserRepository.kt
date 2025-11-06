@@ -1,18 +1,17 @@
 package com.ila.zer0.repository
 
-import com.ila.zer0.entity.Tag
 import com.ila.zer0.entity.User
-import com.ila.zer0.entity.Work
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
-import software.amazon.awssdk.enhanced.dynamodb.model.UpdateItemEnhancedRequest
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import software.amazon.awssdk.services.dynamodb.model.BatchGetItemRequest
+import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
-import java.time.Instant
 
 @Repository
 class UserRepository(
@@ -37,6 +36,43 @@ class UserRepository(
         } catch (e: DynamoDbException) {
             throw RuntimeException(
                 "Failed to retrieve user by userId: $userId",
+                e
+            )
+        }
+    }
+
+    // 指定した userId のリストに対応する User のリストを返す
+    fun findByUserIds(userIds: List<String>): List<User> {
+        if (userIds.isEmpty()) return emptyList()
+
+        return try {
+            // userId を DynamoDB のキー形式に変換
+            val keys = userIds.map { userId ->
+                mapOf(
+                    "userId" to AttributeValue.builder().s(userId).build()
+                )
+            }
+
+            val batchGetRequest = BatchGetItemRequest.builder()
+                .requestItems(
+                    mapOf(
+                        "user" to KeysAndAttributes.builder()
+                            .keys(keys)
+                            .build()
+                    )
+                )
+                .build()
+
+            val response = dynamoDbClient.batchGetItem(batchGetRequest)
+
+            val userItems = response.responses()["user"]?.map { item ->
+                TableSchema.fromClass(User::class.java).mapToItem(item)
+            } ?: emptyList()
+
+            userItems
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "Failed to batch get users by userIds: ${userIds.joinToString(",")}",
                 e
             )
         }

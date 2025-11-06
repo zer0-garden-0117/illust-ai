@@ -7,10 +7,11 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
-import software.amazon.awssdk.enhanced.dynamodb.model.UpdateItemEnhancedRequest
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import software.amazon.awssdk.services.dynamodb.model.BatchGetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
-import java.time.Instant
+import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes
 
 @Repository
 class WorkRepository(
@@ -35,6 +36,43 @@ class WorkRepository(
         } catch (e: DynamoDbException) {
             throw RuntimeException(
                 "Failed to retrieve work by workId: $workId",
+                e
+            )
+        }
+    }
+
+    fun findByWorkIds(workIds: List<String>): List<Work> {
+        if (workIds.isEmpty()) return emptyList()
+
+        return try {
+            // workId を DynamoDB のキー形式に変換
+            val keys = workIds.map { workId ->
+                mapOf(
+                    "workId" to AttributeValue.builder().s(workId).build()
+                )
+            }
+
+            val batchGetRequest = BatchGetItemRequest.builder()
+                .requestItems(
+                    mapOf(
+                        "work" to KeysAndAttributes.builder()
+                            .keys(keys)
+                            .build()
+                    )
+                )
+                .build()
+
+            val response = dynamoDbClient.batchGetItem(batchGetRequest)
+
+            // 取得した item を Work にマッピング
+            val workItems = response.responses()["work"]?.map { item ->
+                TableSchema.fromClass(Work::class.java).mapToItem(item)
+            } ?: emptyList()
+
+            workItems
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "Failed to batch get works by workIds: ${workIds.joinToString(",")}",
                 e
             )
         }
