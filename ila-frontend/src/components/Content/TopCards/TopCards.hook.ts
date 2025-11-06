@@ -1,32 +1,49 @@
 import { useState } from "react";
-import { usePublicWorksGet } from "@/apis/openapi/works/usePublicWorksGet";
+import { usePublicWorksGetInfinite } from "@/apis/openapi/works/usePublicWorksGetInfinite";
+import type { PublicWorksGetResult } from "@/apis/openapi/works/usePublicWorksGet";
+
+const PAGE_SIZE = 4;
 
 export const useTopCards = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [illustNum, setIllustNum] = useState(4);
-  const worksFilterType = 'new';
-  const { data: worksData, mutate: updateWorks } = usePublicWorksGet(
+  const worksFilterType = "new";
+
+  const { data, size, setSize } = usePublicWorksGetInfinite(
     {
-      offset: 0,
-      limit: illustNum,
-      worksFilterType
+      initialOffset: 0,
+      limit: PAGE_SIZE,
+      worksFilterType,
     },
-    { keepPreviousData: true,
-      revalidateOnFocus: false
+    {
+      revalidateOnFocus: false,
     }
   );
 
+  // data は「ページごとの配列」なので flatten する
+  const flatWorks = data ? data.flatMap((page) => page.works ?? []) : [];
+
+  // TopCardsView が今まで通り PublicWorksGetResult を受け取れるように
+  // 最後のページをベースにして works だけ全ページ分に差し替える
+  const worksData: PublicWorksGetResult | undefined = data
+    ? {
+        ...data[data.length - 1],
+        works: flatWorks,
+      }
+    : undefined;
+
+  // 現在表示できる件数（初回ロード中は PAGE_SIZE を使う）
+  const illustNum = flatWorks.length || PAGE_SIZE;
+
   const handleMoreClick = async () => {
     setIsSubmitting(true);
-    setIllustNum(illustNum + 4);
-    await updateWorks();
+    await setSize(size + 1);
     setIsSubmitting(false);
-  }
+  };
 
   return {
     worksData,
     illustNum,
     isSubmitting,
-    handleMoreClick
+    handleMoreClick,
   };
 };

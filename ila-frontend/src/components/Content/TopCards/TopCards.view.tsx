@@ -18,6 +18,7 @@ export const TopCardsView = memo(function WorkViewComponent({
   isSubmitting,
   handleMoreClick
 }: TopCardsViewProps): JSX.Element {
+  console.log('isSubmitting:', isSubmitting);
   const loadedCount = worksData?.works?.length ?? 0;
   const skeletonCount =
     worksData && illustNum > loadedCount ? illustNum - loadedCount : 0;
