@@ -1,6 +1,6 @@
 'use client';
 
-import DrawProcessing from "@/components/Content/DrawProcessing/DrawProcessing";
+import DrawProcessing from "@/components/Content/CreateProcessing/CreateProcessing";
 
 const DrawProcessingPage: React.FC<{ params: { id: string } }> = (
   { params }

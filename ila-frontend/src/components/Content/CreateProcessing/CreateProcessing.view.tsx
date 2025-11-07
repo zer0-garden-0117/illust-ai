@@ -5,7 +5,7 @@ import { Group, Card, Image, AspectRatio, Center, Button, Notification, Space, S
 import { IconCheck, IconPencilCode } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../ImageCard/ImageCard';
 
-type DrawProcessingViewProps = {
+type CreateProcessingViewProps = {
   imageData: ApiWorkWithTag | undefined;
   handleLaterClick: () => void;
   handleHistoryClick: () => void;
@@ -13,13 +13,13 @@ type DrawProcessingViewProps = {
   handleWorkClick: (workId: string | undefined) => void;
 };
 
-export const DrawProcessingView = memo(function WorkViewComponent({
+export const CreateProcessingView = memo(function WorkViewComponent({
   imageData,
   handleLaterClick,
   handleHistoryClick,
   handlePostClick,
   handleWorkClick,
-}: DrawProcessingViewProps): JSX.Element {
+}: CreateProcessingViewProps): JSX.Element {
   return (
     <>
     <Card withBorder padding="md" radius="md">
@@ -96,4 +96,4 @@ export const DrawProcessingView = memo(function WorkViewComponent({
     </>
   );
 });
-DrawProcessingView.displayName = 'DrawProcessingView';
+CreateProcessingView.displayName = 'CreateProcessingView';

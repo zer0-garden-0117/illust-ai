@@ -3,12 +3,12 @@ import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useEffect } from "react";
 
-type UseDrawProcessingrops = {
+type UseCreateProcessingrops = {
   workId: string;
 };
 
-export const useDrawProcessing = (
-  { workId }: UseDrawProcessingrops
+export const useCreateProcessing = (
+  { workId }: UseCreateProcessingrops
 ) => {
   const { user, getIdTokenLatest } = useFirebaseAuthContext();
   const router = useRouter();
@@ -21,7 +21,7 @@ export const useDrawProcessing = (
   // statusが"creating"のときは定期的に更新
   useEffect(() => {
     if (!imageData) return;
-    if (imageData.status !== "creating") return;
+    if (imageData?.apiWork?.status !== "creating") return;
     let attempt = 0;
     let timeoutId: NodeJS.Timeout;
     const fetchWork = () => {
@@ -34,7 +34,7 @@ export const useDrawProcessing = (
 
     fetchWork();
     return () => clearTimeout(timeoutId);
-  }, [imageData?.status, updateWork]);
+  }, [imageData?.apiWork?.status, updateWork]);
 
   const handleLaterClick = () => {
     router.push(`/user/${user?.customUserId}`);

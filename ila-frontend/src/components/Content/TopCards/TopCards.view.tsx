@@ -5,19 +5,22 @@ import { Card, Center, Button, Space, SimpleGrid, Text, Group } from '@mantine/c
 import { PublicWorksGetResult } from '@/apis/openapi/works/usePublicWorksGet';
 import { ImageCard } from '../ImageCard/ImageCard';
 import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
+import { IconFilter, IconFilter2, IconFilter2Bolt, IconSparkles, IconUser, IconUserBolt, IconUserCheck, IconUserSearch } from '@tabler/icons-react';
 
 type TopCardsViewProps = {
   worksData: PublicWorksGetResult | undefined;
   illustNum: number;
   isSubmitting: boolean;
   handleMoreClick: () => void;
+  handleFollowClick: () => void;
 };
 
 export const TopCardsView = memo(function WorkViewComponent({
   worksData,
   illustNum,
   isSubmitting,
-  handleMoreClick
+  handleMoreClick,
+  handleFollowClick
 }: TopCardsViewProps): JSX.Element {
   console.log('isSubmitting:', isSubmitting);
   const loadedCount = worksData?.works?.length ?? 0;
@@ -33,9 +36,26 @@ export const TopCardsView = memo(function WorkViewComponent({
       <Card withBorder padding="md" radius="md">
         <Group justify="space-between">
           <Text fz="md" fw={700} mb="xs">
-            新着イラスト
+            新着
           </Text>
+          <Button
+            radius={"xl"}
+            variant="outline"
+            size="xs"
+            onClick={handleFollowClick}
+            disabled={isSubmitting} 
+            leftSection={
+            <IconFilter2
+              size={16}
+              style={{ display: 'block' }}
+            />
+          }
+          >
+            フォロー中のみ表示
+          </Button>
         </Group>
+        <Space h="xs" />
+
         {/* newの作品 */}
         <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4, xl: 4 }} spacing={{ base: 20 }}>
           {/* Skeleton */}
@@ -61,7 +81,7 @@ export const TopCardsView = memo(function WorkViewComponent({
               />
             ))}
         </SimpleGrid>
-        <Space h="md" />
+        <Space h="xs" />
 
         {/* もっとボタン */}
         {isMoreView && (

@@ -12,7 +12,7 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 import { useRouter } from 'next/navigation';
-import CreateHistory from '../CreateHistory/CreateHistory';
+import CreateHistory from '../UserWorksCards/UserWorksCards';
 
 type UserInfoViewProps = {
   page: number;

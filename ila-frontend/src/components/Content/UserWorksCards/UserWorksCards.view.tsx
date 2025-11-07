@@ -4,11 +4,11 @@ import React, { memo } from 'react';
 import { Card, Group, Pagination, SimpleGrid, Space, Text } from '@mantine/core';
 import { ImageCard } from '@/components/Content/ImageCard/ImageCard';
 import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
-import { UserWorksFilterTypeQueryParam } from './CreateHistory.hook';
+import { UserWorksFilterTypeQueryParam } from './UserWorksCards.hook';
 import { CreateCard } from '../CreateCard/CreateCard';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
-type CreateHistoryViewProps = {
+type UserWorkCardsViewProps = {
   page: number;
   customUserId: string;
   userWorksFilterType: UserWorksFilterTypeQueryParam;
@@ -16,13 +16,13 @@ type CreateHistoryViewProps = {
   handlePageChange: (page: number) => void;
 };
 
-export const CreateHistoryView = memo(function WorkViewComponent({
+export const UserWorkCardsView = memo(function WorkViewComponent({
   page,
   customUserId,
   userWorksFilterType,
   userWorksData,
   handlePageChange
-}: CreateHistoryViewProps): JSX.Element {
+}: UserWorkCardsViewProps): JSX.Element {
   const { user } = useFirebaseAuthContext();
 
   return (
@@ -58,4 +58,4 @@ export const CreateHistoryView = memo(function WorkViewComponent({
     </>
   );
 });
-CreateHistoryView.displayName = 'CreateHistoryView';
+UserWorkCardsView.displayName = 'UserWorkCardsView';

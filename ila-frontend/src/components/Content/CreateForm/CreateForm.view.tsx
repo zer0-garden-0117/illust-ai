@@ -51,7 +51,7 @@ export const CreateWorkView = memo(function WorkViewComponent({
           生成履歴
         </Button>
       </Group>
-      <Space h="md" />
+      <Space h="xs" />
 
       {/* あと何回生成できるか表示 */}
       <Notification

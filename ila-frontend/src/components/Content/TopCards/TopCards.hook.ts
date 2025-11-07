@@ -43,10 +43,15 @@ export const useTopCards = () => {
     setSize(size + 1);
   };
 
+  const handleFollowClick = () => {
+    // フォローロジックをここに実装
+  };
+
   return {
     worksData,
     illustNum,
     isSubmitting: isLoadingMore,
     handleMoreClick,
+    handleFollowClick,
   };
 };
