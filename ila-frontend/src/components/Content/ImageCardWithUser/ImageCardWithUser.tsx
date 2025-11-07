@@ -59,6 +59,7 @@ export const ImageCardWithUser = ({ data, index }: ImageCardWithUserProps) => {
           width={35}
           height={35}
           marginTop={0}
+          isClickable={!!data?.apiWork?.customUserId}
           onClick={() => router.push(`/user/${data?.apiWork?.customUserId}`)}
         />
         <Flex direction="column" justify="center" style={{ flex: 1, minWidth: 0 }}>

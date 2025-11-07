@@ -44,6 +44,7 @@ export const FollowListView = memo(function WorkViewComponent({
               width={40}
               height={40}
               marginTop={0}
+              isClickable={!!item.customUserId}
               onClick={() => handleUserCardClick(item.customUserId)}
             />
             <Flex direction="column" align="flex-start">
@@ -135,7 +136,8 @@ export const FollowListView = memo(function WorkViewComponent({
                       width={30}
                       height={30}
                       marginTop={20}
-                      onClick={() => handleUserCardClick(undefined)}
+                      isClickable={false}
+                      onClick={() => {}}
                     />
                     <div style={{ flex: 1 }}>
                       <Skeleton height={12} width="100" mt={12} />

@@ -40,12 +40,14 @@ export const UserIcon: React.FC = () => {
     <Box style={{ cursor: 'pointer' }}>
       {/* ログイン済の場合 */}
       {user && (
-        <Box onClick={onIconClick}>
+        <Box>
           <SkeltonIcon
             profileImageUrl={user?.profileImageUrl}
             width={avatarSize}
             height={avatarSize}
             marginTop={0}
+            isClickable={!!user?.customUserId}
+            onClick={onIconClick}
           />
         </Box>
        )}

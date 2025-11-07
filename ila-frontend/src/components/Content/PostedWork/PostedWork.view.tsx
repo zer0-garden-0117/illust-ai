@@ -146,6 +146,7 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                 width={40}
                 height={40}
                 marginTop={0}
+                isClickable={!!imageData?.apiWork?.customUserId}
                 onClick={() => handleUserClick(imageData?.apiWork?.customUserId)}
               />
               <Flex direction="column" align="flex-start">

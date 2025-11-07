@@ -93,6 +93,8 @@ export const UserInfoView = memo(function WorkViewComponent({
             height={70}
             marginTop={-30}
             isUserDataLoading={isUserDataLoading}
+            isClickable={false}
+            onClick={() => {}}
           />
           <div key="LoginButton">
             {isLoginUser &&
@@ -272,6 +274,8 @@ export const UserInfoView = memo(function WorkViewComponent({
                 width={70}
                 height={70}
                 marginTop={-30}
+                isClickable={false}
+                onClick={() => {}}
               />
               <Center
                 mt={-20}

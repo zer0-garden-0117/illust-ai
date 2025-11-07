@@ -8,9 +8,10 @@ export const SkeltonIcon: React.FC<
   height?: number
   marginTop?: number
   isUserDataLoading?: boolean
+  isClickable?: boolean
   onClick: () => void
 }
-> = ({ profileImageUrl, width, height, marginTop, isUserDataLoading = false, onClick }) => {
+> = ({ profileImageUrl, width, height, marginTop, isUserDataLoading = false, isClickable = true, onClick }) => {
   return (
     <div
       style={{
@@ -19,9 +20,10 @@ export const SkeltonIcon: React.FC<
         borderRadius: '50%',
         overflow: 'hidden',
         marginTop: marginTop,
-        cursor: 'pointer',
+        cursor: isClickable ? 'pointer' : 'default',
       }}
-      onClick={onClick}
+      // onClickはisClickableがtrueかつ!profileImageUrl || isUserDataLoadingがfalseの場合のみ有効化
+      onClick={isClickable ? onClick : undefined}
     >
       <Skeleton visible={!profileImageUrl || isUserDataLoading} height={height} width={width} radius="50%">
         <Image
