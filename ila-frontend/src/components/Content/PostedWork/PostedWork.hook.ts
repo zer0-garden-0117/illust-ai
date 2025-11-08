@@ -57,7 +57,7 @@ export const usePostedWork = (
   }
 
   const handleTagClick = (tag: string) => {
-    // router.push(`/illust/tag/${encodeURIComponent(tag)}`);
+    router.push(`/illust/tag/${encodeURIComponent(tag)}`);
   }
 
   return {

@@ -48,6 +48,9 @@ paths:
   /public/works:
     $ref: "./paths/works.yaml#/PublicWorks"
 
+  /public/works/tags/{tag}:
+    $ref: "./paths/works.yaml#/PublicWorksTags"
+
   /works:
     $ref: "./paths/works.yaml#/Works"
 
