@@ -1,13 +1,21 @@
 import '@mantine/core/styles.css';
 import { type ReactNode } from "react";
 import { MantineProvider } from '@mantine/core';
-import { Noto_Sans_JP } from 'next/font/google';
+import localFont from 'next/font/local';
 
-// Noto Sans JP をインポート
-
-const notoSansJP = Noto_Sans_JP({
-  weight: ['400', '700'],
-  subsets: ['latin'],
+const notoSansJP = localFont({
+  src: [
+    {
+      path: './fonts/NotoSansJP-Regular.woff',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/NotoSansJP-Bold.woff',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   display: 'swap',
 });
 
