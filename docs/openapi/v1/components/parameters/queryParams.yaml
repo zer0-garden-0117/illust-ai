@@ -32,7 +32,16 @@ UserWorksFilterTypeQueryParam:
   required: true
   schema:
     type: string
-    enum: [posted, liked, created, followUserPosted]
+    enum: [posted, liked, created]
+
+PublicWorksFilterTypeQueryParam:
+  name: worksFilterType
+  in: query
+  description: 作品のフィルターの種類
+  required: true
+  schema:
+    type: string
+    enum: [new, theme]
 
 WorksFilterTypeQueryParam:
   name: worksFilterType
@@ -41,4 +50,4 @@ WorksFilterTypeQueryParam:
   required: true
   schema:
     type: string
-    enum: [new, theme]
+    enum: [followUserPosted]

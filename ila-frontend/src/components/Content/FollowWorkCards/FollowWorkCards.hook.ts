@@ -1,18 +1,19 @@
-import { usePublicWorksGetInfinite } from "@/apis/openapi/works/usePublicWorksGetInfinite";
-import type { PublicWorksGetResult } from "@/apis/openapi/works/usePublicWorksGet";
+import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
+import { useWorksGetInfinite } from "@/apis/openapi/works/useWorksGetInfinite";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useRouter } from "next/navigation";
 
 const PAGE_SIZE = 4;
 
-export const useTopCards = () => {
+export const useFollowWorkCards = () => {
   const router = useRouter();
-  const worksFilterType = "new";
-
-  const { data, size, setSize, isValidating } = usePublicWorksGetInfinite(
+  const { getIdTokenLatest } = useFirebaseAuthContext();
+  const { data, size, setSize, isValidating } = useWorksGetInfinite(
     {
       initialOffset: 0,
       limit: PAGE_SIZE,
-      worksFilterType,
+      worksFilterType: 'followUserPosted',
+      getIdTokenLatest,
     },
     { revalidateOnFocus: false }
   );
@@ -22,8 +23,8 @@ export const useTopCards = () => {
     (page) => page.works ?? []
   ) : [];
 
-  // TopCardsView 向けに PublicWorksGetResult に戻す
-  const worksData: PublicWorksGetResult | undefined = data
+  // FollowWorkCardsView 向けに PublicWorksGetResult に戻す
+  const worksData: UsersWorksGetResult | undefined = data
     ? {
         ...data[data.length - 1],
         works: flatWorks,
@@ -45,8 +46,8 @@ export const useTopCards = () => {
     setSize(size + 1);
   };
 
-  const handleFollowClick = () => {
-    router.push('/follow');
+  const handleNewClick = () => {
+    router.push('/');
   };
 
   return {
@@ -54,6 +55,6 @@ export const useTopCards = () => {
     illustNum,
     isSubmitting: isLoadingMore,
     handleMoreClick,
-    handleFollowClick,
+    handleNewClick,
   };
 };

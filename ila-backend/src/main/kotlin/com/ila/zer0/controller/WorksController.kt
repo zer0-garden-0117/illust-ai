@@ -61,6 +61,28 @@ class WorksController(
         return ResponseEntity.ok(apiWorks)
     }
 
+    override fun getWorks(
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int,
+        @RequestParam(value = "worksFilterType", required = true) worksFilterType: String
+    ): ResponseEntity<ApiWorks> {
+        if (worksFilterType != "followUserPosted" && worksFilterType != "theme") {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+        // ユーザーを取得
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        val workResult = workManagerService.getFollowUserWorks(user.userId, offset, limit)
+        // APIモデルに変換
+        val apiWorksWithTags = mutableListOf<ApiWorkWithTag>()
+        workResult.works.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
+            apiWorksWithTags.add(apiWorkWithTag)
+        }
+        val apiWorks = ApiWorks(apiWorksWithTags, workResult.totalCount)
+        return ResponseEntity.ok(apiWorks)
+    }
 
     override fun createWorks(
         @RequestBody apiWork: ApiWork

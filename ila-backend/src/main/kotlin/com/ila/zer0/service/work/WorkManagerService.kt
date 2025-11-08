@@ -97,9 +97,6 @@ class WorkManagerService(
             "liked" -> {
                 return userManagerService.getUsersLiked(user.userId, offset, limit)
             }
-            "followUserPosted" -> {
-                return getFollowUserWorks(myUserId, offset, limit)
-            }
             else -> {
                 logger.info("不正なuserWorksFilterTypeが指定されました: $userWorksFilterType")
                 return null
@@ -202,6 +199,7 @@ class WorkManagerService(
         )
     }
 
+    @Transactional
     fun getFollowUserWorks(userId: String, offset: Int, limit: Int): WorksWithSearchResult {
         // フォロー一覧を取得
         val follows = followService.findByUserId(userId)
