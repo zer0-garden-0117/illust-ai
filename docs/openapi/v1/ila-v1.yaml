@@ -9,10 +9,16 @@ info:
 tags:
   - name: users
     description: ユーザーに関する事項
+  - name: myusers
+    description: 自分のユーザーに関する事項
+  - name: publicusers
+    description: 公開ユーザーに関する事項
   - name: works
     description: 作品に関する事項
   - name: myworks
     description: 自分の作品に関する事項
+  - name: publicworks
+    description: 公開作品に関する事項
 
 servers:
   - url: https://localhost:8080
@@ -21,13 +27,11 @@ servers:
     description: Local HTTP server
 
 paths:
-  # users
+  # myusers
   /me:
-    $ref: "./paths/users.yaml#/UsersMe"
+    $ref: "./paths/myusers.yaml#/UsersMe"
 
-  /public/users/{customUserId}:
-    $ref: "./paths/users.yaml#/PublicUsersById"
-
+  # users
   /users/{customUserId}:
     $ref: "./paths/users.yaml#/UsersById"
 
@@ -46,28 +50,33 @@ paths:
   /users/liked/{workId}:
     $ref: "./paths/users.yaml#/UsersLikedByWorkId"
 
-  # works
-  /public/works:
-    $ref: "./paths/works.yaml#/PublicWorks"
-  
-  /public/works/{workId}:
-    $ref: "./paths/works.yaml#/PublicWorksById"
+  # publicusers
+  /public/users/{customUserId}:
+    $ref: "./paths/publicusers.yaml#/PublicUsersById"
 
-  /public/works/tags/{tag}:
-    $ref: "./paths/works.yaml#/PublicWorksTags"
-
-  /works:
-    $ref: "./paths/works.yaml#/Works"
-  
-  /works/{workId}:
-    $ref: "./paths/works.yaml#/WorksById"
-  
   # myworks
   /myworks/create:
     $ref: "./paths/myworks.yaml#/MyWorksCreate"
 
   /myworks/{workId}:
     $ref: "./paths/myworks.yaml#/MyWorksById"
+
+  # works
+  /works:
+    $ref: "./paths/works.yaml#/Works"
+  
+  /works/{workId}:
+    $ref: "./paths/works.yaml#/WorksById"
+
+  # publicworks
+  /public/works:
+    $ref: "./paths/publicworks.yaml#/PublicWorks"
+  
+  /public/works/{workId}:
+    $ref: "./paths/publicworks.yaml#/PublicWorksById"
+
+  /public/works/tags/{tag}:
+    $ref: "./paths/publicworks.yaml#/PublicWorksTags"
 
   # billings
   /billings/create-checkout-session:

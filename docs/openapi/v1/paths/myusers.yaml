@@ -1,0 +1,89 @@
+UsersMe:
+  get:
+    operationId: getMyUser
+    tags:
+      - users
+    summary: 認証済のユーザーを取得する
+    description: |
+      認証済のユーザーを取得する
+    security:
+      - FirebaseAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+  patch:
+    operationId: patchMyUser
+    tags:
+      - users
+    summary: 認証済のユーザー情報を更新する
+    description: |
+      認証済のユーザー情報を更新する
+    security:
+      - FirebaseAuth: []
+    requestBody:
+      description: |-
+        ユーザー情報
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              coverImage:
+                type: string
+                format: binary
+                description: カバー画像
+              profileImage:
+                type: string
+                format: binary
+                description: ユーザーアイコン画像
+              customUserId:
+                type: string
+                description: カスタムのuserId
+                example: xxxxx
+              userName:
+                type: string
+                description: ユーザー名
+                example: xxxxx
+              userProfile:
+                type: string
+                description: ユーザーのプロフィール
+                example: xxxxx
+            required:
+              - coverImage
+              - profileImage
+              - customUserId
+              - userName
+              - userProfile
+            encoding:
+              coverImage:
+                contentType: image/png, image/jpeg
+              profileImage:
+                contentType: image/png, image/jpeg
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+  delete:
+    operationId: deleteMyUser
+    tags:
+      - users
+    summary: 認証済のユーザーを削除する
+    description: |
+      認証済のユーザーを削除する
+    security:
+      - FirebaseAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
