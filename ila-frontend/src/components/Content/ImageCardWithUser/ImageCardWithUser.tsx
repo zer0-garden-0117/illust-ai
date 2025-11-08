@@ -53,7 +53,7 @@ export const ImageCardWithUser = ({ data, index }: ImageCardWithUserProps) => {
 
       {/* アイコン */}
       <Card.Section>
-      <Flex gap={5} ml={10} mr={10} mb={10} mt={10} align="center">
+      <Flex gap={5} ml={10} mr={10} mb={10} mt={15} align="center">
         <SkeltonIcon
           profileImageUrl={data?.apiWork?.profileImageUrl}
           width={35}
