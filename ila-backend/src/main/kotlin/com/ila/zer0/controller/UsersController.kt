@@ -29,45 +29,6 @@ class UsersController(
 ) : UsersApi {
     val logger = LoggerFactory.getLogger(UsersController::class.java)
 
-    override fun getMyUser(): ResponseEntity<ApiUser> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val registeredUser = userManagerService.getUserById(userId)
-        // 登録済の場合
-        if (registeredUser != null) {
-            return ResponseEntity.ok(userMapper.toApiUser(registeredUser))
-        }
-        // 未登録の場合(初回ログイン時)
-        val userName =
-            getUserName() ?: "Your Name"
-        val newUser = userManagerService.registerUser(userId, userName)
-        return ResponseEntity.ok(userMapper.toApiUser(newUser))
-    }
-
-    override fun patchMyUser(
-        @RequestPart("coverImage", required = true) coverImage: MultipartFile,
-        @RequestPart("profileImage", required = true) profileImage: MultipartFile,
-        @RequestParam(value = "customUserId", required = true) customUserId: String,
-        @RequestParam(value = "userName", required = true) userName: String,
-        @RequestParam(value = "userProfile", required = true) userProfile: String
-    ): ResponseEntity<ApiUser> {
-        logger.info("patchMyUser")
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val user =
-            userManagerService.getUserById(userId) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
-        val updatedUser = userManagerService.updateUser(user, coverImage, profileImage, customUserId, userName, userProfile)
-        val updatedApiUser = userMapper.toApiUser(updatedUser)
-        return ResponseEntity.ok(updatedApiUser)
-    }
-
-    override fun deleteMyUser(): ResponseEntity<ApiUser> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        userManagerService.deleteUsers(userId)
-        return ResponseEntity.ok(ApiUser(userId,null))
-    }
-
     override fun getUsers(
         @PathVariable("customUserId") customUserId: String
     ): ResponseEntity<ApiUser> {
@@ -98,7 +59,7 @@ class UsersController(
         }
     }
 
-    override fun getUsersWorks(
+    override fun getUsersWorksByCustomIdAndFilter(
         @PathVariable("customUserId") customUserId: String,
         @RequestParam(value = "offset", required = true) offset: Int,
         @RequestParam(value = "limit", required = true) limit: Int,

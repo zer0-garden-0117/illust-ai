@@ -6,7 +6,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '../../configs/auth/config2';
 import { useFirebaseAuth } from '../../apis/auth/useFirebaseAuth';
-import { MyUserGetResult, useMyUserGet } from '@/apis/openapi/users/useMyUserGet';
+import { MyUserGetResult, useMyUserGet } from '@/apis/openapi/myusers/useMyUserGet';
 
 interface AuthResult {
   user: MyUserGetResult;

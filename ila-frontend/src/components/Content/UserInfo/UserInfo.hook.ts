@@ -2,10 +2,10 @@ import { use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
-import { useMyUserUpdate } from "@/apis/openapi/users/useMyUserUpdate";
+import { useMyUserUpdate } from "@/apis/openapi/myusers/useMyUserUpdate";
 import { useUserCheckAvailability } from "@/apis/openapi/users/useUserCheckAvailability";
 import { useUsersGet } from "@/apis/openapi/users/useUsersGet";
-import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
+import { MyUserGetResult } from '@/apis/openapi/myusers/useMyUserGet';
 
 type UseUserInfoProps = {
   userId: string;

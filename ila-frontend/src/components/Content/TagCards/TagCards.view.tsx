@@ -5,7 +5,7 @@ import { Card, Center, Button, Space, SimpleGrid, Text, Group } from '@mantine/c
 import { ImageCard } from '../ImageCard/ImageCard';
 import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
 import { IconFilter, IconFilter2, IconFilter2Bolt, IconSparkles, IconUser, IconUserBolt, IconUserCheck, IconUserSearch } from '@tabler/icons-react';
-import { PublicWorksTagsGetResult } from '@/apis/openapi/works/usePublicWorksTagsGetInfinite';
+import { PublicWorksTagsGetResult } from '@/apis/openapi/publicworks/usePublicWorksTagsGetInfinite';
 
 type TagCardsViewProps = {
   tag: string;

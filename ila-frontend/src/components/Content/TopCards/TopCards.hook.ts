@@ -1,4 +1,4 @@
-import { PublicWorksGetResult, usePublicWorksGetByFilterInfinite } from "@/apis/openapi/works/usePublicWorksGetByFilterInfinite";
+import { PublicWorksGetResult, usePublicWorksGetByFilterInfinite } from "@/apis/openapi/publicworks/usePublicWorksGetByFilterInfinite";
 import { useRouter } from "next/navigation";
 
 const PAGE_SIZE = 4;

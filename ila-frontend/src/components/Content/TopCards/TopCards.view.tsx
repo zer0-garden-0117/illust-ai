@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import { Card, Center, Button, Space, SimpleGrid, Text, Group } from '@mantine/core';
 import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
 import { IconFilter2 } from '@tabler/icons-react';
-import { PublicWorksGetResult } from '@/apis/openapi/works/usePublicWorksGetByFilterInfinite';
+import { PublicWorksGetResult } from '@/apis/openapi/publicworks/usePublicWorksGetByFilterInfinite';
 
 type TopCardsViewProps = {
   worksData: PublicWorksGetResult | undefined;

@@ -4,12 +4,12 @@ import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRConfiguration, SWRResponse } from 'swr';
 
 export type UsersWorksGetResult =
-  operations["getUsersWorks"]["responses"]["200"]["content"]["application/json"];
+  operations["getUsersWorksByCustomIdAndFilter"]["responses"]["200"]["content"]["application/json"];
 export type UsersWorks =
-  operations["getUsersWorks"]["responses"]["200"]["content"]["application/json"]["works"];
+  operations["getUsersWorksByCustomIdAndFilter"]["responses"]["200"]["content"]["application/json"]["works"];
 
-export type UsersWorksGetPath = operations["getUsersWorks"]["parameters"]["path"];
-export type UsersWorksGetQuery = operations["getUsersWorks"]["parameters"]["query"];
+export type UsersWorksGetPath = operations["getUsersWorksByCustomIdAndFilter"]["parameters"]["path"];
+export type UsersWorksGetQuery = operations["getUsersWorksByCustomIdAndFilter"]["parameters"]["query"];
 
 export type UsersWorksGetArgs = {
   customUserId: UsersWorksGetPath["customUserId"];

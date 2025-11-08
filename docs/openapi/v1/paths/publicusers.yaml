@@ -2,7 +2,7 @@ PublicUsersById:
   get:
     operationId: getPublicUsers
     tags:
-      - users
+      - publicusers
     summary: 指定したユーザーを取得する
     description: |
       指定したユーザーを取得する

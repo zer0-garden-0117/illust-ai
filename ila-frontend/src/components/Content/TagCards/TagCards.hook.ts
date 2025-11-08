@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { usePublicWorksTagsGetInfinite, PublicWorksTagsGetResult } from "@/apis/openapi/works/usePublicWorksTagsGetInfinite";
+import { usePublicWorksTagsGetInfinite, PublicWorksTagsGetResult } from "@/apis/openapi/publicworks/usePublicWorksTagsGetInfinite";
 
 const PAGE_SIZE = 4;
 

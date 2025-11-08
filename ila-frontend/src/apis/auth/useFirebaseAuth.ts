@@ -9,7 +9,7 @@ import {
   getAdditionalUserInfo
 } from 'firebase/auth';
 import { auth } from '../../configs/auth/config2'
-import { useMyUserGet, MyUserGetResult } from '../openapi/users/useMyUserGet';
+import { useMyUserGet, MyUserGetResult } from '../openapi/myusers/useMyUserGet';
 
 interface AuthResult {
   user: MyUserGetResult;

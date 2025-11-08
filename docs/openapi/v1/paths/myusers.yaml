@@ -2,7 +2,7 @@ UsersMe:
   get:
     operationId: getMyUser
     tags:
-      - users
+      - myusers
     summary: 認証済のユーザーを取得する
     description: |
       認証済のユーザーを取得する
@@ -18,7 +18,7 @@ UsersMe:
   patch:
     operationId: patchMyUser
     tags:
-      - users
+      - myusers
     summary: 認証済のユーザー情報を更新する
     description: |
       認証済のユーザー情報を更新する
@@ -74,7 +74,7 @@ UsersMe:
   delete:
     operationId: deleteMyUser
     tags:
-      - users
+      - myusers
     summary: 認証済のユーザーを削除する
     description: |
       認証済のユーザーを削除する

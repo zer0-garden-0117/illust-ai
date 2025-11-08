@@ -9,7 +9,7 @@ import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
 import { Skeleton, Image, Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { MyUserGetResult } from '@/apis/openapi/users/useMyUserGet';
+import { MyUserGetResult } from '@/apis/openapi/myusers/useMyUserGet';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 import { useRouter } from 'next/navigation';
 import CreateHistory from '../UserWorksCards/UserWorksCards';
