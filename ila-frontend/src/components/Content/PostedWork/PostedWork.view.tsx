@@ -16,6 +16,7 @@ type PostedWorkViewProps = {
   handleDeleteClick: (workId: string) => void;
   handleUserClick: (customUserId: string | undefined) => void;
   handleLikeClick: (workId: string) => void;
+  handleTagClick: (tag: string) => void;
 };
 
 export const PostedWorkView = memo(function PostedWorkViewComponent({
@@ -25,9 +26,37 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
   handleEditClick,
   handleDeleteClick,
   handleUserClick,
-  handleLikeClick
+  handleLikeClick,
+  handleTagClick
 }: PostedWorkViewProps): JSX.Element {
   const [opened, { open, close }] = useDisclosure(false);
+
+  const renderDescription = (description: string | undefined) => {
+    if (!description) return null;
+    const tokens = description.split(/(\s+)/);
+
+    return tokens.map((token, index) => {
+      if (/^\s+$/.test(token)) {
+        return token;
+      }
+      if (token.startsWith('#') && token.length > 1) {
+        const tag = token.slice(1);
+        return (
+          <Text
+            key={index}
+            span
+            c="blue"
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleTagClick(tag)}
+          >
+            {token}
+          </Text>
+        );
+      }
+      return <React.Fragment key={index}>{token}</React.Fragment>;
+    });
+  };
+
   return (
     <>
       <Card withBorder>
@@ -104,7 +133,7 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                 </Group>
                   {/* キャプションを表示 */}
                   <Text mt="sm" style={{ whiteSpace: 'pre-wrap' }}>
-                    {imageData?.apiWork?.description}
+                    {renderDescription(imageData?.apiWork?.description)}
                   </Text>
                   {/* 画像のいいね数 */}
                   <Space h="xs" />

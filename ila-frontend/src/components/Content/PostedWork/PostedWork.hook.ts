@@ -56,6 +56,10 @@ export const usePostedWork = (
     setIsSubmitting(false);
   }
 
+  const handleTagClick = (tag: string) => {
+    // router.push(`/illust/tag/${encodeURIComponent(tag)}`);
+  }
+
   return {
     workId,
     imageData,
@@ -63,6 +67,7 @@ export const usePostedWork = (
     handleEditClick,
     handleDeleteClick,
     handleUserClick,
-    handleLikeClick
+    handleLikeClick,
+    handleTagClick
   };
 };
