@@ -1,9 +1,9 @@
-import { useRouter } from "next/navigation";
-import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
-import { useMyWorksDeleteById } from "@/apis/openapi/myworks/useMyWorksDeleteById";
-import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
-import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "@mantine/form";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
+import { useMyWorksGetById } from "@/apis/openapi/myworks/useMyWorksGetById";
+import { useMyWorksDeleteById } from "@/apis/openapi/myworks/useMyWorksDeleteById";
 
 type UseDeleteFormProps = {
   workId: string;
@@ -21,7 +21,7 @@ export const useDeleteForm = (
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
-  const { data: imageData, error, mutate: updateWork } = useWorksGetById({
+  const { data: imageData, error, mutate: updateWork } = useMyWorksGetById({
     workId,
     getIdTokenLatest,
   }, { revalidateOnFocus: false });

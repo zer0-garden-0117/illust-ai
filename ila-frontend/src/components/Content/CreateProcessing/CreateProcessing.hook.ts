@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
-import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
+import { useMyWorksGetById } from "@/apis/openapi/myworks/useMyWorksGetById";
 import { useEffect } from "react";
 
 type UseCreateProcessingrops = {
@@ -13,7 +13,7 @@ export const useCreateProcessing = (
   const { user, getIdTokenLatest } = useFirebaseAuthContext();
   const router = useRouter();
 
-  const { data: imageData, error, mutate: updateWork } = useWorksGetById({
+  const { data: imageData, error, mutate: updateWork } = useMyWorksGetById({
     workId,
     getIdTokenLatest,
   }, { revalidateOnFocus: false });
