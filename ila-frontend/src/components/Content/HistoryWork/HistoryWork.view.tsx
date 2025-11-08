@@ -8,6 +8,7 @@ import { IconClock } from '@tabler/icons-react';
 import { ApiWorkWithTag } from '../ImageCard/ImageCard';
 import { useDisclosure } from '@mantine/hooks';
 import { WorkModal } from '../WorkModal/WorkModal';
+import { ForbiddenCard } from '../ForbiddenCard/ForbiddenCard';
 
 type HistoryWorkViewProps = {
   workId: string;
@@ -21,6 +22,11 @@ export const HistoryWorkView = memo(function HistoryWorkViewComponent({
   handlePostClick,
 }: HistoryWorkViewProps): JSX.Element {
   const [opened, { open, close }] = useDisclosure(false);
+
+  if (imageData && !imageData.apiWork?.isMine) {
+    return <ForbiddenCard alertText='イラストを生成したユーザー以外は表示できません。' />;
+  }
+
   return (
     <>
       <Card withBorder>
