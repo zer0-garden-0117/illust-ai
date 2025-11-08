@@ -90,6 +90,7 @@ export const TopCardsView = memo(function WorkViewComponent({
             variant="outline"
             onClick={handleMoreClick}
             loading={isSubmitting}
+            radius="xl"
           >
             もっと見る
           </Button>
