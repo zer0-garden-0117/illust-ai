@@ -37,6 +37,23 @@ class TagService(
         )
     }
 
+    fun findByTagsWithoutOffset(
+        tags: List<String>
+    ): TagsWithSearchResult {
+        val allTags = tags.flatMap { tagRepository.findByTag(it) }
+
+        // 重複削除 (workId を基準にする)
+        val uniqueTags = allTags.distinctBy { it.workId }
+
+        // updatedAt順にソート（降順）
+        val sortedTags = uniqueTags.sortedByDescending { it.updatedAt }
+
+        return TagsWithSearchResult(
+            tags = sortedTags,
+            totalCount = sortedTags.size
+        )
+    }
+
     fun findByWorkId(
         workId: String,
     ): List<Tag> {

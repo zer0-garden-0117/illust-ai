@@ -14,6 +14,7 @@ import com.ila.zer0.repository.WorkRepository
 import com.ila.zer0.service.SqsService
 import com.ila.zer0.service.UuidService
 import com.ila.zer0.service.tag.TagService
+import com.ila.zer0.service.user.FollowService
 import com.ila.zer0.service.user.LikedService
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.user.UserService
@@ -36,6 +37,7 @@ class WorkManagerService(
     private val userManagerService: UserManagerService,
     private val likedService: LikedService,
     private val userRepository: UserRepository,
+    private val followService: FollowService
 ) {
 
     private val logger = LoggerFactory.getLogger(WorkService::class.java)
@@ -81,7 +83,7 @@ class WorkManagerService(
     }
 
     @Transactional
-    fun getUsersWorksByCustomUserIdWithFilter(customUserId: String, offset: Int, limit: Int, userWorksFilterType: String): WorksWithSearchResult? {
+    fun getUsersWorksByCustomUserIdWithFilter(myUserId: String, customUserId: String, offset: Int, limit: Int, userWorksFilterType: String): WorksWithSearchResult? {
         val user = userService.findUserByCustomUserId(customUserId)
         if (user == null) {
             logger.info("user is null $customUserId")
@@ -94,6 +96,9 @@ class WorkManagerService(
             }
             "liked" -> {
                 return userManagerService.getUsersLiked(user.userId, offset, limit)
+            }
+            "followUserPosted" -> {
+                return getFollowUserWorks(myUserId, offset, limit)
             }
             else -> {
                 logger.info("不正なuserWorksFilterTypeが指定されました: $userWorksFilterType")
@@ -113,6 +118,40 @@ class WorkManagerService(
         // 各単語でタグ検索
         val workIds = mutableListOf<String>()
         val tagResult = tagService.findByTagsWithOffset(words, offset, limit)
+        tagResult.tags.forEach { tag ->
+            workIds.add(tag.workId)
+        }
+
+        // 作品情報取得
+        val works = workRepository.findByWorkIds(workIds)
+
+        // ユーザー情報取得
+        val userIds = works.map { it.userId }.toSet().toList()
+        val users = userRepository.findByUserIds(userIds)
+
+        // ユーザー情報を作品に紐付け
+        val userMap = users.associateBy { it.userId }
+        works.forEach { work ->
+            userMap[work.userId]?.let { user ->
+                work.userName = user.userName
+                work.customUserId = user.customUserId
+                work.profileImageUrl = user.profileImageUrl
+            }
+        }
+        return WorksWithSearchResult(works, tagResult.totalCount)
+    }
+
+    @Transactional
+    fun findWorksByTags(words: List<String>?): WorksWithSearchResult? {
+        // 空のリストやnullチェック
+        if (words.isNullOrEmpty()) {
+            logger.info("入力されたタグが空、もしくはnullです。")
+            return null
+        }
+
+        // 各単語でタグ検索
+        val workIds = mutableListOf<String>()
+        val tagResult = tagService.findByTagsWithoutOffset(words)
         tagResult.tags.forEach { tag ->
             workIds.add(tag.workId)
         }
@@ -161,5 +200,28 @@ class WorkManagerService(
             likesCount = likeds.size,
             isLiked = likeds.any { it.userId == userId }
         )
+    }
+
+    fun getFollowUserWorks(userId: String, offset: Int, limit: Int): WorksWithSearchResult {
+        // フォロー一覧を取得
+        val follows = followService.findByUserId(userId)
+        // followsからfollowUserIdの一覧を生成
+        val followUserIds = follows.map { it.followUserId }
+
+        // GLOBALでoffset,limitを指定せず取得
+        val worksWithSearchResult = findWorksByTags(listOf("GLOBAL"))
+
+        // worksの中から下記の条件で抽出
+        // works.userIdがfollowUserIdsのリストに含まれるものだけを抽出
+        val filterWork = worksWithSearchResult?.works?.filter { work ->
+            followUserIds.contains(work.userId)
+        }
+
+        // filterWorkからWorksWithSearchResultを生成
+        val result = WorksWithSearchResult(
+            works = filterWork ?: listOf(),
+            totalCount = filterWork?.size ?: 0
+        )
+        return result
     }
 }
