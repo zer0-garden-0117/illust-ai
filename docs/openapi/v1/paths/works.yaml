@@ -20,6 +20,26 @@ PublicWorks:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
+PublicWorksById:
+  get:
+    operationId: getPublicWorksById
+    tags:
+      - works
+    summary: IDを指定して作品情報を取得する
+    description: |
+      IDを指定して作品情報を取得する。
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/works.yaml#/WorksIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
 PublicWorksTags:
   get:
     operationId: getPublicWorksTags

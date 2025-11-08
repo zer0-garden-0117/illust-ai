@@ -1,9 +1,7 @@
 package com.ila.zer0.controller
 
 import com.ila.zer0.config.token.CustomAuthenticationToken
-import com.ila.zer0.dto.LikesCountAndIsLiked
 import com.ila.zer0.dto.WorkWithTag
-import com.ila.zer0.entity.Tag
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import com.ila.zer0.generated.endpoint.WorksApi
@@ -13,13 +11,9 @@ import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UsageService
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.work.WorkManagerService
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotNull
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -59,6 +53,33 @@ class WorksController(
         }
         val apiWorks = ApiWorks(apiWorksWithTags, workResult?.totalCount ?: 0)
         return ResponseEntity.ok(apiWorks)
+    }
+
+    override fun getPublicWorksById(
+        @PathVariable("workId") workId: String
+    ): ResponseEntity<ApiWorkWithTag> {
+        val workWithTag = workManagerService.findWorkById(workId = workId)
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        workWithTag.work.isMine = (user.userId == workWithTag.work.userId)
+
+        // statusがpostedでない場合はエラーを返す
+        if (workWithTag.work.status != "posted") {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        // 表示用のユーザー情報、いいね数を取得
+        val workUser = userManagerService.getUserByIdForWork(workWithTag.work.userId)
+            ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
+        workWithTag.work.userName = workUser.userName
+        workWithTag.work.customUserId = workUser.customUserId
+        workWithTag.work.profileImageUrl = workUser.profileImageUrl
+        val likesCountAndIsLiked = workManagerService.getLikesCountAndIsLikedByWorkId(workWithTag.work.workId, user.userId)
+        workWithTag.work.likes = likesCountAndIsLiked.likesCount
+        workWithTag.work.isLiked = likesCountAndIsLiked.isLiked
+
+        // APIモデルに変換して返却
+        val response = toApiWorkWithTag(workWithTag)
+        return ResponseEntity.ok(response)
     }
 
     override fun getPublicWorksTags(
@@ -153,21 +174,20 @@ class WorksController(
     override fun getWorksById(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWorkWithTag> {
-        val workWithTag = workManagerService.findWorkById(workId = workId)
-        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        workWithTag.work.isMine = (user.userId == workWithTag.work.userId)
+        // 認証ユーザーを取得
+        val user = getUser()
+            ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
-        // statusがpostedの場合、表示用のユーザー情報、いいね数を取得
-        if (workWithTag.work.status == "posted") {
-            val workUser = userManagerService.getUserByIdForWork(workWithTag.work.userId)
-                ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
-            workWithTag.work.userName = workUser.userName
-            workWithTag.work.customUserId = workUser.customUserId
-            workWithTag.work.profileImageUrl = workUser.profileImageUrl
-            val likesCountAndIsLiked = workManagerService.getLikesCountAndIsLikedByWorkId(workWithTag.work.workId, user.userId)
-            workWithTag.work.likes = likesCountAndIsLiked.likesCount
-            workWithTag.work.isLiked = likesCountAndIsLiked.isLiked
+        // 作品の取得
+        val workWithTag = workManagerService.findWorkById(workId = workId)
+
+        // 認証ユーザーの作品でない場合はエラーを返す
+        if (workWithTag.work.userId != user.userId) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
+        workWithTag.work.isMine = true
+
+        // APIモデルに変換して返却
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
     }
@@ -222,28 +242,6 @@ class WorksController(
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
     }
-
-    override fun searchWorksByTags(
-        @RequestBody(required = false) apiWorkSearchByTags: ApiWorkSearchByTags
-    ): ResponseEntity<ApiWorks> {
-        // 作品検索
-        val workResult = workManagerService.findWorksByTags(
-            apiWorkSearchByTags.tags,
-            apiWorkSearchByTags.offset,
-            apiWorkSearchByTags.limit
-        )
-
-        // APIモデルに変換
-        val apiWorksWithTags = mutableListOf<ApiWorkWithTag>()
-        workResult?.works?.forEach { work ->
-            val apiWork = workMapper.toApiWork(work)
-            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
-            apiWorksWithTags.add(apiWorkWithTag)
-        }
-        val apiWorks = ApiWorks(apiWorksWithTags, workResult?.totalCount ?: 0)
-        return ResponseEntity.ok(apiWorks)
-    }
-
 
     private fun toApiWorkWithTag(
         workWithTag: com.ila.zer0.dto.WorkWithTag
