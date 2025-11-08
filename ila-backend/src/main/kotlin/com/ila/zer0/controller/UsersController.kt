@@ -104,12 +104,8 @@ class UsersController(
         @RequestParam(value = "limit", required = true) limit: Int,
         @RequestParam(value = "userWorksFilterType", required = true) userWorksFilterType: String
     ): ResponseEntity<ApiWorks> {
-        // 認証ユーザーを取得
-        val myUserId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-
         val usersWorks = workManagerService.getUsersWorksByCustomUserIdWithFilter(
-            myUserId, customUserId, offset, limit, userWorksFilterType)
+            customUserId, offset, limit, userWorksFilterType)
             ?: return ResponseEntity.notFound().build()
 
         // APIモデルに変換

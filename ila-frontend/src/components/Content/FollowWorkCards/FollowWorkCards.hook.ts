@@ -1,5 +1,5 @@
 import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
-import { useWorksGetInfinite } from "@/apis/openapi/works/useWorksGetInfinite";
+import { useWorksGetByFilterInfinite } from "@/apis/openapi/works/useWorksGetByFilterInfinite";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +8,7 @@ const PAGE_SIZE = 4;
 export const useFollowWorkCards = () => {
   const router = useRouter();
   const { getIdTokenLatest } = useFirebaseAuthContext();
-  const { data, size, setSize, isValidating } = useWorksGetInfinite(
+  const { data, size, setSize, isValidating } = useWorksGetByFilterInfinite(
     {
       initialOffset: 0,
       limit: PAGE_SIZE,
@@ -23,7 +23,6 @@ export const useFollowWorkCards = () => {
     (page) => page.works ?? []
   ) : [];
 
-  // FollowWorkCardsView 向けに PublicWorksGetResult に戻す
   const worksData: UsersWorksGetResult | undefined = data
     ? {
         ...data[data.length - 1],

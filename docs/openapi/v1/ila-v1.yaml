@@ -11,6 +11,8 @@ tags:
     description: ユーザーに関する事項
   - name: works
     description: 作品に関する事項
+  - name: myworks
+    description: 自分の作品に関する事項
 
 servers:
   - url: https://localhost:8080
@@ -56,12 +58,16 @@ paths:
 
   /works:
     $ref: "./paths/works.yaml#/Works"
-
-  /works/create:
-    $ref: "./paths/works.yaml#/WorksCreate"
-
+  
   /works/{workId}:
     $ref: "./paths/works.yaml#/WorksById"
+  
+  # myworks
+  /myworks/create:
+    $ref: "./paths/myworks.yaml#/MyWorksCreate"
+
+  /myworks/{workId}:
+    $ref: "./paths/myworks.yaml#/MyWorksById"
 
   # billings
   /billings/create-checkout-session:

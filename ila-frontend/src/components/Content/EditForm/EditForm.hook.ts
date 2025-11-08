@@ -3,7 +3,7 @@ import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
-import { useWorksUpdate } from "@/apis/openapi/works/useWorksUpdate";
+import { useMyWorksUpdate } from "@/apis/openapi/myworks/useMyWorksUpdate";
 
 type UseEditFormProps = {
   workId: string;
@@ -17,7 +17,7 @@ export const useEditForm = (
   { workId }: UseEditFormProps
 ) => {
   const { user, getIdTokenLatest } = useFirebaseAuthContext();
-  const { trigger: triggerPost } = useWorksUpdate();
+  const { trigger: triggerPost } = useMyWorksUpdate();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPosted, setIsPosted] = useState(false);

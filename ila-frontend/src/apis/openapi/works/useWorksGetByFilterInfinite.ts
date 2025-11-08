@@ -6,12 +6,12 @@ import client from '../apiClient';
 import type { operations } from '../../../generated/services/ila-v1';
 
 export type WorksGetResult =
-  operations['getWorks']['responses']['200']['content']['application/json'];
+  operations['getWorksByFilter']['responses']['200']['content']['application/json'];
 export type Works =
-  operations['getWorks']['responses']['200']['content']['application/json']['works'];
+  operations['getWorksByFilter']['responses']['200']['content']['application/json']['works'];
 
-export type WorksGetPath = operations['getWorks']['parameters']['path'];
-export type WorksGetQuery = operations['getWorks']['parameters']['query'];
+export type WorksGetPath = operations['getWorksByFilter']['parameters']['path'];
+export type WorksGetQuery = operations['getWorksByFilter']['parameters']['query'];
 
 export type WorksGetInfiniteArgs = {
   initialOffset?: WorksGetQuery['offset'];
@@ -20,7 +20,7 @@ export type WorksGetInfiniteArgs = {
   getIdTokenLatest: () => Promise<string | null>;
 };
 
-export const useWorksGetInfinite = (
+export const useWorksGetByFilterInfinite = (
   args: WorksGetInfiniteArgs,
   options?: SWRInfiniteConfiguration<WorksGetResult, Error>
 ): SWRInfiniteResponse<WorksGetResult, Error> => {

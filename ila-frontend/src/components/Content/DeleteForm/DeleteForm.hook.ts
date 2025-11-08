@@ -1,9 +1,9 @@
 import { useRouter } from "next/navigation";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
+import { useMyWorksDeleteById } from "@/apis/openapi/myworks/useMyWorksDeleteById";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
-import { useWorksDeleteById } from "@/apis/openapi/works/useWorksDeleteById";
 
 type UseDeleteFormProps = {
   workId: string;
@@ -17,7 +17,7 @@ export const useDeleteForm = (
   { workId }: UseDeleteFormProps
 ) => {
   const { user, getIdTokenLatest } = useFirebaseAuthContext();
-  const { trigger: triggerDelete } = useWorksDeleteById();
+  const { trigger: triggerDelete } = useMyWorksDeleteById();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPosted, setIsPosted] = useState(false);

@@ -1,9 +1,9 @@
 import { useRouter } from "next/navigation";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
+import { useMyWorksUpdate } from "@/apis/openapi/myworks/useMyWorksUpdate";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
-import { useWorksUpdate } from "@/apis/openapi/works/useWorksUpdate";
 
 type UsePostFormProps = {
   workId: string;
@@ -17,7 +17,7 @@ export const usePostForm = (
   { workId }: UsePostFormProps
 ) => {
   const { user, getIdTokenLatest } = useFirebaseAuthContext();
-  const { trigger: triggerPost } = useWorksUpdate();
+  const { trigger: triggerPost } = useMyWorksUpdate();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPosted, setIsPosted] = useState(false);

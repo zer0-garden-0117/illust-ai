@@ -4,8 +4,8 @@ import type { AuthHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
-export type CreateWorkResult = operations["createWorks"]["responses"]["200"]["content"]["application/json"];
-export type CreateWorkRequestBody = operations["createWorks"]["requestBody"]["content"]["application/json"];
+export type CreateWorkResult = operations["createMyWorks"]["responses"]["200"]["content"]["application/json"];
+export type CreateWorkRequestBody = operations["createMyWorks"]["requestBody"]["content"]["application/json"];
 export type CreateWorkHeaders = AuthHeader;
 
 export type CreateWorkArgs = {
@@ -13,7 +13,7 @@ export type CreateWorkArgs = {
   body: CreateWorkRequestBody;
 };
 
-export const useWorksCreate = (
+export const useMyWorksCreate = (
   options?: SWRMutationConfiguration<
     CreateWorkResult,
     Error,
@@ -22,10 +22,10 @@ export const useWorksCreate = (
   >
 ): SWRMutationResponse<CreateWorkResult, Error, string, CreateWorkArgs> => {
   return useSWRMutation<CreateWorkResult, Error, string, CreateWorkArgs>(
-    `/works/create`,
+    `/myworks/create`,
     async (_, { arg: { headers, body } }): Promise<CreateWorkResult> => {
       const { data, error } = await client.POST(
-        `/works/create`,
+        `/myworks/create`,
         {
           headers: {
             Authorization: `${headers?.Authorization}`,

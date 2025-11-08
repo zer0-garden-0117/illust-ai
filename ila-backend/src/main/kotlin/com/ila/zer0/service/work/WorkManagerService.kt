@@ -83,7 +83,7 @@ class WorkManagerService(
     }
 
     @Transactional
-    fun getUsersWorksByCustomUserIdWithFilter(myUserId: String, customUserId: String, offset: Int, limit: Int, userWorksFilterType: String): WorksWithSearchResult? {
+    fun getUsersWorksByCustomUserIdWithFilter(customUserId: String, offset: Int, limit: Int, userWorksFilterType: String): WorksWithSearchResult? {
         val user = userService.findUserByCustomUserId(customUserId)
         if (user == null) {
             logger.info("user is null $customUserId")
@@ -197,6 +197,12 @@ class WorkManagerService(
             likesCount = likeds.size,
             isLiked = likeds.any { it.userId == userId }
         )
+    }
+
+    @Transactional
+    fun getLikes(workId: String): Int {
+        val likeds =  likedService.findByWorkId(workId)
+        return likeds.size
     }
 
     @Transactional

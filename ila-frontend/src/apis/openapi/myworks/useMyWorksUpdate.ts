@@ -7,10 +7,10 @@ import type { operations } from '../../../generated/services/ila-v1';
 import type { AuthHeader } from '../apiClient';
 
 export type WorksUpdateResult =
-  operations['updatedWorksById']['responses']['200']['content']['application/json'];
-export type WorksUpdatePath = operations['updatedWorksById']['parameters']['path'];
+  operations['updateMyWorksById']['responses']['200']['content']['application/json'];
+export type WorksUpdatePath = operations['updateMyWorksById']['parameters']['path'];
 export type WorksUpdateBody =
-  operations['updatedWorksById']['requestBody']['content']['application/json'];
+  operations['updateMyWorksById']['requestBody']['content']['application/json'];
 
 export type WorksUpdateArgs = {
   headers?: AuthHeader;
@@ -18,13 +18,13 @@ export type WorksUpdateArgs = {
   body: WorksUpdateBody;
 };
 
-export const useWorksUpdate = (
+export const useMyWorksUpdate = (
   options?: SWRMutationConfiguration<WorksUpdateResult, Error, string, WorksUpdateArgs>
 ): SWRMutationResponse<WorksUpdateResult, Error, string, WorksUpdateArgs> => {
   return useSWRMutation<WorksUpdateResult, Error, string, WorksUpdateArgs>(
-    'works/update',
+    'myworks/update',
     async (_key, { arg }): Promise<WorksUpdateResult> => {
-      const { data, error } = await client.PATCH('/works/{workId}', {
+      const { data, error } = await client.PATCH('/myworks/{workId}', {
         headers: arg?.headers
           ? { Authorization: `${arg.headers.Authorization}` }
           : undefined,

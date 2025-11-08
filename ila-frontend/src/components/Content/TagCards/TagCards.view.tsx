@@ -2,14 +2,14 @@
 
 import React, { memo } from 'react';
 import { Card, Center, Button, Space, SimpleGrid, Text, Group } from '@mantine/core';
-import { PublicWorksGetResult } from '@/apis/openapi/works/usePublicWorksGet';
 import { ImageCard } from '../ImageCard/ImageCard';
 import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
 import { IconFilter, IconFilter2, IconFilter2Bolt, IconSparkles, IconUser, IconUserBolt, IconUserCheck, IconUserSearch } from '@tabler/icons-react';
+import { PublicWorksTagsGetResult } from '@/apis/openapi/works/usePublicWorksTagsGetInfinite';
 
 type TagCardsViewProps = {
   tag: string;
-  worksData: PublicWorksGetResult | undefined;
+  worksData: PublicWorksTagsGetResult | undefined;
   illustNum: number;
   isSubmitting: boolean;
   handleMoreClick: () => void;

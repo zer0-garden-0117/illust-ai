@@ -2,7 +2,7 @@
 
 import React, { memo } from 'react';
 import { Card, Center, Button, Space, SimpleGrid, Text, Group } from '@mantine/core';
-import { PublicWorksGetResult } from '@/apis/openapi/works/usePublicWorksGet';
+import { PublicWorksGetResult } from '@/apis/openapi/works/usePublicWorksGetByFilterInfinite';
 import { ImageCard } from '../ImageCard/ImageCard';
 import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
 import { IconFilter, IconFilter2, IconFilter2Bolt, IconSparkles, IconUser, IconUserBolt, IconUserCheck, IconUserSearch } from '@tabler/icons-react';

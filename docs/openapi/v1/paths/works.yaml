@@ -1,13 +1,11 @@
 PublicWorks:
   get:
-    operationId: getPublicWorks
+    operationId: getPublicWorksByFilter
     tags:
       - works
     summary: 指定した条件で作品を取得する
     description: |
       指定した条件で作品を取得する
-    security:
-      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
       - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
@@ -28,8 +26,6 @@ PublicWorksById:
     summary: IDを指定して作品情報を取得する
     description: |
       IDを指定して作品情報を取得する。
-    security:
-      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:
@@ -48,8 +44,6 @@ PublicWorksTags:
     summary: 指定したタグで作品を取得する
     description: |
       指定したタグで作品を取得する
-    security:
-      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/TagsPathParam"
       - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
@@ -64,7 +58,7 @@ PublicWorksTags:
 
 Works:
   get:
-    operationId: getWorks
+    operationId: getWorksByFilter
     tags:
       - works
     summary: 指定した条件で作品を取得する
@@ -84,86 +78,16 @@ Works:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
-WorksCreate:
-  post:
-    operationId: createWorks
-    tags:
-      - works
-    summary: 作品を作成する
-    description: |
-      作成を作成する
-    security:
-      - FirebaseAuth: []
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/works.yaml#/ApiWork"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
 WorksById:
   get:
     operationId: getWorksById
     tags:
       - works
     summary: IDを指定して作品情報を取得する
+    security:
+      - FirebaseAuth: []
     description: |
       IDを指定して作品情報を取得する。
-    security:
-      - FirebaseAuth: []
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-  patch:
-    operationId: updatedWorksById
-    tags:
-      - works
-    summary: IDを指定して作品情報を更新する
-    description: |
-      IDを指定して作品情報を更新する。
-    security:
-      - FirebaseAuth: []
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
-    requestBody:
-      description: |-
-        ### User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/works.yaml#/ApiWork"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksIdResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-  delete:
-    operationId: deleteWorksById
-    tags:
-      - works
-    summary: 作品を削除する
-    description: |
-      作品を削除する
-    security:
-      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
     responses:

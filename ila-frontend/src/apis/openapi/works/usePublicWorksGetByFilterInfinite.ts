@@ -6,11 +6,11 @@ import client from '../apiClient';
 import type { operations } from '../../../generated/services/ila-v1';
 
 export type PublicWorksGetResult =
-  operations['getPublicWorks']['responses']['200']['content']['application/json'];
+  operations['getPublicWorksByFilter']['responses']['200']['content']['application/json'];
 export type PublicWorks =
-  operations['getPublicWorks']['responses']['200']['content']['application/json']['works'];
+  operations['getPublicWorksByFilter']['responses']['200']['content']['application/json']['works'];
 
-export type PublicWorksGetQuery = operations['getPublicWorks']['parameters']['query'];
+export type PublicWorksGetQuery = operations['getPublicWorksByFilter']['parameters']['query'];
 
 export type PublicWorksGetInfiniteArgs = {
   initialOffset?: PublicWorksGetQuery['offset'];
@@ -18,7 +18,7 @@ export type PublicWorksGetInfiniteArgs = {
   worksFilterType: PublicWorksGetQuery['worksFilterType'];
 };
 
-export const usePublicWorksGetInfinite = (
+export const usePublicWorksGetByFilterInfinite = (
   args: PublicWorksGetInfiniteArgs,
   options?: SWRInfiniteConfiguration<PublicWorksGetResult, Error>
 ): SWRInfiniteResponse<PublicWorksGetResult, Error> => {

@@ -1,4 +1,4 @@
-import { useWorksCreate } from "@/apis/openapi/works/useWorksCreate";
+import { useMyWorksCreate } from "@/apis/openapi/myworks/useMyWorksCreate";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ export type CreateWorkValues = {
 export const useCreateWork = () => {
   const { getIdTokenLatest ,getFreshIdToken } = useFirebaseAuthContext();
   const router = useRouter();
-  const { trigger: createWork } = useWorksCreate();
+  const { trigger: createWork } = useMyWorksCreate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CreateWorkValues>({
@@ -38,7 +38,7 @@ export const useCreateWork = () => {
     // トークンを更新してから遷移
     await getFreshIdToken();
     console.log('Created work:', response);
-    router.push(`/illust/processing/${response.workId}`);
+    router.push(`/illust/processing/${response?.apiWork?.workId}`);
   }
 
   const handleHistoryClick = () => {

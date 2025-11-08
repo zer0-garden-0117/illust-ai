@@ -1,6 +1,5 @@
-import type { PublicWorksGetResult } from "@/apis/openapi/works/usePublicWorksGet";
 import { useRouter } from "next/navigation";
-import { usePublicWorksTagsGetInfinite } from "@/apis/openapi/works/usePublicWorksTagsGetInfinite";
+import { usePublicWorksTagsGetInfinite, PublicWorksTagsGetResult } from "@/apis/openapi/works/usePublicWorksTagsGetInfinite";
 
 const PAGE_SIZE = 4;
 
@@ -27,8 +26,7 @@ export const useTagCards = (
     (page) => page.works ?? []
   ) : [];
 
-  // TagCardsView 向けに PublicWorksGetResult に戻す
-  const worksData: PublicWorksGetResult | undefined = data
+  const worksData: PublicWorksTagsGetResult | undefined = data
     ? {
         ...data[data.length - 1],
         works: flatWorks,

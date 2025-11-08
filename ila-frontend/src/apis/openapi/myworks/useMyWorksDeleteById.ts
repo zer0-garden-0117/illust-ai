@@ -4,8 +4,8 @@ import type { AuthHeader } from '../apiClient';
 import type { operations } from "../../../generated/services/ila-v1";
 import type { SWRMutationConfiguration, SWRMutationResponse } from 'swr/mutation';
 
-export type WorkDeleteByIdResult = operations["deleteWorksById"]["responses"]["200"]["content"]["application/json"];
-export type WorkDeleteByIdPath = operations["deleteWorksById"]["parameters"]["path"];
+export type WorkDeleteByIdResult = operations["deleteMyWorksById"]["responses"]["200"]["content"]["application/json"];
+export type WorkDeleteByIdPath = operations["deleteMyWorksById"]["parameters"]["path"];
 export type WorkDeleteByIdHeaders = AuthHeader;
 
 export type WorkDeleteByIdArgs = {
@@ -13,7 +13,7 @@ export type WorkDeleteByIdArgs = {
   headers?: WorkDeleteByIdHeaders;
 };
 
-export const useWorksDeleteById = (
+export const useMyWorksDeleteById = (
   options?: SWRMutationConfiguration<
     WorkDeleteByIdResult,
     Error,
@@ -22,10 +22,10 @@ export const useWorksDeleteById = (
   >
 ): SWRMutationResponse<WorkDeleteByIdResult, Error, string, WorkDeleteByIdArgs> => {
   return useSWRMutation<WorkDeleteByIdResult, Error, string, WorkDeleteByIdArgs>(
-    `/works/{workId}`,
+    `/myworks/{workId}`,
     async (_, { arg: { headers, workId } }): Promise<WorkDeleteByIdResult> => {
       const { data, error } = await client.DELETE(
-        `/works/{workId}`,
+        `/myworks/{workId}`,
         {
           headers: {
             Authorization: `${headers?.Authorization}`

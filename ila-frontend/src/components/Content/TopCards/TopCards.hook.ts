@@ -1,5 +1,4 @@
-import { usePublicWorksGetInfinite } from "@/apis/openapi/works/usePublicWorksGetInfinite";
-import type { PublicWorksGetResult } from "@/apis/openapi/works/usePublicWorksGet";
+import { PublicWorksGetResult, usePublicWorksGetByFilterInfinite } from "@/apis/openapi/works/usePublicWorksGetByFilterInfinite";
 import { useRouter } from "next/navigation";
 
 const PAGE_SIZE = 4;
@@ -8,7 +7,7 @@ export const useTopCards = () => {
   const router = useRouter();
   const worksFilterType = "new";
 
-  const { data, size, setSize, isValidating } = usePublicWorksGetInfinite(
+  const { data, size, setSize, isValidating } = usePublicWorksGetByFilterInfinite(
     {
       initialOffset: 0,
       limit: PAGE_SIZE,
@@ -22,7 +21,6 @@ export const useTopCards = () => {
     (page) => page.works ?? []
   ) : [];
 
-  // TopCardsView 向けに PublicWorksGetResult に戻す
   const worksData: PublicWorksGetResult | undefined = data
     ? {
         ...data[data.length - 1],
