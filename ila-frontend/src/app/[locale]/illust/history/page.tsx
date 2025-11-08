@@ -1,6 +1,6 @@
 'use client';
 
-import { CreateHistory } from "@/components/Content/UserWorksCards/UserWorksCards";
+import { UserWorkCards } from "@/components/Content/UserWorksCards/UserWorksCards";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
 const CreateHistoryPage: React.FC<{ searchParams: { page?: string } }> = (
@@ -11,7 +11,7 @@ const CreateHistoryPage: React.FC<{ searchParams: { page?: string } }> = (
 
   return (
     <>
-      <CreateHistory
+      <UserWorkCards
         customUserId={user?.customUserId || ''}
         page={page}
         userWorksFilterType="created"
