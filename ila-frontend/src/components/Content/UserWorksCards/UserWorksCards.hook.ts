@@ -28,7 +28,9 @@ export const useUserWorkCards = (
       limit: illustNum,
       userWorksFilterType,
       getIdTokenLatest,
-  });
+  },
+    { revalidateOnFocus: false }
+  );
   
   const handlePageChange = (page: number): void => {
     const params = new URLSearchParams(searchParams.toString());
