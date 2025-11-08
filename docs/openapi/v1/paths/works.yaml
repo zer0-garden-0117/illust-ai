@@ -108,30 +108,6 @@ WorksCreate:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
-WorksSearchByTags:
-  post:
-    operationId: searchWorksByTags
-    tags:
-      - works
-    summary: タグで作品を検索する
-    description: |
-      タグで作品を検索する
-    requestBody:
-      description: |-
-        ### User
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../components/schemas/works.yaml#/ApiWorkSearchByTags"
-    responses:
-      "200":
-        $ref: "../components/responses/works.yaml#/WorksSearchResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
 WorksById:
   get:
     operationId: getWorksById

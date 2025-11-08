@@ -63,9 +63,6 @@ paths:
   /works/{workId}:
     $ref: "./paths/works.yaml#/WorksById"
 
-  /public/works/searchByTags:
-    $ref: "./paths/works.yaml#/WorksSearchByTags"
-
   # billings
   /billings/create-checkout-session:
     $ref: "./paths/billings.yaml#/BillingsCreateCheckoutSession"
@@ -96,9 +93,6 @@ components:
     ApiWork:
       $ref: "./components/schemas/works.yaml#/ApiWork"
 
-    ApiWorkSearchByTags:
-      $ref: "./components/schemas/works.yaml#/ApiWorkSearchByTags"
-
     ApiTag:
       $ref: "./components/schemas/works.yaml#/ApiTag"
 
@@ -110,9 +104,6 @@ components:
     # works
     WorksRegisterResponse:
       $ref: "./components/responses/works.yaml#/WorksRegisterResponse"
-
-    WorksSearchResponse:
-      $ref: "./components/responses/works.yaml#/WorksSearchResponse"
 
     WorksIdResponse:
       $ref: "./components/responses/works.yaml#/WorksIdResponse"

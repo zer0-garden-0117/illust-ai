@@ -110,29 +110,6 @@ ApiWorkWithTag:
     apiTags:
         $ref: './works.yaml#/ApiTag'
 
-ApiWorkSearchByTags:
-  type: object
-  properties:
-    tags:
-      description: "タグ検索リスト"
-      type: array
-      items:
-        type: string
-      example:
-        - "CG"
-        - "真白"
-    offset:
-      description: "取得するデータの開始位置"
-      type: integer
-      example: 0
-    limit:
-      description: "取得するデータの最大件数"
-      type: integer
-      example: 10
-  required:
-    - offset
-    - limit
-
 ApiWorks:
   description: 作品リスト
   type: object

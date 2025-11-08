@@ -7,15 +7,6 @@ WorksRegisterResponse:
       schema:
         $ref: "../schemas/works.yaml#/ApiWorkWithTag"
 
-WorksSearchResponse:
-  description: |-
-    200 OK
-    - 正常終了
-  content:
-    application/json:
-      schema:
-        $ref: "../schemas/works.yaml#/ApiWorks"
-
 WorksIdResponse:
   description: |-
     200 OK
