@@ -7,7 +7,8 @@ import { ImageCard } from '../ImageCard/ImageCard';
 import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
 import { IconFilter, IconFilter2, IconFilter2Bolt, IconSparkles, IconUser, IconUserBolt, IconUserCheck, IconUserSearch } from '@tabler/icons-react';
 
-type TopCardsViewProps = {
+type TagCardsViewProps = {
+  tag: string;
   worksData: PublicWorksGetResult | undefined;
   illustNum: number;
   isSubmitting: boolean;
@@ -15,13 +16,14 @@ type TopCardsViewProps = {
   handleFollowClick: () => void;
 };
 
-export const TopCardsView = memo(function WorkViewComponent({
+export const TagCardsView = memo(function WorkViewComponent({
+  tag,
   worksData,
   illustNum,
   isSubmitting,
   handleMoreClick,
   handleFollowClick
-}: TopCardsViewProps): JSX.Element {
+}: TagCardsViewProps): JSX.Element {
   console.log('isSubmitting:', isSubmitting);
   const loadedCount = worksData?.works?.length ?? 0;
   const skeletonCount =
@@ -36,7 +38,7 @@ export const TopCardsView = memo(function WorkViewComponent({
       <Card withBorder padding="md" radius="md">
         <Group justify="space-between">
           <Text fz="md" fw={700} mb="xs">
-            新着
+            #{tag}
           </Text>
           <Button
             radius={"xl"}
@@ -45,13 +47,13 @@ export const TopCardsView = memo(function WorkViewComponent({
             onClick={handleFollowClick}
             disabled={isSubmitting} 
             leftSection={
-            <IconFilter2
+            <IconSparkles
               size={16}
               style={{ display: 'block' }}
             />
           }
           >
-            フォロー中のみ表示
+            新着
           </Button>
         </Group>
         <Space h="xs" />
@@ -101,4 +103,4 @@ export const TopCardsView = memo(function WorkViewComponent({
     </>
   );
 });
-TopCardsView.displayName = 'TopCardsView';
+TagCardsView.displayName = 'TagCardsView';

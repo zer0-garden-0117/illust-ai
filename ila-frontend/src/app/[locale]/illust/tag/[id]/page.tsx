@@ -1,6 +1,6 @@
 'use client';
 
-import PostedWork from "@/components/Content/PostedWork/PostedWork";
+import TagCards from "@/components/Content/TagCards/TagCards";
 
 const UserPage: React.FC<{ params: { id: string } }> = (
   { params }
@@ -9,7 +9,7 @@ const UserPage: React.FC<{ params: { id: string } }> = (
 
   return (
     <>
-      {/* <PostedWork tag={tag} /> */}
+      <TagCards tag={tag} />
     </>
   )
 };

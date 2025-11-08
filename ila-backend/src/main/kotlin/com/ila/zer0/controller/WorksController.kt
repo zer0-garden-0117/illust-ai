@@ -61,6 +61,25 @@ class WorksController(
         return ResponseEntity.ok(apiWorks)
     }
 
+    override fun getPublicWorksTags(
+        @PathVariable("tag") tag: String,
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int
+    ): ResponseEntity<ApiWorks> {
+        // 作品検索
+        val workResult = workManagerService.findWorksByTags(listOf(tag), offset, limit)
+
+        // APIモデルに変換
+        val apiWorksWithTags = mutableListOf<ApiWorkWithTag>()
+        workResult?.works?.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
+            apiWorksWithTags.add(apiWorkWithTag)
+        }
+        val apiWorks = ApiWorks(apiWorksWithTags, workResult?.totalCount ?: 0)
+        return ResponseEntity.ok(apiWorks)
+    }
+
     override fun getWorks(
         @RequestParam(value = "offset", required = true) offset: Int,
         @RequestParam(value = "limit", required = true) limit: Int,
