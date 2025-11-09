@@ -13,7 +13,7 @@ export type UsersGetArgs = {
 };
 
 export const useUsersGet = (
-  args: UsersGetArgs,
+  args: UsersGetArgs | undefined,
   options?: SWRConfiguration<UsersGetResult, Error>
 ): SWRResponse<UsersGetResult, Error> => {
   const { customUserId, getIdTokenLatest } = args ?? {};
@@ -21,17 +21,19 @@ export const useUsersGet = (
   return useSWR<UsersGetResult, Error>(
     customUserId ? ['/users', customUserId] : null,
     async ([, id]: [string, string]): Promise<UsersGetResult> => {
-      const token = await getIdTokenLatest();
-      if (!token) {
-        throw new Error('Failed to acquire latest ID token');
+
+      let headers: Record<string, string> | undefined = undefined;  
+      if (getIdTokenLatest) {
+        const token = await getIdTokenLatest();
+        if (token) {
+          headers = { Authorization: `Bearer ${token}` };
+        }
       }
 
       const { data, error } = await client.GET(
         `/users/{customUserId}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers,
           params: {
             path: {
               customUserId: id,

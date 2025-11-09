@@ -1,10 +1,11 @@
-import { use, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useMyUserUpdate } from "@/apis/openapi/myusers/useMyUserUpdate";
 import { useUserCheckAvailability } from "@/apis/openapi/users/useUserCheckAvailability";
 import { useUsersGet } from "@/apis/openapi/users/useUsersGet";
+import { usePublicUsersGet } from "@/apis/openapi/publicusers/usePublicUsersGet";
 import { MyUserGetResult } from '@/apis/openapi/myusers/useMyUserGet';
 
 type UseUserInfoProps = {
@@ -37,10 +38,33 @@ export const useUserInfo = (
   const [opened, setOpened] = useState(false);
   const [isUserDataLoading, setIsUserDataLoading] = useState(false);
 
-  const { data: userData, mutate: updateUser } = useUsersGet({
-    customUserId: userId,
-    getIdTokenLatest,
-  }, { revalidateOnFocus: true });
+  const {
+    data: privateUserData,
+    mutate: updatePrivateUser,
+  } = useUsersGet(
+    loginUser
+      ? {
+          customUserId: userId,
+          getIdTokenLatest,
+        }
+      : undefined,
+    { revalidateOnFocus: true }
+  );
+
+  const {
+    data: publicUserData,
+    mutate: updatePublicUser,
+  } = usePublicUsersGet(
+    !loginUser
+      ? {
+          customUserId: userId,
+        }
+      : undefined,
+    { revalidateOnFocus: true }
+  );
+
+  const userData = loginUser ? privateUserData : publicUserData;
+  const updateUser = loginUser ? updatePrivateUser : updatePublicUser;
 
   useEffect(() => {
     setIsLoginUser(!!(loginUser && userData?.customUserId === loginUser.customUserId));
