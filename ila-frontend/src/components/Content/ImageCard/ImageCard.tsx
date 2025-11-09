@@ -36,22 +36,20 @@ export const ImageCard = ({ data, index }: ImageCardProps) => {
           w="100%"
           radius="sm"
         >
-          <div>
-            <Image
-              src={data?.apiWork?.thumbnailImgUrl}
-              alt={data?.apiWork?.mainTitle || 'Image without title'}
-              style={{ width: '100%', height: '100%', opacity: imgLoaded ? 1 : 0, transition: 'opacity 200ms ease' }}
-              onLoad={() => setImgLoaded(true)}
-              onError={() => setImgLoaded(true)}
-              loading="lazy"
-            />
-          </div>
+          <Image
+            src={data?.apiWork?.thumbnailImgUrl}
+            alt={data?.apiWork?.mainTitle || 'Image without title'}
+            style={{ width: '100%', height: '100%', opacity: imgLoaded ? 1 : 0, transition: 'opacity 200ms ease' }}
+            onLoad={() => setImgLoaded(true)}
+            onError={() => setImgLoaded(true)}
+            loading="lazy"
+          />
         </Skeleton>
       </AspectRatio>
       </Card.Section>
 
       {/* タイトル */}
-      <Group style={{ width: '100%', overflow: 'hidden' }} mt={12}>
+      <Group style={{ width: '100%', overflow: 'hidden' }}>
         <Text
           mt={5}
           style={{
