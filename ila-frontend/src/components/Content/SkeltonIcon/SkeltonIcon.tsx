@@ -28,7 +28,7 @@ export const SkeltonIcon: React.FC<
       <Skeleton visible={!profileImageUrl || isUserDataLoading} height={height} width={width} radius="50%">
         <Image
           key={profileImageUrl}
-          src={profileImageUrl || '/default-profile.png'}
+          src={profileImageUrl}
           alt="profile"
           fit="cover"
         />
