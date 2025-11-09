@@ -25,13 +25,18 @@ class MyUsersController(
     val logger = LoggerFactory.getLogger(UsersController::class.java)
 
     override fun getMyUser(): ResponseEntity<ApiUser> {
+        // 認証ユーザー取得
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // ユーザー取得
         val registeredUser = userManagerService.getUserById(userId)
+
         // 登録済の場合
         if (registeredUser != null) {
             return ResponseEntity.ok(userMapper.toApiUser(registeredUser))
         }
+
         // 未登録の場合(初回ログイン時)
         val userName =
             getUserName() ?: "Your Name"
@@ -46,29 +51,42 @@ class MyUsersController(
         @RequestParam(value = "userName", required = true) userName: String,
         @RequestParam(value = "userProfile", required = true) userProfile: String
     ): ResponseEntity<ApiUser> {
-        logger.info("patchMyUser")
+        // 認証ユーザー取得
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // ユーザーを取得して更新
         val user =
             userManagerService.getUserById(userId) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
         val updatedUser = userManagerService.updateUser(user, coverImage, profileImage, customUserId, userName, userProfile)
+
+        // APIモデルに変換
         val updatedApiUser = userMapper.toApiUser(updatedUser)
         return ResponseEntity.ok(updatedApiUser)
     }
 
     override fun deleteMyUser(): ResponseEntity<ApiUser> {
+        // 認証ユーザー取得
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // ユーザー削除
         userManagerService.deleteUsers(userId)
+
         return ResponseEntity.ok(ApiUser(userId, null))
     }
 
     override fun followUsers(
         @PathVariable("userId") userId: String
     ): ResponseEntity<ApiUser> {
+        // 認証ユーザー取得
         val myUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // フォロー処理
         val user = userManagerService.followUser(myUserId, userId)
+
+        // APIモデルに変換
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
     }
@@ -76,27 +94,42 @@ class MyUsersController(
     override fun unfollowUsers(
         @PathVariable("userId") userId: String
     ): ResponseEntity<ApiUser> {
+        // 認証ユーザー取得
         val myUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // フォロー解除処理
         val user = userManagerService.unfollowUser(myUserId, userId)
+
+        // APIモデルに変換
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
     }
 
     // いいね付与
     override fun postUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
+        // 認証ユーザー取得
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // いいね登録処理
         val liked = userManagerService.registerUsersLiked(userId, workId)
+
+        // APIモデルに変換
         val apiLiked = userMapper.toApiLiked(liked)
         return ResponseEntity.ok(apiLiked)
     }
 
     // いいね削除
     override fun deleteUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
+        // 認証ユーザー取得
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // いいね削除処理
         val liked = userManagerService.deleteUsersLiked(userId, workId)
+
+        // APIモデルに変換
         val apiLiked = userMapper.toApiLiked(liked)
         return ResponseEntity.ok(apiLiked)
     }

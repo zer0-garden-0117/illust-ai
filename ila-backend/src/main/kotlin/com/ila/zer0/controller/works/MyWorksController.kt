@@ -34,13 +34,14 @@ class MyWorksController(
     override fun createMyWorks(
         @RequestBody apiWork: ApiWork
     ): ResponseEntity<ApiWorkWithTag> {
+        // 認証ユーザーを取得
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
         // バリデーション
         if (apiWork.prompt.isNullOrEmpty() || apiWork.model.isNullOrEmpty()) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        // ユーザーを取得
-        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         // 生成可能数をチェック
         if (usageService.getRemainingToday(user.userId, defaultLimit = user.illustNumLimit) <= 0) {
             return ResponseEntity(HttpStatus.PAYMENT_REQUIRED)
@@ -103,6 +104,9 @@ class MyWorksController(
         @PathVariable("workId") workId: String,
         @Valid @RequestBody apiWork: ApiWork
     ): ResponseEntity<ApiWorkWithTag> {
+        // 認証ユーザーを取得
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
         // バリデーション
         if (apiWork.description.isNullOrEmpty()) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
@@ -110,13 +114,13 @@ class MyWorksController(
 
         // 作品の取得
         val workWithTag = workManagerService.findWorkById(workId = workId)
-        // 認証ユーザーの作品か確認
-        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // 認証ユーザーの作品でない場合はエラーを返す
         if (workWithTag.work.userId != user.userId) {
             return ResponseEntity(HttpStatus.FORBIDDEN)
         }
 
-        // 説明文を更新
+        // 説明文を設定
         workWithTag.work.description = apiWork.description!!
         // ステータスがposted以外の場合はpostedに更新し、postedAtを設定
         var isFirstUpdate = false
@@ -126,16 +130,21 @@ class MyWorksController(
             isFirstUpdate = true
         }
         workManagerService.updateWork(workWithTag.work, isFirstUpdate)
+
+        // APIモデルに変換して返却
         return ResponseEntity.ok(toApiWorkWithTag(workWithTag))
     }
 
     override fun deleteMyWorksById(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWorkWithTag> {
+        // 認証ユーザーを取得
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
         // 作品の取得
         val workWithTag = workManagerService.findWorkById(workId = workId)
-        // 認証ユーザーの作品か確認
-        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // 認証ユーザーの作品でない場合はエラーを返す
         if (workWithTag.work.userId != user.userId) {
             return ResponseEntity(HttpStatus.FORBIDDEN)
         }
@@ -145,7 +154,7 @@ class MyWorksController(
         // ユーザーの情報からも削除
         userManagerService.deleteWorkId(workId)
 
-        // DomainのモデルをApiのモデルに変換
+        // APIモデルに変換
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
     }

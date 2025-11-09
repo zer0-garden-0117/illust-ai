@@ -3,7 +3,6 @@ package com.ila.zer0.controller.users
 import com.ila.zer0.config.token.CustomAuthenticationToken
 import com.ila.zer0.generated.endpoint.UsersApi
 import com.ila.zer0.generated.model.ApiFollowUsers
-import com.ila.zer0.generated.model.ApiLiked
 import com.ila.zer0.generated.model.ApiUser
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.service.user.UserManagerService
@@ -69,7 +68,10 @@ class UsersController(
     override fun checkUserAvailability(
         @PathVariable("customUserId") customUserId: String
     ): ResponseEntity<Unit> {
-        logger.info("checkUserAvailability")
+        // 認証ユーザーを取得
+        getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // ユーザーの存在確認
         return if (userManagerService.findUserByCustomUserId(customUserId) == null) {
             // 存在しない場合
             ResponseEntity.ok()

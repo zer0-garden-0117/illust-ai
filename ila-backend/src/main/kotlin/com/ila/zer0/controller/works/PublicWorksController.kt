@@ -31,10 +31,12 @@ class PublicWorksController(
         @RequestParam(value = "limit", required = true) limit: Int,
         @RequestParam(value = "publicWorksFilterType", required = true) publicWorksFilterType: String
     ): ResponseEntity<ApiWorks> {
+        // バリデーション
         if (publicWorksFilterType != "new" && publicWorksFilterType != "theme") {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
+        // 作品検索
         val workResult = if (publicWorksFilterType == "new") {
             workManagerService.findWorksByTags(listOf("GLOBAL"), offset, limit)
         } else {
@@ -55,6 +57,7 @@ class PublicWorksController(
     override fun getPublicWorksById(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWorkWithTag> {
+        // 作品を取得
         val workWithTag = workManagerService.findWorkById(workId = workId)
 
         // statusがpostedでない場合はエラーを返す
@@ -69,6 +72,7 @@ class PublicWorksController(
         workWithTag.work.customUserId = workUser.customUserId
         workWithTag.work.profileImageUrl = workUser.profileImageUrl
         workWithTag.work.likes = workManagerService.getLikes(workWithTag.work.workId)
+
         // APIモデルに変換して返却
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
