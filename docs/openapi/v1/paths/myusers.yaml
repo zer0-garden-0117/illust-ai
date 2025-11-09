@@ -87,3 +87,81 @@ UsersMe:
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+UsersFollow:
+  post:
+    operationId: followUsers
+    tags:
+      - myusers
+    summary: 指定したユーザーをフォローする
+    description: |
+      指定したユーザーをフォローする
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/UsersIdPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+  delete:
+    operationId: unfollowUsers
+    tags:
+      - myusers
+    summary: 指定したユーザーをアンフォローする
+    description: |
+      指定したユーザーをアンフォローする
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/UsersIdPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+UsersLikedByWorkId:
+  post:
+    operationId: postUsersLikedByWorkdId
+    tags:
+      - myusers
+    summary: 指定した作品にいいねを付与する
+    description: |
+      指定した作品にいいねを付与する
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersLikedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+  delete:
+    operationId: deleteUsersLikedByWorkdId
+    tags:
+      - myusers
+    summary: 指定した作品のいいねを削除する
+    description: |
+      指定した作品のいいねを削除する
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/WorksIdPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersLikedByWorkIdResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"

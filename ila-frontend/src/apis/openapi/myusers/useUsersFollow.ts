@@ -15,9 +15,9 @@ export const useUsersFollow = (
   options?: SWRMutationConfiguration<UsersFollowResult, Error, string, UsersFollowArgs>
 ): SWRMutationResponse<UsersFollowResult, Error, string, UsersFollowArgs> => {
   return useSWRMutation<UsersFollowResult, Error, string, UsersFollowArgs>(
-    'users/follow',
+    'myusers/follow',
     async (_key, { arg }): Promise<UsersFollowResult> => {
-      const { data, error } = await client.POST('/users/follow/{userId}', {
+      const { data, error } = await client.POST('/myusers/follow/{userId}', {
         headers: {
           Authorization: `${arg?.headers?.Authorization}`,
         },

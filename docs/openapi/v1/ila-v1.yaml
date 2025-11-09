@@ -31,6 +31,12 @@ paths:
   /me:
     $ref: "./paths/myusers.yaml#/UsersMe"
 
+  /myusers/follow/{userId}:
+    $ref: "./paths/myusers.yaml#/UsersFollow"
+
+  /myusers/liked/{workId}:
+    $ref: "./paths/myusers.yaml#/UsersLikedByWorkId"
+
   # users
   /users/{customUserId}:
     $ref: "./paths/users.yaml#/UsersById"
@@ -40,12 +46,6 @@ paths:
 
   /users/follower/{customUserId}:
     $ref: "./paths/users.yaml#/UsersFollowerById"
-
-  /users/follow/{userId}:
-    $ref: "./paths/users.yaml#/UsersFollow"
-
-  /users/liked/{workId}:
-    $ref: "./paths/users.yaml#/UsersLikedByWorkId"
 
   # publicusers
   /public/users/{customUserId}:

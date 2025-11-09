@@ -15,9 +15,9 @@ export const useUsersUnfollow = (
   options?: SWRMutationConfiguration<UsersUnfollowResult, Error, string, UsersUnfollowArgs>
 ): SWRMutationResponse<UsersUnfollowResult, Error, string, UsersUnfollowArgs> => {
   return useSWRMutation<UsersUnfollowResult, Error, string, UsersUnfollowArgs>(
-    'users/unfollow',
+    'myusers/unfollow',
     async (_key, { arg }): Promise<UsersUnfollowResult> => {
-      const { data, error } = await client.DELETE('/users/follow/{userId}', {
+      const { data, error } = await client.DELETE('/myusers/follow/{userId}', {
         headers: {
           Authorization: `${arg?.headers?.Authorization}`,
         },

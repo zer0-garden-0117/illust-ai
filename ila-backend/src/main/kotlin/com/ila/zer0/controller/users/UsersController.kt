@@ -36,44 +36,6 @@ class UsersController(
         return ResponseEntity.ok(apiUser)
     }
 
-    @CrossOrigin(exposedHeaders = ["X-User-Available"])
-    override fun checkUserAvailability(
-        @PathVariable("customUserId") customUserId: String
-    ): ResponseEntity<Unit> {
-        logger.info("checkUserAvailability")
-        return if (userManagerService.findUserByCustomUserId(customUserId) == null) {
-            // 存在しない場合
-            ResponseEntity.ok()
-                .header("X-User-Available", "true")
-                .build()
-        } else {
-            // 存在する場合
-            ResponseEntity.ok()
-                .header("X-User-Available", "false")
-                .build()
-        }
-    }
-
-    override fun followUsers(
-        @PathVariable("userId") userId: String
-    ): ResponseEntity<ApiUser> {
-        val myUserId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val user = userManagerService.followUser(myUserId, userId)
-        val apiUser = userMapper.toApiUser(user)
-        return ResponseEntity.ok(apiUser)
-    }
-
-    override fun unfollowUsers(
-        @PathVariable("userId") userId: String
-    ): ResponseEntity<ApiUser> {
-        val myUserId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val user = userManagerService.unfollowUser(myUserId, userId)
-        val apiUser = userMapper.toApiUser(user)
-        return ResponseEntity.ok(apiUser)
-    }
-
     override fun getFollowUsers(
         @PathVariable("customUserId") customUserId: String,
         @RequestParam(value = "offset", required = true) offset: Int,
@@ -106,22 +68,22 @@ class UsersController(
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    // いいね付与
-    override fun postUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val liked = userManagerService.registerUsersLiked(userId, workId)
-        val apiLiked = userMapper.toApiLiked(liked)
-        return ResponseEntity.ok(apiLiked)
-    }
-
-    // いいね削除
-    override fun deleteUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
-        val userId =
-            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        val liked = userManagerService.deleteUsersLiked(userId, workId)
-        val apiLiked = userMapper.toApiLiked(liked)
-        return ResponseEntity.ok(apiLiked)
+    @CrossOrigin(exposedHeaders = ["X-User-Available"])
+    override fun checkUserAvailability(
+        @PathVariable("customUserId") customUserId: String
+    ): ResponseEntity<Unit> {
+        logger.info("checkUserAvailability")
+        return if (userManagerService.findUserByCustomUserId(customUserId) == null) {
+            // 存在しない場合
+            ResponseEntity.ok()
+                .header("X-User-Available", "true")
+                .build()
+        } else {
+            // 存在する場合
+            ResponseEntity.ok()
+                .header("X-User-Available", "false")
+                .build()
+        }
     }
 
     private fun getUserId(): String? {
@@ -129,12 +91,5 @@ class UsersController(
             SecurityContextHolder.getContext().authentication
         val customAuth = authentication as? CustomAuthenticationToken
         return customAuth?.userId
-    }
-
-    private fun getUserName(): String? {
-        val authentication: Authentication? =
-            SecurityContextHolder.getContext().authentication
-        val customAuth = authentication as? CustomAuthenticationToken
-        return customAuth?.userName
     }
 }

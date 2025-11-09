@@ -21,10 +21,10 @@ export const useUsersLikedRegister = (
   >
 ): SWRMutationResponse<RegisterLikedResult, Error, string, RegisterLikedArgs> => {
   return useSWRMutation<RegisterLikedResult, Error, string, RegisterLikedArgs>(
-    `/users/liked/{workId}`,
+    `/myusers/liked/{workId}`,
     async (url, { arg: { workId, headers } }): Promise<RegisterLikedResult> => {
       const { data, error } = await client.POST(
-        `/users/liked/{workId}`,
+        `/myusers/liked/{workId}`,
         {
           headers: {
             Authorization: `${headers?.Authorization}`

@@ -21,10 +21,10 @@ export const useUsersLikedDelete = (
   >
 ): SWRMutationResponse<DeleteLikedResult, Error, string, DeleteLikedArgs> => {
   return useSWRMutation<DeleteLikedResult, Error, string, DeleteLikedArgs>(
-    `/users/liked/{workId}`,
+    `/myusers/liked/{workId}`,
     async (url, { arg: { workId, headers } }): Promise<DeleteLikedResult> => {
       const { data, error } = await client.DELETE(
-        `/users/liked/{workId}`,
+        `/myusers/liked/{workId}`,
         {
           headers: {
             Authorization: `${headers?.Authorization}`

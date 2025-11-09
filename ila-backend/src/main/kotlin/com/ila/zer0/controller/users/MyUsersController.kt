@@ -2,6 +2,7 @@ package com.ila.zer0.controller.users
 
 import com.ila.zer0.config.token.CustomAuthenticationToken
 import com.ila.zer0.generated.endpoint.MyusersApi
+import com.ila.zer0.generated.model.ApiLiked
 import com.ila.zer0.generated.model.ApiUser
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.service.user.UserManagerService
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
@@ -59,6 +61,44 @@ class MyUsersController(
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         userManagerService.deleteUsers(userId)
         return ResponseEntity.ok(ApiUser(userId, null))
+    }
+
+    override fun followUsers(
+        @PathVariable("userId") userId: String
+    ): ResponseEntity<ApiUser> {
+        val myUserId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val user = userManagerService.followUser(myUserId, userId)
+        val apiUser = userMapper.toApiUser(user)
+        return ResponseEntity.ok(apiUser)
+    }
+
+    override fun unfollowUsers(
+        @PathVariable("userId") userId: String
+    ): ResponseEntity<ApiUser> {
+        val myUserId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val user = userManagerService.unfollowUser(myUserId, userId)
+        val apiUser = userMapper.toApiUser(user)
+        return ResponseEntity.ok(apiUser)
+    }
+
+    // いいね付与
+    override fun postUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val liked = userManagerService.registerUsersLiked(userId, workId)
+        val apiLiked = userMapper.toApiLiked(liked)
+        return ResponseEntity.ok(apiLiked)
+    }
+
+    // いいね削除
+    override fun deleteUsersLikedByWorkdId(workId: String): ResponseEntity<ApiLiked> {
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val liked = userManagerService.deleteUsersLiked(userId, workId)
+        val apiLiked = userMapper.toApiLiked(liked)
+        return ResponseEntity.ok(apiLiked)
     }
 
     private fun getUserId(): String? {

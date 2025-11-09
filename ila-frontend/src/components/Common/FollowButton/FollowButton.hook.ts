@@ -1,5 +1,5 @@
-import { useUsersFollow } from "@/apis/openapi/users/useUsersFollow";
-import { useUsersUnfollow } from "@/apis/openapi/users/useUsersUnfollow";
+import { useUsersFollow } from "@/apis/openapi/myusers/useUsersFollow";
+import { useUsersUnfollow } from "@/apis/openapi/myusers/useUsersUnfollow";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
 type FollowButtonProps = {
