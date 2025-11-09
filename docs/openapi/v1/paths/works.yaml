@@ -48,6 +48,8 @@ WorksUsers:
     summary: 指定したユーザーと条件で作品を取得する
     description: |
       指定したユーザーと条件で作品を取得する
+    security:
+      - FirebaseAuth: []
     parameters:
       - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
       - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"

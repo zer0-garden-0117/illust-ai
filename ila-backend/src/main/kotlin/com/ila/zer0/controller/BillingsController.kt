@@ -20,10 +20,15 @@ class BillingsController(
     override fun createCheckoutSession(
         @RequestBody apiBilling: ApiBilling
     ): ResponseEntity<ApiBilling> {
+        // 認証ユーザーを取得
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // チェックアウトセッションURLを作成
         val user = userManagerService.getUserById(userId)
         val url = stripeService.createCheckoutSessionUrl(userId, user?.userName, apiBilling.product, apiBilling.productType)
+
+        // レスポンスを作成
         val response = ApiBilling().apply {
             this.product = apiBilling.product
             this.checkoutSessionUrl = url
@@ -34,10 +39,15 @@ class BillingsController(
     override fun createPortalSession(
         @RequestBody apiBilling: ApiBilling
     ): ResponseEntity<ApiBilling> {
+        // 認証ユーザーを取得
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // ポータルセッションURLを作成
         val user = userManagerService.getUserById(userId)
         val url = stripeService.createPortalSessionUrl(userId, user?.userName)
+
+        // レスポンスを作成
         val response = ApiBilling().apply {
             this.portalSessionUrl = url
         }
