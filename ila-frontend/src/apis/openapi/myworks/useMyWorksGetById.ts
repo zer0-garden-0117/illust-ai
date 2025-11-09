@@ -17,7 +17,6 @@ export const useMyWorksGetById = (
   args: WorksGetByIdArgs | undefined,
   options?: SWRConfiguration<WorksGetByIdResult, Error>
 ): SWRResponse<WorksGetByIdResult, Error> => {
-  console.log('useMyWorksGetById called with', args);
   const { workId, getIdTokenLatest } = args ?? {};
 
   return useSWR<WorksGetByIdResult, Error>(

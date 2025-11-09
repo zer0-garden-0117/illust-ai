@@ -22,14 +22,11 @@ export const FollowWorkCardsView = memo(function WorkViewComponent({
   handleMoreClick,
   handleNewClick
 }: FollowWorkCardsViewProps): JSX.Element {
-  console.log('isSubmitting:', isSubmitting);
   const loadedCount = worksData?.works?.length ?? 0;
   const skeletonCount =
     worksData && illustNum > loadedCount ? illustNum - loadedCount : 0;
   const isMoreView =
     worksData && worksData.totalWorksCount && (worksData.totalWorksCount >= (worksData.works?.length ?? 0) + 1);
-  console.log('totalWorksCount:', worksData?.totalWorksCount);
-  console.log('worksData.works?.length:', worksData?.works?.length);
 
   return (
     <>

@@ -17,7 +17,6 @@ export const usePublicWorksById = (
   args: PublicWorksGetByIdArgs | undefined,
   options?: SWRConfiguration<PublicWorksGetByIdResult, Error>
 ): SWRResponse<PublicWorksGetByIdResult, Error> => {
-  console.log('usePublicWorksById called with', args);
   const { workId } = args ?? {};
 
   return useSWR<PublicWorksGetByIdResult, Error>(

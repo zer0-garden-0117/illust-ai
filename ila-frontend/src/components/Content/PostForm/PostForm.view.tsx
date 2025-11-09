@@ -26,8 +26,6 @@ export const PostFormView = memo(function WorkViewComponent({
   handlePostClick,
   handleConfirmClick
 }: PostFormViewProps): JSX.Element {
-  console.log('isSubmitting:', isSubmitting);
-  console.log('isPosted:', isPosted);
   return (
     <>
       <Card withBorder>

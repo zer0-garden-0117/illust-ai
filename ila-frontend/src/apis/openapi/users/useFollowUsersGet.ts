@@ -21,7 +21,6 @@ export const useFollowUsersGet = (
   args: FollowUsersGetArgs | undefined,
   options?: SWRConfiguration<FollowUsersGetResult, Error>
 ): SWRResponse<FollowUsersGetResult, Error> => {
-  console.log('useFollowUsersGet called with', args)
   const { customUserId, offset, limit, followType, getIdTokenLatest } = args ?? {};
 
   return useSWR<FollowUsersGetResult, Error>(

@@ -22,7 +22,6 @@ export const usePublicFollowUsersGet = (
   args: PublicFollowUsersGetArgs | undefined,
   options?: SWRConfiguration<PublicFollowUsersGetResult, Error>
 ): SWRResponse<PublicFollowUsersGetResult, Error> => {
-  console.log('usePublicFollowUsersGet called with', args);
   const { customUserId, offset, limit, followType } = args ?? {};
 
   return useSWR<PublicFollowUsersGetResult, Error>(

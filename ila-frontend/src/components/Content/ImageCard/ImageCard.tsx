@@ -64,9 +64,9 @@ export const ImageCard = ({ data, index }: ImageCardProps) => {
 
       {/* 生成日時 */}
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px'}}>
-        <Text fz="xs" color="dimmed">
           {data?.apiWork?.createdAt ? (
             // 日付は2025/03/15(土)のように表示
+            <Text fz="xs" color="dimmed">
             <span>
               {new Date(data.apiWork.createdAt).toLocaleDateString('ja-JP', {
                 year: 'numeric',
@@ -75,10 +75,10 @@ export const ImageCard = ({ data, index }: ImageCardProps) => {
                 weekday: 'short',
               })}
             </span>
+            </Text>
           ) : (
             <Skeleton width={90} height={10} radius="sm" />
           )}
-        </Text>
       </div>
 
     </Card>

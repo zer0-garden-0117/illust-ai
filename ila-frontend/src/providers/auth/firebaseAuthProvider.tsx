@@ -58,8 +58,6 @@ export const FirebaseAuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const { trigger: fetchMyUser } = useMyUserGet();
 
   const getIdTokenLatest = async (): Promise<string | null> => {
-    console.log('getIdTokenLatest called');
-    console.log("aaaaa")
     const cur = auth.currentUser;
     if (!cur) return null;
     try {
@@ -93,7 +91,6 @@ export const FirebaseAuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, async (fbuser) => {
-      console.log('onIdTokenChanged fired. User:', fbuser);
       setFirebaseUser(fbuser);
 
       if (fbuser) {

@@ -37,7 +37,6 @@ export const useCreateWork = () => {
     });
     // トークンを更新してから遷移
     await getFreshIdToken();
-    console.log('Created work:', response);
     router.push(`/illust/processing/${response?.apiWork?.workId}`);
   }
 
