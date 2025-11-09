@@ -4,6 +4,7 @@ import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useWorksGetById } from "@/apis/openapi/works/useWorksGetById";
 import { useUsersLikedDelete } from "@/apis/openapi/myusers/useUsersLikedDelete";
 import { useUsersLikedRegister } from "@/apis/openapi/myusers/useUsersLikedRegister";
+import { usePublicWorksById } from "@/apis/openapi/publicworks/usePublicWorksGetById";
 
 type UsePostedWorkProps = {
   workId: string;
@@ -13,15 +14,26 @@ export const usePostedWork = (
   { workId }: UsePostedWorkProps
 ) => {
   const router = useRouter();
-  const { getIdTokenLatest } = useFirebaseAuthContext();
+  const { getIdTokenLatest, user } = useFirebaseAuthContext();
   const { trigger: deleteLike } = useUsersLikedDelete();
   const { trigger: registerLike } = useUsersLikedRegister();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { data: imageData, error, mutate: updateWork } = useWorksGetById({
-    workId,
-    getIdTokenLatest,
-  }, { revalidateOnFocus: false });
+  const { data: privateImageData, error: privateError, mutate: mutatePrivateWork } = 
+  useWorksGetById(
+    user ? {workId, getIdTokenLatest} : undefined,
+    { revalidateOnFocus: false }
+  );
+
+  const { data: publicImageData, error: publicError, mutate: mutatePublicWork } = 
+  usePublicWorksById(
+    !user ? { workId }: undefined,
+    { revalidateOnFocus: false }
+  );
+
+  const imageData = user ? privateImageData : publicImageData;
+  const error = user ? privateError : publicError;
+  const updateWork = user ? mutatePrivateWork : mutatePublicWork;
 
   const handleEditClick = (workId: string) => {
     router.push(`/illust/edit/${workId}`);

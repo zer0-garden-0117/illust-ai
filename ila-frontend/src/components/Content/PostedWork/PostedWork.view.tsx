@@ -7,6 +7,7 @@ import { ApiWorkWithTag } from '../ImageCard/ImageCard';
 import { useDisclosure } from '@mantine/hooks';
 import { WorkModal } from '../WorkModal/WorkModal';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
+import { WorkActionGroup } from './WorkActionGroup';
 
 type PostedWorkViewProps = {
   workId: string;
@@ -67,70 +68,18 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
               <AspectRatio ratio={1 / Math.sqrt(2)} style={{ maxWidth: '350px', width: '100%' }}>
               {imageData?.apiWork?.thumbnailImgUrl ? (
                 <div>
-                <Group justify='flex-end'>
-                  <Image
-                    src={imageData?.apiWork?.thumbnailImgUrl}
-                    style={{ cursor: 'pointer' }}
-                    onClick={open}
-                    alt=""
+                  {/* いいね、シェア、メニュー */}
+                  <WorkActionGroup
+                    workId={workId}
+                    workCustomUserId={imageData?.apiWork?.customUserId}
+                    thumbnailImgUrl={imageData?.apiWork?.thumbnailImgUrl}
+                    isLiked={imageData?.apiWork?.isLiked}
+                    isSubmitting={isSubmitting}
+                    onOpen={open}
+                    onLikeClick={handleLikeClick}
+                    onEditClick={handleEditClick}
+                    onDeleteClick={handleDeleteClick}
                   />
-                    <ActionIcon
-                      style={{
-                        backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5))',
-                        '&:hover': { backgroundColor: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6))' }
-                      }}
-                      onClick={() => handleLikeClick(workId)}
-                    >
-                      {isSubmitting ? (
-                        <Skeleton width={16} height={16} />
-                      ) : imageData?.apiWork?.isLiked ? (
-                        <IconHeartFilled
-                          size={16}
-                          color='var(--mantine-color-red-6)'
-                        />
-                      ) : (
-                        <IconHeart
-                          size={16}
-                          color='var(--mantine-color-gray-6)'
-                        />
-                      )}
-                    </ActionIcon>
-                    <ActionIcon
-                      style={{
-                        backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5))',
-                        '&:hover': { backgroundColor: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6))' }
-                      }}
-                    >
-                      <IconShare size={16} color='var(--mantine-color-blue-6)' />
-                    </ActionIcon>
-                    <Menu shadow="md">
-                      <Menu.Target>
-                      <ActionIcon
-                        style={{
-                          backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5))',
-                          '&:hover': { backgroundColor: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6))' }
-                        }}
-                      >
-                        <IconMenu2 size={16} color='var(--mantine-color-gray-6)' />
-                      </ActionIcon>
-                      </Menu.Target>
-                      <Menu.Dropdown>
-                        <Menu.Item
-                          leftSection={<IconEdit size={14} />}
-                          onClick={() => handleEditClick(workId)}
-                        >
-                          編集
-                        </Menu.Item>
-                        <Menu.Item
-                          color="red"
-                          leftSection={<IconTrash size={14} />}
-                          onClick={() => handleDeleteClick(workId)}
-                        >
-                          削除
-                        </Menu.Item>
-                      </Menu.Dropdown>
-                    </Menu>
-                </Group>
                   {/* キャプションを表示 */}
                   <Text mt="sm" style={{ whiteSpace: 'pre-wrap' }}>
                     {renderDescription(imageData?.apiWork?.description)}
@@ -158,7 +107,10 @@ export const PostedWorkView = memo(function PostedWorkViewComponent({
                   )}
                 </div>
               ) : (
+                <>
+                {/* 画像がまだ読み込まれていない場合のスケルトン表示 */}
                 <Skeleton height="100%" />
+                </>
               )}
               </AspectRatio>
             </Center>
