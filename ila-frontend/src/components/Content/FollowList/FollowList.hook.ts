@@ -94,8 +94,9 @@ export const useFollowList = (
   };
 
   const handleUserCardClick = (customUserId: string | undefined) => {
-    if (!customUserId) return;
-    router.push(`/user/${customUserId}`);
+    if (customUserId) {
+      router.push(`/user/${customUserId}`);
+    }
   };
 
   const handleArrowLeftClick = () => {

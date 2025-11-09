@@ -67,6 +67,8 @@ export const UserInfoView = memo(function WorkViewComponent({
 }: UserInfoViewProps): JSX.Element {
   const [isTypingUserId, setIsTypingUserId] = useState(false);
   const router = useRouter();
+  const coverImageUrl = userData?.coverImageUrl;
+  const hasCover = !!coverImageUrl;
 
   return (
     <>
@@ -75,7 +77,7 @@ export const UserInfoView = memo(function WorkViewComponent({
           key={userData?.coverImageUrl} 
           h={140}
           style={{
-            backgroundImage: `url(${userData?.coverImageUrl})`,
+            backgroundImage: hasCover ? `url(${coverImageUrl})` : 'none',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -223,7 +225,7 @@ export const UserInfoView = memo(function WorkViewComponent({
           <Card.Section
             h={140}
             style={{
-              backgroundImage: `url(${userData?.coverImageUrl})`,
+              backgroundImage: hasCover ? `url(${coverImageUrl})` : 'none',
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
