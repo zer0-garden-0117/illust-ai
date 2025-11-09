@@ -1,8 +1,10 @@
-package com.ila.zer0.controller
+package com.ila.zer0.controller.users
 
 import com.ila.zer0.config.token.CustomAuthenticationToken
 import com.ila.zer0.generated.endpoint.UsersApi
-import com.ila.zer0.generated.model.*
+import com.ila.zer0.generated.model.ApiFollowUsers
+import com.ila.zer0.generated.model.ApiLiked
+import com.ila.zer0.generated.model.ApiUser
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.service.user.UserManagerService
 import org.slf4j.LoggerFactory
@@ -10,7 +12,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UsersController(

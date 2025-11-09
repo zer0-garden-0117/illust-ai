@@ -1,15 +1,11 @@
 package com.ila.zer0.service.user
 
-import com.ila.zer0.controller.UsersController
 import com.ila.zer0.dto.FollowWithSearchResult
 import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorksWithSearchResult
-import com.ila.zer0.entity.Follow
 import com.ila.zer0.entity.Liked
 import com.ila.zer0.entity.User
-import com.ila.zer0.entity.Work
-import com.ila.zer0.repository.UserRepository
 import com.ila.zer0.repository.WorkRepository
 import com.ila.zer0.service.ConvertService
 import com.ila.zer0.service.S3Service
@@ -19,8 +15,6 @@ import com.ila.zer0.service.work.WorkService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.multipart.MultipartFile
 import java.time.Instant
 

@@ -1,62 +1,61 @@
-package com.ila.zer0.controller
+package com.ila.zer0.controller.works
 
-import com.ila.zer0.config.token.CustomAuthenticationToken
-import com.ila.zer0.entity.User
-import com.ila.zer0.generated.endpoint.WorksApi
-import com.ila.zer0.generated.model.*
+import com.ila.zer0.dto.WorkWithTag
+import com.ila.zer0.generated.endpoint.PublicworksApi
+import com.ila.zer0.generated.model.ApiWorkWithTag
+import com.ila.zer0.generated.model.ApiWorks
 import com.ila.zer0.mapper.TagMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.work.WorkManagerService
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class WorksController(
+class PublicWorksController(
     private val workManagerService: WorkManagerService,
     private val workMapper: WorkMapper,
     private val tagMapper: TagMapper,
     private val userManagerService: UserManagerService,
-) : WorksApi {
-    override fun getWorksByFilter(
+) : PublicworksApi {
+
+    override fun getPublicWorksByFilter(
         @RequestParam(value = "offset", required = true) offset: Int,
         @RequestParam(value = "limit", required = true) limit: Int,
-        @RequestParam(value = "worksFilterType", required = true) worksFilterType: String
+        @RequestParam(value = "publicWorksFilterType", required = true) publicWorksFilterType: String
     ): ResponseEntity<ApiWorks> {
-        // 認証ユーザーを取得
-        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-
-        // worksFilterTypeがfollowUserPostedでない場合はエラーを返す
-        if (worksFilterType != "followUserPosted" && worksFilterType != "theme") {
+        if (publicWorksFilterType != "new" && publicWorksFilterType != "theme") {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        // 作品を取得
-        val workResult = workManagerService.getFollowUserWorks(user.userId, offset, limit)
+        val workResult = if (publicWorksFilterType == "new") {
+            workManagerService.findWorksByTags(listOf("GLOBAL"), offset, limit)
+        } else {
+            workManagerService.findWorksByTags(listOf("theme"), offset, limit)
+        }
 
         // APIモデルに変換
         val apiWorksWithTags = mutableListOf<ApiWorkWithTag>()
-        workResult.works.forEach { work ->
+        workResult?.works?.forEach { work ->
             val apiWork = workMapper.toApiWork(work)
             val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
             apiWorksWithTags.add(apiWorkWithTag)
         }
-        val apiWorks = ApiWorks(apiWorksWithTags, workResult.totalCount)
+        val apiWorks = ApiWorks(apiWorksWithTags, workResult?.totalCount ?: 0)
         return ResponseEntity.ok(apiWorks)
     }
 
-    override fun getWorksById(
+    override fun getPublicWorksById(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWorkWithTag> {
-        // 認証済みユーザーを取得
-        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-
-        // 作品とタグを取得
         val workWithTag = workManagerService.findWorkById(workId = workId)
-        workWithTag.work.isMine = (user.userId == workWithTag.work.userId)
 
         // statusがpostedでない場合はエラーを返す
         if (workWithTag.work.status != "posted") {
@@ -69,32 +68,26 @@ class WorksController(
         workWithTag.work.userName = workUser.userName
         workWithTag.work.customUserId = workUser.customUserId
         workWithTag.work.profileImageUrl = workUser.profileImageUrl
-        val likesCountAndIsLiked = workManagerService.getLikesCountAndIsLikedByWorkId(workWithTag.work.workId, user.userId)
-        workWithTag.work.likes = likesCountAndIsLiked.likesCount
-        workWithTag.work.isLiked = likesCountAndIsLiked.isLiked
-
+        workWithTag.work.likes = workManagerService.getLikes(workWithTag.work.workId)
         // APIモデルに変換して返却
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
     }
 
-    override fun getWorksByUserIdAndFilter(
+    override fun getPublicWorksByUserIdAndFilter(
         @PathVariable("customUserId") customUserId: String,
         @RequestParam(value = "offset", required = true) offset: Int,
         @RequestParam(value = "limit", required = true) limit: Int,
-        @RequestParam(value = "worksUserFilterType", required = true) worksUserFilterType: String
+        @RequestParam(value = "publicWorksUserFilterType", required = true) publicWorksUserFilterType: String
     ): ResponseEntity<ApiWorks> {
-        // 認証済みユーザーを取得
-        getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-
-        // worksUserFilterTypeがcreatedでない場合はエラーを返す
-        if (worksUserFilterType != "created") {
+        // publicWorksUserFilterTypeが"posted"または"liked"でない場合はエラーを返す
+        if (publicWorksUserFilterType != "posted" && publicWorksUserFilterType != "liked") {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
         // 作品を取得
         val usersWorks = workManagerService.getUsersWorksByCustomUserIdWithFilter(
-            customUserId, offset, limit, worksUserFilterType)
+            customUserId, offset, limit, publicWorksUserFilterType)
             ?: return ResponseEntity.notFound().build()
 
         // APIモデルに変換
@@ -108,8 +101,27 @@ class WorksController(
         return ResponseEntity.ok(apiWorks)
     }
 
+    override fun getPublicWorksTags(
+        @PathVariable("tag") tag: String,
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int
+    ): ResponseEntity<ApiWorks> {
+        // 作品検索
+        val workResult = workManagerService.findWorksByTags(listOf(tag), offset, limit)
+
+        // APIモデルに変換
+        val apiWorksWithTags = mutableListOf<ApiWorkWithTag>()
+        workResult?.works?.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
+            apiWorksWithTags.add(apiWorkWithTag)
+        }
+        val apiWorks = ApiWorks(apiWorksWithTags, workResult?.totalCount ?: 0)
+        return ResponseEntity.ok(apiWorks)
+    }
+
     private fun toApiWorkWithTag(
-        workWithTag: com.ila.zer0.dto.WorkWithTag
+        workWithTag: WorkWithTag
     ): ApiWorkWithTag {
         val apiWork = workMapper.toApiWork(workWithTag.work)
         val apiTags = tagMapper.toApiTag(workWithTag.tags)
@@ -118,15 +130,5 @@ class WorksController(
             apiTags = apiTags
         )
         return apiWorkWithTag
-    }
-
-    private fun getUser(): User? {
-        val authentication: Authentication? =
-            SecurityContextHolder.getContext().authentication
-        val customAuth = authentication as? CustomAuthenticationToken
-        if (customAuth?.userId == null) {
-            return null
-        }
-        return userManagerService.getUserById(customAuth.userId)
     }
 }

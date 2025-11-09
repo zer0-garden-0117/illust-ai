@@ -1,24 +1,27 @@
-package com.ila.zer0.controller
+package com.ila.zer0.controller.works
 
 import com.ila.zer0.config.token.CustomAuthenticationToken
 import com.ila.zer0.dto.WorkWithTag
 import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import com.ila.zer0.generated.endpoint.MyworksApi
-import com.ila.zer0.generated.model.*
+import com.ila.zer0.generated.model.ApiWork
+import com.ila.zer0.generated.model.ApiWorkWithTag
 import com.ila.zer0.mapper.TagMapper
 import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UsageService
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.work.WorkManagerService
 import jakarta.validation.Valid
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 @RestController
 class MyWorksController(
@@ -61,7 +64,7 @@ class MyWorksController(
         }
 
         // 作品作成
-        val creatingWork = workManagerService.createWork(work)
+        workManagerService.createWork(work)
 
         // イラスト生成数をデクリメント
         usageService.consumeOneToday(user.userId, limitIfAbsent = user.illustNumLimit)
@@ -148,7 +151,7 @@ class MyWorksController(
     }
 
     private fun toApiWorkWithTag(
-        workWithTag: com.ila.zer0.dto.WorkWithTag
+        workWithTag: WorkWithTag
     ): ApiWorkWithTag {
         val apiWork = workMapper.toApiWork(workWithTag.work)
         val apiTags = tagMapper.toApiTag(workWithTag.tags)

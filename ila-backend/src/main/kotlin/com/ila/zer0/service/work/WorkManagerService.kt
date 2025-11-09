@@ -1,12 +1,8 @@
 package com.ila.zer0.service.work
 
-import com.ila.zer0.dto.FollowWithSearchResult
 import com.ila.zer0.dto.LikesCountAndIsLiked
-import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorkWithTag
 import com.ila.zer0.dto.WorksWithSearchResult
-import com.ila.zer0.entity.Tag
-import com.ila.zer0.entity.User
 import com.ila.zer0.entity.Work
 import com.ila.zer0.repository.TagRepository
 import com.ila.zer0.repository.UserRepository
@@ -19,8 +15,6 @@ import com.ila.zer0.service.user.LikedService
 import com.ila.zer0.service.user.UserManagerService
 import com.ila.zer0.service.user.UserService
 import org.slf4j.LoggerFactory
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
@@ -221,9 +215,12 @@ class WorkManagerService(
             followUserIds.contains(work.userId)
         }
 
+        // offset, limitでスライス
+        val slicedWork = filterWork?.drop(offset)?.take(limit)
+
         // filterWorkからWorksWithSearchResultを生成
         val result = WorksWithSearchResult(
-            works = filterWork ?: listOf(),
+            works = slicedWork ?: listOf(),
             totalCount = filterWork?.size ?: 0
         )
         return result
