@@ -19,7 +19,7 @@ export type PublicFollowUsersGetArgs = {
 };
 
 export const usePublicFollowUsersGet = (
-  args: PublicFollowUsersGetArgs,
+  args: PublicFollowUsersGetArgs | undefined,
   options?: SWRConfiguration<PublicFollowUsersGetResult, Error>
 ): SWRResponse<PublicFollowUsersGetResult, Error> => {
   console.log('usePublicFollowUsersGet called with', args);
@@ -40,7 +40,7 @@ export const usePublicFollowUsersGet = (
             query: {
               offset: off,
               limit: lim,
-              followType: followType,
+              followType: followType!!,
             },
           },
         }

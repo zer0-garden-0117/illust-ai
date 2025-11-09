@@ -18,7 +18,7 @@ export type FollowUsersGetArgs = {
 };
 
 export const useFollowUsersGet = (
-  args: FollowUsersGetArgs,
+  args: FollowUsersGetArgs | undefined,
   options?: SWRConfiguration<FollowUsersGetResult, Error>
 ): SWRResponse<FollowUsersGetResult, Error> => {
   console.log('useFollowUsersGet called with', args)
@@ -27,15 +27,19 @@ export const useFollowUsersGet = (
   return useSWR<FollowUsersGetResult, Error>(
     customUserId ? ['/users/follow', customUserId, offset, limit, followType] : null,
     async ([, id, off, lim]: [string, string, number, number]): Promise<FollowUsersGetResult> => {
-      const token = await getIdTokenLatest();
-      if (!token) throw new Error('Failed to acquire latest ID token');
+      let headers: Record<string, string> | undefined = undefined;
+
+      if (getIdTokenLatest) {
+        const token = await getIdTokenLatest();
+        if (token) {
+          headers = { Authorization: `Bearer ${token}` };
+        }
+      }
 
       const { data, error } = await client.GET(
         "/users/follow/{customUserId}",
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers,
           params: {
             path: {
               customUserId: id,
@@ -43,7 +47,7 @@ export const useFollowUsersGet = (
             query: {
               offset: off,
               limit: lim,
-              followType: followType,
+              followType: followType!!,
             },
           },
         }
