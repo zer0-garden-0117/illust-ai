@@ -61,25 +61,3 @@ UsersFollowById:
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
-
-UsersFollowerById:
-  get:
-    operationId: getFollowerUsers
-    tags:
-      - users
-    summary: 指定したユーザーのフォロワーリストを取得する(自身のフォロー状態を含む)
-    description: |
-      指定したユーザーのフォロワーリストを取得する
-    security:
-      - FirebaseAuth: []
-    parameters:
-      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
-      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
-      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
-    responses:
-      "200":
-        $ref: "../components/responses/users.yaml#/FollowUsersResponse"
-      "400":
-        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
-      "401":
-        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"

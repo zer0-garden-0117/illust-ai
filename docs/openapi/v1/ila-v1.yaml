@@ -44,18 +44,12 @@ paths:
   /users/follow/{customUserId}:
     $ref: "./paths/users.yaml#/UsersFollowById"
 
-  /users/follower/{customUserId}:
-    $ref: "./paths/users.yaml#/UsersFollowerById"
-
   # publicusers
   /public/users/{customUserId}:
     $ref: "./paths/publicusers.yaml#/PublicUsersById"
 
   /public/users/follow/{customUserId}:
     $ref: "./paths/publicusers.yaml#/PublicUsersFollowById"
-
-  /public/users/follower/{customUserId}:
-    $ref: "./paths/publicusers.yaml#/PublicUsersFollowerById"
 
   # myworks
   /myworks/create:

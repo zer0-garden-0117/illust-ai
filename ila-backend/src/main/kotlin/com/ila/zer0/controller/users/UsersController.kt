@@ -27,11 +27,15 @@ class UsersController(
     override fun getUsers(
         @PathVariable("customUserId") customUserId: String
     ): ResponseEntity<ApiUser> {
-        logger.info("getUsers")
+        // 認証ユーザーを取得
         val callerUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // 指定されたcustomUserIdのユーザーを取得
         val user = userManagerService.getUserByCustomUserId(customUserId, callerUserId) ?:
             return ResponseEntity.notFound().build()
+
+        // APIモデルに変換
         val apiUser = userMapper.toApiUser(user)
         return ResponseEntity.ok(apiUser)
     }
@@ -42,10 +46,11 @@ class UsersController(
         @RequestParam(value = "limit", required = true) limit: Int,
         @RequestParam(value = "followType", required = true) followType: String
     ): ResponseEntity<ApiFollowUsers> {
-        logger.info("getFollowUsers")
-        logger.info("customUserId: $customUserId, offset: $offset, limit: $limit, followType: $followType")
+        // 認証ユーザーを取得
         val myUserId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // フォロー一覧を取得
         val followUsersResult =
             userManagerService.getFollowUsersByCustomUserId(customUserId, offset, limit, followType,myUserId)
                 ?: return ResponseEntity.notFound().build()
@@ -58,14 +63,6 @@ class UsersController(
         }
         val apiFollowsUsers = ApiFollowUsers(apiUsers, followUsersResult.totalCount)
         return ResponseEntity.ok(apiFollowsUsers)
-    }
-
-    override fun getFollowerUsers(
-        @PathVariable("customUserId") customUserId: String,
-        @RequestParam(value = "offset", required = true) offset: Int,
-        @RequestParam(value = "limit", required = true) limit: Int
-    ): ResponseEntity<ApiFollowUsers> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     @CrossOrigin(exposedHeaders = ["X-User-Available"])
