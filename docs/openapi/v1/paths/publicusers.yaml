@@ -18,9 +18,9 @@ PublicUsersById:
 
 PublicUsersFollowById:
   get:
-    operationId: getFollowUsers
+    operationId: getPublicFollowUsers
     tags:
-      - users
+      - publicusers
     summary: 指定したユーザーのフォローリストまたはフォロワーリストを取得する(自身のフォロー状態を含まない)
     description: |
       指定したユーザーのフォローリストを取得する

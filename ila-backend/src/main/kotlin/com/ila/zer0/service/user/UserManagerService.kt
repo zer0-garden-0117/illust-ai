@@ -6,6 +6,7 @@ import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Liked
 import com.ila.zer0.entity.User
+import com.ila.zer0.repository.UserRepository
 import com.ila.zer0.repository.WorkRepository
 import com.ila.zer0.service.ConvertService
 import com.ila.zer0.service.S3Service
@@ -30,7 +31,8 @@ class UserManagerService(
     private val s3Service: S3Service,
     private val usageService: UsageService,
     private val productService: ProductService,
-    private val workRepository: WorkRepository
+    private val workRepository: WorkRepository,
+    private val userRepository: UserRepository
 ) {
     val logger = LoggerFactory.getLogger(UserManagerService::class.java)
 
@@ -117,6 +119,24 @@ class UserManagerService(
         user.follower = followers.size
         user.isFollowing = followers.any { it.userId == callerUserId }
         user.isFollowed = follows.any { it.followUserId == callerUserId }
+        return user
+    }
+
+    @Transactional
+    fun getUserByCustomUserId(
+        customUserId: String
+    ): User? {
+        val user = userService.findUserByCustomUserId(customUserId)
+        if (user == null) {
+            logger.info("user is null $customUserId")
+            return null
+        }
+        val follows = followService.findByUserId(user.userId)
+        logger.info("follows list: $follows")
+        val followers = followService.findByFollowUserId(user.userId)
+        logger.info("followers list: $followers")
+        user.follow = follows.size
+        user.follower = followers.size
         return user
     }
 
@@ -243,6 +263,45 @@ class UserManagerService(
             val followUser = userService.findUserById(followId)
             // callerUserFollowsにfollowUser.userIdが含まれているかどうかでisFollowingを設定
             followUser?.isFollowing = callerUserFollows.any { it.followUserId == followId }
+            followUser?.let { followUsers.add(it) }
+        }
+
+        return UsersWithSearchResult(followUsers, followResult.totalCount)
+    }
+
+    @Transactional
+    fun getFollowUsersByCustomUserId(customUserId: String, offset: Int, limit: Int, followType: String): UsersWithSearchResult? {
+        val user = userService.findUserByCustomUserId(customUserId)
+        if (user == null) {
+            logger.info("user is null $customUserId")
+            return null
+        }
+
+        val followIds = mutableListOf<String>()
+        var followResult: FollowWithSearchResult
+        when (followType) {
+            "follow" -> {
+                followResult = followService.findByUserIdWithOffset(user.userId, offset, limit)
+                followResult.follows.forEach { follow ->
+                    followIds.add(follow.followUserId)
+                }
+            }
+            "follower" -> {
+                followResult = followService.findByFollowUserIdWithOffset(user.userId, offset, limit)
+                followResult.follows.forEach { follow ->
+                    followIds.add(follow.userId)
+                }
+            }
+            else -> {
+                logger.info("Invalid followType: $followType")
+                return null
+            }
+        }
+
+        // userIdでユーザー情報を取得
+        val followUsers = mutableListOf<User>()
+        followIds.forEach { followId ->
+            val followUser = userService.findUserById(followId)
             followUser?.let { followUsers.add(it) }
         }
 
