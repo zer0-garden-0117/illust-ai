@@ -2,17 +2,17 @@
 
 import React, { useState, memo } from 'react';
 import { UserInfoFormValues } from './UserInfo.hook';
-import { IconSettings, IconPencil, IconPhoto, IconLock } from '@tabler/icons-react';
+import { IconSettings, IconPencil } from '@tabler/icons-react';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
-import { Skeleton, Image, Button, Group, Avatar, Text, Card, Tabs, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill } from '@mantine/core';
+import { Skeleton, Button, Group, Text, Card, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { MyUserGetResult } from '@/apis/openapi/myusers/useMyUserGet';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 import { useRouter } from 'next/navigation';
-import CreateHistory from '../UserWorksCards/UserWorksCards';
+import UserWorksCards from '../UserWorksCards/UserWorksCards';
 
 type UserInfoViewProps = {
   page: number;
@@ -192,14 +192,14 @@ export const UserInfoView = memo(function WorkViewComponent({
         <Space h={10}/>
 
         {tab === 'home' && (
-          <CreateHistory
+          <UserWorksCards
             customUserId={userData?.customUserId || ''}
             page={page}
             userWorksFilterType="posted"
           />
         )}
         {tab === 'favorite' && (
-          <CreateHistory
+          <UserWorksCards
             customUserId={userData?.customUserId || ''}
             page={page}
             userWorksFilterType="liked"

@@ -1,31 +1,21 @@
 package com.ila.zer0.controller
 
 import com.ila.zer0.config.token.CustomAuthenticationToken
-import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.generated.endpoint.UsersApi
 import com.ila.zer0.generated.model.*
 import com.ila.zer0.mapper.UserMapper
-import com.ila.zer0.mapper.WorkMapper
 import com.ila.zer0.service.user.UserManagerService
-import com.ila.zer0.service.work.WorkManagerService
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.validation.Valid
-import jakarta.validation.constraints.NotNull
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 
 @RestController
 class UsersController(
     private val userManagerService: UserManagerService,
-    private val workManagerService: WorkManagerService,
     private val userMapper: UserMapper,
-    private val workMapper: WorkMapper
 ) : UsersApi {
     val logger = LoggerFactory.getLogger(UsersController::class.java)
 
@@ -57,27 +47,6 @@ class UsersController(
                 .header("X-User-Available", "false")
                 .build()
         }
-    }
-
-    override fun getUsersWorksByCustomIdAndFilter(
-        @PathVariable("customUserId") customUserId: String,
-        @RequestParam(value = "offset", required = true) offset: Int,
-        @RequestParam(value = "limit", required = true) limit: Int,
-        @RequestParam(value = "userWorksFilterType", required = true) userWorksFilterType: String
-    ): ResponseEntity<ApiWorks> {
-        val usersWorks = workManagerService.getUsersWorksByCustomUserIdWithFilter(
-            customUserId, offset, limit, userWorksFilterType)
-            ?: return ResponseEntity.notFound().build()
-
-        // APIモデルに変換
-        val apiWorkWithTags = mutableListOf<ApiWorkWithTag>()
-        usersWorks.works.forEach { work ->
-            val apiWork = workMapper.toApiWork(work)
-            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
-            apiWorkWithTags.add(apiWorkWithTag)
-        }
-        val apiWorks = ApiWorks(apiWorkWithTags, usersWorks.totalCount)
-        return ResponseEntity.ok(apiWorks)
     }
 
     override fun followUsers(

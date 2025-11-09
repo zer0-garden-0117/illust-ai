@@ -55,3 +55,24 @@ PublicWorksTags:
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+PublicWorksUsers:
+  get:
+    operationId: getPublicWorksByUserIdAndFilter
+    tags:
+      - publicworks
+    summary: 指定したユーザーと条件で作品を取得する
+    description: |
+      指定したユーザーと条件で作品を取得する
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
+      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/PublicWorksUserFilterTypeQueryParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersWorksResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"

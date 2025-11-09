@@ -39,3 +39,24 @@ WorksById:
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+WorksUsers:
+  get:
+    operationId: getWorksByUserIdAndFilter
+    tags:
+      - works
+    summary: 指定したユーザーと条件で作品を取得する
+    description: |
+      指定したユーザーと条件で作品を取得する
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
+      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/WorksUserFilterTypeQueryParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersWorksResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"

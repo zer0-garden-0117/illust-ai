@@ -35,17 +35,14 @@ paths:
   /users/{customUserId}:
     $ref: "./paths/users.yaml#/UsersById"
 
-  /users/{customUserId}/works:
-    $ref: "./paths/users.yaml#/UsersWorks"
-
-  /users/follow/{userId}:
-    $ref: "./paths/users.yaml#/UsersFollow"
-
   /users/follow/{customUserId}:
     $ref: "./paths/users.yaml#/UsersFollowById"
 
   /users/follower/{customUserId}:
     $ref: "./paths/users.yaml#/UsersFollowerById"
+
+  /users/follow/{userId}:
+    $ref: "./paths/users.yaml#/UsersFollow"
 
   /users/liked/{workId}:
     $ref: "./paths/users.yaml#/UsersLikedByWorkId"
@@ -53,6 +50,12 @@ paths:
   # publicusers
   /public/users/{customUserId}:
     $ref: "./paths/publicusers.yaml#/PublicUsersById"
+
+  /public/users/follow/{customUserId}:
+    $ref: "./paths/publicusers.yaml#/PublicUsersFollowById"
+
+  /public/users/follower/{customUserId}:
+    $ref: "./paths/publicusers.yaml#/PublicUsersFollowerById"
 
   # myworks
   /myworks/create:
@@ -68,12 +71,18 @@ paths:
   /works/{workId}:
     $ref: "./paths/works.yaml#/WorksById"
 
+  /works/user/{customUserId}:
+    $ref: "./paths/works.yaml#/WorksUsers"
+
   # publicworks
   /public/works:
     $ref: "./paths/publicworks.yaml#/PublicWorks"
   
   /public/works/{workId}:
     $ref: "./paths/publicworks.yaml#/PublicWorksById"
+  
+  /public/works/user/{customUserId}:
+    $ref: "./paths/publicworks.yaml#/PublicWorksUsers"
 
   /public/works/tags/{tag}:
     $ref: "./paths/publicworks.yaml#/PublicWorksTags"

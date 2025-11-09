@@ -66,6 +66,33 @@ class PublicWorksController(
         return ResponseEntity.ok(response)
     }
 
+    override fun getPublicWorksByUserIdAndFilter(
+        @PathVariable("customUserId") customUserId: String,
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int,
+        @RequestParam(value = "publicWorksUserFilterType", required = true) publicWorksUserFilterType: String
+    ): ResponseEntity<ApiWorks> {
+        // publicWorksUserFilterTypeが"posted"または"liked"でない場合はエラーを返す
+        if (publicWorksUserFilterType != "posted" && publicWorksUserFilterType != "liked") {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        // 作品を取得
+        val usersWorks = workManagerService.getUsersWorksByCustomUserIdWithFilter(
+            customUserId, offset, limit, publicWorksUserFilterType)
+            ?: return ResponseEntity.notFound().build()
+
+        // APIモデルに変換
+        val apiWorkWithTags = mutableListOf<ApiWorkWithTag>()
+        usersWorks.works.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
+            apiWorkWithTags.add(apiWorkWithTag)
+        }
+        val apiWorks = ApiWorks(apiWorkWithTags, usersWorks.totalCount)
+        return ResponseEntity.ok(apiWorks)
+    }
+
     override fun getPublicWorksTags(
         @PathVariable("tag") tag: String,
         @RequestParam(value = "offset", required = true) offset: Int,

@@ -1,4 +1,4 @@
-import { UsersWorksGetResult } from "@/apis/openapi/users/useUsersWorksGet";
+import { UsersWorksGetResult } from "@/apis/openapi/publicworks/usePublicWorksByUserIdAndFilterGet";
 import { useWorksGetByFilterInfinite } from "@/apis/openapi/works/useWorksGetByFilterInfinite";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 import { useRouter } from "next/navigation";

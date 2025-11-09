@@ -15,7 +15,7 @@ export type PublicWorksGetQuery = operations['getPublicWorksByFilter']['paramete
 export type PublicWorksGetInfiniteArgs = {
   initialOffset?: PublicWorksGetQuery['offset'];
   limit: PublicWorksGetQuery['limit'];
-  worksFilterType: PublicWorksGetQuery['worksFilterType'];
+  worksFilterType: PublicWorksGetQuery['publicWorksFilterType'];
 };
 
 export const usePublicWorksGetByFilterInfinite = (
@@ -44,7 +44,7 @@ export const usePublicWorksGetByFilterInfinite = (
       string,
       PublicWorksGetQuery['offset'],
       PublicWorksGetQuery['limit'],
-      PublicWorksGetQuery['worksFilterType']
+      PublicWorksGetQuery['publicWorksFilterType']
     ]
   ): Promise<PublicWorksGetResult> => {
     const { data, error } = await client.GET('/public/works', {
@@ -52,7 +52,7 @@ export const usePublicWorksGetByFilterInfinite = (
         query: {
           offset: off,
           limit: lim,
-          worksFilterType: filterType,
+          publicWorksFilterType: filterType,
         },
       },
     });

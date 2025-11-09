@@ -26,13 +26,17 @@ class WorksController(
         @RequestParam(value = "limit", required = true) limit: Int,
         @RequestParam(value = "worksFilterType", required = true) worksFilterType: String
     ): ResponseEntity<ApiWorks> {
+        // 認証ユーザーを取得
+        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // worksFilterTypeがfollowUserPostedでない場合はエラーを返す
         if (worksFilterType != "followUserPosted" && worksFilterType != "theme") {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        // ユーザーを取得
-        val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
+        // 作品を取得
         val workResult = workManagerService.getFollowUserWorks(user.userId, offset, limit)
+
         // APIモデルに変換
         val apiWorksWithTags = mutableListOf<ApiWorkWithTag>()
         workResult.works.forEach { work ->
@@ -47,8 +51,11 @@ class WorksController(
     override fun getWorksById(
         @PathVariable("workId") workId: String
     ): ResponseEntity<ApiWorkWithTag> {
-        val workWithTag = workManagerService.findWorkById(workId = workId)
+        // 認証済みユーザーを取得
         val user = getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // 作品とタグを取得
+        val workWithTag = workManagerService.findWorkById(workId = workId)
         workWithTag.work.isMine = (user.userId == workWithTag.work.userId)
 
         // statusがpostedでない場合はエラーを返す
@@ -69,6 +76,36 @@ class WorksController(
         // APIモデルに変換して返却
         val response = toApiWorkWithTag(workWithTag)
         return ResponseEntity.ok(response)
+    }
+
+    override fun getWorksByUserIdAndFilter(
+        @PathVariable("customUserId") customUserId: String,
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int,
+        @RequestParam(value = "worksUserFilterType", required = true) worksUserFilterType: String
+    ): ResponseEntity<ApiWorks> {
+        // 認証済みユーザーを取得
+        getUser() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // worksUserFilterTypeがcreatedでない場合はエラーを返す
+        if (worksUserFilterType != "created") {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        // 作品を取得
+        val usersWorks = workManagerService.getUsersWorksByCustomUserIdWithFilter(
+            customUserId, offset, limit, worksUserFilterType)
+            ?: return ResponseEntity.notFound().build()
+
+        // APIモデルに変換
+        val apiWorkWithTags = mutableListOf<ApiWorkWithTag>()
+        usersWorks.works.forEach { work ->
+            val apiWork = workMapper.toApiWork(work)
+            val apiWorkWithTag = ApiWorkWithTag(apiWork = apiWork, apiTags = null)
+            apiWorkWithTags.add(apiWorkWithTag)
+        }
+        val apiWorks = ApiWorks(apiWorkWithTags, usersWorks.totalCount)
+        return ResponseEntity.ok(apiWorks)
     }
 
     private fun toApiWorkWithTag(

@@ -1,28 +1,25 @@
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
-import { usePublicWorksByUserIdAndFilterGet } from "@/apis/openapi/publicworks/usePublicWorksByUserIdAndFilterGet";
+import { useUsersWorksGet } from "@/apis/openapi/works/useWorksByUserIdAndFilterGet";
 import type { components } from "../../../generated/services/ila-v1";
-export type PublicWorksUserFilterTypeQueryParam = components["parameters"]["PublicWorksUserFilterTypeQueryParam"];
+export type WorksUserFilterTypeQueryParam = components["parameters"]["WorksUserFilterTypeQueryParam"];
 
-type UseUserWorkCardsProps = {
+type UseCreatedWorksCardsProps = {
   customUserId: string;
   page: number;
-  userWorksFilterType: PublicWorksUserFilterTypeQueryParam;
+  userWorksFilterType: WorksUserFilterTypeQueryParam;
 };
 
-export const useUserWorkCards = (
-    { customUserId, page, userWorksFilterType }: UseUserWorkCardsProps
+export const useCreatedWorksCards = (
+    { customUserId, page, userWorksFilterType }: UseCreatedWorksCardsProps
 ) => {
   const { getIdTokenLatest, user } = useFirebaseAuthContext();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  // userWorksFilterTypeがpostedかつ、customUserIdが自分のcustomUserIdと等しい場合は11を設定、
-  // それ以外の場合は12を設定する
-  const illustNum =
-    userWorksFilterType === 'posted' && customUserId === user?.customUserId ? 11 : 12;
+  const illustNum = 12;
 
-  const { data: userWorksData, mutate: updateUserWorks } = usePublicWorksByUserIdAndFilterGet({
+  const { data: userWorksData, mutate: updateUserWorks } = useUsersWorksGet({
       customUserId: customUserId,
       offset: (page - 1) * illustNum,
       limit: illustNum,
@@ -42,8 +39,6 @@ export const useUserWorkCards = (
 
   return {
     page,
-    customUserId,
-    userWorksFilterType,
     userWorksData,
     handlePageChange
   };
