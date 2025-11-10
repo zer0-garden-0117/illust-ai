@@ -419,6 +419,7 @@ export const UserInfoView = memo(function WorkViewComponent({
                 fw={500}
                 fz={"xs"}
                 mb={3}
+                radius="xl"
               >
                 プランの変更
               </Button>
@@ -448,6 +449,7 @@ export const UserInfoView = memo(function WorkViewComponent({
                 fw={500}
                 fz={"xs"}
                 mb={3}
+                radius="xl"
               >
                 ブーストの追加
               </Button>

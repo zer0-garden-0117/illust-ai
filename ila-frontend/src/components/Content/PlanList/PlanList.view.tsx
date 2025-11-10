@@ -75,7 +75,7 @@ export const PlanListView = memo(function WorkViewComponent({
             {plan.id !== 'free' && (
             <Button 
               color="blue" 
-              radius="md"
+              radius="xl"
               onClick={
                 // user.planがFreeの場合は、購入。Free以外の場合はプラン変更。
                 user?.plan === 'Free'

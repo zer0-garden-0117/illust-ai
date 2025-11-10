@@ -64,7 +64,7 @@ export const BoostListView = memo(function WorkViewComponent({
             <Center>
             <Button 
               color="blue" 
-              radius="md"
+              radius="xl"
               onClick={() => handleAddClick(boostData.id)}
               style={{ display: 'inline-flex', width: 'fit-content' }}
             >

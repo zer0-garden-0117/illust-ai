@@ -68,6 +68,7 @@ export const CreateWorkView = memo(function WorkViewComponent({
             user?.plan === 'Free' ? handlePlanChangeClick : handleBoostAddClick
           }
           disabled={isSubmitting} 
+          radius="xl"
         >
           {/* user.planがFreeの場合は、プランの変更を表示し、Free以外の場合はブーストの追加を表示 */}
           {user?.plan === 'Free' ? 'プランの変更' : 'ブーストの追加'}
