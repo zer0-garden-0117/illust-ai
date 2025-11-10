@@ -104,7 +104,8 @@ export const UserInfoView = memo(function WorkViewComponent({
             {isLoginUser &&
               <LogoutButton />
             }
-            {!isLoginUser &&
+            {/* userDataが存在しない場合は非表示 */}
+            {!isLoginUser && userData &&
               <FollowButton
                 isFollowState={userData?.isFollowing}
                 userId={userData?.userId}
