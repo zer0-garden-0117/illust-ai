@@ -154,6 +154,11 @@ export const useUserInfo = (
 
       // 更新処理後、モーダルを閉じる
       setOpened(false);
+
+      // URLのユーザーIDが変更されていたらリダイレクト
+      if (userData?.customUserId && userData.customUserId !== values.customUserId) {
+        router.push(`/user/${values.customUserId}`);
+      }
     } finally {
       setIsSaving(false);
     }
