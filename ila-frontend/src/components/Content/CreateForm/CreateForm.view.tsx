@@ -112,30 +112,32 @@ export const CreateWorkView = memo(function WorkViewComponent({
           maxRows={5}
         />
         <Group justify="flex-end" mt="md">
-          <Button
-            type="submit"
-            radius="xl"
-            disabled={isSubmitting}
-            rightSection={
-              !isSubmitting ? (
-                <>
-                  <IconPencil color="white" size={20} style={{ display: 'block' }} />
-                  {user?.remainingIllustNum}
-                  <IconArrowNarrowRight color="white" size={20} style={{ display: 'block' }} />
-                  {(user?.remainingIllustNum ?? 0) - 1}
-                </>
-              ) : undefined
-            }
-          >
-            {isSubmitting ? (
-              <Group gap="xs" align="center">
-                <span>イラスト生成中…</span>
-                <Loader size="xs" color='gray'/>
-              </Group>
-            ) : (
-              'イラスト生成'
-            )}
-          </Button>
+          {user && (
+            <Button
+              type="submit"
+              radius="xl"
+              disabled={isSubmitting}
+              rightSection={
+                !isSubmitting ? (
+                  <>
+                    <IconPencil color="white" size={20} style={{ display: 'block' }} />
+                    {user?.remainingIllustNum}
+                    <IconArrowNarrowRight color="white" size={20} style={{ display: 'block' }} />
+                    {(user?.remainingIllustNum ?? 0) - 1}
+                  </>
+                ) : undefined
+              }
+            >
+              {isSubmitting ? (
+                <Group gap="xs" align="center">
+                  <span>イラスト生成中…</span>
+                  <Loader size="xs" color='gray'/>
+                </Group>
+              ) : (
+                'イラスト生成'
+              )}
+            </Button>
+          )}
         </Group>
       </form>
     </Card>

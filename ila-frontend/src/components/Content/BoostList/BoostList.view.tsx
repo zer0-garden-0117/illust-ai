@@ -4,6 +4,7 @@ import React, { memo } from 'react';
 import { Button, Card, Center, Group, List, SimpleGrid, Space, Text } from '@mantine/core';
 import { BoostData } from './BoostList.hook';
 import { IconAlarm, IconCoinYen, IconMoneybag, IconPencilCode, IconPhoto, IconRocket, IconSparkles } from '@tabler/icons-react';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type BoostListViewProps = {
   boostDatas: BoostData[];
@@ -14,6 +15,7 @@ export const BoostListView = memo(function WorkViewComponent({
   boostDatas,
   handleAddClick,
 }: BoostListViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
 
   return (
     <Card withBorder padding="md" radius="md">
@@ -62,14 +64,16 @@ export const BoostListView = memo(function WorkViewComponent({
 
             {/* 購入ボタン */}
             <Center>
-            <Button 
-              color="blue" 
-              radius="xl"
-              onClick={() => handleAddClick(boostData.id)}
-              style={{ display: 'inline-flex', width: 'fit-content' }}
-            >
-              購入
-            </Button>
+              {user && (
+                <Button 
+                  color="blue" 
+                  radius="xl"
+                  onClick={() => handleAddClick(boostData.id)}
+                  style={{ display: 'inline-flex', width: 'fit-content' }}
+                >
+                  購入
+                </Button>
+              )}
             </Center>
 
           </Card>

@@ -8,6 +8,7 @@ import { UseFormReturnType } from '@mantine/form';
 import { PostWorkValues } from './DeleteForm.hook';
 import { useDisclosure } from '@mantine/hooks';
 import { ForbiddenCard } from '../ForbiddenCard/ForbiddenCard';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type DeleteFormViewProps = {
   form: UseFormReturnType<PostWorkValues>;
@@ -28,6 +29,7 @@ export const DeleteFormView = memo(function WorkViewComponent({
   handlePostClick,
   handleBackClick
 }: DeleteFormViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
   const [opened, { open, close }] = useDisclosure(false);
   const handleConfirmDelete = () => {
     form.onSubmit(handlePostClick)();
@@ -35,6 +37,10 @@ export const DeleteFormView = memo(function WorkViewComponent({
   };
 
   if (imageData && !imageData.apiWork?.isMine) {
+    return <ForbiddenCard alertText='イラストを生成したユーザー以外は削除できません。' />;
+  }
+
+  if (!user) {
     return <ForbiddenCard alertText='イラストを生成したユーザー以外は削除できません。' />;
   }
 

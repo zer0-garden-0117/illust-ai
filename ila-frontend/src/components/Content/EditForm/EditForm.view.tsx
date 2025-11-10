@@ -8,6 +8,7 @@ import { UseFormReturnType } from '@mantine/form';
 import { PostWorkValues } from './EditForm.hook';
 import { IoInformationSharp } from 'react-icons/io5';
 import { ForbiddenCard } from '../ForbiddenCard/ForbiddenCard';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type EditFormViewProps = {
   form: UseFormReturnType<PostWorkValues>;
@@ -28,8 +29,13 @@ export const EditFormView = memo(function WorkViewComponent({
   handlePostClick,
   handleConfirmClick
 }: EditFormViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
   // imageDataが存在し、かつapiWorkのisMineプロパティがfalseの場合、ForbiddenCardを表示
   if (imageData && !imageData.apiWork?.isMine) {
+    return <ForbiddenCard alertText='イラストを生成したユーザー以外は編集できません。' />;
+  }
+
+  if (!user) {
     return <ForbiddenCard alertText='イラストを生成したユーザー以外は編集できません。' />;
   }
 

@@ -72,7 +72,7 @@ export const PlanListView = memo(function WorkViewComponent({
             {/* 購入ボタン */}
             <Center>
             {/* plan.idがfreeの場合はボタンを表示しない */}
-            {plan.id !== 'free' && (
+            {plan.id !== 'free' && user && (
             <Button 
               color="blue" 
               radius="xl"

@@ -9,6 +9,7 @@ import { ApiWorkWithTag } from '../ImageCard/ImageCard';
 import { useDisclosure } from '@mantine/hooks';
 import { WorkModal } from '../WorkModal/WorkModal';
 import { ForbiddenCard } from '../ForbiddenCard/ForbiddenCard';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type HistoryWorkViewProps = {
   workId: string;
@@ -21,9 +22,14 @@ export const HistoryWorkView = memo(function HistoryWorkViewComponent({
   imageData,
   handlePostClick,
 }: HistoryWorkViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
   const [opened, { open, close }] = useDisclosure(false);
 
   if (imageData && !imageData.apiWork?.isMine) {
+    return <ForbiddenCard alertText='イラストを生成したユーザー以外は表示できません。' />;
+  }
+
+  if (!user) {
     return <ForbiddenCard alertText='イラストを生成したユーザー以外は表示できません。' />;
   }
 
