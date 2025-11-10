@@ -129,6 +129,7 @@ export const UserInfoView = memo(function WorkViewComponent({
               color={"var(--mantine-color-gray-5)"} 
               variant="outline"
               radius={"xl"}
+              size='compact-lg'
               leftSection={
                 <IconSettings
                   color="var(--mantine-color-gray-8)"
