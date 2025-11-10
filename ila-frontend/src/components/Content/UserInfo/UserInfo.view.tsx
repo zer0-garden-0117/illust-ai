@@ -145,9 +145,10 @@ export const UserInfoView = memo(function WorkViewComponent({
         </Group>
         <Space h={5}/>
 
-        {/* フォローとフォロワー */}
-        <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
-          <div key="Follow">
+        {/* ユーザー名と編集ボタン */}
+        <Group justify="space-between" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
+          <div>
+          <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
             <Anchor
               onClick={handleFollowListClick}
               style={{ textDecorationColor: 'black' }}
@@ -156,8 +157,6 @@ export const UserInfoView = memo(function WorkViewComponent({
               <Text fz="xs" span fw={700} c={"black"}>{userData?.follow}</Text> フォロー
             </Text>
             </Anchor>
-          </div>
-          <div key="Follower">
             <Anchor
               onClick={handleFollowerListClick}
               style={{ textDecorationColor: 'black' }}
@@ -168,13 +167,10 @@ export const UserInfoView = memo(function WorkViewComponent({
               </Text>
               </Group>
             </Anchor>
-          </div>
-        </Group>
-
-        {/* 自己紹介 */}
-        {/* <Group justify="space-between" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}> */}
-        <Group gap={40} style={{ position: 'relative', width: 'fit-content', marginTop: '5px', marginBottom: '10px' }}>
+          </Group>
           <Text
+            mt={5}
+            mb={10}
             fz="sm"
             style={{
               whiteSpace: 'pre-line',
@@ -183,6 +179,18 @@ export const UserInfoView = memo(function WorkViewComponent({
           >
             {userData?.userProfile}
           </Text>
+          </div>
+          {isLoginUser && (
+            <Button
+              color={"var(--mantine-color-gray-5)"} 
+              variant="outline"
+              radius={"xl"}
+              size='compact-lg'
+              // onClick={handleEditButton}
+            >
+              <Text c="var(--mantine-color-gray-8)">設定</Text>
+            </Button>
+          )}
         </Group>
 
         {/* タブ */}
