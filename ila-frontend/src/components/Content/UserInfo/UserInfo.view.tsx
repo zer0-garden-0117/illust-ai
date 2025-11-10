@@ -6,7 +6,7 @@ import { IconSettings, IconPencil, IconEdit } from '@tabler/icons-react';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
-import { Skeleton, Button, Group, Text, Card, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill } from '@mantine/core';
+import { Skeleton, Button, Group, Text, Card, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill, AspectRatio } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { MyUserGetResult } from '@/apis/openapi/myusers/useMyUserGet';
@@ -75,45 +75,53 @@ export const UserInfoView = memo(function WorkViewComponent({
   return (
     <>
       <Card withBorder padding="xl" radius="md">
-        <Card.Section
-          key={userData?.coverImageUrl} 
-          h={140}
-          style={{
-            backgroundImage: hasCover ? `url(${coverImageUrl})` : 'none',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        >
-          <Skeleton visible={!userData || isUserDataLoading} height={140} width="100%">
-            <div style={{ width: '100%', height: '140px' }}></div>
-          </Skeleton>
-        </Card.Section>
+        <Card.Section>
+          <AspectRatio ratio={6 / 1} mah={140}>
+            <Skeleton
+              visible={!userData || isUserDataLoading}
+              style={{ width: '100%', height: '100%' }}
+            >
+              <div
+                key={userData?.coverImageUrl}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundImage: hasCover ? `url(${coverImageUrl})` : 'none',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              />
+            </Skeleton>
+          </AspectRatio>
+        </Card.Section>    
 
         {/* アイコンとログアウトボタン */}
-        <Group justify="space-between">
+        <Group justify="space-between" align="flex-start">
           <SkeltonIcon
             profileImageUrl={userData?.profileImageUrl}
             width={70}
             height={70}
-            marginTop={-30}
             isUserDataLoading={isUserDataLoading}
             isClickable={false}
             onClick={() => {}}
           />
-          <div key="LoginButton">
-            {isLoginUser &&
+          {/* <div key="LoginButton"> */}
+            {/* {isLoginUser &&
               <LogoutButton />
-            }
+            } */}
             {/* userDataが存在しない場合は非表示 */}
-            {!isLoginUser && userData &&
+            {/* {!isLoginUser && userData &&
               <FollowButton
                 isFollowState={userData?.isFollowing}
                 userId={userData?.userId}
                 updateUser={updateUser}
               />
-            }
-          </div>
+            } */}
+          {/* </div> */}
         </Group>
 
         {/* ユーザー名と編集ボタン */}
@@ -145,6 +153,13 @@ export const UserInfoView = memo(function WorkViewComponent({
               <Text c="var(--mantine-color-gray-8)">編集</Text>
             </Button>
           )}
+          {!isLoginUser && userData &&
+              <FollowButton
+                isFollowState={userData?.isFollowing}
+                userId={userData?.userId}
+                updateUser={updateUser}
+              />
+            }
         </Group>
         <Space h={5}/>
 

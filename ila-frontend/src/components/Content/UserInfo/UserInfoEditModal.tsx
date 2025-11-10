@@ -13,6 +13,7 @@ import {
   Pill,
   Center,
   Loader,
+  AspectRatio,
 } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { IconPencil } from '@tabler/icons-react';
@@ -82,15 +83,8 @@ export const UserInfoEditModal = memo(function UserInfoEditModal({
       <form onSubmit={form.onSubmit(handleSave)}>
         <Card withBorder padding="xl" radius="md">
           {/* カバー画像のドロップゾーン */}
-          <Card.Section
-            h={140}
-            style={{
-              backgroundImage: hasCover ? `url(${coverImageUrl})` : 'none',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
+          <Card.Section>
+            <AspectRatio ratio={6 / 1} mah={140}>
             <Dropzone
               onDrop={handleCoverImageDrop}
               accept={IMAGE_MIME_TYPE}
@@ -98,7 +92,6 @@ export const UserInfoEditModal = memo(function UserInfoEditModal({
               mb="md"
               disabled={isLoading || !isUserIdAvailable}
               style={{
-                height: 140,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -116,6 +109,7 @@ export const UserInfoEditModal = memo(function UserInfoEditModal({
             >
               <IconPencil size={30} color="var(--mantine-color-gray-5)" />
             </Dropzone>
+          </AspectRatio>
           </Card.Section>
 
           {/* プロフィール画像のドロップゾーン */}
@@ -137,7 +131,6 @@ export const UserInfoEditModal = memo(function UserInfoEditModal({
                 profileImageUrl={form.values.profileImageUrl}
                 width={70}
                 height={70}
-                marginTop={-30}
                 isClickable={false}
                 onClick={() => {}}
               />
