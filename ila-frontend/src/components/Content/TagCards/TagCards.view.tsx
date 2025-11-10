@@ -73,20 +73,15 @@ export const TagCardsView = memo(function WorkViewComponent({
                   size="xs"
                   onClick={() => handleFavoriteClick("test")}
                   disabled={isSubmitting} 
-                  // leftSection={
-                  // <IconStarFilled
-                  //   size={16}
-                  //   style={{ display: 'block' }}
-                  // />
-                  // }
-                >
-                                    <IconStarFilled
+                  leftSection={
+                  <IconStarFilled
                     size={16}
                     style={{ display: 'block' }}
                   />
-                  {/* 登録済 */}
+                  }
+                >
+                  お気に入り登録済
                 </Button>
-              // <IconStarFilled size={20} color="var(--mantine-color-yellow-6)" />
           ) : (
                 <Button
                   radius={"xl"}
@@ -94,20 +89,15 @@ export const TagCardsView = memo(function WorkViewComponent({
                   size="xs"
                   onClick={() => handleFavoriteClick("test")}
                   disabled={isSubmitting} 
-                  // leftSection={
-                  // <IconStar
-                  //   size={16}
-                  //   style={{ display: 'block' }}
-                  // />
-                  // }
-                >
-                                    <IconStar
+                  leftSection={
+                  <IconStar
                     size={16}
                     style={{ display: 'block' }}
                   />
-                  {/* 登録 */}
+                  }
+                >
+                  お気に入り登録
                 </Button>
-            // <IconStar size={20} color="var(--mantine-color-gray-6)" />
           )}
           </>
         )}
@@ -146,7 +136,6 @@ export const TagCardsView = memo(function WorkViewComponent({
         {isMoreView && (
         <Center>
           <Button
-            variant="outline"
             onClick={handleMoreClick}
             loading={isSubmitting}
             radius="xl"
