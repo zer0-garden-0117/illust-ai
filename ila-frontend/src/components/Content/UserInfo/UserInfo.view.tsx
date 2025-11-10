@@ -2,7 +2,7 @@
 
 import React, { useState, memo } from 'react';
 import { UserInfoFormValues } from './UserInfo.hook';
-import { IconSettings, IconPencil } from '@tabler/icons-react';
+import { IconSettings, IconPencil, IconEdit } from '@tabler/icons-react';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
@@ -131,7 +131,7 @@ export const UserInfoView = memo(function WorkViewComponent({
               radius={"xl"}
               size='compact-lg'
               leftSection={
-                <IconSettings
+                <IconEdit
                   color="var(--mantine-color-gray-8)"
                   size={20}
                   style={{ display: 'block' }}
@@ -149,7 +149,7 @@ export const UserInfoView = memo(function WorkViewComponent({
         {/* ユーザー名と編集ボタン */}
         <Group justify="space-between" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
           <div>
-          <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
+          <Group gap={10} style={{ position: 'relative', width: 'fit-content' }}>
             <Anchor
               onClick={handleFollowListClick}
               style={{ textDecorationColor: 'black' }}
