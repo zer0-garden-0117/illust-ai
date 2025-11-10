@@ -1,34 +1,44 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Card, Center, Button, Space, SimpleGrid, Text, Group } from '@mantine/core';
+import { Card, Center, Button, Space, SimpleGrid, Text, Group, ActionIcon, Skeleton } from '@mantine/core';
 import { ImageCard } from '../ImageCard/ImageCard';
 import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
-import { IconFilter, IconFilter2, IconFilter2Bolt, IconSparkles, IconUser, IconUserBolt, IconUserCheck, IconUserSearch } from '@tabler/icons-react';
+import { IconFilter, IconFilter2, IconFilter2Bolt, IconHeart, IconHeartFilled, IconSparkles, IconStar, IconStarFilled, IconUser, IconUserBolt, IconUserCheck, IconUserSearch } from '@tabler/icons-react';
 import { PublicWorksTagsGetResult } from '@/apis/openapi/publicworks/usePublicWorksTagsGetInfinite';
+import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
 
 type TagCardsViewProps = {
   tag: string;
   worksData: PublicWorksTagsGetResult | undefined;
   illustNum: number;
+  isFavorite: boolean;
   isSubmitting: boolean;
   handleMoreClick: () => void;
-  handleFollowClick: () => void;
+  handleFavoriteClick: (tag: string) => void;
 };
 
 export const TagCardsView = memo(function WorkViewComponent({
   tag,
   worksData,
   illustNum,
+  isFavorite,
   isSubmitting,
   handleMoreClick,
-  handleFollowClick
+  handleFavoriteClick
 }: TagCardsViewProps): JSX.Element {
+  const { user } = useFirebaseAuthContext();
   const loadedCount = worksData?.works?.length ?? 0;
   const skeletonCount =
     worksData && illustNum > loadedCount ? illustNum - loadedCount : 0;
   const isMoreView =
     worksData && worksData.totalWorksCount && (worksData.totalWorksCount >= (worksData.works?.length ?? 0) + 1);
+  const iconButtonStyle = {
+    backgroundColor: 'light-dark(var(--mantine-color-white-0), var(--mantine-color-dark-5))',
+    '&:hover': {
+      backgroundColor: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6))',
+    },
+  };
 
   return (
     <>
@@ -37,11 +47,11 @@ export const TagCardsView = memo(function WorkViewComponent({
           <Text fz="md" fw={700} mb="xs">
             #{tag}
           </Text>
-          <Button
+          {/* <Button
             radius={"xl"}
             variant="outline"
             size="xs"
-            onClick={handleFollowClick}
+            onClick={handleFavoriteClick}
             disabled={isSubmitting} 
             leftSection={
             <IconSparkles
@@ -51,7 +61,57 @@ export const TagCardsView = memo(function WorkViewComponent({
           }
           >
             新着
-          </Button>
+          </Button> */}
+        {user && (
+          <>
+            {isSubmitting ? (
+              <Skeleton width={20} height={20} />
+            ) : isFavorite ? (
+                <Button
+                  radius={"xl"}
+                  variant="outline"
+                  size="xs"
+                  onClick={() => handleFavoriteClick("test")}
+                  disabled={isSubmitting} 
+                  // leftSection={
+                  // <IconStarFilled
+                  //   size={16}
+                  //   style={{ display: 'block' }}
+                  // />
+                  // }
+                >
+                                    <IconStarFilled
+                    size={16}
+                    style={{ display: 'block' }}
+                  />
+                  {/* 登録済 */}
+                </Button>
+              // <IconStarFilled size={20} color="var(--mantine-color-yellow-6)" />
+          ) : (
+                <Button
+                  radius={"xl"}
+                  variant="outline"
+                  size="xs"
+                  onClick={() => handleFavoriteClick("test")}
+                  disabled={isSubmitting} 
+                  // leftSection={
+                  // <IconStar
+                  //   size={16}
+                  //   style={{ display: 'block' }}
+                  // />
+                  // }
+                >
+                                    <IconStar
+                    size={16}
+                    style={{ display: 'block' }}
+                  />
+                  {/* 登録 */}
+                </Button>
+            // <IconStar size={20} color="var(--mantine-color-gray-6)" />
+          )}
+          </>
+        )}
+
         </Group>
         <Space h="xs" />
 

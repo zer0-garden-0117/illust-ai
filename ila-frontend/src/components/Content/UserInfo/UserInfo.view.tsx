@@ -13,6 +13,7 @@ import { MyUserGetResult } from '@/apis/openapi/myusers/useMyUserGet';
 import { SkeltonIcon } from '../SkeltonIcon/SkeltonIcon';
 import { useRouter } from 'next/navigation';
 import UserWorksCards from '../UserWorksCards/UserWorksCards';
+import { CustomPill } from '@/components/Common/CustomPill/CustomPill';
 
 type UserInfoViewProps = {
   page: number;
@@ -88,6 +89,7 @@ export const UserInfoView = memo(function WorkViewComponent({
           </Skeleton>
         </Card.Section>
 
+        {/* アイコンとログアウトボタン */}
         <Group justify="space-between">
           <SkeltonIcon
             profileImageUrl={userData?.profileImageUrl}
@@ -111,6 +113,8 @@ export const UserInfoView = memo(function WorkViewComponent({
             }
           </div>
         </Group>
+
+        {/* ユーザー名と編集ボタン */}
         <Group justify="space-between" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
           <div>
           <Text ta="left" fz="xl" fw={500}>
@@ -140,6 +144,8 @@ export const UserInfoView = memo(function WorkViewComponent({
           )}
         </Group>
         <Space h={5}/>
+
+        {/* フォローとフォロワー */}
         <Group gap={30} style={{ position: 'relative', width: 'fit-content' }}>
           <div key="Follow">
             <Anchor
@@ -164,6 +170,9 @@ export const UserInfoView = memo(function WorkViewComponent({
             </Anchor>
           </div>
         </Group>
+
+        {/* 自己紹介 */}
+        {/* <Group justify="space-between" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}> */}
         <Group gap={40} style={{ position: 'relative', width: 'fit-content', marginTop: '5px', marginBottom: '10px' }}>
           <Text
             fz="sm"
@@ -175,6 +184,8 @@ export const UserInfoView = memo(function WorkViewComponent({
             {userData?.userProfile}
           </Text>
         </Group>
+
+        {/* タブ */}
         <Group gap="3px" mt="xs">
           <Button
             size="compact-sm"
@@ -189,6 +200,13 @@ export const UserInfoView = memo(function WorkViewComponent({
             onClick={() => router.push(`${userData?.customUserId}?tab=favorite`)}
           >
             いいね
+          </Button>
+          <Button
+            size="compact-sm"
+            variant={tab === 'tag' ? 'filled' : 'light'}
+            onClick={() => router.push(`${userData?.customUserId}?tab=tag`)}
+          >
+            タグ
           </Button>
         </Group>
         <Space h={10}/>
@@ -206,6 +224,15 @@ export const UserInfoView = memo(function WorkViewComponent({
             page={page}
             userWorksFilterType="liked"
           />
+        )}
+        {tab === 'tag' && (
+          <Card withBorder padding="md" radius="md">
+            <Group gap="xs" wrap="wrap">
+              <CustomPill onClick={() => router.push(`/illust/tag/${encodeURIComponent("test")}`)}>test</CustomPill>
+              <CustomPill onClick={() => router.push(`/illust/tag/${encodeURIComponent("test1")}`)}>test1</CustomPill>
+              <CustomPill onClick={() => router.push(`/illust/tag/${encodeURIComponent("test2")}`)}>test2</CustomPill>
+            </Group>
+          </Card>
         )}
       </Card>
 

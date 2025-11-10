@@ -1,5 +1,6 @@
 import { useRouter } from "next/navigation";
 import { usePublicWorksTagsGetInfinite, PublicWorksTagsGetResult } from "@/apis/openapi/publicworks/usePublicWorksTagsGetInfinite";
+import { useState } from "react";
 
 const PAGE_SIZE = 4;
 
@@ -11,6 +12,7 @@ export const useTagCards = (
   { tag }: UseTagCardsProps
 ) => {
   const router = useRouter();
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const { data, size, setSize, isValidating } = usePublicWorksTagsGetInfinite(
     {
@@ -48,16 +50,17 @@ export const useTagCards = (
     setSize(size + 1);
   };
 
-  const handleFollowClick = () => {
-    router.push('/follow');
+  const handleFavoriteClick = (tag: string) => {
+    setIsFavorite((prev) => !prev);
   };
 
   return {
     tag,
     worksData,
     illustNum,
+    isFavorite,
     isSubmitting: isLoadingMore,
     handleMoreClick,
-    handleFollowClick,
+    handleFavoriteClick,
   };
 };
