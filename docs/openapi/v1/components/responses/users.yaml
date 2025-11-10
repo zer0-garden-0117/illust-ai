@@ -33,3 +33,21 @@ UsersLikedByWorkIdResponse:
     application/json:
       schema:
         $ref: "../schemas/users.yaml#/ApiLiked"
+
+UsersTagResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiTag"
+
+UsersIsTagResponse:
+  description: |-
+    200 OK
+    - 正常終了
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/works.yaml#/ApiIsTag"

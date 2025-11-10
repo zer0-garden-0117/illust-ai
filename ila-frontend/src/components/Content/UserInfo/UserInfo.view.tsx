@@ -214,7 +214,7 @@ export const UserInfoView = memo(function WorkViewComponent({
             variant={tab === 'tag' ? 'filled' : 'light'}
             onClick={() => router.push(`${userData?.customUserId}?tab=tag`)}
           >
-            タグ
+            お気に入りタグ
           </Button>
         </Group>
         <Space h={10}/>

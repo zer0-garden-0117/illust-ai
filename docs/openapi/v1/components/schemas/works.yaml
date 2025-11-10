@@ -101,6 +101,15 @@ ApiTag:
         description: タグ
         example: "夜景"
 
+ApiIsTag:
+  description: タグのいいね状態
+  type: object
+  properties:
+    isLiked:
+      type: boolean
+      description: "認証ユーザーがこのタグにいいねしているかどうか"
+      example: true
+
 ApiWorkWithTag:
   description: "作品情報とそれに付与されたタグ情報"
   type: object

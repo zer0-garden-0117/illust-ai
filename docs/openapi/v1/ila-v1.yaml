@@ -37,6 +37,9 @@ paths:
   /myusers/liked/{workId}:
     $ref: "./paths/myusers.yaml#/UsersLikedByWorkId"
 
+  /myusers/tag/{tag}: 
+    $ref: "./paths/myusers.yaml#/UsersTag"
+
   # users
   /users/{customUserId}:
     $ref: "./paths/users.yaml#/UsersById"
@@ -50,6 +53,9 @@ paths:
 
   /public/users/follow/{customUserId}:
     $ref: "./paths/publicusers.yaml#/PublicUsersFollowById"
+
+  /public/users/tag/{customUserId}:
+    $ref: "./paths/publicusers.yaml#/PublicUsersTagById"
 
   # myworks
   /myworks/create:

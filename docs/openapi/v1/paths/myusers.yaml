@@ -165,3 +165,61 @@ UsersLikedByWorkId:
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+UsersTag:
+  get:
+    operationId: getUsersTag
+    tags:
+      - myusers
+    summary: 指定したタグのいいね情報を取得する
+    description: |
+      指定したタグのいいね情報を取得する
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/TagsPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersIsTagResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+  post:
+    operationId: postUsersTag
+    tags:
+      - myusers
+    summary: 指定したタグにいいねを付与する
+    description: |
+      指定したタグにいいねを付与する
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/TagsPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersTagResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+  delete:
+    operationId: deleteUsersTag
+    tags:
+      - myusers
+    summary: 指定したタグのいいねを削除する
+    description: |
+      指定したタグのいいねを削除する
+    security:
+      - FirebaseAuth: []
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/TagsPathParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersTagResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"

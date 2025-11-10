@@ -36,3 +36,23 @@ PublicUsersFollowById:
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
+PublicUsersTagById:
+  get:
+    operationId: getPublicTagUsers
+    tags:
+      - publicusers
+    summary: 指定したユーザーがいいねしたタグを取得する
+    description: |
+      指定したユーザーがいいねしたタグを取得する
+    parameters:
+      - $ref: "../components/parameters/pathParams.yaml#/CustomUsersIdPathParam"
+      - $ref: "../components/parameters/queryParams.yaml#/OffsetQueryParam"
+      - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersTagResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
