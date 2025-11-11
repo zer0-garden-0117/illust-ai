@@ -5,7 +5,10 @@ import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorksWithSearchResult
 import com.ila.zer0.entity.Liked
+import com.ila.zer0.entity.Tag
+import com.ila.zer0.entity.Tagged
 import com.ila.zer0.entity.User
+import com.ila.zer0.repository.TaggedRepository
 import com.ila.zer0.repository.UserRepository
 import com.ila.zer0.repository.WorkRepository
 import com.ila.zer0.service.ConvertService
@@ -32,7 +35,8 @@ class UserManagerService(
     private val usageService: UsageService,
     private val productService: ProductService,
     private val workRepository: WorkRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val taggedRepository: TaggedRepository
 ) {
     val logger = LoggerFactory.getLogger(UserManagerService::class.java)
 
@@ -415,5 +419,23 @@ class UserManagerService(
             }
         }
         return limitNum
+    }
+
+    @Transactional fun isUsersTagRegistered(userId: String, tag: String): Boolean {
+        return taggedRepository.existsByUserIdAndTag(
+            userId, tag
+        )
+    }
+
+    @Transactional fun registerUsersTag(userId: String, tag: String): Tagged {
+        return taggedRepository.registerTagged(
+            Tagged(userId = userId, tag = tag, updatedAt = Instant.now())
+        )
+    }
+
+    @Transactional fun deleteUsersTag(userId: String, tag: String): Tagged {
+        return taggedRepository.deleteTagged(
+            userId, tag
+        )
     }
 }

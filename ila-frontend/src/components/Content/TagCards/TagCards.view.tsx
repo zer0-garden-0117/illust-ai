@@ -1,18 +1,18 @@
 'use client';
 
 import React, { memo } from 'react';
-import { Card, Center, Button, Space, SimpleGrid, Text, Group, ActionIcon, Skeleton } from '@mantine/core';
-import { ImageCard } from '../ImageCard/ImageCard';
+import { Card, Center, Button, Space, SimpleGrid, Text, Group, Skeleton } from '@mantine/core';
 import { ImageCardWithUser } from '../ImageCardWithUser/ImageCardWithUser';
-import { IconFilter, IconFilter2, IconFilter2Bolt, IconHeart, IconHeartFilled, IconSparkles, IconStar, IconStarFilled, IconUser, IconUserBolt, IconUserCheck, IconUserSearch } from '@tabler/icons-react';
-import { PublicWorksTagsGetResult } from '@/apis/openapi/publicworks/usePublicWorksTagsGetInfinite';
+import { IconStar, IconStarFilled } from '@tabler/icons-react';
 import { useFirebaseAuthContext } from '@/providers/auth/firebaseAuthProvider';
+import { PublicWorksTagsGetResult } from '@/apis/openapi/publicworks/usePublicWorksTagsGetInfinite';
+import { UsersTagGetResult } from '@/apis/openapi/myusers/useUsersTagGet';
 
 type TagCardsViewProps = {
   tag: string;
   worksData: PublicWorksTagsGetResult | undefined;
+  favoriteTagsData: UsersTagGetResult | undefined;
   illustNum: number;
-  isFavorite: boolean;
   isSubmitting: boolean;
   handleMoreClick: () => void;
   handleFavoriteClick: (tag: string) => void;
@@ -22,7 +22,7 @@ export const TagCardsView = memo(function WorkViewComponent({
   tag,
   worksData,
   illustNum,
-  isFavorite,
+  favoriteTagsData,
   isSubmitting,
   handleMoreClick,
   handleFavoriteClick
@@ -47,26 +47,11 @@ export const TagCardsView = memo(function WorkViewComponent({
           <Text fz="md" fw={700} mb="xs">
             #{tag}
           </Text>
-          {/* <Button
-            radius={"xl"}
-            variant="outline"
-            size="xs"
-            onClick={handleFavoriteClick}
-            disabled={isSubmitting} 
-            leftSection={
-            <IconSparkles
-              size={16}
-              style={{ display: 'block' }}
-            />
-          }
-          >
-            新着
-          </Button> */}
         {user && (
           <>
             {isSubmitting ? (
               <Skeleton width={20} height={20} />
-            ) : isFavorite ? (
+            ) : favoriteTagsData?.isLiked ? (
                 <Button
                   radius={"xl"}
                   variant="outline"

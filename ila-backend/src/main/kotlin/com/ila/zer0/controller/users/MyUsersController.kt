@@ -2,7 +2,9 @@ package com.ila.zer0.controller.users
 
 import com.ila.zer0.config.token.CustomAuthenticationToken
 import com.ila.zer0.generated.endpoint.MyusersApi
+import com.ila.zer0.generated.model.ApiIsTag
 import com.ila.zer0.generated.model.ApiLiked
+import com.ila.zer0.generated.model.ApiTag
 import com.ila.zer0.generated.model.ApiUser
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.service.user.UserManagerService
@@ -132,6 +134,50 @@ class MyUsersController(
         // APIモデルに変換
         val apiLiked = userMapper.toApiLiked(liked)
         return ResponseEntity.ok(apiLiked)
+    }
+
+    // タグが登録されているかを取得
+    override fun getUsersTag(
+        @PathVariable("tag") tag: String
+    ): ResponseEntity<ApiIsTag> {
+        // 認証ユーザー取得
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        val isTagged = userManagerService.isUsersTagRegistered(tag, userId)
+
+        val apiIsTag = ApiIsTag(isLiked = isTagged)
+        return ResponseEntity.ok(apiIsTag)
+    }
+
+    // タグ登録
+    override fun postUsersTag(
+        @PathVariable("tag") tag: String
+    ): ResponseEntity<ApiTag> {
+        // 認証ユーザー取得
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // ユーザータグ登録
+        val tagged = userManagerService.registerUsersTag(tag, userId)
+
+        val apiTag = ApiTag(tags = mutableListOf(tagged.tag))
+        return ResponseEntity.ok(apiTag)
+    }
+
+    // タグ削除
+    override fun deleteUsersTag(
+        @PathVariable("tag") tag: String
+    ): ResponseEntity<ApiTag> {
+        // 認証ユーザー取得
+        val userId =
+            getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        // ユーザータグ削除
+        val tagged = userManagerService.deleteUsersTag(tag, userId)
+
+        val apiTag = ApiTag(tags = mutableListOf(tagged.tag))
+        return ResponseEntity.ok(apiTag)
     }
 
     private fun getUserId(): String? {

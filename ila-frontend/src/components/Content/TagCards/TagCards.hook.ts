@@ -1,6 +1,10 @@
 import { useRouter } from "next/navigation";
+
 import { usePublicWorksTagsGetInfinite, PublicWorksTagsGetResult } from "@/apis/openapi/publicworks/usePublicWorksTagsGetInfinite";
-import { useState } from "react";
+import { useUsersTagGet, UsersTagGetResult } from "@/apis/openapi/myusers/useUsersTagGet";
+import { useUsersTagRegister } from "@/apis/openapi/myusers/useUsersTagRegister";
+import { useUsersTagDelete } from "@/apis/openapi/myusers/useUsersTagDelete";
+import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
 const PAGE_SIZE = 4;
 
@@ -11,8 +15,9 @@ type UseTagCardsProps = {
 export const useTagCards = (
   { tag }: UseTagCardsProps
 ) => {
-  const router = useRouter();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { getIdTokenLatest } = useFirebaseAuthContext();
+  const { trigger: triggerTagRegister } = useUsersTagRegister();
+  const { trigger: triggerTagDelete } = useUsersTagDelete();
 
   const { data, size, setSize, isValidating } = usePublicWorksTagsGetInfinite(
     {
@@ -20,6 +25,11 @@ export const useTagCards = (
       tag: tag,
       limit: PAGE_SIZE,
     },
+    { revalidateOnFocus: false }
+  );
+
+  const { data: favoriteTagsData, mutate: updateFavoriteTags } = useUsersTagGet(
+    { tag: tag, getIdTokenLatest: getIdTokenLatest },
     { revalidateOnFocus: false }
   );
 
@@ -50,15 +60,26 @@ export const useTagCards = (
     setSize(size + 1);
   };
 
-  const handleFavoriteClick = (tag: string) => {
-    setIsFavorite((prev) => !prev);
+  const handleFavoriteClick = async (tag: string) => {
+    if (favoriteTagsData?.isLiked) {
+      await triggerTagDelete({
+        headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
+        tag: tag
+      });
+    } else {
+      await triggerTagRegister({
+        headers: { Authorization: `Bearer ${await getIdTokenLatest()}` },
+        tag: tag
+      });
+    }
+    await updateFavoriteTags();
   };
 
   return {
     tag,
     worksData,
+    favoriteTagsData,
     illustNum,
-    isFavorite,
     isSubmitting: isLoadingMore,
     handleMoreClick,
     handleFavoriteClick,

@@ -24,6 +24,25 @@ class TaggedRepository(
 
     private val logger = LoggerFactory.getLogger(TaggedRepository::class.java)
 
+    fun existsByUserIdAndTag(userId: String, tag: String): Boolean {
+        return try {
+            val tagged = table.getItem { r ->
+                r.key(
+                    Key.builder()
+                        .partitionValue(userId)
+                        .sortValue(tag)
+                        .build()
+                )
+            }
+            tagged != null
+        } catch (e: DynamoDbException) {
+            throw RuntimeException(
+                "Failed to check existence of tagged for userId: $userId and tag: $tag",
+                e
+            )
+        }
+    }
+
     fun findByUserId(userId: String): List<Tagged> {
         return try {
             val query = QueryConditional.keyEqualTo(
@@ -73,8 +92,8 @@ class TaggedRepository(
         }
     }
 
-    fun deleteTagged(userId: String, tag: String) {
-        try {
+    fun deleteTagged(userId: String, tag: String): Tagged {
+        return try {
             table.deleteItem { r ->
                 r.key(
                     Key.builder()
