@@ -144,7 +144,7 @@ class MyUsersController(
         val userId =
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
-        val isTagged = userManagerService.isUsersTagRegistered(tag, userId)
+        val isTagged = userManagerService.isUsersTagRegistered(userId, tag)
 
         val apiIsTag = ApiIsTag(isLiked = isTagged)
         return ResponseEntity.ok(apiIsTag)
@@ -159,7 +159,7 @@ class MyUsersController(
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
         // ユーザータグ登録
-        val tagged = userManagerService.registerUsersTag(tag, userId)
+        val tagged = userManagerService.registerUsersTag(userId, tag)
 
         val apiTag = ApiTag(tags = mutableListOf(tagged.tag))
         return ResponseEntity.ok(apiTag)
@@ -174,7 +174,7 @@ class MyUsersController(
             getUserId() ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
         // ユーザータグ削除
-        val tagged = userManagerService.deleteUsersTag(tag, userId)
+        val tagged = userManagerService.deleteUsersTag(userId, tag)
 
         val apiTag = ApiTag(tags = mutableListOf(tagged.tag))
         return ResponseEntity.ok(apiTag)

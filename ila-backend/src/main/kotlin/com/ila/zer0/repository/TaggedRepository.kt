@@ -1,5 +1,6 @@
 package com.ila.zer0.repository
 
+import com.ila.zer0.entity.Follow
 import com.ila.zer0.entity.Tagged
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
@@ -45,28 +46,20 @@ class TaggedRepository(
 
     fun findByUserId(userId: String): List<Tagged> {
         return try {
-            val query = QueryConditional.keyEqualTo(
+            val queryConditional = QueryConditional.keyEqualTo(
                 Key.builder().partitionValue(userId).build()
             )
-
-            val taggedList = mutableListOf<Tagged>()
-            val result = table.query { r ->
-                r.queryConditional(query)
-            }
-
-            result.forEach { page ->
-                taggedList.addAll(page.items())
-            }
-
-            // order 昇順でソートして返す
-            taggedList.sortedBy { it.order }
+            val results = table.query(queryConditional).items().toList()
+            logger.info("Found ${results.size} follow items for userId=$userId")
+            results
         } catch (e: DynamoDbException) {
             throw RuntimeException(
-                "Failed to retrieve tagged list by userId: $userId",
+                "Failed to find follow items for userId=$userId",
                 e
             )
         }
     }
+
 
     fun registerTagged(tagged: Tagged): Tagged {
         return try {

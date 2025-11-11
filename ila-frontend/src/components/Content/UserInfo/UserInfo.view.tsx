@@ -15,12 +15,14 @@ import { useRouter } from 'next/navigation';
 import UserWorksCards from '../UserWorksCards/UserWorksCards';
 import { CustomPill } from '@/components/Common/CustomPill/CustomPill';
 import { UserInfoEditModal } from './UserInfoEditModal';
+import { TagUsersGetResult } from '@/apis/openapi/users/useTagUsersGet';
 
 type UserInfoViewProps = {
   page: number;
   tab: string;
   form: UseFormReturnType<UserInfoFormValues>;
   userData: UsersGetResult | undefined,
+  taggedUsersData: TagUsersGetResult | undefined,
   loginUser: MyUserGetResult,
   isLoginUser: boolean,
   isChecking: boolean,
@@ -47,6 +49,7 @@ export const UserInfoView = memo(function WorkViewComponent({
   tab,
   form,
   userData,
+  taggedUsersData,
   loginUser,
   isLoginUser,
   isChecking,
@@ -254,9 +257,11 @@ export const UserInfoView = memo(function WorkViewComponent({
         {tab === 'tag' && (
           <Card withBorder padding="md" radius="md">
             <Group gap="xs" wrap="wrap">
-              <CustomPill onClick={() => router.push(`/illust/tag/${encodeURIComponent("test")}`)}>test</CustomPill>
-              <CustomPill onClick={() => router.push(`/illust/tag/${encodeURIComponent("test1")}`)}>test1</CustomPill>
-              <CustomPill onClick={() => router.push(`/illust/tag/${encodeURIComponent("test2")}`)}>test2</CustomPill>
+              {taggedUsersData?.tags?.map((tag) => (
+                <CustomPill key={tag} onClick={() => router.push(`/illust/tag/${encodeURIComponent(tag)}`)}>
+                  #{tag}
+                </CustomPill>
+              ))}
             </Group>
           </Card>
         )}

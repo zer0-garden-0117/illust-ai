@@ -442,12 +442,18 @@ class UserManagerService(
     }
 
     @Transactional fun getUsersTagsWithOffset(
-        userId: String,
+        customUserId: String,
         offset: Int,
         limit: Int
-    ): TaggedWithSearchResult {
+    ): TaggedWithSearchResult? {
+        val user = userService.findUserByCustomUserId(customUserId)
+        if (user == null) {
+            logger.info("user is null $customUserId")
+            return null
+        }
+
         return taggedService.findByUserIdWithOffset(
-            userId, offset, limit
+            user.userId, offset, limit
         )
     }
 }

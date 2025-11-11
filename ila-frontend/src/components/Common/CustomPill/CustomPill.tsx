@@ -14,8 +14,12 @@ export const CustomPill = React.memo(({ onClick, children, ...props }: CustomPil
       onClick={(e) => {
         onClick();
       }}
+      size='md'
       style={{
         cursor: 'pointer',
+        backgroundColor: 'var(--mantine-color-blue-light)',
+        color: 'var(--mantine-color-blue-6)',
+        fontWeight: 'bold',
       }}
     >
       {children}

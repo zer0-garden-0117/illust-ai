@@ -44,7 +44,7 @@ export const TagCardsView = memo(function WorkViewComponent({
     <>
       <Card withBorder padding="md" radius="md">
         <Group justify="space-between">
-          <Text fz="md" fw={700} mb="xs">
+          <Text fz="md" fw={700} mb="xs" c="blue">
             #{tag}
           </Text>
         {user && (
@@ -72,7 +72,7 @@ export const TagCardsView = memo(function WorkViewComponent({
                   radius={"xl"}
                   variant="outline"
                   size="xs"
-                  onClick={() => handleFavoriteClick("test")}
+                  onClick={() => handleFavoriteClick(tag)}
                   disabled={isSubmitting} 
                   leftSection={
                   <IconStar

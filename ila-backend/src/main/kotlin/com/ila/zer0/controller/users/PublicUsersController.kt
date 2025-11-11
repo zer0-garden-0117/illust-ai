@@ -60,6 +60,7 @@ class PublicUsersController(
         // ユーザーの登録タグ一覧を取得
         val usersTagsResult =
             userManagerService.getUsersTagsWithOffset(customUserId, offset, limit)
+                ?: return ResponseEntity.notFound().build()
 
         // APIモデルに変換
         val tags = mutableListOf<String>()

@@ -7,6 +7,7 @@ import { useUserCheckAvailability } from "@/apis/openapi/users/useUserCheckAvail
 import { useUsersGet } from "@/apis/openapi/users/useUsersGet";
 import { usePublicUsersGet } from "@/apis/openapi/publicusers/usePublicUsersGet";
 import { MyUserGetResult } from '@/apis/openapi/myusers/useMyUserGet';
+import { useTagUsersGet } from "@/apis/openapi/users/useTagUsersGet";
 
 type UseUserInfoProps = {
   userId: string;
@@ -58,6 +59,21 @@ export const useUserInfo = (
     !loginUser
       ? {
           customUserId: userId,
+        }
+      : undefined,
+    { revalidateOnFocus: true }
+  );
+
+  const {
+    data: taggedUsersData,
+    mutate: updateTaggedUsers,
+  } = useTagUsersGet(
+    loginUser
+      ? {
+          customUserId: userId,
+          offset: 0,
+          limit: 10,
+          getIdTokenLatest,
         }
       : undefined,
     { revalidateOnFocus: true }
@@ -206,6 +222,7 @@ export const useUserInfo = (
     tab,
     form,
     userData,
+    taggedUsersData,
     loginUser: loginUser as MyUserGetResult,
     isLoginUser,
     isChecking,
