@@ -51,7 +51,7 @@ PublicUsersTagById:
       - $ref: "../components/parameters/queryParams.yaml#/LimitQueryParam"
     responses:
       "200":
-        $ref: "../components/responses/users.yaml#/UsersTagResponse"
+        $ref: "../components/responses/users.yaml#/UsersTagsResponse"
       "400":
         $ref: "../components/responses/errors.yaml#/BadRequestResponse"
       "401":

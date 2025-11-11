@@ -100,3 +100,18 @@ ApiLiked:
       format: date-time
       description: "最終更新日時"
       example: "2024-07-08T00:00:00+09:00"
+
+ApiTaggeds:
+  description: タグ情報
+  type: object
+  properties:
+    tags:
+      type: array
+      items:
+        type: string
+        description: タグ
+        example: "夜景"
+    totalTagCount:
+      type: integer
+      description: タグの総数
+      example: 100

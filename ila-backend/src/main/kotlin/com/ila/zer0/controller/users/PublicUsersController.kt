@@ -2,6 +2,7 @@ package com.ila.zer0.controller.users
 
 import com.ila.zer0.generated.endpoint.PublicusersApi
 import com.ila.zer0.generated.model.ApiFollowUsers
+import com.ila.zer0.generated.model.ApiTaggeds
 import com.ila.zer0.generated.model.ApiUser
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.service.user.UserManagerService
@@ -49,5 +50,26 @@ class PublicUsersController(
         }
         val apiFollowsUsers = ApiFollowUsers(apiUsers, followUsersResult.totalCount)
         return ResponseEntity.ok(apiFollowsUsers)
+    }
+
+    override fun getPublicTagUsers(
+        @PathVariable("customUserId") customUserId: String,
+        @RequestParam(value = "offset", required = true) offset: Int,
+        @RequestParam(value = "limit", required = true) limit: Int
+    ): ResponseEntity<ApiTaggeds> {
+        // ユーザーの登録タグ一覧を取得
+        val usersTagsResult =
+            userManagerService.getUsersTagsWithOffset(customUserId, offset, limit)
+
+        // APIモデルに変換
+        val tags = mutableListOf<String>()
+        usersTagsResult.taggeds.map { tagged ->
+            tags.add(tagged.tag)
+        }
+        val apiTagUsers = ApiTaggeds(
+            tags = tags,
+            totalTagCount = usersTagsResult.totalCount
+        )
+        return ResponseEntity.ok(apiTagUsers)
     }
 }

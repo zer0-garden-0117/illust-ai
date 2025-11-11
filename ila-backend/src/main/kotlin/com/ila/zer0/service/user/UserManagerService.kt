@@ -1,6 +1,7 @@
 package com.ila.zer0.service.user
 
 import com.ila.zer0.dto.FollowWithSearchResult
+import com.ila.zer0.dto.TaggedWithSearchResult
 import com.ila.zer0.dto.UsersActivity
 import com.ila.zer0.dto.UsersWithSearchResult
 import com.ila.zer0.dto.WorksWithSearchResult
@@ -36,6 +37,7 @@ class UserManagerService(
     private val productService: ProductService,
     private val workRepository: WorkRepository,
     private val userRepository: UserRepository,
+    private val taggedService: TaggedService,
     private val taggedRepository: TaggedRepository
 ) {
     val logger = LoggerFactory.getLogger(UserManagerService::class.java)
@@ -436,6 +438,16 @@ class UserManagerService(
     @Transactional fun deleteUsersTag(userId: String, tag: String): Tagged {
         return taggedRepository.deleteTagged(
             userId, tag
+        )
+    }
+
+    @Transactional fun getUsersTagsWithOffset(
+        userId: String,
+        offset: Int,
+        limit: Int
+    ): TaggedWithSearchResult {
+        return taggedService.findByUserIdWithOffset(
+            userId, offset, limit
         )
     }
 }
