@@ -112,6 +112,15 @@ create_table liked \
             }
         ]"
 
+# tagged テーブルの作成
+create_table tagged \
+    --attribute-definitions \
+        AttributeName=userId,AttributeType=S \
+        AttributeName=tag,AttributeType=S \
+    --key-schema \
+        AttributeName=userId,KeyType=HASH \
+        AttributeName=tag,KeyType=RANGE
+
 # rated テーブルの作成
 create_table rated \
     --attribute-definitions \
