@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, memo } from 'react';
-import { UserInfoFormValues } from './UserInfo.hook';
+import { UserInfoFormValues, UserSettingFormValues } from './UserInfo.hook';
 import { IconSettings, IconPencil, IconEdit } from '@tabler/icons-react';
 import { UsersGetResult } from '@/apis/openapi/users/useUsersGet';
 import FollowButton from '@/components/Common/FollowButton/FollowButton';
 import LogoutButton from '@/components/Common/LogoutButton/LogoutButton';
-import { Skeleton, Button, Group, Text, Card, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill, AspectRatio } from '@mantine/core';
+import { Skeleton, Button, Group, Text, Card, Space, Modal, TextInput, Textarea, Center, Loader, Anchor, Pill, AspectRatio, Checkbox } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { MyUserGetResult } from '@/apis/openapi/myusers/useMyUserGet';
@@ -21,6 +21,7 @@ type UserInfoViewProps = {
   page: number;
   tab: string;
   form: UseFormReturnType<UserInfoFormValues>;
+  settingForm: UseFormReturnType<UserSettingFormValues>;
   userData: UsersGetResult | undefined,
   taggedUsersData: TagUsersGetResult | undefined,
   loginUser: MyUserGetResult,
@@ -31,13 +32,17 @@ type UserInfoViewProps = {
   isLoading: boolean,
   isUserDataLoading: boolean,
   opened: boolean,
+  settingOpened: boolean,
   updateUser: () => void,
   validateCustomUserId: (value: string) => Promise<string | null>,
   setOpened: React.Dispatch<React.SetStateAction<boolean>>,
+  setSettingOpened: React.Dispatch<React.SetStateAction<boolean>>,
   handleSave: (values: UserInfoFormValues) => Promise<void>,
+  handleSettingSave: () => void,
   handleCoverImageDrop: (files: File[]) => void,
   handleProfileImageDrop: (files: File[]) => void,
   handleEditButton: () => void,
+  handleSettingButton: () => void,
   handleFollowListClick: () => void,
   handleFollowerListClick: () => void,
   handlePlanChangeClick: () => void,
@@ -48,6 +53,7 @@ export const UserInfoView = memo(function WorkViewComponent({
   page,
   tab,
   form,
+  settingForm,
   userData,
   taggedUsersData,
   loginUser,
@@ -58,13 +64,17 @@ export const UserInfoView = memo(function WorkViewComponent({
   isLoading,
   isUserDataLoading,
   opened,
+  settingOpened,
   updateUser,
   validateCustomUserId,
   setOpened,
+  setSettingOpened,
   handleSave,
+  handleSettingSave,
   handleCoverImageDrop,
   handleProfileImageDrop,
   handleEditButton,
+  handleSettingButton,
   handleFollowListClick,
   handleFollowerListClick,
   handlePlanChangeClick,
@@ -213,7 +223,7 @@ export const UserInfoView = memo(function WorkViewComponent({
                   style={{ display: 'block' }}
                 />
               }
-              // onClick={handleEditButton}
+              onClick={handleSettingButton}
             >
               <Text c="var(--mantine-color-gray-8)">設定</Text>
             </Button>
@@ -293,6 +303,69 @@ export const UserInfoView = memo(function WorkViewComponent({
         handlePlanChangeClick={handlePlanChangeClick}
         handleBoostChangeClick={handleBoostChangeClick}
       />
+      {/* ユーザー設定モーダル */}
+      <Modal
+        opened={settingOpened}
+        onClose={() => setSettingOpened(false)}
+        title="表示設定"
+        size="lg"
+        centered
+      >
+        <Card withBorder radius="md">
+        <form
+          onSubmit={settingForm.onSubmit(() => {
+            handleSettingSave();
+          })}
+        >
+
+          {/* センシティブな画像を表示するかどうか */}
+          <Checkbox
+            label="センシティブな画像を表示する (R18+)"
+            {...settingForm.getInputProps('showSensitiveImages')}
+          />
+          {/* 微センシティブな画像を表示するかどうか */}
+          <Checkbox mt={10}
+            label="微センシティブな画像を表示する (R15+)"
+            {...settingForm.getInputProps('showMildlySensitiveImages')}
+          />
+          <Group justify="flex-end" mt="md">
+            <Button
+              variant="outline"
+              radius="xl"
+            >
+              キャンセル
+            </Button>
+            <Button type="submit" color="blue" radius={"xl"}>
+              保存
+            </Button>
+          </Group>
+        </form>
+        </Card>
+
+        {/* その他 */}
+        <Text mt={20} mb={10} fz="md" fw={500}>その他</Text>
+
+        {/* ログアウトする */}
+        <Card withBorder radius={"md"} p="md" mb={10}>
+        <Group justify="space-between" align="center">
+          <Text fz="sm">ログアウト</Text>
+          <LogoutButton />
+        </Group>
+        {/* ユーザーを削除する */}
+        <Group justify="space-between" align="center" mt={20}>
+          <Text fz="sm">ユーザーの削除</Text>
+          <Button
+            variant="outline" 
+            color="red"
+            size="sm"
+            radius={"xl"}
+            onClick={() => {}}
+          >
+            ユーザーを削除する
+          </Button>
+        </Group>
+        </Card>
+      </Modal>
     </>
   );
 });

@@ -23,6 +23,11 @@ export type UserInfoFormValues = {
   userProfile: string;
 };
 
+export type UserSettingFormValues = {
+  showSensitiveImages: boolean;
+  showMildlySensitiveImages: boolean;
+};
+
 export const useUserInfo = (
   { userId, tab, page }: UseUserInfoProps
 ) => {
@@ -37,6 +42,7 @@ export const useUserInfo = (
   const [isLoading, setIsLoading] = useState(false);
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
+  const [settingOpened, setSettingOpened] = useState(false);
   const [isUserDataLoading, setIsUserDataLoading] = useState(false);
 
   const {
@@ -110,6 +116,23 @@ export const useUserInfo = (
     });
     setCoverImageFile(new File([], ""));
     setProfileImageFile(new File([], ""));
+  };
+
+  const settingForm = useForm({
+    initialValues: {
+      // センシティブな画像を表示するかどうか
+      showSensitiveImages: false,
+      // 微センシティブな画像を表示するかどうか
+      showMildlySensitiveImages: false,
+    },
+  });
+
+  const initSettingForm = () => {
+    // 設定用フォームの初期化処理があればここに追加
+    settingForm.setValues({
+      showSensitiveImages: false,
+      showMildlySensitiveImages: false,
+    });
   };
 
   const validateCustomUserId = async (value: string) => {
@@ -201,6 +224,15 @@ export const useUserInfo = (
     setOpened(true);
   }
 
+  const handleSettingButton = () => {
+    setSettingOpened(true);
+  }
+
+  const handleSettingSave = () => {
+    // 設定保存処理があればここに追加
+    setSettingOpened(false);
+  }
+
   const handleFollowListClick = () => {
     router.push(`/user/${userData?.customUserId}/follow?page=1`);
   };
@@ -221,6 +253,7 @@ export const useUserInfo = (
     page,
     tab,
     form,
+    settingForm,
     userData,
     taggedUsersData,
     loginUser: loginUser as MyUserGetResult,
@@ -231,13 +264,17 @@ export const useUserInfo = (
     isLoading,
     isUserDataLoading,
     opened,
+    settingOpened,
     updateUser,
     validateCustomUserId,
     setOpened,
+    setSettingOpened,
     handleSave,
+    handleSettingSave,
     handleCoverImageDrop,
     handleProfileImageDrop,
     handleEditButton,
+    handleSettingButton,
     handleFollowListClick,
     handleFollowerListClick,
     handlePlanChangeClick,
