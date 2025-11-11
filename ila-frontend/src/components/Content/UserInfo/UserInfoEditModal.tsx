@@ -138,7 +138,7 @@ export const UserInfoEditModal = memo(function UserInfoEditModal({
                 mt={-20}
                 style={{
                   position: 'absolute',
-                  top: '50%',
+                  top: '80%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
                   transition: 'opacity 0.2s',

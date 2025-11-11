@@ -150,7 +150,6 @@ export const UserInfoView = memo(function WorkViewComponent({
                   style={{ display: 'block' }}
                 />
               }
-              style={{ flexShrink: 0, minWidth: 120 }}
               onClick={handleEditButton}
             >
               <Text c="var(--mantine-color-gray-8)">編集</Text>
@@ -207,6 +206,13 @@ export const UserInfoView = memo(function WorkViewComponent({
               variant="outline"
               radius={"xl"}
               size='compact-lg'
+              leftSection={
+                <IconSettings
+                  color="var(--mantine-color-gray-8)"
+                  size={20}
+                  style={{ display: 'block' }}
+                />
+              }
               // onClick={handleEditButton}
             >
               <Text c="var(--mantine-color-gray-8)">設定</Text>
