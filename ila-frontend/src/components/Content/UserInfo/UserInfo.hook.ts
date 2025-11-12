@@ -43,7 +43,9 @@ export const useUserInfo = (
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [opened, setOpened] = useState(false);
   const [settingOpened, setSettingOpened] = useState(false);
+  const [confirmOpened, setConfirmOpened] = useState(false);
   const [isUserDataLoading, setIsUserDataLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const {
     data: privateUserData,
@@ -228,9 +230,16 @@ export const useUserInfo = (
     setSettingOpened(true);
   }
 
-  const handleSettingSave = () => {
+  const handleSettingSave = async () => {
+    setIsSaving(true);
     // 設定保存処理があればここに追加
+    // ToDo: 設定保存処理
+    // 1秒遅延
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  
+    // 保存後、モーダルを閉じる
     setSettingOpened(false);
+    setIsSaving(false);
   }
 
   const handleFollowListClick = () => {
@@ -249,6 +258,25 @@ export const useUserInfo = (
     router.push('/boost');
   }
 
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    // ユーザー削除処理
+    // ToDo: ユーザー削除処理の実装
+
+    // 1秒遅延
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // 削除後、トップページへリダイレクト
+    setConfirmOpened(false);
+    setSettingOpened(false);
+    setIsDeleting(false);
+    router.push('/');
+  }
+
+  const handleDeleteUserClick = async () => {
+    setConfirmOpened(true);
+  }
+
   return {
     page,
     tab,
@@ -263,12 +291,15 @@ export const useUserInfo = (
     isUserIdAvailable,
     isLoading,
     isUserDataLoading,
+    isDeleting,
     opened,
     settingOpened,
+    confirmOpened,
     updateUser,
     validateCustomUserId,
     setOpened,
     setSettingOpened,
+    setConfirmOpened,
     handleSave,
     handleSettingSave,
     handleCoverImageDrop,
@@ -278,6 +309,8 @@ export const useUserInfo = (
     handleFollowListClick,
     handleFollowerListClick,
     handlePlanChangeClick,
-    handleBoostChangeClick
+    handleBoostChangeClick,
+    handleDeleteUserClick,
+    handleConfirmDelete
   };
 };

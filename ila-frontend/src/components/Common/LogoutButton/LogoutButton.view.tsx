@@ -5,10 +5,11 @@ import { Button, Group } from '@mantine/core';
 
 type LogoutButtonViewProps = {
   onLogout: () => void;
+  isDisable: boolean;
 };
 
 
-export default function LogoutButtonView({ onLogout }: LogoutButtonViewProps) {
+export default function LogoutButtonView({ onLogout, isDisable }: LogoutButtonViewProps) {
   const { user } = useFirebaseAuthContext();
 
   // 認証済
@@ -21,6 +22,7 @@ export default function LogoutButtonView({ onLogout }: LogoutButtonViewProps) {
           color="red"
           size="sm"
           radius={"xl"}
+          disabled={isDisable}
         >
           Logout
         </Button>

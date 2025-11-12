@@ -6,12 +6,13 @@ import LogoutButtonView from './LogoutButton.view';
 
 type LogoutButtonProps = {
   onSuccess?: () => void;
+  isDisable? : boolean;
 };
 
 export const LogoutButton: React.FC<LogoutButtonProps> = (
-  { onSuccess }
+  { onSuccess, isDisable }
 ): JSX.Element => {
-  const viewProps = useLogoutButton({ onSuccess });
+  const viewProps = useLogoutButton({ onSuccess, isDisable });
   return <LogoutButtonView {...viewProps} />;
 };
 

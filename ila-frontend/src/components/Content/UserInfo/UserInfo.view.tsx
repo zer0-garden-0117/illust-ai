@@ -31,12 +31,15 @@ type UserInfoViewProps = {
   isUserIdAvailable: boolean,
   isLoading: boolean,
   isUserDataLoading: boolean,
+  isDeleting: boolean,
   opened: boolean,
   settingOpened: boolean,
+  confirmOpened: boolean,
   updateUser: () => void,
   validateCustomUserId: (value: string) => Promise<string | null>,
   setOpened: React.Dispatch<React.SetStateAction<boolean>>,
   setSettingOpened: React.Dispatch<React.SetStateAction<boolean>>,
+  setConfirmOpened: React.Dispatch<React.SetStateAction<boolean>>,
   handleSave: (values: UserInfoFormValues) => Promise<void>,
   handleSettingSave: () => void,
   handleCoverImageDrop: (files: File[]) => void,
@@ -46,7 +49,9 @@ type UserInfoViewProps = {
   handleFollowListClick: () => void,
   handleFollowerListClick: () => void,
   handlePlanChangeClick: () => void,
-  handleBoostChangeClick: () => void
+  handleBoostChangeClick: () => void,
+  handleDeleteUserClick: () => void,
+  handleConfirmDelete: () => void,
 };
 
 export const UserInfoView = memo(function WorkViewComponent({
@@ -63,12 +68,15 @@ export const UserInfoView = memo(function WorkViewComponent({
   isUserIdAvailable,
   isLoading,
   isUserDataLoading,
+  isDeleting,
   opened,
   settingOpened,
+  confirmOpened,
   updateUser,
   validateCustomUserId,
   setOpened,
   setSettingOpened,
+  setConfirmOpened,
   handleSave,
   handleSettingSave,
   handleCoverImageDrop,
@@ -78,7 +86,9 @@ export const UserInfoView = memo(function WorkViewComponent({
   handleFollowListClick,
   handleFollowerListClick,
   handlePlanChangeClick,
-  handleBoostChangeClick
+  handleBoostChangeClick,
+  handleDeleteUserClick,
+  handleConfirmDelete
 }: UserInfoViewProps): JSX.Element {
   const [isTypingUserId, setIsTypingUserId] = useState(false);
   const router = useRouter();
@@ -335,10 +345,17 @@ export const UserInfoView = memo(function WorkViewComponent({
             <Button
               variant="outline"
               radius="xl"
+              disabled={isSaving || isDeleting}
             >
               キャンセル
             </Button>
-            <Button type="submit" color="blue" radius={"xl"}>
+            <Button
+              type="submit"
+              color="blue"
+              radius={"xl"}
+              disabled={isDeleting}
+              loading={isSaving}
+            >
               保存
             </Button>
           </Group>
@@ -352,7 +369,7 @@ export const UserInfoView = memo(function WorkViewComponent({
         <Card withBorder radius={"md"} p="md" mb={10}>
         <Group justify="space-between" align="center">
           <Text fz="sm">ログアウト</Text>
-          <LogoutButton />
+          <LogoutButton isDisable={isSaving || isDeleting}/>
         </Group>
         {/* ユーザーを削除する */}
         <Group justify="space-between" align="center" mt={20}>
@@ -362,12 +379,45 @@ export const UserInfoView = memo(function WorkViewComponent({
             color="red"
             size="sm"
             radius={"xl"}
-            onClick={() => {}}
+            onClick={handleDeleteUserClick}
+            disabled={isSaving || isDeleting}
           >
             ユーザーを削除する
           </Button>
         </Group>
         </Card>
+      </Modal>
+
+      {/* 確認モーダル */}
+      <Modal
+        opened={confirmOpened}
+        onClose={() => setConfirmOpened(false)}
+        title="削除の確認"
+        centered
+        withCloseButton={false}
+      >
+        <Text size="sm" mb="md">
+          本当に削除しますか？この操作は取り消しできません。
+        </Text>
+        <Group justify="flex-end" mt="md">
+          <Button variant="default" onClick={() => setConfirmOpened(false)} disabled={isDeleting}>
+            キャンセル
+          </Button>
+          <Button
+            color="red"
+            onClick={handleConfirmDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <Group gap="xs" align="center">
+                <span>削除中…</span>
+                <Loader size="xs" />
+              </Group>
+            ) : (
+              '削除'
+            )}
+          </Button>
+        </Group>
       </Modal>
     </>
   );

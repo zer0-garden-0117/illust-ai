@@ -2,10 +2,11 @@ import { useFirebaseAuthContext } from "@/providers/auth/firebaseAuthProvider";
 
 type LogoutButtonProps = {
   onSuccess?: () => void;
+  isDisable?: boolean;
 };
 
 export const useLogoutButton = (
-  { onSuccess }: LogoutButtonProps
+  { onSuccess, isDisable = false }: LogoutButtonProps
 ) => {
   const { signOut } = useFirebaseAuthContext();
 
@@ -18,6 +19,7 @@ export const useLogoutButton = (
   };
 
   return {
-    onLogout
+    onLogout,
+    isDisable
   };
 };
