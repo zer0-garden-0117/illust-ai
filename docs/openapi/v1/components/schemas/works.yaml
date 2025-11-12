@@ -49,6 +49,10 @@ ApiWork:
       type: integer
       description: "作品のいいね数"
       example: 0
+    rating:
+      type: integer
+      description: "レーティング（0:全年齢 1:R15 2:R18）"
+      example: 0
     createdAt:
       type: string
       format: date-time

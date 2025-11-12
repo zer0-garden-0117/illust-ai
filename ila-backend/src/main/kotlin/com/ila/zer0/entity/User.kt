@@ -55,4 +55,7 @@ data class User(
 
     @get:DynamoDbAttribute("remainingIllustNum")
     var remainingIllustNum: Int = 0,
+
+    @get:DynamoDbAttribute("viewRating")
+    var viewRating: Int = 0,
 )

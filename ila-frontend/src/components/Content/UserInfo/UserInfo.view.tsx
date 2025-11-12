@@ -307,10 +307,13 @@ export const UserInfoView = memo(function WorkViewComponent({
       <Modal
         opened={settingOpened}
         onClose={() => setSettingOpened(false)}
-        title="表示設定"
         size="lg"
         centered
+        withCloseButton={false}
       >
+
+        {/* その他 */}
+        <Text mb={10} fz="md" fw={500}>表示設定</Text>
         <Card withBorder radius="md">
         <form
           onSubmit={settingForm.onSubmit(() => {

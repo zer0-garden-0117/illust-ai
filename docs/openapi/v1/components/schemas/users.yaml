@@ -69,6 +69,10 @@ ApiUser:
       type: integer
       description: 残りのイラスト生成回数
       example: 3
+    viewRating:
+      type: integer
+      description: "表示レーティング（0:全年齢 1:R15 2:R18）"
+      example: 0
 
 ApiFollowUsers:
   description: フォロー情報

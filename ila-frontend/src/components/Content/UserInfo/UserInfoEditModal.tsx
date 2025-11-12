@@ -74,13 +74,13 @@ export const UserInfoEditModal = memo(function UserInfoEditModal({
     <Modal
       opened={opened}
       onClose={() => setOpened(false)}
-      title="プロフィール編集"
       size="lg"
       closeOnClickOutside={!isSaving}
-      withCloseButton={!isSaving}
+      withCloseButton={false}
       radius="md"
     >
       <form onSubmit={form.onSubmit(handleSave)}>
+        <Text mb={10} fz="md" fw={500}>プロフィール編集</Text>
         <Card withBorder padding="xl" radius="md">
           {/* カバー画像のドロップゾーン */}
           <Card.Section>

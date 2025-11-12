@@ -64,6 +64,9 @@ data class Work(
     @get:DynamoDbAttribute("rate")
     var rate: Double = 0.0,
 
+    @get:DynamoDbAttribute("rating")
+    var rating: Int = 0,
+
     @get:DynamoDbAttribute("ttl")
     var ttl: Long? = null,
 
