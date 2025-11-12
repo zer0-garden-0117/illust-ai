@@ -30,6 +30,9 @@ paths:
   # myusers
   /me:
     $ref: "./paths/myusers.yaml#/UsersMe"
+  
+  /me/viewrating:
+    $ref: "./paths/myusers.yaml#/UsersViewRating"
 
   /myusers/follow/{userId}:
     $ref: "./paths/myusers.yaml#/UsersFollow"

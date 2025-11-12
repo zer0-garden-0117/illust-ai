@@ -6,14 +6,18 @@ import com.ila.zer0.generated.model.ApiIsTag
 import com.ila.zer0.generated.model.ApiLiked
 import com.ila.zer0.generated.model.ApiTag
 import com.ila.zer0.generated.model.ApiUser
+import com.ila.zer0.generated.model.PatchMyUserViewRatingRequest
 import com.ila.zer0.mapper.UserMapper
 import com.ila.zer0.service.user.UserManagerService
+import io.swagger.v3.oas.annotations.Parameter
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
@@ -65,6 +69,12 @@ class MyUsersController(
         // APIモデルに変換
         val updatedApiUser = userMapper.toApiUser(updatedUser)
         return ResponseEntity.ok(updatedApiUser)
+    }
+
+    override fun patchMyUserViewRating(
+        @RequestBody patchMyUserViewRatingRequest: PatchMyUserViewRatingRequest
+    ): ResponseEntity<ApiUser> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     override fun deleteMyUser(): ResponseEntity<ApiUser> {

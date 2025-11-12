@@ -88,6 +88,38 @@ UsersMe:
       "401":
         $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
 
+UsersViewRating:
+  patch:
+    operationId: patchMyUserViewRating
+    tags:
+      - myusers
+    summary: 認証済のユーザー情報の表示レーティングを更新する
+    description: |
+      認証済のユーザー情報の表示レーティングを更新する
+    security:
+      - FirebaseAuth: []
+    requestBody:
+      description: |-
+        表示レーティング
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              viewRating:
+                type: integer
+                description: 表示レーティング（0:全年齢 1:R15 2:R18）
+            required:
+              - viewRating
+    responses:
+      "200":
+        $ref: "../components/responses/users.yaml#/UsersResponse"
+      "400":
+        $ref: "../components/responses/errors.yaml#/BadRequestResponse"
+      "401":
+        $ref: "../components/responses/errors.yaml#/UnauthorizedResponse"
+
 UsersFollow:
   post:
     operationId: followUsers
