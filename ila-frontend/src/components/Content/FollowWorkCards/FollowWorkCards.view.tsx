@@ -30,26 +30,10 @@ export const FollowWorkCardsView = memo(function WorkViewComponent({
 
   return (
     <>
-      <Card withBorder padding="md" radius="md">
         <Group justify="space-between">
           <Text fz="md" fw={700} mb="xs">
             フォロー中のみ表示
           </Text>
-          <Button
-            radius={"xl"}
-            variant="outline"
-            size="xs"
-            onClick={handleNewClick}
-            disabled={isSubmitting} 
-            leftSection={
-            <IconSparkles
-              size={16}
-              style={{ display: 'block' }}
-            />
-          }
-          >
-            新着
-          </Button>
         </Group>
         <Space h="xs" />
 
@@ -92,8 +76,6 @@ export const FollowWorkCardsView = memo(function WorkViewComponent({
           </Button>
         </Center>
         )}
-
-      </Card>
     </>
   );
 });

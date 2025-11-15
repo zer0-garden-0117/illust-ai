@@ -50,7 +50,7 @@ PublicWorksFilterTypeQueryParam:
   required: true
   schema:
     type: string
-    enum: [new, theme]
+    enum: [new, theme, random, recommended]
 
 WorksFilterTypeQueryParam:
   name: worksFilterType

@@ -29,26 +29,11 @@ export const TopCardsView = memo(function WorkViewComponent({
 
   return (
     <>
-      <Card withBorder padding="md" radius="md">
+      {/* <Card> */}
         <Group justify="space-between">
           <Text fz="md" fw={700} mb="xs">
             新着
           </Text>
-          <Button
-            radius={"xl"}
-            variant="outline"
-            size="xs"
-            onClick={handleFollowClick}
-            disabled={isSubmitting} 
-            leftSection={
-            <IconFilter2
-              size={16}
-              style={{ display: 'block' }}
-            />
-          }
-          >
-            フォロー中のみ表示
-          </Button>
         </Group>
         <Space h="xs" />
 
@@ -92,7 +77,7 @@ export const TopCardsView = memo(function WorkViewComponent({
         </Center>
         )}
 
-      </Card>
+      {/* </Card> */}
     </>
   );
 });
